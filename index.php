@@ -1,6 +1,12 @@
 <?php
 
+	$serv = 'localhost';
+	$user = 'jaysoftw_brett';
+	$pass = 'Su944jAk127456';
+	$db = 'jaysoftw_homebase';
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en-US">
 
@@ -14,11 +20,10 @@
     <title>Home Base 3.0</title>
     <!-- LINK TO A RESET CSS -->
     <link rel="stylesheet" type="text/css" href="resources/css/reset.css">
-    <!-- LINK TO GOOGLE FONTS -->
-    <!-- <link href="https://fonts.googleapis.com/css?family=Mogra" rel="stylesheet"> -->
-    <link href="https://fonts.googleapis.com/css?family=Lobster|VT323|Orbitron:400,900" rel="stylesheet">
     <!-- LINK TO MAIN STYLING SHEET -->
     <link rel="stylesheet" type="text/css" href="resources/css/main.css">
+    <!-- LINK TO GOOGLE FONTS -->
+    <link href="https://fonts.googleapis.com/css?family=Lobster|VT323|Orbitron:400,900" rel="stylesheet">
 </head>
 
 <body>
@@ -35,7 +40,42 @@
         </div>
     </header>
     <div id="ghost-header"></div>
+	
+	<main>
+		<section class="column weather">
+			<h2>Weather</h2>
+			<?php
+				$conn = new mysqli($serv, $user, $pass, $db);
+				if (!$conn) {
+					die("Connection to server failed: " . mysqli_connect_errno());
+				}
+				$cities_select = "SELECT * FROM weather_cities";
+				$result = $conn->query($cities_select);
+				if ($result->num_rows > 0) {
+			?>
+					<script>
+						var myCities = [];	
+					</script>
+			<?php
+					while($row = $result->fetch_assoc()) {
+						echo "<div>";
+						echo "<img src='' id='" . $row["name"] . "-weather-button'/>";
+						echo "<h3>" .$row["name"] . "</h3>";
+						echo "</div>"
+			?>
+					<script>
+						myCities.push("<?php echo $row["name"]?>")
+					</script>
+			<?php
+					}
+				}
+				$conn->close();
+			?>
+		</section>
+	</main>
 
+	<!--
+	
     <div class="all-columns">
 
         <div class="first-column">
@@ -54,14 +94,6 @@
                 </div>
             </div>
         </div>
-        <div class="second-column">
-            <div id="stats">
-                <!-- <h2>Activity Name</h2>
-          <p>General Goal: </p>
-          <p>Today's Target: </p>
-          <p>Today's Progress: </p>
-          <p>Total Hours: </p> -->
-            </div>
         </div>
         <div class="third-column">
             <div class="daily-habits">
@@ -118,6 +150,8 @@
             </div>
         </div>
     </div>
+
+	-->
 
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
     <script type="text/javascript" src="resources/js/main.js"></script>

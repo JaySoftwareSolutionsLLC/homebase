@@ -1,6 +1,29 @@
 $(document).ready(function() {
 	"use strict";
-    /* Function that uses an ajax call to a government website to pull weather data based on the user's current location and then uses the speak function to tell the user about that data it has retrieved.*/
+	var curLat, curLon;
+	
+	/* Function: uses geolocation to determine the user's latitude and longitude and stores them in global variables */
+	function getLocation() {
+		let options = {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0
+        };
+
+        function error() {
+            speak("Brett, I am unable to determine your location.");
+        }
+
+        function success(pos) {
+			curLat = pos.coords.latitude;
+			curLon = pos.coords.longitude;
+			testPositions();
+        };
+		navigator.geolocation.getCurrentPosition(success, error, options);
+	}
+	getLocation();
+
+    /* Function: uses an ajax call to a government website to pull weather data based on the user's current location and then uses the speak function to tell the user about that data it has retrieved.*/
     function tellMeAboutLocalWeather() {
         let options = {
             enableHighAccuracy: true,
@@ -90,7 +113,7 @@ $(document).ready(function() {
     on current weather in that area and then uses speak function*/
     function tellMeAboutWeatherIn(lat, lon) {
         $.ajax({
-            url: 'http://forecast.weather.gov/MapClick.php?lat=' + lat + '&lon=' + lon + '&FcstType=json',
+            url: 'https://forecast.weather.gov/MapClick.php?lat=' + lat + '&lon=' + lon + '&FcstType=json',
             datatype: 'jsonp',
             success: function(data) {
                 let city = data.productionCenter;
@@ -164,13 +187,13 @@ $(document).ready(function() {
 
     function pullWeatherImage(lat, lon, imgID) {
         $.ajax({
-            url: 'http://forecast.weather.gov/MapClick.php?lat=' + lat + '&lon=' + lon + '&FcstType=json',
+            url: 'https://forecast.weather.gov/MapClick.php?lat=' + lat + '&lon=' + lon + '&FcstType=json',
             datatype: 'jsonp',
             success: function(data) {
                 if (data.currentobservation.Weatherimage == "NULL") {
                     var image = data.data.iconLink[0];
                 } else {
-                    var image = "http://forecast.weather.gov/newimages/large/" + data.currentobservation.Weatherimage;
+                    var image = "https://forecast.weather.gov/newimages/large/" + data.currentobservation.Weatherimage;
                 }
                 document.getElementById(imgID).setAttribute("src", image);
             }
@@ -196,11 +219,13 @@ $(document).ready(function() {
     document.getElementById("phoenix-weather-button").onclick = function() {
         tellMeAboutPhoenixWeather();
     }
-    document.getElementById("phoenix-weather-button").onclick = function() {
-        tellMeAboutPhoenixWeather();
-    }
 	document.getElementById("austin-weather-button").onclick = function() {
         tellMeAboutAustinWeather();
     }
+	
+	function testPositions() {
+		console.log(curLat);
+		console.log(curLon);
+	}
 	
 });

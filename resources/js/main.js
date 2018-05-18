@@ -4,7 +4,7 @@ $(document).ready(function() {
 	getCurrentDate = function() {
     	return new Date();
 	}
-
+	
   var toDoActivities = [];
 
   var liftingSevenDays =      [102, 68, 100, 0, 75, 100, 82];
