@@ -121,6 +121,7 @@ $(document).ready(function() {
     var coordsOfAlbany = [42.7481, -73.8023];
     var coordsOfKula = [19.5189, -154.8342];
     var coordsOfPhoenix = [33.4484, -112.0740];
+	var coordsOfAustin = [30.2672, -97.7431];
 
     function tellMeAboutSanDiegoWeather() {
         tellMeAboutWeatherIn(coordsOfSanDiego[0], coordsOfSanDiego[1]);
@@ -137,12 +138,17 @@ $(document).ready(function() {
     function tellMeAboutPhoenixWeather() {
         tellMeAboutWeatherIn(coordsOfPhoenix[0], coordsOfPhoenix[1]);
     }
+	
+ 	function tellMeAboutAustinWeather() {
+        tellMeAboutWeatherIn(coordsOfAustin[0], coordsOfAustin[1]);
+    }
 
     function generateWeatherImages() {
         pullWeatherImage(coordsOfAlbany[0], coordsOfAlbany[1], "albany-weather-button");
         pullWeatherImage(coordsOfSanDiego[0], coordsOfSanDiego[1], "san-diego-weather-button");
         pullWeatherImage(coordsOfKula[0], coordsOfKula[1], "kula-weather-button");
         pullWeatherImage(coordsOfPhoenix[0], coordsOfPhoenix[1], "phoenix-weather-button");
+		pullWeatherImage(coordsOfAustin[0], coordsOfAustin[1], "austin-weather-button");
 
         function success(pos) {
             let currentLatitude = pos.coords.latitude;
@@ -153,6 +159,8 @@ $(document).ready(function() {
         function error() {}
         navigator.geolocation.getCurrentPosition(success, error);
     }
+	
+	
 
     function pullWeatherImage(lat, lon, imgID) {
         $.ajax({
@@ -173,6 +181,9 @@ $(document).ready(function() {
         generateWeatherImages();
     }, (1000 * 60 * 10));
 
+	document.getElementById("my-weather-button").onclick = function() {
+        tellMeAboutLocalWeather();
+    }
     document.getElementById("albany-weather-button").onclick = function() {
         tellMeAboutAlbanyWeather();
     }
@@ -185,7 +196,11 @@ $(document).ready(function() {
     document.getElementById("phoenix-weather-button").onclick = function() {
         tellMeAboutPhoenixWeather();
     }
-    document.getElementById("my-weather-button").onclick = function() {
-        tellMeAboutLocalWeather();
+    document.getElementById("phoenix-weather-button").onclick = function() {
+        tellMeAboutPhoenixWeather();
     }
+	document.getElementById("austin-weather-button").onclick = function() {
+        tellMeAboutAustinWeather();
+    }
+	
 });
