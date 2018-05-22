@@ -3,6 +3,8 @@
 	$serv = 'localhost';
 	$user = 'jaysoftw_brett';
 	$pass = 'Su944jAk127456';
+//	$user = 'root';
+//	$pass = 'Bc6219bAj';
 	$db = 'jaysoftw_homebase';
 
 ?>
@@ -22,6 +24,7 @@
     <link rel="stylesheet" type="text/css" href="resources/css/reset.css">
     <!-- LINK TO MAIN STYLING SHEET -->
     <link rel="stylesheet" type="text/css" href="resources/css/main.css">
+    <link rel="stylesheet" type="text/css" href="resources/css/weather.css">
     <!-- LINK TO GOOGLE FONTS -->
     <link href="https://fonts.googleapis.com/css?family=Lobster|VT323|Orbitron:400,900" rel="stylesheet">
 </head>
@@ -44,6 +47,7 @@
 	<main>
 		<section class="column weather">
 			<h2>Weather</h2>
+			<div class="content">
 			<?php
 				$conn = new mysqli($serv, $user, $pass, $db);
 				if (!$conn) {
@@ -54,23 +58,28 @@
 				if ($result->num_rows > 0) {
 			?>
 					<script>
-						var myCities = [];	
+						var myCities = [];
+						function City(name, lat, lon) {
+							this.name = name;
+							this.lat = lat;
+							this.lon = lon;
+						}
 					</script>
 			<?php
 					while($row = $result->fetch_assoc()) {
-						echo "<div>";
-						echo "<img src='' id='" . $row["name"] . "-weather-button'/>";
-						echo "<h3>" .$row["name"] . "</h3>";
-						echo "</div>"
 			?>
 					<script>
-						myCities.push("<?php echo $row["name"]?>")
+						myCities.push(new City("<?php echo $row["name"]?>", "<?php echo $row["lat"]?>", "<?php echo $row["lon"]?>"));
 					</script>
 			<?php
 					}
 				}
 				$conn->close();
 			?>
+			</div>
+		</section>
+		<section class="column finance">
+			<h2>Finances</h2>
 		</section>
 	</main>
 

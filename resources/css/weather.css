@@ -1,0 +1,27 @@
+section.weather {
+	border: 0.25rem solid white;
+}
+section.weather div.content {
+	width: 100%;
+	display: inline-flex;
+	justify-content: space-around;
+	flex-flow: row wrap;
+	align-items: center;
+}
+section.weather div.city {
+	display: inline-flex;
+	flex-flow: column nowrap;
+	align-items: center;
+	margin: 1rem 0;
+}
+section.weather div.city img {
+	width: 6rem;
+	height: 6rem;
+	border-radius: 0.25rem 1rem;
+}
+section.weather div.city h3 {
+	font-size: 1rem;
+}
+section.weather div.city h4 {
+	font-size: 0.75rem;
+}
