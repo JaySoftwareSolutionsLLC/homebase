@@ -6,7 +6,7 @@ $(document).ready(function() {
 	
 	/* Function: creates div and img elements for the city object argument. Then performs an ajax call to a government website based on the city object's latitude and longitude which pulls weather information about the city. Upon a successful ajax call the image will be changed to display current weather and the current temperature will be displayed as well as the number of beautiful days and nights. Also sets events to trigger the speakCurrentWeather and speakForecastWeather functions. */
 	function displayCity(city) {
-		$("section.weather .content").append( "<div class='city " + city.name + "'>" );
+		$("section.weather .content").prepend( "<div class='city " + city.name + "'>" );
 		$("div." + city.name).append("<img src=''>");
 		$.ajax({
 				url: 'https://forecast.weather.gov/MapClick.php?lat=' + city.lat + '&lon=' + city.lon + '&FcstType=json',

@@ -1,10 +1,10 @@
 <?php
 
 	$serv = 'localhost';
-	$user = 'jaysoftw_brett';
-	$pass = 'Su944jAk127456';
-//	$user = 'root';
-//	$pass = 'Bc6219bAj';
+//	$user = 'jaysoftw_brett';
+//	$pass = 'Su944jAk127456';
+	$user = 'root';
+	$pass = 'Bc6219bAj';
 	$db = 'jaysoftw_homebase';
 
 ?>
@@ -15,18 +15,16 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
     <meta name="description" content="INSERT">
-    <!-- FAVICON -->
     <link rel="shortcut icon" href="resources/assets/images/favicon.png" type="image/x-icon">
     <link rel="icon" href="resources/assets/images/favicon.png" type="image/x-icon">
-    <!-- TITLE -->
     <title>Home Base 3.0</title>
-    <!-- LINK TO A RESET CSS -->
-    <link rel="stylesheet" type="text/css" href="resources/css/reset.css">
-    <!-- LINK TO MAIN STYLING SHEET -->
-    <link rel="stylesheet" type="text/css" href="resources/css/main.css">
-    <link rel="stylesheet" type="text/css" href="resources/css/weather.css">
-    <!-- LINK TO GOOGLE FONTS -->
     <link href="https://fonts.googleapis.com/css?family=Lobster|VT323|Orbitron:400,900" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="resources/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="resources/css/main.css">
+    <link rel="stylesheet" type="text/css" href="resources/css/fitness.css">
+    <link rel="stylesheet" type="text/css" href="resources/css/weather.css">
+    <link rel="stylesheet" type="text/css" href="resources/css/finance.css">
+
 </head>
 
 <body>
@@ -37,7 +35,8 @@
         </div>
         <div class="right">
             <nav>
-                <a href="file:///C:/cygwin64/home/Brett%20Brewster/projects/Unfinished%20Projects/yolked/project/index.html" target="_blank">Yolked!</a>
+               	<a class="coords"></a>
+                <a href="https://secure332.sgcpanel.com:2096/cpsess0106124978/webmail/Crystal/index.html?mailclient=horde" target="_blank">webmail</a>
                 <a href="https://quizlet.com/215065234/programming-terminology-flash-cards/" target="_blank">Quizlet</a>
             </nav>
         </div>
@@ -45,127 +44,19 @@
     <div id="ghost-header"></div>
 	
 	<main>
-		<section class="column weather">
-			<h2>Weather</h2>
-			<div class="content">
-			<?php
-				$conn = new mysqli($serv, $user, $pass, $db);
-				if (!$conn) {
-					die("Connection to server failed: " . mysqli_connect_errno());
-				}
-				$cities_select = "SELECT * FROM weather_cities";
-				$result = $conn->query($cities_select);
-				if ($result->num_rows > 0) {
-			?>
-					<script>
-						var myCities = [];
-						function City(name, lat, lon) {
-							this.name = name;
-							this.lat = lat;
-							this.lon = lon;
-						}
-					</script>
-			<?php
-					while($row = $result->fetch_assoc()) {
-			?>
-					<script>
-						myCities.push(new City("<?php echo $row["name"]?>", "<?php echo $row["lat"]?>", "<?php echo $row["lon"]?>"));
-					</script>
-			<?php
-					}
-				}
-				$conn->close();
-			?>
-			</div>
-		</section>
-		<section class="column finance">
-			<h2>Finances</h2>
-		</section>
+	<?php
+		include('resources/sections/fitness.php');
+		include('resources/sections/finance.php');
+		include('resources/sections/weather.php');
+	?>
 	</main>
-
-	<!--
-	
-    <div class="all-columns">
-
-        <div class="first-column">
-            <div id="work-schedule">
-                <h2>Today's Work Schedule</h2>
-                <button id="work-schedule-pa">Programmer Analyst</button>
-                <button id="work-schedule-pa-ricks">Programmer Analyst + Rick's</button>
-                <button id="work-schedule-ricks-am">Rick's AM</button>
-                <button id="work-schedule-ricks-pm">Rick's PM</button>
-                <button id="work-schedule-ricks-dbl">Rick's Double</button>
-                <button id="work-schedule-none">None</button>
-            </div>
-            <div id="queue">
-                <h2 id="queueH2">Queue</h2>
-                <div id="log-a-session">
-                </div>
-            </div>
-        </div>
-        </div>
-        <div class="third-column">
-            <div class="daily-habits">
-                <h2>Habits</h2>
-                <div class="habit">
-                    <img src="resources/assets/images/medication.jpg" class="habit-image">
-                    <h3>A.M.</h3>
-                </div>
-                <div class="habit">
-                    <img src="resources/assets/images/juice.jpg" class="habit-image">
-                    <h3>Juicing</h3>
-                </div>
-                <div class="habit">
-                    <img src="resources/assets/images/medication.jpg" class="habit-image">
-                    <h3>P.M.</h3>
-                </div>
-            </div>
-            <div class="daily-weather">
-                <h2>Weather</h2>
-                <div class="weather">
-                    <img src="resources/assets/images/transparent.png" class="weather-image" id="my-weather-button">
-                    <h3>My Weather</h3>
-                </div>
-                <div class="weather">
-                    <img src="resources/assets/images/transparent.png" class="weather-image" id="albany-weather-button">
-                    <h3>Albany</h3>
-                </div>
-                <div class="weather">
-                    <img src="resources/assets/images/transparent.png" class="weather-image" id="san-diego-weather-button">
-                    <h3>San Diego</h3>
-                </div>
-                <div class="weather">
-                    <img src="resources/assets/images/transparent.png" class="weather-image" id="kula-weather-button">
-                    <h3>Kula</h3>
-                </div>
-                <div class="weather">
-                    <img src="resources/assets/images/transparent.png" class="weather-image" id="phoenix-weather-button">
-                    <h3>Phoenix</h3>
-                </div>
-                <div class="weather">
-                    <img src="resources/assets/images/transparent.png" class="weather-image" id="austin-weather-button">
-                    <h3>Austin</h3>
-                </div>
-            </div>
-            <div class="to-do" id="urgent-errand-div">
-                <h2>Urgent Errands</h2>
-                <ol>
-                </ol>
-            </div>
-            <div class="to-do" id="errand-div">
-                <h2>Errands</h2>
-                <ol>
-                </ol>
-            </div>
-        </div>
-    </div>
-
-	-->
 
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
     <script type="text/javascript" src="resources/js/main.js"></script>
     <script type="text/javascript" src="resources/js/speech.js"></script>
     <script type="text/javascript" src="resources/js/greeting.js"></script>
+	<script type="text/javascript" src="resources/js/fitness.js"></script>
+    <script type="text/javascript" src="resources/js/finance.js"></script>
     <script type="text/javascript" src="resources/js/weather.js"></script>
 </body>
 

@@ -12,7 +12,7 @@ section.weather div.city {
 	display: inline-flex;
 	flex-flow: column nowrap;
 	align-items: center;
-	margin: 1rem 0;
+	margin: 0rem 0rem 1rem 0;
 }
 section.weather div.city img {
 	width: 6rem;
@@ -21,7 +21,10 @@ section.weather div.city img {
 }
 section.weather div.city h3 {
 	font-size: 1rem;
+	color: hsla(190, 100%, 50%, 1);
+	margin: 0.5rem 0 0.25rem;
 }
 section.weather div.city h4 {
 	font-size: 0.75rem;
+	margin: 0.125rem 0;
 }

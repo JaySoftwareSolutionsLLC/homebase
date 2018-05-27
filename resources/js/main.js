@@ -735,3 +735,9 @@ $(document).ready(function() {
   dailyHabitsFunctionality();
 
 });
+
+$("svg").click(function(e) {
+	$("a.coords").html(e.pageX + "," + (e.pageY - 48));
+	console.log(e.pageX);
+});
+	

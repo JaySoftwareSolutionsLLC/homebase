@@ -58,5 +58,6 @@ section {
 }
 section h2 {
 	font-size: 3rem;
-	color: hsla(190, 100%, 50%, 1);
+	margin-bottom: 2rem;
+/*	color: hsla(190, 100%, 50%, 1);*/
 }

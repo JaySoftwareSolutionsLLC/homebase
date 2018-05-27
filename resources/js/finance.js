@@ -1,0 +1,1 @@
+$("#weekly-income").append("<h4>$" + thisWeekRicks + "</h4>")
