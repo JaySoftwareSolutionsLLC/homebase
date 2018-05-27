@@ -9,7 +9,7 @@
             	<style>
             	</style>
         	</defs>
-        	<g class="front" stroke="white" stroke-width="2" fill="none">
+        	<g class="front" stroke="white" stroke-width="0.5" fill="none">
         	<path d="M 85,52 
 				C 75,68 57,57 50,76 
 				C 33,75 21,94 28,107 
@@ -58,8 +58,9 @@
 				C 120,20 110,6 100,8
 				C 90,6 80,20 85,30
 				C 80,35 80,40 85,45
-				C 84,51 85,52 85,52 "/>
-     			<g class="muscles" stroke-width="1" fill="red">
+				C 84,51 85,52 85,52
+    			C 95,63 105,63 115,53"/>
+     			<g class="muscles" stroke-width="0.5" fill="red">
       				<path class="right trapezius" 
       				d="	M 85,52 
 						C 75,68 57,57 50,76
@@ -187,9 +188,9 @@
      					C 106,334 104,312 105,284"
       				/>
 				</g>
-       		<text x="100" y="410" text-anchor="middle">Front</text>
+       		<text x="100" y="415" text-anchor="middle" fill="white" stroke="none">Front</text>
         	</g>
-        	<g class="back" stroke="white" stroke-width="2" fill="none" transform="translate(200,0)">
+        	<g class="back" stroke="white" stroke-width="0.5" fill="none" transform="translate(200,0)">
          	<path d="M 85,52 
 				C 75,68 57,57 50,76 
 				C 33,75 21,94 28,107 
@@ -238,8 +239,8 @@
 				C 120,20 110,6 100,8
 				C 90,6 80,20 85,30
 				C 80,35 80,40 85,45
-				C 84,51 85,52 85,52 "/>
-      		    <g class="muscles" stroke-width="1" fill="red">
+				C 84,51 85,52 85,52"/>
+      		    <g class="muscles" stroke-width="0.5" fill="red">
       				<path class="left trapezius" 
       				d="	M 97,38 
 						C 75,68 57,57 50,76
@@ -361,7 +362,7 @@
      					Q 122,290 127,280"
       				/>
 				</g>
-       		<text x="100" y="410" text-anchor="middle">Back</text>
+       		<text x="100" y="415" text-anchor="middle" fill="white" stroke="none">Back</text>
         	</g>
 	   </svg>
    </div>
