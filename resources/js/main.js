@@ -736,8 +736,8 @@ $(document).ready(function() {
 
 });
 
-$("svg").click(function(e) {
-	$("a.coords").html(e.pageX + "," + (e.pageY - 48));
-	console.log(e.pageX);
-});
+//$("svg").click(function(e) {
+//	$("a.coords").html(e.pageX + "," + (e.pageY - 48));
+//	console.log(e.pageX);
+//});
 	

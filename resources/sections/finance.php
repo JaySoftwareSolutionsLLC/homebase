@@ -1,5 +1,5 @@
 <script>
-	var thisWeekRicks, thisWeekSealAndDesign, annualIncomeProjection;
+	var thisWeekRicks, thisWeekSealAndDesign, annualIncomeProjection, currCash, currAssets, currLiabilities;
 </script>
 <?php
 	$last_sunday = "'" . date('Y/m/d', strtotime('last Sunday')) . "'";
@@ -29,9 +29,39 @@
 	$row = mysqli_fetch_row($result);
 	$total_ricks_hours = $row[0];
 
+	$current_cash = 0;
+	$query = "SELECT value, MAX(date) FROM `finance_accounts` WHERE type = 'cash' GROUP BY name";
+	$result = $conn->query($query);
+	if ($result->num_rows > 0) {
+		while($r = $result->fetch_assoc()) {
+			$current_cash += $r["value"];
+		}
+	}
+
+	$current_assets = 0;
+	$query = "SELECT value, MAX(date) FROM `finance_accounts` WHERE type = 'asset' GROUP BY name";
+	$result = $conn->query($query);
+	if ($result->num_rows > 0) {
+		while($r = $result->fetch_assoc()) {
+			$current_assets += $r["value"];
+		}
+	}
+
+	$current_liabilities = 0;
+	$query = "SELECT value, MAX(date) FROM `finance_accounts` WHERE type = 'liability' GROUP BY name";
+	$result = $conn->query($query);
+	if ($result->num_rows > 0) {
+		while($r = $result->fetch_assoc()) {
+			$current_liabilities += $r["value"];
+		}
+	}
+
 ?>
 	<script>
 		thisWeekRicks = "<?php echo round($this_week_ricks_tips + (7.5 * $this_week_ricks_hours))?>";
+		currCash = "<?php echo $current_cash ?>"
+		currAssets = "<?php echo $current_assets ?>";
+		currLiabilities = "<?php echo $current_liabilities ?>";
 	</script>
 <?php
 	$conn->close();
@@ -48,8 +78,6 @@
 	<div class="content">
 		<div class="stat" id="actual-net-worth">
 			<h3>Current Net Worth</h3>
-<!--			<h4>$______</h4>-->
-<!--			<h5>As of 05/22/2018</h5>-->
 		</div>
 		<div class="stat" id="weekly-income">
 			<h3>This Week Income</h3>

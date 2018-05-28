@@ -1,10 +1,10 @@
 <?php
 
 	$serv = 'localhost';
-	$user = 'jaysoftw_brett';
-	$pass = 'Su944jAk127456';
-//	$user = 'root';
-//	$pass = 'Bc6219bAj';
+//	$user = 'jaysoftw_brett';
+//	$pass = 'Su944jAk127456';
+	$user = 'root';
+	$pass = 'Bc6219bAj';
 	$db = 'jaysoftw_homebase';
 
 ?>
@@ -35,7 +35,6 @@
         </div>
         <div class="right">
             <nav>
-               	<a class="coords"></a>
                 <a href="https://secure332.sgcpanel.com:2096/cpsess0106124978/webmail/Crystal/index.html?mailclient=horde" target="_blank">webmail</a>
                 <a href="https://quizlet.com/215065234/programming-terminology-flash-cards/" target="_blank">Quizlet</a>
             </nav>
@@ -45,6 +44,8 @@
 	
 	<main>
 	<?php
+		include('resources/sections/habits.php');
+		include('resources/sections/goals.php');
 		include('resources/sections/fitness.php');
 		include('resources/sections/finance.php');
 		include('resources/sections/weather.php');
