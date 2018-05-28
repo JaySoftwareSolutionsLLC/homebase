@@ -1,3 +1,41 @@
-div.content {
+section.fitness svg g.body {
+	stroke-width: 2px;
+}
+section.fitness svg .muscles {
+	stroke-width: 2px;
+}
+
+section.fitness div.content {
 	width: 100%;
+}
+section.fitness div.stats {
+	width: 100%;
+	border: 1px solid hsl(180, 100%, 50%);
+	color: white;
+	display: inline-flex;
+	flex-flow: row wrap;
+	justify-content: space-between;
+	text-align: center;
+	padding: 0.5rem;
+}
+section.fitness div.stats h3 {
+	font-size: 1.25rem;
+	width: 100%;
+	padding: 0.5rem 0rem 1rem 0rem;
+}
+section.fitness div.stat {
+	width: 45%;
+	display: inline-flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 0.5rem;
+}
+section.fitness div.stat h4.name {
+	font-size: 0.625rem;
+}
+section.fitness div.stat h4.value {
+	font-size: 1rem;
+}
+section.fitness div.stat h3.title {
+	text-transform: capitalize;
 }

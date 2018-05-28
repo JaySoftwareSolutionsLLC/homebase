@@ -1,10 +1,10 @@
 <?php
 
 	$serv = 'localhost';
-//	$user = 'jaysoftw_brett';
-//	$pass = 'Su944jAk127456';
-	$user = 'root';
-	$pass = 'Bc6219bAj';
+	$user = 'jaysoftw_brett';
+	$pass = 'Su944jAk127456';
+//	$user = 'root';
+//	$pass = 'Bc6219bAj';
 	$db = 'jaysoftw_homebase';
 
 ?>

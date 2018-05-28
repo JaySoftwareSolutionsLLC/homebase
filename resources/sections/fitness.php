@@ -3,13 +3,13 @@
 ?>
 <section class="column fitness">
 <h2>Fitness</h2>
-   <div class="content">
-    	<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 400 420">
+	<div class="content">
+   		<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 400 420">
         	<defs>
             	<style>
             	</style>
         	</defs>
-        	<g class="front" stroke="white" stroke-width="0.5" fill="none">
+        	<g class="body front" stroke="white" stroke-width="0.5" fill="none">
         	<path d="M 85,52 
 				C 75,68 57,57 50,76 
 				C 33,75 21,94 28,107 
@@ -61,128 +61,128 @@
 				C 84,51 85,52 85,52
     			C 95,63 105,63 115,53"/>
      			<g class="muscles" stroke-width="0.5" fill="red">
-      				<path class="right trapezius" 
+      				<path class="muscle right trapezius" 
       				d="	M 85,52 
 						C 75,68 57,57 50,76
      					C 66,76 85,70 85,52"
       				/>
-      				<path class="left trapezius" 
+      				<path class="muscle left trapezius" 
       				d="	M 115,52 
 						C 125,68 143,57 150,76
      					C 134,76 115,70 115,52"
       				/>
-      				<path class="right shoulder" 
+      				<path class="muscle right shoulder" 
       				d="	M 50,76 
 						C 33,75 21,94 28,107
      					C 43,104 59,90 50,76"
       				/>
-      				<path class="left shoulder" 
+      				<path class="muscle left shoulder" 
       				d="	M 150,76 
 						C 164,75 179,94 172,107
      					C 157,104 141,90 150,76"
       				/>
-      				<path class="right tricep" 
+      				<path class="muscle right tricep" 
       				d="	M 27,111 
 						C 32,110 38,109 42,105
      					C 32,114 40,129 26,136
      					C 23,124 25,115 27,111"
       				/>
-      				<path class="left tricep" 
+      				<path class="muscle left tricep" 
       				d="	M 173,111 
 						C 168,110 162,109 158,105
      					C 168,114 160,129 174,136
      					C 177,124 175,115 173,111"
       				/>
-      				<path class="right bicep" 
+      				<path class="muscle right bicep" 
       				d="	M 65,116 
 						C 60,128 54,143 42,142
      					C 43,124 44,113 46,104
      					C 52,113 59,114 64,116"
       				/>
-      				<path class="left bicep" 
+      				<path class="muscle left bicep" 
       				d="	M 135,116 
 						C 140,128 146,143 158,142
      					C 157,124 156,113 154,104
      					C 148,113 141,114 136,116"
       				/>
-      				<path class="right forearm" 
+      				<path class="muscle right forearm" 
       				d="	M 17,154 
 						C 23,145 33,137 38,135
      					C 33,158 49,162 24,198
      					C 17,182 15,172 17,154"
       				/>
-      				<path class="left forearm" 
+      				<path class="muscle left forearm" 
       				d="	M 183,154 
 						C 177,145 167,137 162,135
      					C 167,158 151,162 176,198
      					C 183,182 185,172 183,154"
       				/>
-      				<path class="right pec" 
+      				<path class="muscle right pec" 
       				d="	M 52,100 
-						C 63,84 78,76 97,68
-						C 100,133 100,115 97,118
+						C 63,80 78,72 96,68
+						C 100,70 100,100 96,118
      					C 80,118 60,107 52,100"
       				/>
-      				<path class="left pec" 
+      				<path class="muscle left pec" 
       				d="	M 148,100 
-						C 137,90 122,76 103,68
-						C 100,133 100,115 103,118
+						C 137,80 122,72 104,68
+						C 100,70 100,100 104,118
      					C 120,118 140,107 148,100"
       				/>
-      				<path class="right oblique" 
+      				<path class="muscle right oblique" 
       				d="	M 70,118 
 						C 59,143 84,156 87,170
      					C 85,150 83,132 82,123
      					C 77,122 74,120 70,118"
       				/>
-      				<path class="left oblique" 
+      				<path class="muscle left oblique" 
       				d="	M 130,118 
 						C 141,143 116,156 113,170
      					C 115,150 117,132 118,123
      					C 123,122 126,120 130,118"
       				/>
-      				<path class="right abs" 
+      				<path class="muscle right abdominal" 
       				d="	M 87,123
-						C 89,148 92,180 100,192
+						C 89,148 90,190 100,192
      					C 100,170 100,150 100,125
      					C 95,125 91,124 87,123"
       				/>
-      				<path class="left abs" 
+      				<path class="muscle left abdominal" 
       				d="	M 113,123
-						C 111,148 108,180 100,192
+						C 111,148 110,190 100,192
      					C 100,170 100,150 100,125
      					C 105,125 109,124 113,123"
       				/>
-      				<path class="right quads" 
+      				<path class="muscle right quads" 
       				d="	M 61,188
 						C 53,223 50,260 69,280
      					C 72,284 76,280 79,282
      					C 82,248 85,232 86,220
      					C 94,205 71,203 61,188"
       				/>
-      				<path class="left quads" 
+      				<path class="muscle left quads" 
       				d="	M 139,188
 						C 147,223 150,260 131,280
      					C 128,284 124,280 121,282
      					C 118,248 115,232 114,220
      					C 106,205 129,203 139,188"
       				/>
-      				<path class="right calf" 
+      				<path class="muscle right calf" 
       				d="	M 69,280
 						C 61,298 61,315 65,334
      					C 69,316 71,295 69,280"
       				/>
-      				<path class="right calf" 
+      				<path class="muscle right calf" 
       				d="	M 95,284
 						C 80,288 79,327 90,353
      					C 94,334 96,312 95,284"
       				/>
-      				<path class="left calf" 
+      				<path class="muscle left calf" 
       				d="	M 131,280
 						C 139,298 139,315 135,334
      					C 131,316 129,295 131,280"
       				/>
-      				<path class="left calf" 
+      				<path class="muscle left calf" 
       				d="	M 105,284
 						C 120,288 121,327 110,353
      					C 106,334 104,312 105,284"
@@ -190,8 +190,8 @@
 				</g>
        		<text x="100" y="415" text-anchor="middle" fill="white" stroke="none">Front</text>
         	</g>
-        	<g class="back" stroke="white" stroke-width="0.5" fill="none" transform="translate(200,0)">
-         	<path d="M 85,52 
+        	<g class="body back" stroke="white" stroke-width="0.5" fill="none" transform="translate(200,0)">
+        	<path d="M 85,52 
 				C 75,68 57,57 50,76 
 				C 33,75 21,94 28,107 
 				Q 22,116 25,138 
@@ -201,8 +201,8 @@
 				Q 31,228 42,224
 				C 47,220 34,210 41,204
 				C 42,199 27,193 31,191
-				C 47,177 59,154 50,140
-				C 53,142 60,136 61,126
+				C 43,177 55,154 50,140
+				C 50,142 57,136 61,126
 				C 53,144 65,150 67,158
 				C 68,168 65,181 61,188
 				C 53,223 50,260 69,280
@@ -211,9 +211,9 @@
 				C 61,395 86,392 96,390
 				C 95,375 85,359 90,353
 				C 96,337 96,302 95,280
-				C 92,288 98,271 100,240
+				C 93,258 95,248 100,230
 
-				C 102,271 108,288 105,280
+				C 105,248 107,258 105,280
 				C 104,302 104,337 110,353
 				C 115,359 105,375 104,390
 				C 114,392 139,395 152,394
@@ -222,8 +222,8 @@
 				C 150,260 147,223 139,188
 				C 135,181 132,168 133,158
 				C 135,150 147,144 139,126
-				C 140,136 147,142 150,140
-				C 141,154 153,177 169,191
+				C 143,136 150,142 150,140
+				C 145,154 157,177 169,191
 				C 173,193 158,199 158,204
 				C 166,210 153,220 158,224
 				Q 169,228 181,227
@@ -241,7 +241,7 @@
 				C 80,35 80,40 85,45
 				C 84,51 85,52 85,52"/>
       		    <g class="muscles" stroke-width="0.5" fill="red">
-      				<path class="left trapezius" 
+      				<path class="muscle left trapezius" 
       				d="	M 97,38 
 						C 75,68 57,57 50,76
     					C 70,70 75,83 78,90 
@@ -249,7 +249,7 @@
      					C 97,97 93,72 89,71
      					C 95,58 97,44 97,38"
       				/>
-      				<path class="right trapezius" 
+      				<path class="muscle right trapezius" 
       				d="	M 103,38 
 						C 125,68 143,57 150,76
     					C 130,70 125,83 122,90 
@@ -257,19 +257,19 @@
      					C 103,97 103,72 111,71
      					C 105,58 103,44 103,38"
       				/>
-      				<path class="left delt" 
+      				<path class="muscle left delt" 
       				d="	M 50,76
 						C 33,75 21,94 28,107
     					C 40,103 51,93 58,88
     					C 56,82 53,78 50,76"
       				/>
-      				<path class="right delt" 
+      				<path class="muscle right delt" 
       				d="	M 150,76
 						C 167,75 179,94 172,107
     					C 160,103 149,93 142,88
     					C 144,82 147,78 150,76"
       				/>
-      				<path class="left tricep" 
+      				<path class="muscle left tricep" 
       				d="	M 28,107
 						Q 22,116 25,138
     					C 29,127 32,122 37,120
@@ -278,7 +278,7 @@
     					C 59,116 56,110 54,105
     					C 44,109 32,109 28,107"
       				/>
-      				<path class="right tricep" 
+      				<path class="muscle right tricep" 
       				d="	M 172,107
 						Q 178,116 175,138
     					C 171,127 168,122 163,120
@@ -287,75 +287,75 @@
     					C 141,116 144,110 146,105
     					C 156,109 168,109 172,107"
       				/>
-      				<path class="left forearm" 
+      				<path class="muscle left forearm" 
       				d="	M 25,138
 						Q 13,152 17,184
     					Q 27,159 25,138"
       				/>
-      				<path class="right forearm" 
+      				<path class="muscle right forearm" 
       				d="	M 175,138
 						Q 187,152 183,184
     					Q 173,159 175,138"
       				/>
-      				<path class="left lat" 
+      				<path class="muscle left lat" 
       				d="	M 59,98
 						C 53,136 62,154 77,164
     					C 74,146 80,142 95,140
     					L 79,104
     					C 74,106 65,104 59,98"
       				/>
-      				<path class="right lat" 
+      				<path class="muscle right lat" 
       				d="	M 141,98
 						C 147,136 138,154 123,164
     					C 126,146 120,142 105,140
     					L 121,104
     					C 126,106 135,104 141,98"
       				/>
-      				<path class="left lower-back" 
+      				<path class="muscle left lower-back" 
       				d="	M 100,142
 						C 93,146 86,157 85,164
     					C 86,172 97,192 100,196
     					L 100,142"
       				/>
-      				<path class="right lower-back" 
+      				<path class="muscle right lower-back" 
       				d="	M 100,142
 						C 107,146 114,157 115,164
     					C 114,172 103,192 100,196
     					L 100,142"
       				/>
-      				<path class="left glute" 
+      				<path class="muscle left glute" 
       				d="	M 63,208
 						Q 59,220 61,236
      					Q 81,238 91,231
      					Q 97,217 93,208
      					Q 75,199 63,208"
       				/>
-      				<path class="right glute" 
+      				<path class="muscle right glute" 
       				d="	M 137,208
 						Q 141,220 139,236
      					Q 119,238 109,231
      					Q 103,217 107,208
      					Q 125,199 137,208"
       				/>
-      				<path class="left hamstring" 
+      				<path class="muscle left hamstring" 
       				d="	M 60,242
 						C 65,258 69,280 85,281
-     					Q 95,256 95,239
+     					Q 87,256 90,239
      					Q 69,244 60,242"
       				/>
-      				<path class="right hamstring" 
+      				<path class="muscle right hamstring" 
       				d="	M 140,242
 						C 135,258 131,280 115,281
-     					Q 105,256 105,239
+     					Q 113,256 110,239
      					Q 131,244 140,242"
       				/>
-      				<path class="left calf" 
+      				<path class="muscle left calf" 
       				d="	M 73,280
      					Q 60,313 80,354
      					Q 91,322 90,296
      					Q 78,290 73,280"
       				/>
-      				<path class="right calf" 
+      				<path class="muscle right calf" 
       				d="	M 127,280
      					Q 140,313 120,354
      					Q 109,322 110,296
@@ -364,7 +364,30 @@
 				</g>
        		<text x="100" y="415" text-anchor="middle" fill="white" stroke="none">Back</text>
         	</g>
-	   </svg>
-   </div>
+        </svg>
+        <div class="stats">
+        	<h3 class="title">Stats</h3>
+        	<div class="stat">
+        		<h4 class="name">Weight</h4>
+        		<h4 class="value">155 lbs</h4>
+        	</div>
+        	<div class="stat">
+        		<h4 class="name">Ready Muscles</h4>
+        		<h4 class="value">11</h4>
+        	</div>
+        	<div class="stat">
+        		<h4 class="name">Percent Ideal</h4>
+        		<h4 class="value">83%</h4>
+        	</div>
+        	<div class="stat">
+        		<h4 class="name">Strength Index</h4>
+        		<h4 class="value">204</h4>
+        	</div>
+        	<div class="stat">
+        		<h4 class="name">Ideal Muscles</h4>
+        		<h4 class="value">6 / 13</h4>
+        	</div>        	
+		</div>
+	</div>
 </section>
 
