@@ -6,7 +6,7 @@ body {
 main {
 	box-sizing: border-box;
 	width: 80%;
-    max-width: 40rem;
+    max-width: 60rem;
     min-width: 25rem;
 	background: white;
 	color: black;

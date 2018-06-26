@@ -21,7 +21,7 @@ if(isset($_POST['date'])) {
 	}
 }
 
-$qry = "SELECT DAYNAME(date) AS 'dow', date, type, hours, tips FROM finance_ricks_shifts ORDER BY date DESC LIMIT 10;";
+$qry = "SELECT DAYNAME(date) AS 'dow', date, type, hours, tips FROM finance_ricks_shifts ORDER BY date DESC;";
 $res = $conn->query($qry);
 if ($res->num_rows > 0) {
 	$data_log = '';
@@ -38,47 +38,53 @@ if ($res->num_rows > 0) {
 
 $conn->close();
 
-?>
-<!-- Link to style sheets -->
-<link href="https://fonts.googleapis.com/css?family=Lobster|VT323|Orbitron:400,900" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="../css/reset.css">
-<link rel="stylesheet" type="text/css" href="../css/main.css">
-<link rel="stylesheet" type="text/css" href="../css/form.css">
+// Link to Style Sheets
+include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/css-files.php');
 
-<body>
-	<main>
-	
-		<h1>Rick's on Main Shift</h1>
-		<h2 class='msg'><?php echo $entry_msg ?></h2>
-		
-		<form method='post'>
-			<label for='date'>Date</label>
-			<input id='date' type='date' name='date' value="<?php echo $today;?>"/>
-			<label for='type'>Type</label>
-			<select id='type' name='type'>
-				<option value='am'>AM</option>
-				<option value='pm'>PM</option>
-			</select>
-			<label for='hours'>Hours</label>
-			<input id='hours' type='number' name='hours' min='0' max='10' step='0.01'/>
-			<label for='tips'>Tips</label>
-			<input id='tips' type='number' name='tips' min='0' max='500' step='1'/>
-			<button type="submit">Submit</button>
-		</form>
-		
-		<table class='log'>
-			<tr>
-				<th colspan='5'>Recent Rick's on Main Shifts</th>
-			</tr>
-			<tr>
-				<th>Date</th>
-				<th>Day</th>
-				<th>Type</th>
-				<th>Hours</th>
-				<th>Tips</th>
-			</tr>
-			<?php echo $data_log; ?>
-		</table>
-		
-	</main>
-</body>
+?>
+
+
+	<body>
+		<main>
+
+			<h1>Rick's on Main Shift</h1>
+			<h2 class='msg'><?php echo $entry_msg ?></h2>
+
+			<form method='post'>
+				<label for='date'>Date</label>
+				<input id='date' type='date' name='date' value="<?php echo $today;?>"/>
+				<label for='type'>Type</label>
+				<select id='type' name='type'>
+					<option value='am'>AM</option>
+					<option value='pm' selected>PM</option>
+				</select>
+				<label for='hours'>Hours</label>
+				<input id='hours' type='number' name='hours' min='0' max='10' step='0.01'/>
+				<label for='tips'>Tips</label>
+				<input id='tips' type='number' name='tips' min='0' max='500' step='1'/>
+				<button type="submit">Submit</button>
+			</form>
+
+			<table class='log' id='ricks-shifts-table'>
+				<thead>
+					<tr>
+						<th>Date</th>
+						<th>Day</th>
+						<th>Type</th>
+						<th>Hours</th>
+						<th>Tips</th>
+					</tr>
+				</thead>
+				<?php echo $data_log; ?>
+			</table>
+
+		</main>
+<?php
+include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/js-files.php');
+?>
+		<script>
+			$(document).ready( function () {
+				$('#ricks-shifts-table').DataTable();
+			} );
+		</script>
+	</body>

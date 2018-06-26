@@ -20,7 +20,7 @@ if(isset($_POST['date']) && isset($_POST['type']) && isset($_POST['amount'])) {
 	}
 }
 
-$qry = "SELECT date, type, amount FROM finance_seal_income ORDER BY date DESC LIMIT 10;";
+$qry = "SELECT date, type, amount FROM finance_seal_income ORDER BY date DESC;";
 $res = $conn->query($qry);
 if ($res->num_rows > 0) {
 	$data_log = '';
@@ -35,13 +35,10 @@ if ($res->num_rows > 0) {
 
 $conn->close();
 
+// Link to Style Sheets
+include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/css-files.php');
+
 ?>
-<!-- Link to style sheets -->
-<link href="https://fonts.googleapis.com/css?family=Lobster|VT323|Orbitron:400,900" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="../css/reset.css">
-<link rel="stylesheet" type="text/css" href="../css/main.css">
-<link rel="stylesheet" type="text/css" href="../css/form.css">
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
 
 	<body>
 		<main>
@@ -71,8 +68,9 @@ $conn->close();
 			</table>
 
 		</main>
-  		<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
-		<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+<?php
+include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/js-files.php');
+?>
 		<script>
 			$(document).ready( function () {
     			$('#seal-and-design-income-table').DataTable();
