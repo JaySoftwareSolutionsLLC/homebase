@@ -55,47 +55,54 @@ $conn->close();
 <link rel="stylesheet" type="text/css" href="../css/reset.css">
 <link rel="stylesheet" type="text/css" href="../css/main.css">
 <link rel="stylesheet" type="text/css" href="../css/form.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
 
-<body>
-	<main>
-	
-		<h1>Seal & Design Shift</h1>
-		<h2 class='msg'><?php echo $entry_msg ?></h2>
-		
-		<form method='post'>
-			<label for='date'>Date</label>
-			<input id='date' type='date' name='date' value="<?php echo $today;?>"/>
-			<label for='arrival_time'>Arrival Time</label>
-			<input id='arrival_time' type='time' name='arrival_time'/>
-			<label for='departure_time'>Departure Time</label>
-			<input id='departure_time' type='time' name='departure_time'/>
-			<label for='strain'>Strain</label>
-			<input id='strain' type='number' name='strain' min='1' max='10' step='1'/>
-			<label for='feedback'>Feedback</label>
-			<input id='feedback' type='number' name='feedback' min='1' max='10' step='1'/>
-			<label for='stress'>Stress</label>
-			<input id='stress' type='number' name='stress' min='1' max='10' step='1'/>
-			<button type="submit">Submit</button>
-		</form>
-		
-		<table class='log'>
-			<tr>
-				<th colspan='6'>Recent Seal & Design Shifts</th>
-			</tr>
-			<tr>
-				<th>Date</th>
-				<th>Day</th>
-				<th>Arr.</th>
-				<th>Dep.</th>
-				<th>Hrs</th>
-				<th>Strain</th>
-				<th>Feedback</th>
-				<th>Stress</th>
-			</tr>
-			<?php echo $data_log; ?>
-		</table>
-		
-	</main>
-</body>
+	<body>
+		<main>
+
+			<h1>Seal & Design Shift</h1>
+			<h2 class='msg'><?php echo $entry_msg ?></h2>
+
+			<form method='post'>
+				<label for='date'>Date</label>
+				<input id='date' type='date' name='date' value="<?php echo $today;?>"/>
+				<label for='arrival_time'>Arrival Time</label>
+				<input id='arrival_time' type='time' name='arrival_time'/>
+				<label for='departure_time'>Departure Time</label>
+				<input id='departure_time' type='time' name='departure_time'/>
+				<label for='strain'>Strain</label>
+				<input id='strain' type='number' name='strain' min='1' max='10' step='1'/>
+				<label for='feedback'>Feedback</label>
+				<input id='feedback' type='number' name='feedback' min='1' max='10' step='1'/>
+				<label for='stress'>Stress</label>
+				<input id='stress' type='number' name='stress' min='1' max='10' step='1'/>
+				<button type="submit">Submit</button>
+			</form>
+
+			<table class='log' id='seal-and-design-shifts-table'>
+				<thead>
+					<tr>
+						<th>Date</th>
+						<th>Day</th>
+						<th>Arr.</th>
+						<th>Dep.</th>
+						<th>Hrs</th>
+						<th>Strain</th>
+						<th>Feedback</th>
+						<th>Stress</th>
+					</tr>				
+				</thead>
+				<?php echo $data_log; ?>
+			</table>
+
+		</main>
+			<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+			<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+			<script>
+				$(document).ready( function () {
+					$('#seal-and-design-shifts-table').DataTable();
+				} );
+			</script>
+	</body>
 
 </html>

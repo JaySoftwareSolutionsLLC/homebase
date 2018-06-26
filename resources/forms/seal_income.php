@@ -41,36 +41,45 @@ $conn->close();
 <link rel="stylesheet" type="text/css" href="../css/reset.css">
 <link rel="stylesheet" type="text/css" href="../css/main.css">
 <link rel="stylesheet" type="text/css" href="../css/form.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
 
-<body>
-	<main>
-	
-		<h1>Seal & Design Income</h1>
-		<h2 class='msg'><?php echo $entry_msg ?></h2>
-		
-		<form method='post'>
-			<label for='date'>Date</label>
-			<input id='date' type='date' name='date' value="<?php echo $today;?>"/>
-			<label for='type'>Type</label>
-			<input id='type' type='string' name='type'/>
-			<label for='amount'>Amount</label>
-			<input id='amount' type='number' name='amount' step='0.01' min='0'/>
-			<button type="submit">Submit</button>
-		</form>
-		
-		<table class='log'>
-			<tr>
-				<th colspan='6'>Recent Seal & Design Income</th>
-			</tr>
-			<tr>
-				<th>Date</th>
-				<th>Type</th>
-				<th>Amount</th>
-			</tr>
-			<?php echo $data_log; ?>
-		</table>
-		
-	</main>
-</body>
+	<body>
+		<main>
+
+			<h1>Seal & Design Income</h1>
+			<h2 class='msg'><?php echo $entry_msg ?></h2>
+
+			<form method='post'>
+				<label for='date'>Date</label>
+				<input id='date' type='date' name='date' value="<?php echo $today;?>"/>
+				<label for='type'>Type</label>
+				<input id='type' type='string' name='type'/>
+				<label for='amount'>Amount</label>
+				<input id='amount' type='number' name='amount' step='0.01' min='0'/>
+				<button type="submit">Submit</button>
+			</form>
+
+			<table class='log' id='seal-and-design-income-table'>
+				<thead>
+					<tr>
+						<th>Date</th>
+						<th>Type</th>
+						<th>Amount</th>
+					</tr>
+				</thead>
+				<?php echo $data_log; ?>
+			</table>
+
+		</main>
+  		<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+		<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+		<script>
+			$(document).ready( function () {
+    			$('#seal-and-design-income-table').DataTable();
+			} );
+		</script>
+	</body>
 
 </html>
+
+
