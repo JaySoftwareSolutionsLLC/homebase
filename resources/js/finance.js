@@ -22,14 +22,12 @@ let EOYProjection = Math.floor(currNetWorth + ((adi - ade) * (1 - percentTax)) *
 
 console.log(`netInc: ${netInc} | netExp: ${netExp} | activeDays: ${activeDays} | netHrs: ${netHrs} | `);
 
-$(".finance .adi").append(`<h4>+$${adi}/day</h4>`);
-$(".finance .adi").append(`<h5>Goal: > $${adiTrgt}/day</h5>`);
-$(".finance .ade").append(`<h4>-$${ade}/day</h4>`);
-$(".finance .ade").append(`<h5>Goal: < $${adeTrgt}/day</h5>`);
-$(".finance .awh").append(`<h4>${awh} hrs</h4>`);
-$(".finance .ahw").append(`<h4>$${ahw}/hr</h4>`);
+$(".finance .adi").prepend(`<h4>+$${adi}/day</h4>`);
+$(".finance .ade").prepend(`<h4>-$${ade}/day</h4>`);
+$(".finance .awh").prepend(`<h4>${awh} hrs</h4>`);
+$(".finance .ahw").prepend(`<h4>$${ahw}/hr</h4>`);
 
-$(".finance .net-worth").append("<h4>$" + currNetWorth + "</h4>");
+$(".finance .net-worth").prepend("<h4>$" + currNetWorth + "</h4>");
 $(".finance .net-worth").append("<h5>" + netWorthDate + "</h5>");
 
 $(".finance .income-projection-2018").append("<h4>$" + expected2018Income + "</h4>");
