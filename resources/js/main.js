@@ -1,5 +1,7 @@
 var getCurrentDate;
 $(document).ready(function() {
+	
+	
 
 	getCurrentDate = function() {
     	return new Date();

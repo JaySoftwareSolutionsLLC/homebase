@@ -1,7 +1,14 @@
 let grn = 'hsl(100, 100%, 50%)';
+let ylw = 'hsl(45, 100%, 50%)';
+$(".trapezius").css('fill', grn);
+$(".shoulder").css('fill', grn);
 $(".pec").css('fill', grn);
 $(".bicep").css('fill', grn);
-$(".abdominal").css('fill', grn);
+//$(".abdominal").css('fill', ylw);
+$(".trapezius").css('fill', grn);
+$(".calf").css('fill', grn);
+$(".delt").css('fill', grn);
+$(".tricep").css('fill', grn);
 
 
 $("svg .muscle").mouseover(function() {
@@ -18,7 +25,7 @@ $("svg .muscle").mouseover(function() {
 });
 $("svg .muscle").mouseout(function() {
 	$(".fitness .stats").html("");
-	addStatTitle("Stats");
+	addStatTitle("Body");
 	addStat("Weight", "155 lbs");
 	addStat("Ready Muscles", "11");
 	addStat("Percent Ideal", "83%");
@@ -31,4 +38,8 @@ function addStat(name,value) {
 }
 function addStatTitle(value) {
 	$(".fitness .stats").append(`<h3 class='title'>${value}</h3>`);
+}
+
+function growthRequired(current, ideal) {
+	return Math.round(((ideal - current) / ideal) * 10000) / 100;
 }

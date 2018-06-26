@@ -366,7 +366,7 @@
         	</g>
         </svg>
         <div class="stats">
-        	<h3 class="title">Stats</h3>
+        	<h3 class="title">Body</h3>
         	<div class="stat">
         		<h4 class="name">Weight</h4>
         		<h4 class="value">155 lbs</h4>
@@ -387,6 +387,30 @@
         		<h4 class="name">Ideal Muscles</h4>
         		<h4 class="value">6 / 13</h4>
         	</div>        	
+		</div>
+		<div class="row">
+			<a href='' class="form generate-workout" target='_blank'>
+				<img src='resources/assets/images/dumbbell.png'/>
+				<figcaption>Gen. Lift</figcaption>
+			</a>
+			<a href='' class="form lift" target='_blank'>
+				<img src='resources/assets/images/dumbbell.png'/>
+				<figcaption>Log Lift</figcaption>
+			</a>
+			<a href='' class="form mile" target='_blank'>
+				<img src='resources/assets/images/dumbbell.png'/>
+				<figcaption>Running</figcaption>
+			</a>
+		</div>
+		<div class="row">
+			<a href='' class="form generate-workout" target='_blank'>
+				<img src='resources/assets/images/dumbbell.png'/>
+				<figcaption>Body Weight</figcaption>
+			</a>
+			<a href='' class="form lift" target='_blank'>
+				<img src='resources/assets/images/dumbbell.png'/>
+				<figcaption>Circs</figcaption>
+			</a>
 		</div>
 	</div>
 </section>

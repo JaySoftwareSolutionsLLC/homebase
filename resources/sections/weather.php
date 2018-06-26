@@ -2,10 +2,6 @@
 			<h2>Weather</h2>
 			<div class="content">
 			<?php
-				$conn = new mysqli($serv, $user, $pass, $db);
-				if (!$conn) {
-					die("Connection to server failed: " . mysqli_connect_errno());
-				}
 				$cities_select = "SELECT * FROM weather_cities";
 				$result = $conn->query($cities_select);
 				if ($result->num_rows > 0) {
@@ -27,7 +23,6 @@
 			<?php
 					}
 				}
-				$conn->close();
 			?>
 			</div>
 		</section>

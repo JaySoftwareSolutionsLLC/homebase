@@ -1,22 +1,19 @@
 section.finance {
 	
 }
-section.finance nav {
-	width: 15rem;
-	display: inline-flex;
-}
-section.finance nav button {
-	background: black;
-	border: none;
-	color: hsl(190, 100%, 50%);
-	font-size: 1.125rem;
-	border: 1px solid hsl(190, 100%, 50%);
-}
 section.finance div.content {
 	width: 100%;
 	display: inline-flex;
 	flex-flow: row wrap;
 	justify-content: space-around;
+}
+section.finance div.row {
+	width: 100%;
+	display: inline-flex;
+	flex-flow: row nowrap;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
 }
 section.finance div.content div.stat {
 	width: 15rem;
@@ -25,9 +22,19 @@ section.finance div.content div.stat {
 	flex-flow: column nowrap;
 	align-items: center;
 	justify-content: space-around;
-	border: 1px solid white;
 	margin: 0.25rem;
-	border-radius: 2rem 0.125rem;
+	padding: 0.25rem;
+	border-top-left-radius: 0.25rem 1rem;
+    border-top-right-radius: 0.25rem 1rem;
+    border-bottom-right-radius: 0.25rem 1rem;
+    border-bottom-left-radius: 0.25rem 1rem;
+	transition: all 750ms 50ms;
+	background: black;
+	border: 1px solid black;
+	cursor: pointer;
+}
+section.finance div.content div.stat.graphic {
+	height: 10rem;	
 }
 section.finance div.content div.stat h3 {
 	font-weight: 900;
@@ -35,8 +42,45 @@ section.finance div.content div.stat h3 {
 	color: hsl(190, 100%, 50%);
 }
 section.finance div.content div.stat h4 {
-	font-size: 1.25rem;
+	font-size: 1rem;
 }
 section.finance div.content div.stat h5 {
 	font-size: 0.5rem;
+	color: white;
+}
+section.finance div.content div.small {
+	width: 10rem;
+}
+section.finance div.content div.small h3 {
+	font-size: 0.625rem;
+}
+section.finance .adi {
+	color: hsl(100, 100%, 50%);
+}
+section.finance .ade {
+	color: hsl(0, 100%, 60%);
+}
+section.finance .form {
+	width: 5rem;
+	height: 5rem;
+	box-sizing: border-box;
+	display: inline-flex;
+	flex-flow: column nowrap;
+	align-items: center;
+	justify-content: space-around;
+	margin: 1rem;
+	cursor: pointer;
+	text-decoration: none;
+	color: white;
+	border-radius: 1rem;
+}
+section.finance .form:hover {
+	background: hsla(190, 100%, 50%, 0.6);
+}
+section.finance .form img {
+	height: 3rem;
+	width: 3rem;
+}
+section.finance .form figcaption {
+	font-size: 0.75rem;
 }

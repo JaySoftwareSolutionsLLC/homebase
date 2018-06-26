@@ -1,0 +1,81 @@
+body {
+	width: 100%;
+	display: block;
+}
+
+section.report-options {
+	width: 90%;
+	margin: 1rem 5%;
+}
+
+section.generated-report {
+	width: 90%;
+	margin: 1rem 5%;
+	background: white;
+	color: black;
+}
+
+section.generated-report h1 {
+	font-size: 2rem;
+}
+
+section.generated-report h2 {
+	font-size: 1.25rem;
+	margin: 0.5rem 0 2rem 0;
+}
+
+section.generated-report div.stats {
+	width: 100%;
+	display: inline-flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	flex-wrap: wrap;
+}
+
+section.generated-report div.stats .stat {
+	box-sizing: border-box;
+	width: 2in;
+	min-height: 2in;
+	padding: 0.125in 0;
+	justify-content: space-between;
+	display: inline-flex;
+	flex-flow: column nowrap;
+	text-align: center;
+	border: 3px solid black;
+}
+
+section.generated-report div.stats .stat .stat-text {
+	display: inline-flex;
+	flex-flow: column nowrap;
+}
+
+section.generated-report div.stats .stat .stat-text h3 {
+	font-size: 0.875rem;
+}
+
+section.generated-report div.stats .stat .stat-text h4 {
+	font-size: 1.125rem;
+}
+
+section.generated-report div.stats .stat .stat-text h5 {
+	font-size: 0.625rem;
+}
+
+
+
+@media print {
+	@page {
+		width: 8.5in;
+		height: 11in;
+	}
+	header, #ghost-header, section.report-options {
+		display: none;
+	}
+	section.generated-report {
+		box-sizing: border-box;
+		width: 100%;
+		height: 100%;
+		padding: 0.125in;
+		margin: 0;
+	}
+}

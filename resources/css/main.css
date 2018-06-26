@@ -6,13 +6,15 @@ html {
 	color: white;
 	background: linear-gradient(to bottom right, black, white);
 }
+* {
+  transition: all 400ms linear;
+}
 body {
-  	height: 100%;
 	display: inline-flex;
 	flex-flow: column wrap;
 }
-* {
-  transition: all 400ms linear;
+main {
+	
 }
 /*HEADER*/
 header {
@@ -55,6 +57,7 @@ section {
 	align-items: center;
 	padding: 2rem;
 	border: 0.25rem solid white;
+	margin: 1rem auto;
 }
 section h2 {
 	font-size: 3rem;

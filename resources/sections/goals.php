@@ -1,10 +1,46 @@
-<!doctype html>
-<html>
-<head>
-<meta charset="utf-8">
-<title>Untitled Document</title>
-</head>
-
-<body>
-</body>
-</html>
+<section class="column goals">
+	<h2>Goals</h2>
+		<div class="content">
+			<h3>End of Year Goals</h3>
+			<div class="goal" id="goal-debt-free">
+				<h3>Debt Free</h3>
+				<div class="progress">
+					<div class="fill">
+						
+					</div>
+				</div>
+			</div>
+			<div class="goal" id="goal-net-worth">
+				<h3>30k Net Worth</h3>
+				<div class="progress">
+					<div class="fill">
+						
+					</div>
+				</div>
+			</div>
+			<div class="goal" id="goal-body-weight">
+				<h3>165 lbs</h3>
+				<div class="progress">
+					<div class="fill">
+						
+					</div>
+				</div>
+			</div>
+			<div class="goal" id="goal-bench-press">
+				<h3>Bench 200</h3>
+				<div class="progress">
+					<div class="fill">
+						
+					</div>
+				</div>
+			</div>
+			<div class="goal" id="goal-running">
+				<h3>6 Minute Mile</h3>
+				<div class="progress">
+					<div class="fill">
+						
+					</div>
+				</div>
+			</div>
+		</div>
+</section>

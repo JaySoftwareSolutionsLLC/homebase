@@ -4,7 +4,9 @@ section.fitness svg g.body {
 section.fitness svg .muscles {
 	stroke-width: 0.5px;
 }
-
+section.fitness svg .muscle:hover {
+	cursor: pointer;
+}
 section.fitness div.content {
 	width: 100%;
 }
@@ -38,4 +40,36 @@ section.fitness div.stat h4.value {
 }
 section.fitness div.stat h3.title {
 	text-transform: capitalize;
+}
+section.fitness div.row {
+	width: 100%;
+	display: inline-flex;
+	flex-flow: row nowrap;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+}
+section.fitness .form {
+	width: 5rem;
+	height: 5rem;
+	box-sizing: border-box;
+	display: inline-flex;
+	flex-flow: column nowrap;
+	align-items: center;
+	justify-content: space-around;
+	margin: 1rem;
+	cursor: pointer;
+	text-decoration: none;
+	color: white;
+	border-radius: 1rem;
+}
+section.fitness .form:hover {
+	background: hsla(190, 100%, 50%, 0.6);
+}
+section.fitness .form img {
+	height: 3rem;
+	width: 3rem;
+}
+section.fitness .form figcaption {
+	font-size: 0.75rem;
 }
