@@ -1,12 +1,13 @@
 <?php
 // Time related variables
 
-	$start_date = date('Y/m/d', strtotime('June 1st 2018'));
+	$start_date = date('Y/m/d', strtotime($START_DATE_STRING_FINANCIAL));
 	$start_time = strtotime($start_date);
 	$today_time = time();
 	$last_sunday = "'" . date('Y/m/d', strtotime('last Sunday')) . "'";
 	$sec_in_day = (60 * 60 * 24);
 	$days_active = ceil(($today_time - $start_time) / ($sec_in_day));
+	$days_left_in_year = (365 - (date('z') + 1));
 
 // Income related variables
 
@@ -15,7 +16,7 @@
 // Perform all queries to pull relevant data from DB and put in PHP variables
 
 	$all_account_names = array();
-	$oldest_date = "2050-01-01";
+	$oldest_date = "2550-01-01";
 	$current_cash = 0;
 	$current_assets = 0;
 	$current_liabilities = 0;
@@ -114,54 +115,65 @@
 
 	// NET INCOME : Hourlywage at ricks multiplied by ricks hours + net tips from ricks + net recorded income from seal and design + unreceived (but earned) income from seal and design
 	$net_income = (7.5 * $net_ricks_hours) + $net_ricks_tips + $net_seal_income + $unreceived_seal_income;
+
+	$adi = number_format($net_income / $days_active, 2);
+	$ade = number_format($net_expenditure / $days_active, 2);
+	$awh = number_format(7 * $net_hours / $days_active, 2);
+	$ahw = number_format(7 * $adi / $awh, 2);
+
+	$current_net_worth = $current_assets + $current_cash - $current_liabilities;
+
+	$estimated_2018_income = number_format($PRE_JUNE_RICKS_INCOME + ($adi  * ($days_left_in_year + $days_active)), 0);
+
+	$estimated_EOY_net_worth = number_format($current_net_worth + ((($adi * ($ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) - $ade) * ($days_left_in_year)), 0);
+
 ?>
-	<script>
-		var activeDays = "<?php echo $days_active ?>";
-		
-		var currCash = "<?php echo $current_cash ?>";
-		var currAssets = "<?php echo $current_assets ?>";
-		var currLiabilities = "<?php echo $current_liabilities ?>";
-		var netWorthDate = "<?php echo $oldest_date ?>";
-		
-		var netExp = "<?php echo $net_expenditure ?>"
-		var netHrs = "<?php echo $net_hours ?>";
-		var netInc = "<?php echo $net_income ?>";
-	</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js" integrity="sha256-XF29CBwU1MWLaGEnsELogU6Y6rcc5nCkhhx89nFMIDQ=" crossorigin="anonymous"></script>
 <section class="column finance">
 	<h2>Finances</h2>
 	<div class="content">
+		<div class="stat net-worth">
+			<h3>Current Net Worth</h3>
+			<h4>$<?php echo $current_net_worth; ?></h4>
+			<h5><?php echo $oldest_date; ?></h5>
+		</div>
 		<div class="row">
 			<div class="small stat adi">
 				<h3>ADI</h3>
+				<h4>$<?php echo $adi?>/day</h4>
 				<h5><?php echo $AVG_DAILY_INCOME_TARGET; ?></h5>
 			</div>
 			<div class="small stat ade">
 				<h3>ADE</h3>
+				<h4>$<?php echo $ade?>/day</h4>
 				<h5><?php echo $AVG_DAILY_EXPENDITURE_TARGET; ?></h5>
 			</div>
 		</div>
 		<div class="row">
 			<div class="small stat awh">
 				<h3>AWH</h3>
+				<h4><?php echo $awh?>hrs/wk</h4>
+				<h5><?php echo $WEEKLY_HOURS_TARGET; ?></h5>
 			</div>
 			<div class="small stat ahw">
 				<h3>AHW</h3>
+				<h4>$<?php echo $ahw?>/hr</h4>
+				<h5><?php echo $HOURLY_WAGE_TARGET; ?></h5>
 			</div>
-		</div>
-		<div class="stat net-worth">
-			<h3>Current Net Worth</h3>
 		</div>
 		<div class="stat income-projection-2018">
 			<h3>2018 Income Projection</h3>
+			<h4>$<?php echo $estimated_2018_income; ?></h4>
 		</div>
 		<div class="stat proj-net-worth">
 			<h3>Projected EOY Net Worth</h3>
+			<h4>$<?php echo $estimated_EOY_net_worth; ?></h4>
 		</div>
 		<div class="stat graphic account-allocation">
 			<h3>Accounts Allocation</h3>
 			<canvas id='account-allocation-graph'></canvas>
 		</div>
+		
+		
 		<div class="row">
 			<a href='resources/forms/expense.php' class="form expense" target='_blank'>
 				<img src='resources/assets/images/expense.png'/>
@@ -188,3 +200,43 @@
 		</div>
 	</div>
 </section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js" integrity="sha256-XF29CBwU1MWLaGEnsELogU6Y6rcc5nCkhhx89nFMIDQ=" crossorigin="anonymous"></script>
+<script>
+	new Chart(document.getElementById("account-allocation-graph"),{
+		"type":"doughnut",
+		"data": {
+			"labels":["$","Asts.","Lbls."],
+			"datasets":[
+				{"label":"Asset Allocation",
+				 "data":[<?php echo "$current_cash, $current_assets, $current_liabilities" ?>],
+				 "backgroundColor":["hsl(120, 100%, 50%)", "hsl(200, 100%, 50%)", "hsl(0, 100%, 50%)"],
+				 "borderColor":["black", "black", "black"],
+				 "borderWidth":[1,1,1]
+				}
+			]
+		},
+		options: {
+			legend: {
+				labels: {
+					fontColor: 'white',
+					boxWidth: 15,
+					fontFamily: "'Orbitron', sans-serif"
+				}
+			}
+		}
+	});
+</script>
+<script>
+	var activeDays = "<?php echo $days_active ?>";
+		
+	var currCash = "<?php echo $current_cash ?>";
+	var currAssets = "<?php echo $current_assets ?>";
+	var currLiabilities = "<?php echo $current_liabilities ?>";
+	var netWorthDate = "<?php echo $oldest_date ?>";
+		
+	var netExp = "<?php echo $net_expenditure ?>"
+	var netHrs = "<?php echo $net_hours ?>";
+	var netInc = "<?php echo $net_income ?>";
+</script>
+

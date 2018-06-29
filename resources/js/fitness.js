@@ -1,14 +1,17 @@
 let grn = 'hsl(100, 100%, 50%)';
 let ylw = 'hsl(45, 100%, 50%)';
-$(".trapezius").css('fill', grn);
-$(".shoulder").css('fill', grn);
-$(".pec").css('fill', grn);
-$(".bicep").css('fill', grn);
-//$(".abdominal").css('fill', ylw);
-$(".trapezius").css('fill', grn);
-$(".calf").css('fill', grn);
-$(".delt").css('fill', grn);
-$(".tricep").css('fill', grn);
+let red = 'hsl(0, 100%, 50%)';
+
+//$(".trapezius").css('fill', red);
+$(".deltoid").css('fill', red);
+$(".pec").css('fill', red);
+$(".tricep").css('fill', red);
+$(".bicep").css('fill', red);
+//$(".forearm").css('fill', red)
+//$(".abdominal").css('fill', red);
+//$(".oblique").css('fill', red);
+//$(".calf").css('fill', red);
+
 
 
 $("svg .muscle").mouseover(function() {

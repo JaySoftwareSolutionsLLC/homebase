@@ -1,5 +1,10 @@
 <?php
+	$today_time = time(); // Should be moved into main index.php file
 
+	$start_date_running = date('Y/m/d', strtotime($START_DATE_STRING_RUNNING));
+	$start_time_running = strtotime($start_date);
+
+	$days_active = ceil(($today_time - $start_time) / (SEC_IN_DAY));
 ?>
 <section class="column fitness">
 <h2>Fitness</h2>
@@ -60,7 +65,7 @@
 				C 80,35 80,40 85,45
 				C 84,51 85,52 85,52
     			C 95,63 105,63 115,53"/>
-     			<g class="muscles" stroke-width="0.5" fill="red">
+     			<g class="muscles" stroke-width="0.5" fill="hsl(100,100%,50%)">
       				<path class="muscle right trapezius" 
       				d="	M 85,52 
 						C 75,68 57,57 50,76
@@ -71,12 +76,12 @@
 						C 125,68 143,57 150,76
      					C 134,76 115,70 115,52"
       				/>
-      				<path class="muscle right shoulder" 
+      				<path class="muscle right deltoid" 
       				d="	M 50,76 
 						C 33,75 21,94 28,107
      					C 43,104 59,90 50,76"
       				/>
-      				<path class="muscle left shoulder" 
+      				<path class="muscle left deltoid" 
       				d="	M 150,76 
 						C 164,75 179,94 172,107
      					C 157,104 141,90 150,76"
@@ -240,7 +245,7 @@
 				C 90,6 80,20 85,30
 				C 80,35 80,40 85,45
 				C 84,51 85,52 85,52"/>
-      		    <g class="muscles" stroke-width="0.5" fill="red">
+      		    <g class="muscles" stroke-width="0.5" fill="hsl(100, 100%, 50%)">
       				<path class="muscle left trapezius" 
       				d="	M 97,38 
 						C 75,68 57,57 50,76
@@ -257,13 +262,13 @@
      					C 103,97 103,72 111,71
      					C 105,58 103,44 103,38"
       				/>
-      				<path class="muscle left delt" 
+      				<path class="muscle left deltoid" 
       				d="	M 50,76
 						C 33,75 21,94 28,107
     					C 40,103 51,93 58,88
     					C 56,82 53,78 50,76"
       				/>
-      				<path class="muscle right delt" 
+      				<path class="muscle right deltoid" 
       				d="	M 150,76
 						C 167,75 179,94 172,107
     					C 160,103 149,93 142,88
