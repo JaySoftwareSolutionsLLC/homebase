@@ -73,7 +73,9 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/js
 ?>
 		<script>
 			$(document).ready( function () {
-    			$('#seal-and-design-income-table').DataTable();
+    			$('#seal-and-design-income-table').DataTable( {
+					"order": [[ 0, "desc" ]]
+				} );
 			} );
 		</script>
 	</body>

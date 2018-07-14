@@ -98,7 +98,9 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/js
 ?>
 			<script>
 				$(document).ready( function () {
-					$('#seal-and-design-shifts-table').DataTable();
+					$('#seal-and-design-shifts-table').DataTable( {
+						"order": [[ 0, "desc" ]]
+					} );
 				} );
 			</script>
 	</body>

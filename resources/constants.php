@@ -28,8 +28,11 @@ $JUNE_1ST_DEBT =						17000;
 
 //--- Fitness Constants ---
 $START_DATE_STRING_RUNNING = 			'June 29th 2018';
-$STARTING_MILE_TIME =					485; // In seconds
-
+$STARTING_MILE_TIME =					515; // In seconds
 const MILE_TIME_TARGET =				405; // In seconds
+
+const START_DATE_STRING_BODY_WEIGHT =	'June 4th 2018';
+const STARTING_BODY_WEIGHT =			147.0; // In Pounds
+const BODY_WEIGHT_TARGET =				160.0; // In Pounds
 
 ?>

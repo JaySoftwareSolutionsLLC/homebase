@@ -1,6 +1,6 @@
 <header>
 	<div class="left">
-		<h1>Home Base 3.0</h1>
+		<a href='/homebase/index.php'><h1>Home Base 3.0</h1></a>
 	</div>
 	<div class="right">
 		<nav>

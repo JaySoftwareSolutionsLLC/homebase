@@ -91,6 +91,7 @@
 	$row = mysqli_fetch_row($res);
 	$net_seal_income = $row[0];
 		// Seal income earned but not yet received
+		// UPDATE 07/03/18 - This functionality breaks if a check is deposited before the two weeks is up (ie. we get checks early due to a holiday) because a few days of $ came from May...The lag days were compensated by the few may days so it worked out but now it causes an issue if a check is deposited early :/
 	$q = "SELECT MAX(date) FROM finance_seal_income WHERE date >= '$start_date' AND type = 'check'";
 	$res = $conn->query($q);
 	$row = mysqli_fetch_row($res);

@@ -99,7 +99,9 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/js
 ?>
 		<script>
 			$(document).ready( function () {
-				$('#expenses-table').DataTable();
+				$('#expenses-table').DataTable( {
+					"order": [[ 1, "desc" ]]
+				} );
 			} );
 		</script>
 	</body>

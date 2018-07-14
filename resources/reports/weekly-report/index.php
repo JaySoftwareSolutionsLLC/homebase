@@ -310,7 +310,7 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/weekly-report/r
 					<div class='stat-text'>
 						<h3>Hourly Wage</h3>
 						<h4><?php echo $hourly_net; ?></h4>
-						<h5>Target: <?php echo $WEEKLY_HOURLY_WAGE_TARGET; ?></h5>
+						<h5>Target: <?php echo $HOURLY_WAGE_TARGET; ?></h5>
 					</div>
 					<canvas id='net-hourly-graph'></canvas>
 					<script>

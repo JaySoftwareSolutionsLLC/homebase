@@ -398,22 +398,22 @@
 				<img src='resources/assets/images/dumbbell.png'/>
 				<figcaption>Gen. Lift</figcaption>
 			</a>
-			<a href='' class="form lift" target='_blank'>
+			<a href='' class="form lifts" target='_blank'>
 				<img src='resources/assets/images/dumbbell.png'/>
 				<figcaption>Log Lift</figcaption>
 			</a>
-			<a href='' class="form mile" target='_blank'>
-				<img src='resources/assets/images/dumbbell.png'/>
+			<a href='/homebase/resources/forms/runs.php' class="form runs" target='_blank'>
+				<img src='resources/assets/images/icon-run.png'/>
 				<figcaption>Running</figcaption>
 			</a>
 		</div>
 		<div class="row">
-			<a href='' class="form generate-workout" target='_blank'>
-				<img src='resources/assets/images/dumbbell.png'/>
+			<a href='/homebase/resources/forms/body_weight.php' class="form body-weight" target='_blank'>
+				<img src='resources/assets/images/icon-scale.png'/>
 				<figcaption>Body Weight</figcaption>
 			</a>
-			<a href='' class="form lift" target='_blank'>
-				<img src='resources/assets/images/dumbbell.png'/>
+			<a href='' class="form measuring-tape" target='_blank'>
+				<img src='resources/assets/images/icon-measuring-tape.png'/>
 				<figcaption>Circs</figcaption>
 			</a>
 		</div>

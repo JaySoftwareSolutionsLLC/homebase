@@ -21,5 +21,8 @@ function fillInProgress(id, percentOfGoal) {
 
 fillInProgress("goal-debt-free", percentGoalDebtFree);
 fillInProgress("goal-net-worth", percentGoalNetWorth);
-fillInProgress("goal-body-weight", percentGoalBodyWeight);
 fillInProgress("goal-bench-press", percentGoalBenchPress);
+
+$(document).ready(function() {
+	
+});

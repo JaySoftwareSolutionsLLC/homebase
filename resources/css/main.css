@@ -29,6 +29,9 @@ header {
   position: fixed;
   z-index: 15;
 }
+header a {
+	text-decoration: none;
+}
 header h1 {
   padding-left: 1rem;
   color: hsla(190, 100%, 50%, 1);
