@@ -1,10 +1,5 @@
 <?php
-	$today_time = time(); // Should be moved into main index.php file
 
-	$start_date_running = date('Y/m/d', strtotime($START_DATE_STRING_RUNNING));
-	$start_time_running = strtotime($start_date);
-
-	$days_active = ceil(($today_time - $start_time) / (SEC_IN_DAY));
 ?>
 <section class="column fitness">
 <h2>Fitness</h2>
