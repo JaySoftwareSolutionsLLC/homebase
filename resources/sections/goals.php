@@ -35,14 +35,6 @@
 				</div>
 				<h5><?php echo $percent_goal_body_weight; ?>%</h5>
 			</div>
-			<div class="goal" id="goal-bench-press">
-				<h3>Bench 200</h3>
-				<div class="progress">
-					<div class="fill">
-						
-					</div>
-				</div>
-			</div>
 			<div class="goal" id="goal-running">
 				<h3>6 Minute Mile</h3>
 				<div class="progress">
@@ -52,6 +44,15 @@
 					<div class="target-fill" style="width: <?php echo $percent_time_frame_running; ?>%;"></div>
 				</div>
 				<h5><?php echo $percent_goal_mile_time; ?>%</h5>
+			</div>
+			<div class="goal" id="goal-bench-press">
+				<h3>Bench 200</h3>
+				<div class="progress">
+					<div class="fill" style="display: none;">
+						
+					</div>
+				</div>
+				<h5>0%</h5>
 			</div>
 		</div>
 </section>

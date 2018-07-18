@@ -13,24 +13,24 @@
 			<div class="small stat adi">
 				<h3>ADI</h3>
 				<h4>$<?php echo $adi?>/day</h4>
-				<h5><?php echo $AVG_DAILY_INCOME_TARGET; ?></h5>
+				<h5><?php echo AVG_DAILY_INCOME_TARGET; ?></h5>
 			</div>
 			<div class="small stat ade">
 				<h3>ADE</h3>
 				<h4>$<?php echo $ade?>/day</h4>
-				<h5><?php echo $AVG_DAILY_EXPENDITURE_TARGET; ?></h5>
+				<h5><?php echo AVG_DAILY_EXPENDITURE_TARGET; ?></h5>
 			</div>
 		</div>
 		<div class="row">
 			<div class="small stat awh">
 				<h3>AWH</h3>
 				<h4><?php echo $awh?>hrs/wk</h4>
-				<h5><?php echo $WEEKLY_HOURS_TARGET; ?></h5>
+				<h5><?php echo WEEKLY_HOURS_TARGET; ?></h5>
 			</div>
 			<div class="small stat ahw">
 				<h3>AHW</h3>
 				<h4>$<?php echo $ahw?>/hr</h4>
-				<h5><?php echo $HOURLY_WAGE_TARGET; ?></h5>
+				<h5><?php echo HOURLY_WAGE_TARGET; ?></h5>
 			</div>
 		</div>
 		<div class="stat income-projection-2018">

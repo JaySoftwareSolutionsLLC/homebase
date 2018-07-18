@@ -16,7 +16,7 @@
 	// FINANCIAL--------------------------------------------------------------------
 
 	// Time Related Variables
-	$start_date_financial = date('Y/m/d', strtotime($START_DATE_STRING_FINANCIAL));
+	$start_date_financial = date('Y/m/d', strtotime(START_DATE_STRING_FINANCIAL));
 	$start_time_financial = strtotime($start_date_financial);
 	$days_active_financial = ceil(($today_time - $start_time_financial) / (SEC_IN_DAY));
 	$days_left_in_year_financial = (365 - (date('z') + 1));
@@ -110,7 +110,7 @@
 		$this_dow = date('D',$this_time_to_check);
 		$this_time_to_check += SEC_IN_DAY;
 		if ($this_dow != 'Sat' && $this_dow != 'Sun' && ($this_time_to_check < strtotime('July 14th 2018') || $this_time_to_check > strtotime('July 21st 2018'))) {
-			$unreceived_seal_income += ($HOURLY_WAGE_SEAL * 8);
+			$unreceived_seal_income += (HOURLY_WAGE_SEAL * 8);
 		}
 		$fuse++;
 		if ($fuse > 30) {
@@ -120,7 +120,7 @@
 	}
 
 	// NET INCOME : Hourlywage at ricks multiplied by ricks hours + net tips from ricks + net recorded income from seal and design + unreceived (but earned) income from seal and design
-	$net_income = ($HOURLY_WAGE_RICKS * $net_ricks_hours) + $net_ricks_tips + $net_seal_income + $unreceived_seal_income;
+	$net_income = (HOURLY_WAGE_RICKS * $net_ricks_hours) + $net_ricks_tips + $net_seal_income + $unreceived_seal_income;
 
 	$adi = number_format($net_income / $days_active_financial, 2);
 	$ade = number_format($net_expenditure / $days_active_financial, 2);
@@ -129,15 +129,15 @@
 
 	$current_net_worth = $current_assets + $current_cash - $current_liabilities;
 
-	$estimated_2018_income = number_format($PRE_JUNE_RICKS_INCOME + ($adi  * ($days_left_in_year_financial + $days_active_financial)), 0);
+	$estimated_2018_income = number_format(PRE_JUNE_RICKS_INCOME + ($adi  * ($days_left_in_year_financial + $days_active_financial)), 0);
 
-	$estimated_EOY_net_worth = number_format($current_net_worth + ((($adi * ($ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) - $ade) * ($days_left_in_year_financial)), 0);
+	$estimated_EOY_net_worth = number_format($current_net_worth + ((($adi * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) - $ade) * ($days_left_in_year_financial)), 0);
 
 	//---FITNESS--------------------------------------------------------------------
 
 	// Running
 
-	$start_date_running = date('Y/m/d', strtotime($START_DATE_STRING_RUNNING));
+	$start_date_running = date('Y/m/d', strtotime(START_DATE_STRING_RUNNING));
 	$start_time_running = strtotime($start_date_running);
 
 	$days_active_running = ceil(($today_time - $start_time_running) / (SEC_IN_DAY));
@@ -162,10 +162,10 @@
 	//---GOALS----------------------------------------------------------------------
 
 	$percent_goal_debt_free = 	number_format(((JUNE_1ST_DEBT - $current_liabilities) / JUNE_1ST_DEBT) * 100, 2);
-	$percent_time_frame_debt_free = number_format((100 * $days_active_financial / (((strtotime('January 1st, 2019')) - strtotime($START_DATE_STRING_FINANCIAL)) / SEC_IN_DAY)), 2);
+	$percent_time_frame_debt_free = number_format((100 * $days_active_financial / (((strtotime('January 1st, 2019')) - strtotime(START_DATE_STRING_FINANCIAL)) / SEC_IN_DAY)), 2);
 
 	$percent_goal_net_worth = 	number_format((($current_cash + $current_assets - $current_liabilities - JUNE_1ST_NET_WORTH) / (END_OF_YEAR_NET_WORTH_TARGET - JUNE_1ST_NET_WORTH)) * 100, 2);
-	$percent_time_frame_net_worth = number_format((100 * $days_active_financial / (((strtotime('January 1st, 2019')) - strtotime($START_DATE_STRING_FINANCIAL)) / SEC_IN_DAY)), 2);
+	$percent_time_frame_net_worth = number_format((100 * $days_active_financial / (((strtotime('January 1st, 2019')) - strtotime(START_DATE_STRING_FINANCIAL)) / SEC_IN_DAY)), 2);
 	
 	// Case Tests: mrbw = 147 --> 0% | mrbw = 160 --> 100% | mrbw = 153.5 --> 50%
 	// All Case Tests PASS
@@ -174,7 +174,7 @@
 
 	// Case Tests: bmt = 405 --> 100% | bmt = 515 --> 0% | bmt = 460 --> 50%
 	// All Case Tests PASS
-	$percent_goal_mile_time = number_format(100 - (($best_mile_time - MILE_TIME_TARGET) * (100 / ($STARTING_MILE_TIME - MILE_TIME_TARGET))), 2);
+	$percent_goal_mile_time = number_format(100 - (($best_mile_time - MILE_TIME_TARGET) * (100 / (STARTING_MILE_TIME - MILE_TIME_TARGET))), 2);
 	$percent_time_frame_running = number_format((100 * $days_active_running / (((strtotime('January 1st, 2019')) - strtotime($START_DATE_STRING_RUNNING)) / SEC_IN_DAY)), 2);
 ?>
 

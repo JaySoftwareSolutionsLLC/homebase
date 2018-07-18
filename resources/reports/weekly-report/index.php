@@ -48,7 +48,7 @@ if ($generated) {
 	while ($day_to_check <= $date_end) {
 		$this_dow = date('D', strtotime($day_to_check));
 		if ($this_dow != 'Sat' && $this_dow != 'Sun' && ($day_to_check < date('Y-m-d', strtotime('July 14th 2018')) || $day_to_check > date('Y-m-d', strtotime('July 21st 2018')))) {
-			$income_seal += ($HOURLY_WAGE_SEAL * 8);
+			$income_seal += (HOURLY_WAGE_SEAL * 8);
 		}
 		$day_to_check = date('Y-m-d', strtotime($day_to_check.'+1day'));
 		// echo "DOW: $this_dow | INCOME: $income_seal | DAYTOCHECK: $day_to_check <br/>";
@@ -70,7 +70,7 @@ if ($generated) {
 	$row = mysqli_fetch_row($res);
 	$tips_ricks = round($row[0], 2);
 
-	$income_ricks = round(($tips_ricks + ($HOURLY_WAGE_RICKS * $hours_ricks)), 2);
+	$income_ricks = round(($tips_ricks + (HOURLY_WAGE_RICKS * $hours_ricks)), 2);
 
 	
 	// SEAL HOURLY
@@ -159,7 +159,7 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/weekly-report/r
 					<div class='stat-text'>
 						<h3>Income Differential</h3>
 						<h4><?php echo $income_diff; ?></h4>
-						<h5>Target: <?php echo $WEEKLY_INCOME_DIFF_TARGET; ?></h5>
+						<h5>Target: <?php echo WEEKLY_INCOME_DIFF_TARGET; ?></h5>
 					</div>
 					<canvas id='net-income-diff-graph'></canvas>
 					<script>
@@ -194,7 +194,7 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/weekly-report/r
 					<div class='stat-text'>
 						<h3>Income</h3>
 						<h4><?php echo $income_net; ?></h4>
-						<h5>Target: <?php echo $WEEKLY_INCOME_TARGET; ?></h5>
+						<h5>Target: <?php echo WEEKLY_INCOME_TARGET; ?></h5>
 					</div>
 					<canvas id='net-income-graph'></canvas>
 					<script>
@@ -227,7 +227,7 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/weekly-report/r
 					<div class='stat-text'>
 						<h3>Expenditure</h3>
 						<h4><?php echo $expenditure_net; ?></h4>
-						<h5>Target: <?php echo $WEEKLY_EXPENDITURE_TARGET; ?></h5>
+						<h5>Target: <?php echo WEEKLY_EXPENDITURE_TARGET; ?></h5>
 					</div>
 					<canvas id='expenditure-breakdown-graph'></canvas>
 					<script>
@@ -277,7 +277,7 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/weekly-report/r
 					<div class='stat-text'>
 						<h3>Hours</h3>
 						<h4><?php echo $hours_net; ?></h4>
-						<h5>Target: <?php echo $WEEKLY_HOURS_TARGET; ?></h5>
+						<h5>Target: <?php echo WEEKLY_HOURS_TARGET; ?></h5>
 					</div>
 					<canvas id='net-hours-graph'></canvas>
 					<script>
@@ -310,7 +310,7 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/weekly-report/r
 					<div class='stat-text'>
 						<h3>Hourly Wage</h3>
 						<h4><?php echo $hourly_net; ?></h4>
-						<h5>Target: <?php echo $HOURLY_WAGE_TARGET; ?></h5>
+						<h5>Target: <?php echo HOURLY_WAGE_TARGET; ?></h5>
 					</div>
 					<canvas id='net-hourly-graph'></canvas>
 					<script>

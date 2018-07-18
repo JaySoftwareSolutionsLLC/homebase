@@ -39,11 +39,14 @@ section.goals div.content div.goal div.fill {
 	height: 100%;
 	border: none;
 	border-radius: 0.5rem;
-	background: hsl(190, 100%, 50%);
+	/*background: hsl(190, 100%, 50%);*/
 }
 section.goals div.content div.goal div.target-fill {
 	height: 14px; 
 	border-right: 1px dashed white; 
+	border-top-left-radius: 0.5rem;
+	border-bottom-left-radius: 0.5rem;
+	background: hsla(0, 0%, 100%, 0.5);
 	position: relative; 
 	bottom: 14px; 
 	z-index: 10;
