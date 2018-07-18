@@ -10,6 +10,7 @@
 	$today_time = time();
 	$today_date = date('Y-m-d');
 	$last_sunday = "'" . date('Y/m/d', strtotime('last Sunday')) . "'";
+	$days_left_in_2018 = floor((strtotime('January 1st, 2019') - $today_time) / SEC_IN_DAY);
 
 //---SELECT FROM DATABASE-----------------------------------------------------------
 
@@ -175,7 +176,7 @@
 	// Case Tests: bmt = 405 --> 100% | bmt = 515 --> 0% | bmt = 460 --> 50%
 	// All Case Tests PASS
 	$percent_goal_mile_time = number_format(100 - (($best_mile_time - MILE_TIME_TARGET) * (100 / (STARTING_MILE_TIME - MILE_TIME_TARGET))), 2);
-	$percent_time_frame_running = number_format((100 * $days_active_running / (((strtotime('January 1st, 2019')) - strtotime($START_DATE_STRING_RUNNING)) / SEC_IN_DAY)), 2);
+	$percent_time_frame_running = number_format((100 * $days_active_running / (((strtotime('January 1st, 2019')) - strtotime(START_DATE_STRING_RUNNING)) / SEC_IN_DAY)), 2);
 ?>
 
 <!DOCTYPE html>

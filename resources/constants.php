@@ -9,8 +9,8 @@ const START_DATE_STRING_FINANCIAL = 	'June 1st 2018';
 const ANNUAL_INCOME_TARGET = 			74250;	// If hit, annual After Tax Income ~$55,000
 const ANNUAL_EXPENDITURE_TARGET =		15000;	// If hit and Income Target hit...net worth contribution ~$40,000
 
-const AVG_DAILY_INCOME_TARGET = 		number_format((ANNUAL_INCOME_TARGET / 365), 2);
-const AVG_DAILY_EXPENDITURE_TARGET =	number_format((ANNUAL_EXPENDITURE_TARGET / 365), 2);
+define("AVG_DAILY_INCOME_TARGET", number_format((ANNUAL_INCOME_TARGET / 365), 2));
+define("AVG_DAILY_EXPENDITURE_TARGET", number_format((ANNUAL_EXPENDITURE_TARGET / 365), 2));
 
 const HOURLY_WAGE_SEAL = 				21.63;
 const HOURLY_WAGE_RICKS = 				7.50;

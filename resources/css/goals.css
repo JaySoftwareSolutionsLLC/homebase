@@ -4,6 +4,13 @@ section.goals div.content {
 	flex-flow: row wrap;
 	justify-content: space-around;
 }
+section.goals div.content h3 {
+	width: 100%;
+	text-align: center;
+}
+section.goals div.content h5 {
+	font-size: 0.5rem;
+}
 section.goals div.content div.goal {
 	width: 17.5rem;
 	height: 5rem;

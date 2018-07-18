@@ -5,6 +5,7 @@
 	<h2>Goals</h2>
 		<div class="content">
 			<h3>End of Year Goals</h3>
+			<h5>(<?php echo $days_left_in_2018; ?> Days Remaining)</h5>
 			<div class="goal" id="goal-debt-free">
 				<h3>Debt Free</h3>
 				<div class="progress">
