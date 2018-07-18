@@ -138,7 +138,7 @@
 	// Running
 
 	$start_date_running = date('Y/m/d', strtotime($START_DATE_STRING_RUNNING));
-	$start_time_running = strtotime($start_date);
+	$start_time_running = strtotime($start_date_running);
 
 	$days_active_running = ceil(($today_time - $start_time_running) / (SEC_IN_DAY));
 
@@ -165,14 +165,17 @@
 	$percent_time_frame_debt_free = number_format((100 * $days_active_financial / (((strtotime('January 1st, 2019')) - strtotime($START_DATE_STRING_FINANCIAL)) / SEC_IN_DAY)), 2);
 
 	$percent_goal_net_worth = 	number_format((($current_cash + $current_assets - $current_liabilities - JUNE_1ST_NET_WORTH) / (END_OF_YEAR_NET_WORTH_TARGET - JUNE_1ST_NET_WORTH)) * 100, 2);
+	$percent_time_frame_net_worth = number_format((100 * $days_active_financial / (((strtotime('January 1st, 2019')) - strtotime($START_DATE_STRING_FINANCIAL)) / SEC_IN_DAY)), 2);
 	
 	// Case Tests: mrbw = 147 --> 0% | mrbw = 160 --> 100% | mrbw = 153.5 --> 50%
 	// All Case Tests PASS
 	$percent_goal_body_weight = number_format(($most_recent_body_weight - STARTING_BODY_WEIGHT) * (100 / (BODY_WEIGHT_TARGET -STARTING_BODY_WEIGHT)), 2);
+	$percent_time_frame_body_weight = number_format((100 * $days_active_body_weight / (((strtotime('January 1st, 2019')) - strtotime(START_DATE_STRING_BODY_WEIGHT)) / SEC_IN_DAY)), 2);
 
 	// Case Tests: bmt = 405 --> 100% | bmt = 515 --> 0% | bmt = 460 --> 50%
 	// All Case Tests PASS
 	$percent_goal_mile_time = number_format(100 - (($best_mile_time - MILE_TIME_TARGET) * (100 / ($STARTING_MILE_TIME - MILE_TIME_TARGET))), 2);
+	$percent_time_frame_running = number_format((100 * $days_active_running / (((strtotime('January 1st, 2019')) - strtotime($START_DATE_STRING_RUNNING)) / SEC_IN_DAY)), 2);
 ?>
 
 <!DOCTYPE html>
