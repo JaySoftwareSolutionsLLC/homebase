@@ -37,8 +37,13 @@ section.goals div.content div.goal div.progress {
 }
 section.goals div.content div.goal div.fill {
 	height: 100%;
-	width: 0%;
 	border: none;
 	border-radius: 0.5rem;
 	background: hsl(190, 100%, 50%);
+}
+section.goals div.content div.goal div.target-fill {
+	height: 100%;
+	border-right: 3px dotted white; 
+	border-radius: 0.5rem; 
+	position: relative;
 }

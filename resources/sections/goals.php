@@ -11,6 +11,7 @@
 					<div class="fill" style='width:<?php echo $percent_goal_debt_free; ?>%'>
 						
 					</div>
+					<div class="target-fill" style="width: <?php echo $percent_time_frame_debt_free; ?>%; height: 100%; border-right: 3px dotted black; border-radius: 0.5rem; position: relative; z-index: 10;"></div>
 				</div>
 				<h5><?php echo $percent_goal_debt_free; ?>%</h5>
 			</div>

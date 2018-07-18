@@ -1,3 +1,4 @@
+/*
 function fillInProgress(id, percentOfGoal) {
 	let hue = 1.9 * percentOfGoal;
 	if (hue > 190) {
@@ -6,7 +7,7 @@ function fillInProgress(id, percentOfGoal) {
 	$(`#${id} div.fill`).css("width", `${percentOfGoal}%`).css('background', `linear-gradient(90deg, hsl(0, 100%, 50%), hsl(${hue}, 100%, 50%))`);
 	$(`#${id}`).append(`<h5>${percentOfGoal}%</h5>`);
 }
-
+*/
 $(document).ready(function() {
 	$('.progress .fill').each(function() {
 		let width = $(this).css('width');
