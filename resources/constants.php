@@ -13,6 +13,10 @@ define("AVG_DAILY_INCOME_TARGET", number_format((ANNUAL_INCOME_TARGET / 365), 2)
 define("AVG_DAILY_EXPENDITURE_TARGET", number_format((ANNUAL_EXPENDITURE_TARGET / 365), 2));
 
 const HOURLY_WAGE_SEAL = 				21.63;
+const HOURLY_WAGES_SEAL = 				array(21.63, 22.12); // Array value must correspond with HOURLY_WAGES_DATESTRINGS_SEAL date. Referenced in reports/weekly-report/index.php
+const HOURLY_WAGES_DATESTRINGS_SEAL =	array('2018-05-29', '2018-08-27'); // Array date must correspond with HOURLY_WAGES_SEAL value. Referenced in reports/weekly-report/index.php
+
+
 const HOURLY_WAGE_RICKS = 				7.50;
 const HOURLY_WAGE_TARGET =				26;
 
@@ -34,7 +38,11 @@ const STARTING_MILE_TIME =				515; // In seconds
 const MILE_TIME_TARGET =				405; // In seconds
 
 const START_DATE_STRING_BODY_WEIGHT =	'June 4th 2018';
-const STARTING_BODY_WEIGHT =			147.0; // In Pounds
-const BODY_WEIGHT_TARGET =				160.0; // In Pounds
+const STARTING_BODY_WEIGHT =			147.0; // In pounds
+const BODY_WEIGHT_TARGET =				160.0; // In pounds
+
+const START_DATE_STRING_BENCH_PRESS = 	'June 4th 2018';
+const STARTING_BENCH_PRESS =			160; // In pounds
+const END_OF_YEAR_BENCH_PRESS_TARGET = 	200; // In pounds
 
 ?>

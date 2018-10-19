@@ -49,11 +49,12 @@
 			<div class="goal" id="goal-bench-press">
 				<h3>Bench 200</h3>
 				<div class="progress">
-					<div class="fill" style="display: none;">
+					<div class="fill" style="width:<?php echo $percent_goal_bench_press; ?>%;" data-value="<?php echo $percent_goal_bench_press; ?>">
 						
 					</div>
+					<div class="target-fill" style="width: <?php echo $percent_time_frame_bench_press; ?>%;"></div>
 				</div>
-				<h5>0%</h5>
+				<h5><?php echo $percent_goal_bench_press; ?>%</h5>
 			</div>
 		</div>
 </section>

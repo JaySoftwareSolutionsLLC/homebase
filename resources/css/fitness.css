@@ -4,6 +4,20 @@ section.fitness svg g.body {
 section.fitness svg .muscles {
 	stroke-width: 0.5px;
 }
+section.fitness svg .muscle {
+	transition: 200ms 50ms linear;
+}
+section.fitness svg .muscle.selected {
+	stroke-width: 2px;
+}
+section.fitness svg .muscle.flashing {
+	animation: flashing 1500ms linear 2s infinite;
+}
+@keyframes flashing {
+	0% {stroke-width:0.5px;}
+	50% {stroke-width:2px;}
+	100% {stroke-width:0.5px;}
+}
 section.fitness svg .muscle:hover {
 	cursor: pointer;
 }
@@ -36,7 +50,7 @@ section.fitness div.stat h4.name {
 	font-size: 0.625rem;
 }
 section.fitness div.stat h4.value {
-	font-size: 1rem;
+	font-size: 0.875rem;
 }
 section.fitness div.stat h3.title {
 	text-transform: capitalize;

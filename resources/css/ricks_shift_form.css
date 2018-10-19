@@ -1,0 +1,29 @@
+section.shift-averages {
+	width: 80%;
+}
+.day-avg-summary {
+	border: 1px solid hsl(190, 100%, 50%); 
+	width: 8rem; 
+	height: 6rem; 
+	border-radius: 5rem; 
+	display: inline-flex; 
+	flex-flow: column nowrap; 
+	align-items: center; 
+	justify-content: space-around; 
+	padding: 1rem; 
+	box-sizing: border-box;
+}
+.day-avg-summary.pm {
+	color: white;
+	background: hsl(190, 100%, 50%);
+	border-color: white;
+}
+.day-avg-summary.am {
+	
+}
+
+@media only screen and (max-width: 900px) {
+	section.shift-averages {
+		width: 100%;
+	}
+}

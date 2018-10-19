@@ -48,12 +48,25 @@ if ($generated) {
 	while ($day_to_check <= $date_end) {
 		$this_dow = date('D', strtotime($day_to_check));
 		if ($this_dow != 'Sat' && $this_dow != 'Sun' && ($day_to_check < date('Y-m-d', strtotime('July 14th 2018')) || $day_to_check > date('Y-m-d', strtotime('July 21st 2018')))) {
-			$income_seal += (HOURLY_WAGE_SEAL * 8);
+			$num_hourly_wages = count(HOURLY_WAGES_DATESTRINGS_SEAL);
+			// TEST PASSED 2018.10.18 echo $num_hourly_wages;
+			$i = 0;
+			for ($i; $i < $num_hourly_wages; $i++) {
+				if (strtotime(HOURLY_WAGES_DATESTRINGS_SEAL[$i]) > strtotime($day_to_check)) {
+					break;
+				}
+				else {
+					$correct_hourly = HOURLY_WAGES_SEAL[$i];
+					// TEST PASSED 2018.10.18 echo $correct_hourly;
+				}
+			}
+			$income_seal += ($correct_hourly * 8);
+			echo $income_seal;
 		}
 		$day_to_check = date('Y-m-d', strtotime($day_to_check.'+1day'));
 		// echo "DOW: $this_dow | INCOME: $income_seal | DAYTOCHECK: $day_to_check <br/>";
 		$fuse++;
-		if ($fuse >= 100) {
+		if ($fuse >= 10) {
 			echo "FUSE BLOWN";
 			exit;
 		}

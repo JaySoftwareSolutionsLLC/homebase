@@ -9,8 +9,11 @@
 //---INITIALIZE GLOBAL VARIABLES ---------------------------------------------------
 	$today_time = time();
 	$today_date = date('Y-m-d');
+	$today_datetime = new DateTime();
 	$last_sunday = "'" . date('Y/m/d', strtotime('last Sunday')) . "'";
 	$days_left_in_2018 = floor((strtotime('January 1st, 2019') - $today_time) / SEC_IN_DAY);
+
+	$current_bench_press = 185;
 
 //---SELECT FROM DATABASE-----------------------------------------------------------
 
@@ -111,7 +114,18 @@
 		$this_dow = date('D',$this_time_to_check);
 		$this_time_to_check += SEC_IN_DAY;
 		if ($this_dow != 'Sat' && $this_dow != 'Sun' && ($this_time_to_check < strtotime('July 14th 2018') || $this_time_to_check > strtotime('July 21st 2018'))) {
-			$unreceived_seal_income += (HOURLY_WAGE_SEAL * 8);
+			$num_hourly_wages = count(HOURLY_WAGES_DATESTRINGS_SEAL);
+			$i = 0;
+			for ($i; $i < $num_hourly_wages; $i++) {
+				if (strtotime(HOURLY_WAGES_DATESTRINGS_SEAL[$i]) > $this_time_to_check) {
+					break;
+				}
+				else {
+					$correct_hourly = HOURLY_WAGES_SEAL[$i];
+				}
+			}
+			$unreceived_seal_income += ($correct_hourly * 8);
+			// TEST PASSED 2018.10.18 echo "$ $unreceived_seal_income | $days_active_financial days";
 		}
 		$fuse++;
 		if ($fuse > 30) {
@@ -123,9 +137,9 @@
 	// NET INCOME : Hourlywage at ricks multiplied by ricks hours + net tips from ricks + net recorded income from seal and design + unreceived (but earned) income from seal and design
 	$net_income = (HOURLY_WAGE_RICKS * $net_ricks_hours) + $net_ricks_tips + $net_seal_income + $unreceived_seal_income;
 
-	$adi = number_format($net_income / $days_active_financial, 2);
-	$ade = number_format($net_expenditure / $days_active_financial, 2);
-	$awh = number_format(7 * $net_hours / $days_active_financial, 2);
+	$adi = number_format($net_income / ($days_active_financial - 7), 2); // the 7 is subtracted from days_active_financial to make ADI reflect NON-UNPAID VACATION DAYS b/c in future all vacations should be paid (at least from S&D)
+	$ade = number_format($net_expenditure / ($days_active_financial), 2); // the 7 is NOT subtracted from days_active_financial because will take vacations in future
+	$awh = number_format(7 * $net_hours / ($days_active_financial - 7), 2); // the 7 is subtracted from days_active_financial to make AWH reflect NON-UNPAID VACATION DAYS b/c in future all vacations should be paid (at least from S&D)
 	$ahw = number_format(7 * $adi / $awh, 2);
 
 	$current_net_worth = $current_assets + $current_cash - $current_liabilities;
@@ -160,6 +174,93 @@
 	$row = mysqli_fetch_row($res);
 	$most_recent_body_weight = $row[0];
 
+	// Lifting
+	$q = "SELECT workout_structure_id FROM `fitness_cycles` WHERE start_date <= '$today_date' AND end_date >= '$today_date' LIMIT 1";
+	$res = $conn->query($q);
+	$row = mysqli_fetch_row($res);
+	$workout_structure = $row[0];
+	// TEST PASSED 2018.10.14 echo "WORKOUT STRUCTURE: $workout_structure <br/>";
+
+	$number_ready_muscles = 0;
+	$number_total_muscles = 0;
+	$number_near_ideal_muscles = 0;
+	$ideal_percent_tolerance = 5; // Used to determine which muscles should be marked as 'ideal'
+	$ideal_score =			0;
+
+	$muscle_objects = array();
+	$q = "SELECT 
+	muscles.id, muscles.common_name, circs.id AS 'circ_id', circs.name AS 'circ_name', circs.ideal, rec_times.ideal_recovery
+	FROM `fitness_muscles` AS muscles 
+	INNER JOIN `fitness_circumferences` AS circs ON (muscles.circumference_id = circs.id)
+	INNER JOIN `fitness_ideal_recovery_times` AS rec_times ON (muscles.id = rec_times.muscle_id)
+	WHERE rec_times.workout_structure_id = $workout_structure";
+	$res = $conn->query($q);
+	if ($res->num_rows > 0) {
+		while($row = $res->fetch_assoc()) {
+			//var_dump($row);
+			$muscle_id = 				$row['id'];
+			$muscle_name = 				$row['common_name'];
+			
+			$muscle_associated_circ_id = $row['circ_id'];
+			$muscle_associated_circ = 	$row['circ_name'];
+			$muscle_ideal_circ = 		$row['ideal'];
+			
+			$muscle_ideal_rest =		$row['ideal_recovery'];
+			
+			$q_current_circ = 			"SELECT value FROM fitness_measurements_circumferences WHERE circumference_id = $muscle_associated_circ_id ORDER BY datetime DESC LIMIT 1";
+			$res_current_circ = 		$conn->query($q_current_circ);
+			$row_current_circ = 		mysqli_fetch_row($res_current_circ);
+			$muscle_current_circ = 		$row_current_circ[0];
+			
+			$q_mrf = "SELECT datetime FROM `fitness_lifts` WHERE exercise_id IN (SELECT exercise_id FROM `fitness_pivot_exercises_muscles` WHERE muscle_id = $muscle_id AND type = 'primary') ORDER BY datetime DESC LIMIT 1";
+			$res_mrf =					$conn->query($q_mrf);
+			$row_mrf =					mysqli_fetch_row($res_mrf);
+			$muscle_mrf_time =			strtotime($row_mrf[0]); // Most Recent Failure as datetime
+			$muscle_mrf_hours =			ceil(($today_time - $muscle_mrf_time) / (60 * 60)); // Most Recent Failure as datetime
+			if ($muscle_mrf_hours > 999) { $muscle_mrf_hours = 999; }
+			
+			$hur =						$muscle_ideal_rest - $muscle_mrf_hours;
+			if ($hur <= 0) {
+				$number_ready_muscles++;
+			}
+			$percent_ideal = 			number_format((100 - ((($muscle_ideal_circ - $muscle_current_circ) / $muscle_ideal_circ) * 100)), 2);
+
+			if ($percent_ideal <= 100) {
+				$idealness_score = $percent_ideal;
+			}
+			else {
+				$idealness_score = (200 - $percent_ideal);
+			}
+			
+			if ($idealness_score >= (100 - $ideal_percent_tolerance)) {
+				$number_near_ideal_muscles++;
+			}
+			
+			$this_muscle =	 			new stdClass();
+			$this_muscle -> id =		$muscle_id;
+			$this_muscle -> name = 		$muscle_name;
+			$this_muscle -> circ =		$muscle_associated_circ;
+			$this_muscle -> curr_circ =	$muscle_current_circ;
+			$this_muscle -> ideal_circ = $muscle_ideal_circ;
+			$this_muscle -> ideal_rest = $muscle_ideal_rest;
+			$this_muscle -> mrf =		$muscle_mrf_hours;
+			$this_muscle -> hur = 		$hur;
+			$this_muscle -> perc_ideal = $percent_ideal;
+			
+						
+			$muscle_objects[] =			$this_muscle;
+			
+			$number_total_muscles++;
+			$ideal_score += 			$idealness_score;			
+			
+			//echo "ID: $muscle_id | COMMON NAME: $muscle_name | CIRC.: $muscle_associated_circ | IDEAL: $muscle_ideal_circ | CURRENT: $muscle_current_circ | MRF: $muscle_mrf_hours | IDEAL REC: $muscle_ideal_rest | HUR: $hur | % IDEAL: $percent_ideal <br/>";
+		}
+	}
+
+	$body_net_percent_ideal =			number_format(($ideal_score / $number_total_muscles), 2);
+
+	//var_dump($muscle_objects);
+
 	//---GOALS----------------------------------------------------------------------
 
 	$percent_goal_debt_free = 	number_format(((JUNE_1ST_DEBT - $current_liabilities) / JUNE_1ST_DEBT) * 100, 2);
@@ -177,6 +278,12 @@
 	// All Case Tests PASS
 	$percent_goal_mile_time = number_format(100 - (($best_mile_time - MILE_TIME_TARGET) * (100 / (STARTING_MILE_TIME - MILE_TIME_TARGET))), 2);
 	$percent_time_frame_running = number_format((100 * $days_active_running / (((strtotime('January 1st, 2019')) - strtotime(START_DATE_STRING_RUNNING)) / SEC_IN_DAY)), 2);
+
+	$percent_goal_bench_press = number_format( ( 100 * ( $current_bench_press - STARTING_BENCH_PRESS ) / ( END_OF_YEAR_BENCH_PRESS_TARGET - STARTING_BENCH_PRESS ) ), 2);
+	$percent_time_frame_bench_press = $percent_time_frame_body_weight; // Rather than redoing the calculation, just using the same time-frame as tracking body weight
+//---CLOSE DATABASE CONNECTION------------------------------------------------------
+	$conn->close();
+
 ?>
 
 <!DOCTYPE html>
@@ -206,7 +313,6 @@
 		include('resources/sections/fitness.php');
 		include('resources/sections/finance.php');
 		include('resources/sections/weather.php');
-		$conn->close();
 	?>
 	</main>
 

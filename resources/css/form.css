@@ -54,6 +54,11 @@ main form button {
 main form button:hover {
 	background: hsla(190, 100%, 50%, 0.8);
 }
+main ol li {
+	list-style: decimal;
+	padding: 0.5rem;
+    text-transform: capitalize;
+}
 table.log {
 	box-sizing: border-box;
 	width: 100%;

@@ -29,8 +29,8 @@ if ($res->num_rows > 0) {
     while($row = $res->fetch_assoc()) {
 		$hours = $row['hours'];
 		$tips = $row['tips'];
-		$hourly = number_format((($tips / $hours) + $HOURLY_WAGE_RICKS), 2);
-		$total = number_format((($hours * $HOURLY_WAGE_RICKS) + $tips), 2);
+		$hourly = number_format((($tips / $hours) + HOURLY_WAGE_RICKS), 2);
+		$total = number_format((($hours * HOURLY_WAGE_RICKS) + $tips), 2);
         $data_log .= "<tr>
 						<td>" . $row['date'] . "</td>
 						<td>" . $row['dow'] . "</td>
@@ -43,7 +43,7 @@ if ($res->num_rows > 0) {
     }
 }
 
-$qry = "SELECT DAYNAME(date) AS 'dow', type, AVG(tips + (hours * 7.5)) AS 'net income', AVG((tips / hours) + 7.5) AS 'hourly wage' FROM `finance_ricks_shifts` GROUP BY DAYNAME(date), type";
+$qry = "SELECT DAYNAME(date) AS 'dow', type, AVG(tips + (hours * " . HOURLY_WAGE_RICKS . ")) AS 'net income', AVG((tips / hours) + 7.5) AS 'hourly wage' FROM `finance_ricks_shifts` GROUP BY DAYNAME(date), type ORDER BY DAYOFWEEK(date)";
 $res = $conn->query($qry);
 if ($res->num_rows > 0) {
 	$shifts = array();
@@ -63,7 +63,7 @@ $conn->close();
 include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/css-files.php');
 
 ?>
-
+	<link rel="stylesheet" type="text/css" href="/homebase/resources/css/ricks_shift_form.css">
 
 	<body>
 		<main>
@@ -86,13 +86,13 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 				<button type="submit">Submit</button>
 			</form>
 			
-			<section class='shift-averages' style='display: inline-flex; justify-content: space-between; width: 60%; flex-flow: row wrap; padding: 0;'>
+			<section class='shift-averages' style='display: inline-flex; justify-content: space-between; flex-flow: row wrap; padding: 0;'>
 <?php
 			foreach ($shifts as $s) {
-				echo "	<div style='border: 1px solid hsl(190, 100%, 50%); width: 10rem; height: 10rem; border-radius: 5rem; display: inline-flex; flex-flow: column nowrap; align-items: center; justify-content: space-around; padding: 1rem; box-sizing: border-box;'>
+				echo "	<div style='' class='$s[1] day-avg-summary'>
 							<h3><span style='font-weight: 900;'>$s[0]</span> - $s[1]</h3>
-							<h4>$<span style='font-weight: 900;'>$s[2]</span>/shift</h4>
-							<h4>$<span style='font-weight: 900;'>$s[3]</span>/hour</h4>
+							<h4 style='padding: 1rem; font-size: 0.75rem;'>$<span style='font-weight: 900;'>$s[2]</span>/shift</h4>
+							<h4 style='font-size: 0.75rem;'>$<span style='font-weight: 900;'>$s[3]</span>/hour</h4>
 						</div>";
 			}
 ?>
