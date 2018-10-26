@@ -101,7 +101,8 @@
 	$net_seal_income = $row[0];
 		// Seal income earned but not yet received
 		// UPDATE 07/03/18 - This functionality breaks if a check is deposited before the two weeks is up (ie. we get checks early due to a holiday) because a few days of $ came from May...The lag days were compensated by the few may days so it worked out but now it causes an issue if a check is deposited early :/
-	$q = "SELECT MAX(date) FROM finance_seal_income WHERE date >= '$start_date_financial' AND type = 'check'";
+	$may_check_adjustment = 3 * 8 * 21.63; // 3 days in my first check were from May work days. This program only checks June 1st on so those days should not count towards total
+	$q = "SELECT MAX(end_payperiod) FROM finance_seal_income WHERE date >= '$start_date_financial' AND type = 'check'";
 	$res = $conn->query($q);
 	$row = mysqli_fetch_row($res);
 	$last_seal_check_date = $row[0]; // The most recent check date
@@ -135,7 +136,7 @@
 	}
 
 	// NET INCOME : Hourlywage at ricks multiplied by ricks hours + net tips from ricks + net recorded income from seal and design + unreceived (but earned) income from seal and design
-	$net_income = (HOURLY_WAGE_RICKS * $net_ricks_hours) + $net_ricks_tips + $net_seal_income + $unreceived_seal_income;
+	$net_income = (HOURLY_WAGE_RICKS * $net_ricks_hours) + $net_ricks_tips + $net_seal_income + $unreceived_seal_income - $may_check_adjustment;
 
 	$adi = number_format($net_income / ($days_active_financial - 7), 2); // the 7 is subtracted from days_active_financial to make ADI reflect NON-UNPAID VACATION DAYS b/c in future all vacations should be paid (at least from S&D)
 	$ade = number_format($net_expenditure / ($days_active_financial), 2); // the 7 is NOT subtracted from days_active_financial because will take vacations in future
@@ -146,7 +147,7 @@
 
 	$estimated_2018_income = number_format(PRE_JUNE_RICKS_INCOME + ($adi  * ($days_left_in_year_financial + $days_active_financial)), 0);
 
-	$estimated_EOY_net_worth = number_format($current_net_worth + ((($adi * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) - $ade) * ($days_left_in_year_financial)), 0);
+	$estimated_EOY_net_worth = number_format($current_net_worth + $unreceived_seal_income + ((($adi * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) - $ade) * ($days_left_in_year_financial)), 0);
 
 	//---FITNESS--------------------------------------------------------------------
 

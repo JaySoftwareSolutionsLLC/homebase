@@ -7,7 +7,7 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/constants.php');
 $conn = connect_to_db();
 
 // Initialize variables
-$title = 'Weekly Report Generator';
+$title = 'Monthly Report Generator';
 $date_start = set_post_value('start-date');
 $date_end = set_post_value('end-date');
 $count_days = ( strtotime($date_end . "+1 days") - strtotime($date_start) ) / SEC_IN_DAY;
@@ -64,7 +64,7 @@ if ($generated) {
 		$day_to_check = date('Y-m-d', strtotime($day_to_check.'+1day'));
 		// echo "DOW: $this_dow | INCOME: $income_seal | DAYTOCHECK: $day_to_check <br/>";
 		$fuse++;
-		if ($fuse >= 10) {
+		if ($fuse >= 40) {
 			echo "FUSE BLOWN";
 			exit;
 		}
@@ -152,7 +152,7 @@ if ($generated) {
 
 
 include $_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/sections/header.php'; // Website header
-include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/weekly-report/report-options.php"; // Report header
+include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/monthly-report/report-options.php"; // Report header
 
 // var_dump($_POST);
 
@@ -167,49 +167,14 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/weekly-report/r
 		
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js" integrity="sha256-XF29CBwU1MWLaGEnsELogU6Y6rcc5nCkhhx89nFMIDQ=" crossorigin="anonymous"></script>
 <section class='generated-report'>
-			<h1>Weekly Report</h1>
+			<h1>Monthly Report</h1>
 			<h2><?php echo "($date_start - $date_end)" ?></h2>
 			<div class='stats financial'>
-				<div class='stat income-differential'>
-					<div class='stat-text'>
-						<h3>Income Differential</h3>
-						<h4><?php echo $income_diff; ?></h4>
-						<h5>Target: <?php echo WEEKLY_INCOME_DIFF_TARGET; ?></h5>
-					</div>
-					<canvas id='net-income-diff-graph'></canvas>
-					<script>
-						new Chart(document.getElementById("net-income-diff-graph"),{
-							"type":"bar",
-							"data": {
-								"labels":["Income", "Expenditure"],
-								"datasets":[
-									{"data":[<?php echo "$income_net,$expenditure_net" ?>],
-									 "backgroundColor":["hsl(120, 100%, 50%)", "hsl(0, 100%, 50%)"],
-									 "borderColor":["white", "white"],
-									 "borderWidth":[0,0]
-									}
-								]
-							},
-							options: {
-								legend: {
-									display: false
-								},
-								scales: {
-									yAxes: [{
-										ticks: {
-											beginAtZero: true
-										}
-									}]
-								}
-							}							
-						});
-					</script>
-				</div>
 				<div class='stat income'>
 					<div class='stat-text'>
 						<h3>Income</h3>
 						<h4><?php echo $income_net; ?></h4>
-						<h5>Target: <?php echo WEEKLY_INCOME_TARGET; ?></h5>
+						<h5>Target: <?php echo round(MONTHLY_INCOME_TARGET, 2); ?></h5>
 						<h5>ADI: <?php echo $adi; ?></h5>
 					</div>
 					<canvas id='net-income-graph'></canvas>
@@ -219,7 +184,7 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/weekly-report/r
 							"data": {
 								"labels":["S&D", "Ricks"],
 								"datasets":[
-									{"label":"Weekly Income",
+									{"label":"Monthly Income",
 									 "data":[<?php echo "$income_seal,$income_ricks" ?>],
 									 "backgroundColor":[<?php echo "'$color_seal','$color_ricks'" ?>],
 									 "borderColor":["white", "white"],
@@ -243,7 +208,7 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/weekly-report/r
 					<div class='stat-text'>
 						<h3>Expenditure</h3>
 						<h4><?php echo $expenditure_net; ?></h4>
-						<h5>Target: <?php echo WEEKLY_EXPENDITURE_TARGET; ?></h5>
+						<h5>Target: <?php echo round(MONTHLY_EXPENDITURE_TARGET, 2); ?></h5>
 						<h5>ADE: <?php echo $ade; ?></h5>
 					</div>
 					<canvas id='expenditure-breakdown-graph'></canvas>
@@ -290,11 +255,46 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/weekly-report/r
 						});
 					</script>
 				</div>
+				<div class='stat income-differential'>
+					<div class='stat-text'>
+						<h3>Income Differential</h3>
+						<h4><?php echo $income_diff; ?></h4>
+						<h5>Target: <?php echo round(MONTHLY_INCOME_DIFF_TARGET, 2); ?></h5>
+					</div>
+					<canvas id='net-income-diff-graph'></canvas>
+					<script>
+						new Chart(document.getElementById("net-income-diff-graph"),{
+							"type":"bar",
+							"data": {
+								"labels":["Income", "Expenditure"],
+								"datasets":[
+									{"data":[<?php echo "$income_net,$expenditure_net" ?>],
+									 "backgroundColor":["hsl(120, 100%, 50%)", "hsl(0, 100%, 50%)"],
+									 "borderColor":["white", "white"],
+									 "borderWidth":[0,0]
+									}
+								]
+							},
+							options: {
+								legend: {
+									display: false
+								},
+								scales: {
+									yAxes: [{
+										ticks: {
+											beginAtZero: true
+										}
+									}]
+								}
+							}							
+						});
+					</script>
+				</div>
 				<div class='stat hours'>
 					<div class='stat-text'>
 						<h3>Hours</h3>
 						<h4><?php echo $hours_net; ?></h4>
-						<h5>Target: <?php echo WEEKLY_HOURS_TARGET; ?></h5>
+						<h5>Target: <?php echo round(MONTHLY_HOURS_TARGET, 2); ?></h5>
 					</div>
 					<canvas id='net-hours-graph'></canvas>
 					<script>

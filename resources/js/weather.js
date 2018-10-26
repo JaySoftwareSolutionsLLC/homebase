@@ -75,12 +75,10 @@ $(document).ready(function() {
 				}
 		});
 		$("div." + city.name).on("click", function(e) {
-			if (e.shiftKey) {
-				speakForecastWeather(city);
-			}
-			else {
-				speakCurrentWeather(city);				
-			}
+			speakCurrentWeather(city);				
+		});
+		$("div." + city.name).on("dblclick", function(e) {
+			speakForecastWeather(city);
 		});
 	}
 	

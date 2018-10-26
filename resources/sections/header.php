@@ -5,7 +5,9 @@
 	<div class="right">
 		<nav>
 			<a href="https://secure332.sgcpanel.com:2096/cpsess0106124978/webmail/Crystal/index.html?mailclient=horde" target="_blank">webmail</a>
-			<a href="https://quizlet.com/215065234/programming-terminology-flash-cards/" target="_blank">Quizlet</a>
+			<a href="/homebase/resources/reports/weekly-report/index.php" target="_blank">Weekly Report</a>
+			<a href="/homebase/resources/reports/monthly-report/index.php" target="_blank">Monthly Report</a>
+			<!--<a href="https://quizlet.com/215065234/programming-terminology-flash-cards/" target="_blank">Quizlet</a>-->
 		</nav>
 	</div>
 </header>

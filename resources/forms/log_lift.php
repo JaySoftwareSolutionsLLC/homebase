@@ -29,7 +29,7 @@ $reps_per_set = $row['reps_per_set'];
 // Select all of the exercises from fitness and store each of them server side as an object inside of an array
 $exercises = array();
 $qry = "SELECT 
-			fe.id, fe.name, fe.current_weight, 
+			fe.id, fe.name, fe.current_weight, fe.description, 
 				COALESCE((SELECT total_reps FROM fitness_lifts AS fl WHERE fl.exercise_id=fe.id AND fl.workout_structure_id = $current_workout_structure_id AND fl.weight=fe.current_weight ORDER BY total_reps DESC LIMIT 1), 0) AS 'target_reps', 
 				(SELECT datetime FROM `fitness_lifts` WHERE exercise_id IN (SELECT exercise_id FROM `fitness_pivot_exercises_muscles` WHERE muscle_id IN (SELECT muscle_id FROM `fitness_pivot_exercises_muscles`
 		WHERE exercise_id = fe.id) 
@@ -45,32 +45,10 @@ if ($res->num_rows > 0) {
 		$this_exercise->current_weight = $row['current_weight'];
 		$this_exercise->target_reps = $row['target_reps'];
 		$this_exercise->mrf_assoc_muscles = $row['mrf_associated_muscles'];
-		/*
-		$subqry = "SELECT total_reps FROM `fitness_lifts` WHERE exercise_id='$this_exercise->id' AND workout_structure_id='$current_workout_structure_id' AND weight='$this_exercise->current_weight' ORDER BY total_reps DESC LIMIT 1";
-		// TEST echo $subqry;
-		$subres = $conn->query($subqry);
-		if ($subres->num_rows > 0) {
-    		while($subrow = $subres->fetch_assoc()) {
-				$this_exercise->total_reps = $subrow['total_reps'];
-			}
-		}
-		*/
+		$this_exercise->description = $row['description'];
+		
 		$exercises[] = $this_exercise;
 	}
-	foreach ($exercises as $ex) {
-		$data_log .= "<tr>
-					<td>" . $ex->name . "</td>
-					<td>" . $ex->mrf_assoc_muscles . "</td>
-					<td>" . substr($row['arrival_time'], 0, 5) . "</td>
-					<td>" . substr($row['departure_time'], 0, 5) . "</td>
-					<td>" . round($row['hours'], 2) . "</td>
-					<td>" . $row['strain'] . "</td>
-					<td>" . $row['feedback'] . "</td>
-					<td>" . $row['stress'] . "</td>
-				</tr>";
-	}
-	
-	// TEST PASSED var_dump($exercises);
 }
 
 if (isset($_POST['datetime']) && isset($_POST['workout-structure-id']) && isset($_POST['total-reps']) && isset($_POST['exercise-id']) && isset($_POST['weight'])) {
@@ -97,7 +75,7 @@ if (isset($_POST['datetime']) && isset($_POST['workout-structure-id']) && isset(
 		$qry = "UPDATE `fitness_exercises` SET `current_weight` = $new_weight WHERE `fitness_exercises`.`id` = $this_ex->id";
 		// TEST PASSED echo $qry;
 		if ($conn->query($qry) === TRUE) {
-    	$entry_msg .= "Current weight set to $new_weight. </br>";
+    	$entry_msg .= "Current weight set to $new_weight. For $this_ex->name </br>";
 		} else {
     	$entry_msg .= "Error with query: $qry </br> $conn->error </br>";
 		}
@@ -105,11 +83,49 @@ if (isset($_POST['datetime']) && isset($_POST['workout-structure-id']) && isset(
 	
 }
 
-
-
-        
- 
-
+$lifts = array();
+$qry = " SELECT fl.datetime, 
+				fm.common_name, 
+				fe.name AS 'ex-name', 
+				fws.name AS 'ws-name', 
+				fl.weight, 
+				fl.total_reps 
+			FROM fitness_lifts AS fl 
+			INNER JOIN fitness_exercises AS fe 
+				ON (fl.exercise_id = fe.id) 
+			INNER JOIN fitness_workout_structures AS fws 
+				ON (fl.workout_structure_id = fws.id) 
+			INNER JOIN fitness_pivot_exercises_muscles AS fpem 
+				ON (fe.id = fpem.exercise_id) 
+			INNER JOIN fitness_muscles AS fm 
+				ON (fpem.muscle_id = fm.id) ORDER BY fl.datetime DESC 
+		";
+$res = $conn->query($qry);
+if ($res->num_rows > 0) {
+    while($row = $res->fetch_assoc()) {
+		$this_lift = new stdClass();
+		$this_lift->datetime = $row['datetime'];
+		$this_lift->muscle = $row['common_name'];
+		$this_lift->exercise = $row['ex-name'];
+		$this_lift->structure = $row['ws-name'];
+		$this_lift->weight = $row['weight'];
+		$this_lift->reps = $row['total_reps'];
+		
+		$lifts[] = $this_lift;
+	}
+	foreach ($lifts as $l) {
+		$data_log .= "<tr>
+					<td>" . $l->datetime . "</td>
+					<td>" . $l->muscle . "</td>
+					<td>" . $l->exercise . "</td>
+					<td>" . $l->structure . "</td>
+					<td>" . $l->weight . "</td>
+					<td>" . $l->reps . "</td>
+				</tr>";
+	}
+	
+	// TEST PASSED var_dump($exercises);
+}
 
 $conn->close();
 
@@ -123,7 +139,7 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 
 			<h1>Log Lift</h1>
 			<h2 class='msg'><?php echo $entry_msg ?></h2>
-
+			<p class='exercise-notes' style='width: 60%; background: hsl(190, 100%, 50%); color: white; padding: 0.5rem; font-size:0.75rem; margin: 1rem 0; border-radius: 0.25rem 0.75rem;'>Exercise notes populate here</p>
 			<form method='post'>
 				<label for='datetime'>Date</label>
 				<input id='datetime' type='datetime-local' name='datetime'/>
@@ -131,8 +147,8 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 				<select name='exercise-id'>
 <?php
 	foreach( $exercises as $e ) {
-		echo "<option type='text' data-target-reps='$e->target_reps' data-current-weight='$e->current_weight' value='$e->id'>$e->name</option>";
-	}				
+		echo "<option type='text' data-target-reps='$e->target_reps' data-current-weight='$e->current_weight' data-description='$e->description' value='$e->id'>$e->name</option>";
+	}		
 ?>
 				</select>
 				<label for='workout-structure-id'>Structure ID</label>
@@ -151,25 +167,28 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 					console.log(thisSelection);
 					let weight = $(this).find(':selected').data('current-weight');
 					let targetReps = $(this).find(':selected').data('target-reps');
-					console.log($('input#weight'));
+					let description = $(this).find(':selected').data('description');
+					if (description == '') {
+						description = 'No notes yet';
+					}
+					console.log(description);
 					$('input#weight').attr('value', weight);
 					$('input#total-reps').attr('value', targetReps);
+					$('p.exercise-notes').html(`${description}`);
 				});
 			</script>
 <?php
-/*
+
 ?>
-			<table class='log' id='seal-and-design-shifts-table'>
+			<table class='log' id='lifts-table'>
 				<thead>
 					<tr>
 						<th>Date</th>
-						<th>Day</th>
-						<th>Arr.</th>
-						<th>Dep.</th>
-						<th>Hrs</th>
-						<th>Strain</th>
-						<th>Feedback</th>
-						<th>Stress</th>
+						<th>Muscle</th>
+						<th>Exercise</th>
+						<th>Structure</th>
+						<th>Weight</th>
+						<th>Reps</th>
 					</tr>				
 				</thead>
 				<?php echo $data_log; ?>
@@ -181,14 +200,9 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/js
 ?>
 			<script>
 				$(document).ready( function () {
-					$('#seal-and-design-shifts-table').DataTable( {
+					$('#lifts-table').DataTable( {
 						"order": [[ 0, "desc" ]]
 					} );
 				} );
 			</script>
 	</body>
-
-</html>
-
-?>
-*/

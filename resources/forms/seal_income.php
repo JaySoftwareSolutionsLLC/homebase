@@ -10,8 +10,8 @@ $entry_msg = "Welcome to the Seal & Design income submission page.";
 
 // If variables have been posted insert into db
 if(isset($_POST['date']) && isset($_POST['type']) && isset($_POST['amount'])) {
-	$qry = "INSERT INTO `finance_seal_income`(`date`,`type`,`amount`)
-	VALUES ('" . $_POST['date'] . "', '" . $_POST['type'] . "', '" . $_POST['amount'] . "');";
+	$qry = "INSERT INTO `finance_seal_income`(`date`,`type`,`amount`, `start_payperiod`, `end_payperiod`)
+	VALUES ('" . $_POST['date'] . "', '" . $_POST['type'] . "', '" . $_POST['amount'] . "', '" . $_POST['period-start'] . "', '" . $_POST['period-end'] . "');";
 
 	if ($conn->query($qry) === TRUE) {
     	$entry_msg = "New record created successfully";
@@ -49,10 +49,15 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 			<form method='post'>
 				<label for='date'>Date</label>
 				<input id='date' type='date' name='date' value="<?php echo $today;?>"/>
+				<label for='period-start'>Period Start (Optional)</label>
+				<input id='period-start' type='date' name='period-start' value=""/>
+				<label for='period-end'>Period End (Optional)</label>
+				<input id='period-end' type='date' name='period-end' value=""/>
 				<label for='type'>Type</label>
 				<input id='type' type='string' name='type'/>
 				<label for='amount'>Amount</label>
 				<input id='amount' type='number' name='amount' step='0.01' min='0'/>
+				
 				<button type="submit">Submit</button>
 			</form>
 
