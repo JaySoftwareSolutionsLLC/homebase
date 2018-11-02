@@ -13,7 +13,7 @@
 	$last_sunday = "'" . date('Y/m/d', strtotime('last Sunday')) . "'";
 	$days_left_in_2018 = floor((strtotime('January 1st, 2019') - $today_time) / SEC_IN_DAY);
 
-	$current_bench_press = 185;
+	// DEPRECATED 2018.10.28 $current_bench_press = 185;
 
 //---SELECT FROM DATABASE-----------------------------------------------------------
 
@@ -158,7 +158,8 @@
 
 	$days_active_running = ceil(($today_time - $start_time_running) / (SEC_IN_DAY));
 
-	$q = "SELECT MIN(seconds) FROM `fitness_runs` WHERE miles >= 1;";
+	//DEPRECATED 2018.10.28 $q = "SELECT TOP(1) MIN(seconds) FROM `fitness_runs` WHERE miles >= 1 ORDER BY datetime DESC;";
+	$q = "SELECT seconds FROM `fitness_runs` WHERE miles = 1 ORDER BY datetime DESC LIMIT 1";
 	$res = $conn->query($q);
 	$row = mysqli_fetch_row($res);
 	$best_mile_time = $row[0];
@@ -258,6 +259,11 @@
 		}
 	}
 
+	$q = "SELECT MAX(weight) FROM `fitness_lifts` WHERE exercise_id = 23 AND workout_structure_id = 2 AND total_reps > 5 ORDER BY datetime DESC";
+	$res = $conn->query($q);
+	$row = mysqli_fetch_row($res);
+	$current_bench_press = $row[0];
+
 	$body_net_percent_ideal =			number_format(($ideal_score / $number_total_muscles), 2);
 
 	//var_dump($muscle_objects);
@@ -265,24 +271,63 @@
 	//---GOALS----------------------------------------------------------------------
 
 	$percent_goal_debt_free = 	number_format(((JUNE_1ST_DEBT - $current_liabilities) / JUNE_1ST_DEBT) * 100, 2);
+	if ($percent_goal_debt_free > 100) {
+		$percent_goal_debt_free = 100;
+	}
 	$percent_time_frame_debt_free = number_format((100 * $days_active_financial / (((strtotime('January 1st, 2019')) - strtotime(START_DATE_STRING_FINANCIAL)) / SEC_IN_DAY)), 2);
 
 	$percent_goal_net_worth = 	number_format((($current_cash + $current_assets - $current_liabilities - JUNE_1ST_NET_WORTH) / (END_OF_YEAR_NET_WORTH_TARGET - JUNE_1ST_NET_WORTH)) * 100, 2);
+	if ($percent_goal_net_worth > 100) {
+		$percent_goal_net_worth = 100;
+	}
 	$percent_time_frame_net_worth = number_format((100 * $days_active_financial / (((strtotime('January 1st, 2019')) - strtotime(START_DATE_STRING_FINANCIAL)) / SEC_IN_DAY)), 2);
 	
 	// Case Tests: mrbw = 147 --> 0% | mrbw = 160 --> 100% | mrbw = 153.5 --> 50%
 	// All Case Tests PASS
 	$percent_goal_body_weight = number_format(($most_recent_body_weight - STARTING_BODY_WEIGHT) * (100 / (BODY_WEIGHT_TARGET -STARTING_BODY_WEIGHT)), 2);
+	if ($percent_goal_body_weight > 100) {
+		$percent_goal_body_weight = 100;
+	}
 	$percent_time_frame_body_weight = number_format((100 * $days_active_body_weight / (((strtotime('January 1st, 2019')) - strtotime(START_DATE_STRING_BODY_WEIGHT)) / SEC_IN_DAY)), 2);
 
 	// Case Tests: bmt = 405 --> 100% | bmt = 515 --> 0% | bmt = 460 --> 50%
 	// All Case Tests PASS
 	$percent_goal_mile_time = number_format(100 - (($best_mile_time - MILE_TIME_TARGET) * (100 / (STARTING_MILE_TIME - MILE_TIME_TARGET))), 2);
+	if ($percent_goal_mile_time > 100) {
+		$percent_goal_mile_time = 100;
+	}
 	$percent_time_frame_running = number_format((100 * $days_active_running / (((strtotime('January 1st, 2019')) - strtotime(START_DATE_STRING_RUNNING)) / SEC_IN_DAY)), 2);
 
 	$percent_goal_bench_press = number_format( ( 100 * ( $current_bench_press - STARTING_BENCH_PRESS ) / ( END_OF_YEAR_BENCH_PRESS_TARGET - STARTING_BENCH_PRESS ) ), 2);
+	if ($percent_goal_bench_press > 100) {
+		$percent_goal_bench_press = 100;
+	}
 	$percent_time_frame_bench_press = $percent_time_frame_body_weight; // Rather than redoing the calculation, just using the same time-frame as tracking body weight
 //---CLOSE DATABASE CONNECTION------------------------------------------------------
+
+//--- NOTIFICATIONS ----------------------------------------------------------------
+	// Goal Progress Test
+	$number_completed_2018_goals = 0;
+	$number_on_track_2018_goals = 0;
+	$number_below_par_2018_goals = 0;
+	function update_2018_goals_status($percent_goal, $percent_time) {
+		if ($percent_goal >= 100) {
+			$GLOBALS['number_completed_2018_goals'] += 1;
+		}
+		else if ($percent_goal >= $percent_time) {
+			$GLOBALS['number_on_track_2018_goals'] += 1;
+		}
+		else {
+			$GLOBALS['number_below_par_2018_goals'] += 1;
+		}
+	}
+	update_2018_goals_status($percent_goal_debt_free, $percent_time_frame_debt_free);
+	update_2018_goals_status($percent_goal_net_worth, $percent_time_frame_net_worth);
+	update_2018_goals_status($percent_goal_body_weight, $percent_time_frame_body_weight);
+	update_2018_goals_status($percent_goal_mile_time, $percent_time_frame_running);
+	update_2018_goals_status($percent_goal_bench_press, $percent_time_frame_bench_press);
+
+
 	$conn->close();
 
 ?>
@@ -297,18 +342,22 @@
     <link rel="icon" href="resources/assets/images/favicon.png" type="image/x-icon">
     <title>Home Base 3.0</title>
     <link href="https://fonts.googleapis.com/css?family=Lobster|VT323|Orbitron:400,900" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="resources/css/reset.css">
     <link rel="stylesheet" type="text/css" href="resources/css/main.css">
+    <link rel="stylesheet" type="text/css" href="resources/css/notifications.css">
     <link rel="stylesheet" type="text/css" href="resources/css/goals.css">
     <link rel="stylesheet" type="text/css" href="resources/css/fitness.css">
     <link rel="stylesheet" type="text/css" href="resources/css/weather.css">
     <link rel="stylesheet" type="text/css" href="resources/css/finance.css">
+    
 </head>
 
 <body>
 	<main>
 	<?php
 		include('resources/sections/header.php');
+		include('resources/sections/notifications.php');
 		include('resources/sections/habits.php');
 		include('resources/sections/goals.php');
 		include('resources/sections/fitness.php');

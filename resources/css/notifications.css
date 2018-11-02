@@ -1,0 +1,9 @@
+li.warning {
+	color: hsl(0, 100%, 50%);
+}
+li.caution {
+	color: hsl(50, 100%, 50%);
+}
+li.success {
+	color: hsl(120, 100%, 50%);
+}
