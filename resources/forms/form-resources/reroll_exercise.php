@@ -34,6 +34,7 @@
 	$new_exercise_name = $row['name'];
 	$new_exercise_url = $row['reference_url'];
 	$new_exercise_best_weight = $row['best_weight'];
+	$new_exercise_best_total_reps = $row['best_total_reps'];
 
 	$out_str .= "<i class='reroll fas fa-sync-alt' data-muscle-id='$new_exercise_muscle_id' data-exercise-id='$new_exercise_id' data-muscle-idealness='$muscle_idealness'></i> &nbsp; $new_exercise_muscle_name ($muscle_idealness%) - ";
 	if ( ! empty( $new_exercise_url ) ) {
@@ -42,7 +43,7 @@
 	else {
 		$out_str .= $new_exercise_name;
 	}
-	$out_str .= " @ $new_exercise_best_weight";
+	$out_str .= " @ $new_exercise_best_weight (x$new_exercise_best_total_reps)";
 
 	echo $out_str;
 

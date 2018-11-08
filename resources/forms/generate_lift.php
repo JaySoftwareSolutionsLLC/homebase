@@ -127,6 +127,7 @@
 			$row = mysqli_fetch_array($res);
 			$exercise_name = $row['name'];
 			$exercise_best_weight = $row['best_weight'];
+			$exercise_best_total_reps = $row['best_total_reps'];
 			$exercise_url = $row['reference_url'];
 			$exercise_id = $row['id'];
 			
@@ -134,6 +135,7 @@
 			$this_exercise -> id = 		$exercise_id;
 			$this_exercise -> name =	$exercise_name;
 			$this_exercise -> best_weight = $exercise_best_weight;
+			$this_exercise -> best_total_reps = $exercise_best_total_reps;
 			$this_exercise -> url = 	$exercise_url;
 			$this_exercise -> muscle_name = $mo->name;
 			$this_exercise -> muscle_per_ideal = $mo->perc_ideal;
@@ -160,7 +162,7 @@
 		else {
 			$workout_str .= $eo->name;
 		}
-		$workout_str .= " @ $eo->best_weight</li>";
+		$workout_str .= " @ $eo->best_weight (x$eo->best_total_reps)</li>";
 	}
 				
 	$time_estimate = ceil(($num_exercises * $estimated_sec_per_muscle) / 60);
