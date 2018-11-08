@@ -11,7 +11,7 @@
 //---CONNECT TO DATABASE------------------------------------------------------------
 	$conn = connect_to_db();
 
-	$q = " SELECT fe.id, fe.name, fpem.muscle_id, fe.current_weight, fm.common_name, fe.reference_url
+	$q = " SELECT fe.id, fe.name, fpem.muscle_id, /*fe.current_weight,*/ fm.common_name, fe.reference_url
 			FROM `fitness_exercises` AS fe
 			INNER JOIN `fitness_pivot_exercises_muscles` AS fpem
 				ON (fe.id = fpem.exercise_id)
@@ -29,7 +29,7 @@
 	$new_exercise_id = $row['id'];
 	$new_exercise_name = $row['name'];
 	$new_exercise_url = $row['reference_url'];
-	$new_exercise_cur_weight = $row['current_weight'];
+	// FIELD LOCATION MOVED $new_exercise_cur_weight = $row['current_weight'];
 
 	$out_str .= "<i class='reroll fas fa-sync-alt' data-muscle-id='$new_exercise_muscle_id' data-exercise-id='$new_exercise_id' data-muscle-idealness='$muscle_idealness'></i> &nbsp; $new_exercise_muscle_name ($muscle_idealness%) - ";
 	if ( ! empty( $new_exercise_url ) ) {
@@ -38,7 +38,7 @@
 	else {
 		$out_str .= $new_exercise_name;
 	}
-	$out_str .= " @ $new_exercise_cur_weight";
+	// FIELD LOCATION MOVED $out_str .= " @ $new_exercise_cur_weight";
 
 	echo $out_str;
 

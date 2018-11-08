@@ -113,7 +113,7 @@
 			continue;
 		} 
 		else {
-			$q = "SELECT fm.common_name, fe.name, fe.current_weight, fe.reference_url, fe.description, fe.id 
+			$q = "SELECT fm.common_name, fe.name, /*fe.current_weight,*/ fe.reference_url, fe.description, fe.id 
 					FROM `fitness_exercises` AS fe 
 					INNER JOIN `fitness_pivot_exercises_muscles` AS p 
 						ON (fe.id = p.exercise_id) 
@@ -123,14 +123,14 @@
 			$res = $conn->query($q);
 			$row = mysqli_fetch_array($res);
 			$exercise_name = $row['name'];
-			$exercise_current_weight = $row['current_weight'];
+			// FIELD LOCATION MOVED $exercise_current_weight = $row['current_weight'];
 			$exercise_url = $row['reference_url'];
 			$exercise_id = $row['id'];
 			
 			$this_exercise = 			new stdClass();
 			$this_exercise -> id = 		$exercise_id;
 			$this_exercise -> name =	$exercise_name;
-			$this_exercise -> current_weight = $exercise_current_weight;
+			// FIELD LOCATION MOVED $this_exercise -> current_weight = $exercise_current_weight;
 			$this_exercise -> url = 	$exercise_url;
 			$this_exercise -> muscle_name = $mo->name;
 			$this_exercise -> muscle_per_ideal = $mo->perc_ideal;
@@ -144,11 +144,13 @@
 			break;
 		}
 	}
-
+	/* REWRITE REQUIRED DUE TO WEIGHT FIELD LOCATION MOVED */
+	/*
 	usort($exercise_objects, function($a, $b) {
 		return ( intval( $a->current_weight ) < intval( $b->current_weight ) );
 	});
-
+	*/
+	
 	foreach($exercise_objects as $eo) {
 		$workout_str .= "<li><i class='reroll fas fa-sync-alt' data-muscle-id='$eo->muscle_id' data-exercise-id='$eo->id' data-muscle-idealness='$eo->muscle_per_ideal'></i> &nbsp; $eo->muscle_name ($eo->muscle_per_ideal%) - ";
 		if ( ! empty( $eo->url ) ) {
@@ -157,7 +159,7 @@
 		else {
 			$workout_str .= $eo->name;
 		}
-		$workout_str .= " @ $eo->current_weight</li>";
+		// FIELD LOCATION MOVED $workout_str .= " @ $eo->current_weight</li>";
 	}
 				
 	$time_estimate = ceil(($num_exercises * $estimated_sec_per_muscle) / 60);
