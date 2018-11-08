@@ -17,7 +17,7 @@
 	$weight_redistribution_time = 120; // in seconds
 	$workout_str = '';
 
-// Retrieve all of the muscle info and then
+// Retrieve all of the muscle info
 	$q = "SELECT workout_structure_id FROM `fitness_cycles` WHERE start_date <= '$today_date' AND end_date >= '$today_date' LIMIT 1";
 	$res = $conn->query($q);
 	$row = mysqli_fetch_array($res);
@@ -113,19 +113,28 @@
 			continue;
 		} 
 		else {
-			$q = "SELECT fm.common_name, fe.name, fe.current_weight, fe.reference_url, fe.description FROM `fitness_exercises` AS fe INNER JOIN `fitness_pivot_exercises_muscles` AS p ON (fe.id = p.exercise_id) INNER JOIN `fitness_muscles` AS fm ON (p.muscle_id = fm.id) WHERE fm.id = '" . $mo->id . "' ORDER BY RAND() LIMIT 1";
+			$q = "SELECT fm.common_name, fe.name, fe.current_weight, fe.reference_url, fe.description, fe.id 
+					FROM `fitness_exercises` AS fe 
+					INNER JOIN `fitness_pivot_exercises_muscles` AS p 
+						ON (fe.id = p.exercise_id) 
+					INNER JOIN `fitness_muscles` AS fm 
+						ON (p.muscle_id = fm.id) 
+					WHERE fm.id = '" . $mo->id . "' ORDER BY RAND() LIMIT 1";
 			$res = $conn->query($q);
 			$row = mysqli_fetch_array($res);
 			$exercise_name = $row['name'];
 			$exercise_current_weight = $row['current_weight'];
 			$exercise_url = $row['reference_url'];
+			$exercise_id = $row['id'];
 			
 			$this_exercise = 			new stdClass();
-			$this_exercise -> name 		=	$exercise_name;
+			$this_exercise -> id = 		$exercise_id;
+			$this_exercise -> name =	$exercise_name;
 			$this_exercise -> current_weight = $exercise_current_weight;
-			$this_exercise -> url 		= $exercise_url;
+			$this_exercise -> url = 	$exercise_url;
 			$this_exercise -> muscle_name = $mo->name;
 			$this_exercise -> muscle_per_ideal = $mo->perc_ideal;
+			$this_exercise -> muscle_id = $mo->id;
 			
 			$exercise_objects[] =		$this_exercise;
 		
@@ -141,14 +150,14 @@
 	});
 
 	foreach($exercise_objects as $eo) {
-		$workout_str .= "<li>";
+		$workout_str .= "<li><i class='reroll fas fa-sync-alt' data-muscle-id='$eo->muscle_id' data-exercise-id='$eo->id' data-muscle-idealness='$eo->muscle_per_ideal'></i> &nbsp; $eo->muscle_name ($eo->muscle_per_ideal%) - ";
 		if ( ! empty( $eo->url ) ) {
-			$workout_str .= "<a href='$eo->url' target='_blank'>" . $eo->muscle_name . "</a>";
+			$workout_str .= "<a href='$eo->url' target='_blank'>" . $eo->name . "</a>";
 		}
 		else {
-			$workout_str .= $eo->muscle_name;
+			$workout_str .= $eo->name;
 		}
-		$workout_str .= " (" . $eo->muscle_per_ideal . "%) - $eo->name @ $eo->current_weight</li>";
+		$workout_str .= " @ $eo->current_weight</li>";
 	}
 				
 	$time_estimate = ceil(($num_exercises * $estimated_sec_per_muscle) / 60);
@@ -163,6 +172,7 @@
     <meta name="description" content="change">
     <link rel="shortcut icon" href="/homebase/resources/assets/images/favicon.png" type="image/x-icon">
     <link rel="icon" href="/homebase/resources/assets/images/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <title>Generated Lift</title>
 <?php include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/css-files.php'); ?>
     
@@ -176,12 +186,15 @@
 		<h1><?php echo $workout_structure_name; ?></h1>
 		<h2 class='msg'><?php echo "($reps_per_set" . "reps * $num_sets" . "sets @ $cadence" . "sec/rep w/ $rest" . " sec/set)"; ?></h2>
 		<h3>Estimated Time: <?php echo $time_estimate; ?> minutes</h3>
-		<ol>
+		<ol style='width: 80%;'>
 			<?php echo $workout_str; ?>
 		</ol>
 		
 		<?php // TEST var_dump($muscle_objects); ?>
 		
 	</main>
+	
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+	<script src='/homebase/resources/js/generate_lift.js' defer></script>
 
 </body>

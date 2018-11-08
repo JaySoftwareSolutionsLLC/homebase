@@ -1,10 +1,23 @@
 <?php
+//---CONNECT TO LOCAL DB------------------------------------------------------------
+/*
+	error_reporting(E_ERROR);
+//---INCLUDE RESOURCES--------------------------------------------------------------
+	include($_SERVER["DOCUMENT_ROOT"] . '/brettjaybrewster/homebase/resources/resources.php');
+	include($_SERVER["DOCUMENT_ROOT"] . '/brettjaybrewster/homebase/resources/constants.php');
+
+//---CONNECT TO DATABASE------------------------------------------------------------
+	$conn = connect_to_local_db();
+*/
+
+
 //---INCLUDE RESOURCES--------------------------------------------------------------
 	include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/resources.php');
 	include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/constants.php');
 
 //---CONNECT TO DATABASE------------------------------------------------------------
 	$conn = connect_to_db();
+
 
 //---INITIALIZE GLOBAL VARIABLES ---------------------------------------------------
 	$today_time = time();
@@ -147,7 +160,9 @@
 
 	$estimated_2018_income = number_format(PRE_JUNE_RICKS_INCOME + ($adi  * ($days_left_in_year_financial + $days_active_financial)), 0);
 
-	$estimated_EOY_net_worth = number_format($current_net_worth + $unreceived_seal_income + ((($adi * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) - $ade) * ($days_left_in_year_financial)), 0);
+	$estimated_2019_income = number_format(($adi * 365), 0);
+
+	$estimated_EOY_net_worth = number_format($current_net_worth + ($unreceived_seal_income * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) + ((($adi * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) - $ade) * ($days_left_in_year_financial)), 0);
 
 	//---FITNESS--------------------------------------------------------------------
 
@@ -259,7 +274,8 @@
 		}
 	}
 
-	$q = "SELECT MAX(weight) FROM `fitness_lifts` WHERE exercise_id = 23 AND workout_structure_id = 2 AND total_reps > 5 ORDER BY datetime DESC";
+	//$q = "SELECT MAX(weight) FROM `fitness_lifts` WHERE exercise_id = 23 AND ((workout_structure_id = 2 AND total_reps > 5) OR (workout_structure_id = 3 AND total_reps > 0)) ORDER BY datetime DESC";
+	$q = "SELECT MAX(weight) FROM `fitness_lifts` WHERE exercise_id = 23 AND workout_structure_id = 3 AND total_reps > 0 ORDER BY datetime DESC";
 	$res = $conn->query($q);
 	$row = mysqli_fetch_row($res);
 	$current_bench_press = $row[0];
@@ -271,13 +287,13 @@
 	//---GOALS----------------------------------------------------------------------
 
 	$percent_goal_debt_free = 	number_format(((JUNE_1ST_DEBT - $current_liabilities) / JUNE_1ST_DEBT) * 100, 2);
-	if ($percent_goal_debt_free > 100) {
+	if ($percent_goal_debt_free >= 100) {
 		$percent_goal_debt_free = 100;
 	}
 	$percent_time_frame_debt_free = number_format((100 * $days_active_financial / (((strtotime('January 1st, 2019')) - strtotime(START_DATE_STRING_FINANCIAL)) / SEC_IN_DAY)), 2);
 
 	$percent_goal_net_worth = 	number_format((($current_cash + $current_assets - $current_liabilities - JUNE_1ST_NET_WORTH) / (END_OF_YEAR_NET_WORTH_TARGET - JUNE_1ST_NET_WORTH)) * 100, 2);
-	if ($percent_goal_net_worth > 100) {
+	if ($percent_goal_net_worth >= 100) {
 		$percent_goal_net_worth = 100;
 	}
 	$percent_time_frame_net_worth = number_format((100 * $days_active_financial / (((strtotime('January 1st, 2019')) - strtotime(START_DATE_STRING_FINANCIAL)) / SEC_IN_DAY)), 2);
@@ -293,13 +309,13 @@
 	// Case Tests: bmt = 405 --> 100% | bmt = 515 --> 0% | bmt = 460 --> 50%
 	// All Case Tests PASS
 	$percent_goal_mile_time = number_format(100 - (($best_mile_time - MILE_TIME_TARGET) * (100 / (STARTING_MILE_TIME - MILE_TIME_TARGET))), 2);
-	if ($percent_goal_mile_time > 100) {
+	if ($percent_goal_mile_time >= 100) {
 		$percent_goal_mile_time = 100;
 	}
 	$percent_time_frame_running = number_format((100 * $days_active_running / (((strtotime('January 1st, 2019')) - strtotime(START_DATE_STRING_RUNNING)) / SEC_IN_DAY)), 2);
 
 	$percent_goal_bench_press = number_format( ( 100 * ( $current_bench_press - STARTING_BENCH_PRESS ) / ( END_OF_YEAR_BENCH_PRESS_TARGET - STARTING_BENCH_PRESS ) ), 2);
-	if ($percent_goal_bench_press > 100) {
+	if ($percent_goal_bench_press >= 100) {
 		$percent_goal_bench_press = 100;
 	}
 	$percent_time_frame_bench_press = $percent_time_frame_body_weight; // Rather than redoing the calculation, just using the same time-frame as tracking body weight
@@ -326,7 +342,6 @@
 	update_2018_goals_status($percent_goal_body_weight, $percent_time_frame_body_weight);
 	update_2018_goals_status($percent_goal_mile_time, $percent_time_frame_running);
 	update_2018_goals_status($percent_goal_bench_press, $percent_time_frame_bench_press);
-
 
 	$conn->close();
 

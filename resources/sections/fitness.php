@@ -2,8 +2,8 @@
 
 ?>
 <section class="column fitness">
-<h2>Fitness</h2>
-	<div class="content">
+<h2 class='fitness-title'>Fitness</h2>
+	<div class="content fitness-content">
    		<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 400 420">
         	<defs>
             	<style>

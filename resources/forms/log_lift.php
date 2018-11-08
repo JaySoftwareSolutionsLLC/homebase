@@ -85,9 +85,12 @@ if (isset($_POST['datetime']) && isset($_POST['workout-structure-id']) && isset(
 
 $lifts = array();
 $qry = " SELECT fl.datetime, 
-				fm.common_name, 
-				fe.name AS 'ex-name', 
+				fm.common_name,
+				fm.id AS 'muscle_id',
+				fe.name AS 'ex-name',
+				fe.id AS 'ex-id',
 				fws.name AS 'ws-name', 
+				fws.id AS 'ws-id', 
 				fl.weight, 
 				fl.total_reps 
 			FROM fitness_lifts AS fl 
@@ -106,8 +109,11 @@ if ($res->num_rows > 0) {
 		$this_lift = new stdClass();
 		$this_lift->datetime = $row['datetime'];
 		$this_lift->muscle = $row['common_name'];
+		$this_lift->muscle_id = $row['muscle_id'];
 		$this_lift->exercise = $row['ex-name'];
+		$this_lift->exercise_id = $row['ex-id'];
 		$this_lift->structure = $row['ws-name'];
+		$this_lift->structure_id = $row['ws-id'];
 		$this_lift->weight = $row['weight'];
 		$this_lift->reps = $row['total_reps'];
 		
@@ -116,9 +122,9 @@ if ($res->num_rows > 0) {
 	foreach ($lifts as $l) {
 		$data_log .= "<tr>
 					<td>" . $l->datetime . "</td>
-					<td>" . $l->muscle . "</td>
-					<td>" . $l->exercise . "</td>
-					<td>" . $l->structure . "</td>
+					<td>" . $l->muscle . " (#$l->muscle_id)</td>
+					<td>" . $l->exercise . "(#$l->exercise_id)</td>
+					<td>" . $l->structure . "(#$l->structure_id)</td>
 					<td>" . $l->weight . "</td>
 					<td>" . $l->reps . "</td>
 				</tr>";

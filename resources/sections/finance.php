@@ -37,6 +37,10 @@
 			<h3>2018 Income Projection</h3>
 			<h4>$<?php echo $estimated_2018_income; ?></h4>
 		</div>
+		<div class="stat income-projection-2019">
+			<h3>2019 Income Projection</h3>
+			<h4>$<?php echo $estimated_2019_income; ?></h4>
+		</div>
 		<div class="stat proj-net-worth">
 			<h3>Projected EOY Net Worth</h3>
 			<h4>$<?php echo $estimated_EOY_net_worth; ?></h4>
