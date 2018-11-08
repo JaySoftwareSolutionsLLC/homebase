@@ -28,22 +28,35 @@ $reps_per_set = $row['reps_per_set'];
 
 // Select all of the exercises from fitness and store each of them server side as an object inside of an array
 $exercises = array();
+/* DEPRECATED QUERY */
+/*
 $qry = "SELECT 
-			fe.id, fe.name, /*fe.current_weight,*/ fe.description, 
-				/*COALESCE((SELECT total_reps FROM fitness_lifts AS fl WHERE fl.exercise_id=fe.id AND fl.workout_structure_id = $current_workout_structure_id AND fl.weight=fe.current_weight ORDER BY total_reps DESC LIMIT 1), 0) AS 'target_reps',*/
+			fe.id, fe.name, fe.current_weight, fe.description, 
+				COALESCE((SELECT total_reps FROM fitness_lifts AS fl WHERE fl.exercise_id=fe.id AND fl.workout_structure_id = $current_workout_structure_id AND fl.weight=fe.current_weight ORDER BY total_reps DESC LIMIT 1), 0) AS 'target_reps',
 				(SELECT datetime FROM `fitness_lifts` WHERE exercise_id IN (SELECT exercise_id FROM `fitness_pivot_exercises_muscles` WHERE muscle_id IN (SELECT muscle_id FROM `fitness_pivot_exercises_muscles`
 		WHERE exercise_id = fe.id) 
 		AND type = 'primary') 
 		ORDER BY datetime DESC LIMIT 1) AS 'mrf_associated_muscles' 
 		FROM fitness_exercises AS fe";
+*/
+$qry = "SELECT 
+			fe.id, fe.name, fe.description, 
+				(SELECT datetime FROM `fitness_lifts` WHERE exercise_id IN 
+					(SELECT exercise_id FROM `fitness_pivot_exercises_muscles` WHERE muscle_id IN 
+						(SELECT muscle_id FROM `fitness_pivot_exercises_muscles` WHERE exercise_id = fe.id) AND type = 'primary') ORDER BY datetime DESC LIMIT 1) AS 'mrf_associated_muscles',
+            IFNULL(fbl.weight, 0) AS 'best_weight',
+            IFNULL(fbl.total_reps, 0) AS 'best_total_reps'
+		FROM fitness_exercises AS fe 
+		LEFT JOIN fitness_best_lifts AS fbl 
+			ON (fe.id = fbl.exercise_id AND $current_workout_structure_id = fbl.workout_structure_id)";
 $res = $conn->query($qry);
 if ($res->num_rows > 0) {
     while($row = $res->fetch_assoc()) {
 		$this_exercise = new stdClass();
 		$this_exercise->id = $row['id'];
 		$this_exercise->name = $row['name'];
-		// FIELD LOCATION MOVED $this_exercise->current_weight = $row['current_weight'];
-		// FIELD LOCATION DERIVATION CHANGED $this_exercise->target_reps = $row['target_reps'];
+		$this_exercise->best_weight = $row['best_weight'];
+		$this_exercise->best_total_reps = $row['best_total_reps'];
 		$this_exercise->mrf_assoc_muscles = $row['mrf_associated_muscles'];
 		$this_exercise->description = $row['description'];
 		
@@ -152,16 +165,16 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 			<form method='post'>
 				<label for='datetime'>Date</label>
 				<input id='datetime' type='datetime-local' name='datetime'/>
+				<label for='workout-structure-id'>Structure ID</label>
+				<input id='workout-structure-id' type='number' name='workout-structure-id' value='<?php echo $current_workout_structure_id; ?>' min='1'/>
 				<label for='exercise-id'>Exercise</label>
 				<select name='exercise-id'>
 <?php
 	foreach( $exercises as $e ) {
-		echo "<option type='text' data-target-reps='0' " . /* FIELD DERIVATION CHANGED $e->target_reps */ " data-current-weight='0' " . /* FIELD LOCATION MOVED $e->current_weight' */ " data-description='$e->description' value='$e->id'>$e->name</option>";
+		echo "<option type='text' data-target-reps='$e->best_total_reps' data-current-weight='$e->best_weight' data-description='$e->description' value='$e->id'>$e->name</option>";
 	}		
 ?>
 				</select>
-				<label for='workout-structure-id'>Structure ID</label>
-				<input id='workout-structure-id' type='number' name='workout-structure-id' value='<?php echo $current_workout_structure_id; ?>' min='1'/>
 				<label for='total-reps'>Total Reps</label>
 				<input id='total-reps' type='number' name='total-reps' value='0' min='1'/>
 				<label for='weight'>Weight</label>
