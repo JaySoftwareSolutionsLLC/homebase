@@ -48,7 +48,8 @@ $qry = "SELECT
             IFNULL(fbl.total_reps, 0) AS 'best_total_reps'
 		FROM fitness_exercises AS fe 
 		LEFT JOIN fitness_best_lifts AS fbl 
-			ON (fe.id = fbl.exercise_id AND $current_workout_structure_id = fbl.workout_structure_id)";
+			ON (fe.id = fbl.exercise_id AND $current_workout_structure_id = fbl.workout_structure_id)
+		ORDER BY fe.name";
 $res = $conn->query($qry);
 if ($res->num_rows > 0) {
     while($row = $res->fetch_assoc()) {
