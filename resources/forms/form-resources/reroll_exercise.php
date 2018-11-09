@@ -8,6 +8,9 @@
 	$exercise_id = 						$_POST['exercise-id'] ?? 0;
 	$muscle_idealness = 				$_POST['muscle-idealness'] ?? 0;
 	$workout_structure = 				$_POST['workout-structure'] ?? 0;
+	$equipments =						unserialize($_POST['equipments']) ?? 0;
+	//echo $equipments;
+	//exit;
 
 //---CONNECT TO DATABASE------------------------------------------------------------
 	$conn = connect_to_db();
@@ -22,11 +25,20 @@
             	ON (fe.id = fbl.exercise_id
                 AND $workout_structure = fbl.workout_structure_id)
 			WHERE fpem.muscle_id = $muscle_id
-				AND fe.id <> $exercise_id 
+				AND fpem.type = 'primary'
+				AND fe.id <> $exercise_id
+				AND ((SELECT COUNT(*) FROM fitness_pivot_exercises_equipment WHERE exercise_id = fe.id AND equipment_id NOT IN (" . implode(' , ', $equipments) . ")) = 0)
+				
 			ORDER BY RAND()
 			LIMIT 1 ";
 	$res = $conn->query($q);
-	$row = mysqli_fetch_array($res);
+	if ($res->num_rows > 0) {
+		$row = mysqli_fetch_array($res);
+	}
+	else {
+		echo "N/A";
+		exit;
+	}
 	
 	$new_exercise_muscle_id = $row['muscle_id'];
 	$new_exercise_muscle_name = $row['common_name'];

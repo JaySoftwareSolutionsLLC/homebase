@@ -9,22 +9,30 @@ $today = date('Y-m-d');
 $entry_msg = "Welcome to the workout submission page.";
 $data_log = '';
 
-$qry = "SELECT workout_structure_id FROM fitness_cycles WHERE start_date <= '$today' AND end_date >= '$today'";
-// TEST PASSED echo $qry;
-$res = $conn->query($qry);
-if ($res->num_rows > 0) {
-	while($row = $res->fetch_assoc()) {
-		$current_workout_structure_id = $row['workout_structure_id'];
-		// TEST PASSED echo $current_workout_structure_id;
+$current_workout_structure_id = 0;
+
+if ( isset( $_POST['workout-structure-id'] ) ) {
+	$current_workout_structure_id = $_POST['workout-structure-id'];
+}
+else {
+	$qry = "SELECT workout_structure_id FROM fitness_cycles WHERE start_date <= '$today' AND end_date >= '$today'";
+	// TEST PASSED echo $qry;
+	$res = $conn->query($qry);
+	if ($res->num_rows > 0) {
+		while($row = $res->fetch_assoc()) {
+			$current_workout_structure_id = $row['workout_structure_id'];
+			// TEST PASSED echo $current_workout_structure_id;
+		}
 	}
 }
-
+/* DEPRECATED CONCEPT */
+/*
 $qry = "SELECT * FROM fitness_workout_structures WHERE id = $current_workout_structure_id";
 $res = $conn->query($qry);
 $row = $res->fetch_assoc();
 $set_per_exercise = $row['sets_per_exercise'];
 $reps_per_set = $row['reps_per_set'];
-
+*/
 
 // Select all of the exercises from fitness and store each of them server side as an object inside of an array
 $exercises = array();
@@ -66,11 +74,26 @@ if ($res->num_rows > 0) {
 }
 
 if (isset($_POST['datetime']) && isset($_POST['workout-structure-id']) && isset($_POST['total-reps']) && isset($_POST['exercise-id']) && isset($_POST['weight'])) {
+	//var_dump($_POST);
+	$post_weight = $_POST['weight'];
+	//var_dump($post_weight);
+	$post_total_reps = $_POST['total-reps'];
+	$post_exercise_id = $_POST['exercise-id'];
+	$post_workout_structure_id = $_POST['workout-structure-id'];
 	$qry = "INSERT INTO `fitness_lifts`(`exercise_id`,`workout_structure_id`,`total_reps`,`weight`,`datetime`)
 	VALUES ('" . $_POST['exercise-id'] . "', '" . $_POST['workout-structure-id'] . "', '" . $_POST['total-reps'] . "', '" . $_POST['weight'] . "', '" . $_POST['datetime'] . "');";
 
 	if ($conn->query($qry) === TRUE) {
     	$entry_msg = "New record created successfully <br/>";
+		$qry_s = "SELECT id FROM fitness_lifts WHERE exercise_id = $post_exercise_id AND workout_structure_id = $post_workout_structure_id AND weight = $post_weight AND total_reps = $post_total_reps ORDER BY id LIMIT 1";
+		$res_s = $conn->query($qry_s);
+		if ($res_s->num_rows > 0) {
+			$row_s = $res_s->fetch_assoc();
+			$new_lift_id = $row_s['id'];
+		}
+		else {
+			$new_lift_id = 0;
+		}
 	} else {
     	$entry_msg = "Error with query: $qry <br/> $conn->error <br/>";
 	}
@@ -84,19 +107,44 @@ if (isset($_POST['datetime']) && isset($_POST['workout-structure-id']) && isset(
 		}
 	}
 	/* REWRITE REQUIRED DUE TO WEIGHT FIELD LOCATION MOVED */
-	/*
-	if ($_POST['weight'] >= $this_ex->current_weight && $_POST['total-reps'] >= ($set_per_exercise * $reps_per_set)) {
+	
+	if ($post_weight > $this_ex->best_weight || ($post_weight == $this_ex->best_weight && $post_total_reps > $this_ex->best_total_reps) ) {
+		//echo "TRIGGER";
 		// TEST PASSED echo "Record Weight.<br/>";
-		$new_weight = ($_POST['weight'] + 2.5);
-		$qry = "UPDATE `fitness_exercises` SET `current_weight` = $new_weight WHERE `fitness_exercises`.`id` = $this_ex->id";
+		//$new_weight = ($_POST['weight'] + 2.5);
+		if ($this_ex->best_weight == 0 && $this_ex->best_total_reps == 0) {
+			$qry = " INSERT INTO `fitness_best_lifts` (exercise_id, workout_structure_id, weight, total_reps, lift_id)
+						VALUES ($post_exercise_id, $post_workout_structure_id, $post_weight, $post_total_reps, $new_lift_id)";
+			//echo $qry;
+		}
+		else {
+			$qry = "UPDATE `fitness_best_lifts`
+				SET weight = $post_weight,
+					total_reps = $post_total_reps,
+					lift_id = $new_lift_id
+				WHERE 	exercise_id = $post_exercise_id
+					AND workout_structure_id = $post_workout_structure_id ";
+			//echo $qry;
+		}
+		$this_ex->best_weight == $post_weight;
+		$this_ex->best_total_reps == $post_total_reps;
+		
+		
 		// TEST PASSED echo $qry;
+		
 		if ($conn->query($qry) === TRUE) {
-    	$entry_msg .= "Current weight set to $new_weight. For $this_ex->name </br>";
+    	$entry_msg .= "New Personal Record!</br>";
 		} else {
     	$entry_msg .= "Error with query: $qry </br> $conn->error </br>";
 		}
+		
+		
 	}
-	*/
+	else {
+		echo "NON-TRIGGER";
+		echo "<br/>$post_weight | $post_total_reps | $this_ex->best_weight | $this_ex->best_total_reps | ";
+	}
+	
 	
 }
 
@@ -150,6 +198,19 @@ if ($res->num_rows > 0) {
 	// TEST PASSED var_dump($exercises);
 }
 
+$workout_structures = array();
+$q = " SELECT * FROM fitness_workout_structures ";
+$res = $conn->query($q);
+if ($res->num_rows > 0) {
+    while($row = $res->fetch_assoc()) {
+		$wos = new stdClass();
+		$wos->id = $row['id'];
+		$wos->name = $row['name'];
+		$workout_structures[] = $wos;
+	}
+}
+//var_dump($workout_structures);
+
 $conn->close();
 
 // Link to Style Sheets
@@ -167,9 +228,18 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 				<label for='datetime'>Date</label>
 				<input id='datetime' type='datetime-local' name='datetime'/>
 				<label for='workout-structure-id'>Structure ID</label>
-				<input id='workout-structure-id' type='number' name='workout-structure-id' value='<?php echo $current_workout_structure_id; ?>' min='1'/>
+				<select name='workout-structure-id' class='workout-structure-selection'>
+<?php
+	foreach( $workout_structures as $wos ) {
+		echo "<option type='text' value='$wos->id'>$wos->name</option>";
+	}		
+?>	
+				</select>
+				<!--
+				<input id='workout-structure-id' type='number' name='workout-structure-id' value='<?php //echo $current_workout_structure_id; ?>' min='1'/>
+				-->
 				<label for='exercise-id'>Exercise</label>
-				<select name='exercise-id'>
+				<select name='exercise-id' class='exercise-selection'>
 <?php
 	foreach( $exercises as $e ) {
 		echo "<option type='text' data-target-reps='$e->best_total_reps' data-current-weight='$e->best_weight' data-description='$e->description' value='$e->id'>$e->name</option>";
@@ -186,8 +256,28 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 			<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 			<script>
 				$('select').on('change', function() {
-					let thisSelection = $(this).find(':selected');
-					console.log(thisSelection);
+					let thisWorkoutStructure = $('select.workout-structure-selection').val();
+					let exerciseID = $('select.exercise-selection').val();
+					$.ajax({
+						url: '/homebase/resources/forms/form-resources/return_best_lift.php',
+						method: 'POST',
+						data: {
+							'exercise-id' : exerciseID,
+							'workout-structure' : thisWorkoutStructure
+						},
+						success: function(data) {
+							if (data != 'N/A') {
+								let bestLift = jQuery.parseJSON( data );
+								$('input#weight').val(bestLift['weight']);
+								$('input#total-reps').val(bestLift['total_reps']);
+							}
+							else {
+								$('input#weight').val(0);
+								$('input#total-reps').val(0);
+							}
+						}
+					});
+					/*
 					let weight = $(this).find(':selected').data('current-weight');
 					let targetReps = $(this).find(':selected').data('target-reps');
 					let description = $(this).find(':selected').data('description');
@@ -198,6 +288,7 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 					$('input#weight').attr('value', weight);
 					$('input#total-reps').attr('value', targetReps);
 					$('p.exercise-notes').html(`${description}`);
+					*/
 				});
 			</script>
 <?php

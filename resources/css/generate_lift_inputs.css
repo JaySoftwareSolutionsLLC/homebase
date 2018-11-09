@@ -1,0 +1,13 @@
+span.equipment-input {
+  display: inline-flex;
+  flex-flow: column nowrap;
+  padding: 0.5rem;
+  align-items: center;
+  border: 3px solid #00d5ff;
+  border-radius: 1rem 0.25rem;
+  margin: 0.5rem; }
+
+span.checked {
+  background: #00d5ff;
+  color: white;
+  font-weight: 900; }

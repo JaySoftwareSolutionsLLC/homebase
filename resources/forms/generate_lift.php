@@ -5,6 +5,8 @@
 
 //---RETRIEVE POST VARIABLES--------------------------------------------------------
 	$user_input_time_to_lift		= $_POST['time-to-lift'] ?? 0;
+	$equipments = $_POST['equipments'] ?? array();
+	// TEST PASSED 2018.11.08 var_dump($equipments);
 
 
 //---CONNECT TO DATABASE------------------------------------------------------------
@@ -122,9 +124,31 @@
 					LEFT JOIN fitness_best_lifts AS fbl
                     	ON (fe.id = fbl.exercise_id
                         AND $workout_structure = fbl.workout_structure_id)
-					WHERE fm.id = '" . $mo->id . "' ORDER BY RAND() LIMIT 1";
+					WHERE 	fm.id = $mo->id
+                    	AND p.type = 'primary' 
+                        AND ((SELECT COUNT(*) FROM fitness_pivot_exercises_equipment WHERE exercise_id = fe.id AND equipment_id NOT IN (" . implode(' , ', $equipments) . ")) = 0)
+                    
+                    ORDER BY RAND() LIMIT 1";
+				//echo $q;
+			/*
+			$q = "SELECT fm.common_name, fe.name, fe.reference_url, fe.description, fe.id, IFNULL(fbl.weight, 0) AS 'best_weight', IFNULL(fbl.total_reps, 0) AS 'best_total_reps'
+					FROM `fitness_exercises` AS fe 
+					INNER JOIN `fitness_pivot_exercises_muscles` AS p 
+						ON (fe.id = p.exercise_id) 
+					INNER JOIN `fitness_muscles` AS fm 
+						ON (p.muscle_id = fm.id)
+					LEFT JOIN fitness_best_lifts AS fbl
+                    	ON (fe.id = fbl.exercise_id
+                        AND $workout_structure = fbl.workout_structure_id)
+					WHERE fm.id = '" . $mo->id . "' AND p.type = 'primary' ORDER BY RAND() LIMIT 1";
+			*/
 			$res = $conn->query($q);
-			$row = mysqli_fetch_array($res);
+			if ($res->num_rows > 0) {
+				$row = mysqli_fetch_array($res);
+			}
+			else {
+				continue;
+			}
 			$exercise_name = $row['name'];
 			$exercise_best_weight = $row['best_weight'];
 			$exercise_best_total_reps = $row['best_total_reps'];
@@ -167,6 +191,8 @@
 				
 	$time_estimate = ceil(($num_exercises * $estimated_sec_per_muscle) / 60);
 
+	$conn->close();
+
 ?>
 
 
@@ -188,7 +214,7 @@
 
 	<main>
 		
-		<h1 data-workout-structure-id='<?php echo $workout_structure; ?>'><?php echo $workout_structure_name; ?></h1>
+		<h1 data-workout-structure-id='<?php echo $workout_structure; ?>' data-equipments='<?php echo serialize($equipments); ?>'><?php echo $workout_structure_name; ?></h1>
 		<h2 class='msg'><?php echo "($reps_per_set" . "reps * $num_sets" . "sets @ $cadence" . "sec/rep w/ $rest" . " sec/set)"; ?></h2>
 		<h3>Estimated Time: <?php echo $time_estimate; ?> minutes</h3>
 		<ol style='width: 80%;'>

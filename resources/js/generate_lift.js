@@ -2,6 +2,7 @@
 function setEventForAllRerollIcons() {
 	$('i.reroll').on('click', function() {
 		let workoutStructure = $('h1').attr('data-workout-structure-id');
+		let equipments = $('h1').attr('data-equipments');
 		let thisRow = $(this);
 		let muscleID = $(this).attr('data-muscle-id');
 		let exerciseID = $(this).attr('data-exercise-id');
@@ -13,12 +14,18 @@ function setEventForAllRerollIcons() {
 				'muscle-id' : muscleID,
 				'exercise-id' : exerciseID,
 				'muscle-idealness' : muscleIdealness,
-				'workout-structure' : workoutStructure
+				'workout-structure' : workoutStructure,
+				'equipments' : equipments
 			},
 			success: function(data) {
-				console.log(data);
-				thisRow.parent('li').html(data);
-				setEventForAllRerollIcons();
+				if (data != 'N/A') {
+					console.log(data);
+					thisRow.parent('li').html(data);
+					setEventForAllRerollIcons();
+				}
+				else {
+					thisRow.css('display', 'none');
+				}
 			}
 		});
 	});
