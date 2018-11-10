@@ -6,8 +6,7 @@ span.equipment-input {
   border: 3px solid #00d5ff;
   border-radius: 1rem 0.25rem;
   margin: 0.5rem; }
-
-span.checked {
-  background: #00d5ff;
-  color: white;
-  font-weight: 900; }
+  span.equipment-input.checked {
+    background: #00d5ff;
+    color: white;
+    font-weight: 900; }

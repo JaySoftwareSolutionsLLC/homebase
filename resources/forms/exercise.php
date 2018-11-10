@@ -14,11 +14,14 @@
 	$today_date = date('Y-m-d');
 	$today_datetime = new DateTime();
 
-	$exercise_id = 34;
+	$exercise_id = 14;
 	$exercise = new stdClass();
 	$exercise->id = $exercise_id;
 	$exercise->p_muscles = array();
 	$exercise->s_muscles = array();
+	$exercise->equipments = array();
+
+	// If there is an exercise-id posted 
 
 	$q = " SELECT * FROM `fitness_exercises` WHERE id = $exercise->id ";
 	$res = $conn->query($q);
@@ -42,6 +45,50 @@
 			else if ($row['type'] == 'secondary') {
 				$exercise->s_muscles[] = $row['muscle_id'];
 			}
+		}
+	}
+
+	$q = " 	SELECT equipment_id
+			FROM fitness_pivot_exercises_equipment
+			WHERE exercise_id = $exercise->id ";
+	$res = $conn->query($q);
+	if ($res->num_rows > 0) {
+		while($row = $res->fetch_assoc()) {
+			$exercise->equipments[] = $row['equipment_id'];
+		}
+	}
+
+	$equipments = array();
+	// Determine what all of the equipment options are
+	$q = " SELECT * FROM fitness_equipment ";
+	$res = $conn->query($q);
+	if ($res->num_rows > 0) {
+		while($row = $res->fetch_assoc()) {
+			$e = new stdClass();
+			$e->id = $row['id'];
+			$e->name = $row['name'];
+			
+			$equipments[] = $e;
+		}
+	}
+
+	$workout_structures = array();
+	// Determine what all of the equipment options are
+	$q = " 	SELECT fws.id, fws.name, IFNULL(fbl.weight, 0) AS 'best_weight', IFNULL(fbl.total_reps, 0) AS 'best_total_reps'
+			FROM fitness_workout_structures AS fws
+			LEFT JOIN fitness_best_lifts AS fbl
+				ON (fws.id = fbl.workout_structure_id
+				AND $exercise->id = fbl.exercise_id) ";
+	$res = $conn->query($q);
+	if ($res->num_rows > 0) {
+		while($row = $res->fetch_assoc()) {
+			$wos = new stdClass();
+			$wos->id = $row['id'];
+			$wos->name = $row['name'];
+			$wos->best_weight = $row['best_weight'];
+			$wos->best_total_reps = $row['best_total_reps'];
+			
+			$workout_structures[] = $wos;
 		}
 	}
 
@@ -452,11 +499,33 @@
 		
 		<section class='column equipment-selection'>
 			<h2>Equipment</h2>
+			<div>
+<?php
+			foreach ($equipments as $e) {
+				$str = "<span class='equipment-input'><label for='equipment-$e->id'>$e->name</label><input type='checkbox' name='equipments[]' id='equipment-$e->id' value='$e->id' class='equipment' ";
+				if (in_array($e->id, $exercise->equipments)) {
+					$str .= " checked ";
+				}
+				$str .= " ></span>";
+				echo $str;
+			}			
+?>
+			</div>
 		</section>
 		
 		<section class='current-stats'>
-			<h2>Stats</h2>
+			<h2>Best Lifts</h2>
 			<form>
+<?php
+			foreach ($workout_structures as $wos) {
+				$str = "<div class='workout-structure'>";
+				$str .= "<h3>$wos->name</h3>";
+				$str .= "<h4>$wos->best_total_reps reps @ $wos->best_weight lbs</h4>";
+				$str .= "</div>";
+				echo $str;
+			}	
+?>
+			<!--
 				<h3>Bodybuilding</h3>
 					<div>
 						<div class='label-group'>
@@ -468,7 +537,7 @@
 							<input type='number' name='current-rest-1' id='current-rest-1' value='0'/>	
 						</div>
 					</div>
-					
+			-->
 				
 			</form>
 		</section>
@@ -524,6 +593,20 @@
 			echo "$('svg path.muscle.$sm').css('fill', `hsl(50, 100%, 50%)`);";
 		}
 ?>
+		function changeColorOfEquipmentSpans() {
+			$('input.equipment').each(function() {
+				if ($(this).is(':checked')) {
+					$(this).parent('span').addClass('checked');
+				}
+				else {
+					$(this).parent('span').removeClass('checked');
+				}
+			})
+		}
+		changeColorOfEquipmentSpans();
+		$('input.equipment').on('change', function() {
+			changeColorOfEquipmentSpans();
+		});
 	</script>
 
 </body>

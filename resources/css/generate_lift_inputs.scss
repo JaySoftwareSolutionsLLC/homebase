@@ -6,10 +6,10 @@ span.equipment-input {
     border: 3px solid hsl(190, 100%, 50%);
     border-radius: 1rem 0.25rem;
     margin: 0.5rem;
+	&.checked {
+		background: hsl(190, 100%, 50%);
+		color: white;
+		font-weight: 900;
+	}
     //background: hsl(190, 100%, 50%);
-}
-span.checked {
-	background: hsl(190, 100%, 50%);
-	color: white;
-	font-weight: 900;
 }

@@ -1,114 +1,136 @@
 body {
-	width: 100%;
-	align-items: center;
-	padding: 2rem 0;
-}
-main {
-	box-sizing: border-box;
-	width: 80%;
-    max-width: 60rem;
-    min-width: 25rem;
-	background: white;
-	color: black;
-	font-family: 'Orbitron', sans-serif;
-	display: inline-flex;
-	flex-flow: column;
-	align-items: center;
-	padding: 2rem 1rem;
-	border-radius: 1rem 0.25rem;
-}
-main h1 {
-	width: 100%;
-	text-align: center;
-	font-size: 2.5rem;
-	margin-bottom: 0.5rem;
-	color: hsl(190, 100%, 50%);
-}
-main h2.msg {
-	font-size: 0.75rem;
-	margin-bottom: 1.5rem;
-}
-main form {
-	width: 60%;
-	display: inline-flex;
-	flex-flow: column;
-	margin-bottom: 3rem;
-}
-main form label {
-	font-size: 0.75rem;
-	margin-bottom: 0.25rem;
-}
-main form select, main form input {
-	font-size: 1rem;
-	height: 1.5rem;
-	margin-bottom: 0.5rem;
-}
-main form button {
-	width: 6rem;
-	height: 3rem;
-	text-align: center;
-	align-self: center;
-	border: none;
-	cursor: pointer;
-}
-main form button:hover {
-	background: hsla(190, 100%, 50%, 0.8);
-}
-main ol li {
-	list-style: decimal;
-	padding: 0.5rem;
-    text-transform: capitalize;
-}
-table.log {
-	box-sizing: border-box;
-	width: 100%;
-	color: black;
-}
-table.log th {
-	box-sizing: border-box;
-	height: 2rem;
-	font-weight: bold;
-	vertical-align: middle;
+  width: 100%;
+  align-items: center;
+  padding: 2rem 0; }
 
-}
+main {
+  box-sizing: border-box;
+  width: 80%;
+  max-width: 60rem;
+  min-width: 25rem;
+  background: white;
+  color: black;
+  font-family: 'Orbitron', sans-serif;
+  display: inline-flex;
+  flex-flow: column;
+  align-items: center;
+  padding: 2rem 1rem;
+  border-radius: 1rem 0.25rem; }
+
+main h1 {
+  width: 100%;
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: #00d5ff; }
+
+main h2.msg {
+  font-size: 0.75rem;
+  margin-bottom: 1.5rem; }
+
+main form {
+  width: 60%;
+  display: inline-flex;
+  flex-flow: column;
+  margin-bottom: 3rem; }
+
+main form label {
+  font-size: 0.75rem;
+  margin-bottom: 0.25rem; }
+
+main form select, main form input {
+  font-size: 1rem;
+  height: 1.5rem;
+  margin-bottom: 0.5rem; }
+
+main form button {
+  width: 6rem;
+  height: 3rem;
+  text-align: center;
+  align-self: center;
+  border: none;
+  cursor: pointer; }
+
+main form button:hover {
+  background: rgba(0, 213, 255, 0.8); }
+
+main ol li {
+  list-style: decimal;
+  padding: 0.5rem;
+  text-transform: capitalize; }
+
+table.log {
+  box-sizing: border-box;
+  width: 100%;
+  color: black; }
+
+table.log th {
+  box-sizing: border-box;
+  height: 2rem;
+  font-weight: bold;
+  vertical-align: middle; }
+
 table.log tr:nth-child(even) {
-	background: hsla(190, 100%, 50%, 0.2);
-}
+  background: rgba(0, 213, 255, 0.2); }
+
 table.log td {
-	box-sizing: border-box;
-	font-size: 0.75rem;	
-	height: 1.25rem;
-	text-align: center;
-	vertical-align: middle;
-}
+  box-sizing: border-box;
+  font-size: 0.75rem;
+  height: 1.25rem;
+  text-align: center;
+  vertical-align: middle; }
+
 table.log tr {
-	box-sizing: border-box;
-}
+  box-sizing: border-box; }
+
 table.log td.asset,
 table.log td.cash {
-	color: green;
-}
+  color: green; }
+
 table.log td.liability {
-	color: red;
-}
+  color: red; }
 
 @media only screen and (max-width: 900px) {
-    body {
-        padding: 0;
-    }
-	main {
-		width: 100%;
-		max-width: none;
-		background: black;
-		color: white;
-	}
-	main form label {
-		font-size: 1.25rem;
-		margin-bottom: 0.5rem;
-	}
-	main form select, main form input {
-		font-size: 1.25rem;
-		height: 2rem;
-		margin-bottom: 0.5rem;
-	}
-}
+  body {
+    padding: 0; }
+
+  main {
+    width: 100%;
+    max-width: none;
+    background: black;
+    color: white; }
+
+  main form label {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem; }
+
+  main form select, main form input {
+    font-size: 1.25rem;
+    height: 2rem;
+    margin-bottom: 0.5rem; } }
+span.equipment-input {
+  display: inline-flex;
+  flex-flow: column nowrap;
+  padding: 0.5rem;
+  align-items: center;
+  border: 3px solid #00d5ff;
+  border-radius: 1rem 0.25rem;
+  margin: 0.5rem; }
+  span.equipment-input.checked {
+    background: #00d5ff;
+    color: white;
+    font-weight: 900; }
+
+div.workout-structure {
+  padding: 0.25rem;
+  margin: 0.25rem;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 0.2rem 0.5rem;
+  cursor: pointer; }
+  div.workout-structure:hover {
+    background: white; }
+  div.workout-structure h3 {
+    font-size: 1.125rem;
+    padding-bottom: 0.25rem; }
+  div.workout-structure h4 {
+    font-size: 0.875rem; }
