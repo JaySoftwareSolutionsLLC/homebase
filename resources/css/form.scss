@@ -20,7 +20,7 @@ main {
 main h1 {
 	width: 100%;
 	text-align: center;
-	font-size: 2.5rem;
+	font-size: 1.75rem;
 	margin-bottom: 0.5rem;
 	color: hsl(190, 100%, 50%);
 }
@@ -128,11 +128,12 @@ span.equipment-input {
     //background: hsl(190, 100%, 50%);
 }
 div.workout-structure {
-  	padding:0.25rem;
-  	margin: 0.25rem;
-  	background: hsla(0, 0%, 100%, 0.5);
-  	border-radius: 0.2rem 0.5rem;
-  	cursor: pointer;
+  	padding: 0.25rem 0.75rem;
+    margin: 0.25rem;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 0.2rem 0.5rem;
+    cursor: pointer;
+    width: 80%;
 	&:hover {
 		background: white;
 	}
@@ -142,5 +143,15 @@ div.workout-structure {
 	}
 	h4 {
 		font-size: 0.875rem;
+	}
+}
+svg path.muscle {
+	fill: 			hsl(0, 0%, 80%);
+	cursor: 		pointer;
+	&.primary {
+		fill: 		hsl(0, 100%, 50%);
+	}
+	&.secondary {
+		fill: 		hsl(50, 100%, 50%);
 	}
 }

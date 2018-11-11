@@ -20,7 +20,7 @@ main {
 main h1 {
   width: 100%;
   text-align: center;
-  font-size: 2.5rem;
+  font-size: 1.75rem;
   margin-bottom: 0.5rem;
   color: #00d5ff; }
 
@@ -122,11 +122,12 @@ span.equipment-input {
     font-weight: 900; }
 
 div.workout-structure {
-  padding: 0.25rem;
+  padding: 0.25rem 0.75rem;
   margin: 0.25rem;
   background: rgba(255, 255, 255, 0.5);
   border-radius: 0.2rem 0.5rem;
-  cursor: pointer; }
+  cursor: pointer;
+  width: 80%; }
   div.workout-structure:hover {
     background: white; }
   div.workout-structure h3 {
@@ -134,3 +135,11 @@ div.workout-structure {
     padding-bottom: 0.25rem; }
   div.workout-structure h4 {
     font-size: 0.875rem; }
+
+svg path.muscle {
+  fill: #cccccc;
+  cursor: pointer; }
+  svg path.muscle.primary {
+    fill: red; }
+  svg path.muscle.secondary {
+    fill: #ffd500; }

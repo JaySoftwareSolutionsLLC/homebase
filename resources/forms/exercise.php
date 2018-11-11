@@ -14,47 +14,15 @@
 	$today_date = date('Y-m-d');
 	$today_datetime = new DateTime();
 
-	$exercise_id = 14;
-	$exercise = new stdClass();
-	$exercise->id = $exercise_id;
-	$exercise->p_muscles = array();
-	$exercise->s_muscles = array();
-	$exercise->equipments = array();
-
-	// If there is an exercise-id posted 
-
-	$q = " SELECT * FROM `fitness_exercises` WHERE id = $exercise->id ";
+	$exercises = array();
+	$q = " SELECT * FROM fitness_exercises ORDER BY name ";
 	$res = $conn->query($q);
 	if ($res->num_rows > 0) {
-		$row = $res->fetch_assoc();
-		$exercise->name = $row['name'];
-	}
-
-	$q = " SELECT fpem.muscle_id, fpem.type
-			FROM `fitness_pivot_exercises_muscles` AS fpem
-			INNER JOIN `fitness_muscles` AS fm
-				ON (fpem.muscle_id = fm.id)
-			WHERE fpem.exercise_id = $exercise->id ";
-	//echo $q;
-	$res = $conn->query($q);
-	if ($res->num_rows > 0) {
-		while($row = $res->fetch_assoc()) {
-			if ($row['type'] == 'primary') {
-				$exercise->p_muscles[] = $row['muscle_id'];
-			}
-			else if ($row['type'] == 'secondary') {
-				$exercise->s_muscles[] = $row['muscle_id'];
-			}
-		}
-	}
-
-	$q = " 	SELECT equipment_id
-			FROM fitness_pivot_exercises_equipment
-			WHERE exercise_id = $exercise->id ";
-	$res = $conn->query($q);
-	if ($res->num_rows > 0) {
-		while($row = $res->fetch_assoc()) {
-			$exercise->equipments[] = $row['equipment_id'];
+		while ($row = $res->fetch_assoc()) {
+			$e = new stdClass();
+			$e->id = $row['id'];
+			$e->name = $row['name'];
+			$exercises[] = $e;
 		}
 	}
 
@@ -69,26 +37,6 @@
 			$e->name = $row['name'];
 			
 			$equipments[] = $e;
-		}
-	}
-
-	$workout_structures = array();
-	// Determine what all of the equipment options are
-	$q = " 	SELECT fws.id, fws.name, IFNULL(fbl.weight, 0) AS 'best_weight', IFNULL(fbl.total_reps, 0) AS 'best_total_reps'
-			FROM fitness_workout_structures AS fws
-			LEFT JOIN fitness_best_lifts AS fbl
-				ON (fws.id = fbl.workout_structure_id
-				AND $exercise->id = fbl.exercise_id) ";
-	$res = $conn->query($q);
-	if ($res->num_rows > 0) {
-		while($row = $res->fetch_assoc()) {
-			$wos = new stdClass();
-			$wos->id = $row['id'];
-			$wos->name = $row['name'];
-			$wos->best_weight = $row['best_weight'];
-			$wos->best_total_reps = $row['best_total_reps'];
-			
-			$workout_structures[] = $wos;
 		}
 	}
 
@@ -114,9 +62,25 @@
 
 	<main style='background: none;'>
 		
-		<h1><?php echo "$exercise->name (#$exercise->id)"; ?></h1>
+		<h1 class='exercise-name'><?php //echo "$exercise->name (#$exercise->id)"; ?></h1>
 		<h2 class='msg'></h2>
 		<h3></h3>
+		
+		<section class='exercise-selection'>
+			<select style='width: 100%;'>
+				<option value='new'>New Exercise</option>
+<?php
+				//var_dump($exercises);
+				foreach ($exercises as $e) {
+					$str = "<option value='$e->id'>$e->name</option>";
+					echo $str;
+				}
+?>
+			</select>
+			<input style='width: 100%;' type='text' name='exercise-name-input' value='' class='exercise-name-input' placeholder='Pushups' autocomplete="off"></input>
+			<input style='width: 100%;' type='text' name='exercise-href-input' value='' class='exercise-href-input' placeholder='https://www.bodybuilding.com/exercises/pushups' autocomplete="off"></input>
+			<textarea style='width: 100%;' type='text' name='exercise-desc-input' value='' class='exercise-desc-input' placeholder='Hands on ground. Back as straight as possible. Focus on feeling pecs contract on each rep.'></textarea>
+		</section>
 		
 		<section class='muscle-selection'>
 			<h2>Muscles</h2>
@@ -513,33 +477,23 @@
 			</div>
 		</section>
 		
-		<section class='current-stats'>
+		<section class='best-lifts'>
 			<h2>Best Lifts</h2>
-			<form>
 <?php
+			/*
 			foreach ($workout_structures as $wos) {
 				$str = "<div class='workout-structure'>";
 				$str .= "<h3>$wos->name</h3>";
 				$str .= "<h4>$wos->best_total_reps reps @ $wos->best_weight lbs</h4>";
 				$str .= "</div>";
 				echo $str;
-			}	
-?>
-			<!--
-				<h3>Bodybuilding</h3>
-					<div>
-						<div class='label-group'>
-							<label for='current-weight-1'>Bodybuilding Weight (lbs)</label>
-							<input type='number' name='current-weight-1' id='current-weight-1' value='0'/>	
-						</div>
-						<div class='label-group'>
-							<label for='current-rest-1'>Bodybuilding Rest (hrs)</label>
-							<input type='number' name='current-rest-1' id='current-rest-1' value='0'/>	
-						</div>
-					</div>
-			-->
-				
-			</form>
+			}
+			*/
+?>			
+		</section>
+		
+		<section>
+			<button id='submit'>Update/Create</button>
 		</section>
 		
 		<?php // TEST var_dump($muscle_objects); ?>
@@ -547,20 +501,45 @@
 	</main>
 
 	<script>
-		var primMuscles = <?php echo json_encode($exercise->p_muscles); ?>;
-		var secMuscles = <?php echo json_encode($exercise->s_muscles); ?>;
+		/*
 		$("svg path.muscle").each(function() {
 			let muscleID = $(this).attr("data-muscle-id");
-			let muscleHue = 0;
-			let muscleLit = 100;
+			//let muscleHue = 0;
+			//let muscleLit = 100;
 			if ( primMuscles.includes(muscleID) ) {
-				muscleHue = 0;
-				muscleLit = 50;
+				//muscleHue = 0;
+				//muscleLit = 50;
+				$(this).addClass('primary');
 			}
 			else if ( secMuscles.includes(muscleID) ) {
-				muscleHue = 50;
-				muscleLit = 50;
+				//muscleHue = 50;
+				//muscleLit = 50;
+				$(this).addClass('secondary');
 			}
+			$(this).on('click', function() {
+				if ( $(this).hasClass('primary') ) {
+					$("svg path.muscle").each(function() {
+						if ( $(this).attr('data-muscle-id') == muscleID ) {
+							$(this).removeClass('primary');
+						}
+					});
+				}
+				else if ( $(this).hasClass('secondary') ) {
+					$("svg path.muscle").each(function() {
+						if ( $(this).attr('data-muscle-id') == muscleID ) {
+							$(this).addClass('primary').removeClass('secondary');
+						}
+					});
+				}
+				else {
+					$("svg path.muscle").each(function() {
+						if ( $(this).attr('data-muscle-id') == muscleID ) {
+							$(this).addClass('secondary');
+						}
+					});
+				}
+			});
+			*/
 			/*
 			let relMuscle = muscleObjects.filter(obj => {
 				return obj.id === muscleID;
@@ -576,7 +555,7 @@
 			}
 			*/
 
-			$(this).css('fill', `hsl(${muscleHue}, 100%, ${muscleLit}%)`);
+			//$(this).css('fill', `hsl(${muscleHue}, 100%, ${muscleLit}%)`);
 			/*
 			let percIdeal = muscleObj['perc_ideal'];
 			// If the muscle is ready and far from ideal or if the muscle has been ready for more than a week then apply the flashing class
@@ -584,15 +563,18 @@
 				$(this).addClass('flashing');
 			}
 			*/
+		/*
 		});
 <?php
-		foreach ($exercise->p_muscles as $pm) {
+		/*foreach ($exercise->p_muscles as $pm) {
 			echo "$('svg path.muscle.$pm').css('fill', `hsl(0, 100%, 50%)`);";
 		}
 		foreach ($exercise->s_muscles as $sm) {
 			echo "$('svg path.muscle.$sm').css('fill', `hsl(50, 100%, 50%)`);";
 		}
+		*/
 ?>
+		*/
 		function changeColorOfEquipmentSpans() {
 			$('input.equipment').each(function() {
 				if ($(this).is(':checked')) {
@@ -607,6 +589,154 @@
 		$('input.equipment').on('change', function() {
 			changeColorOfEquipmentSpans();
 		});
+		
+		// If the exercise selection was changed then update the page information
+		$('section.exercise-selection select').on('change', function() {
+			$('svg path.muscle').removeClass('primary').removeClass('secondary');
+			$('input.equipment').each(function() {
+				$(this).attr('checked', false);
+			});
+			changeColorOfEquipmentSpans();
+			$('section.best-lifts').html('<h2>Best Lifts</h2>');
+			
+			//console.log('changed');
+			thisExerciseID = $(this).val();
+			if (thisExerciseID == 'new') {
+				$('button#submit').html('Create');
+				$('input.exercise-name-input').css('display', 'block');
+				$('section.best-lifts').css('display', 'none');
+				$('h1.exercise-name').css('display', 'none');
+			}
+			else {
+				$('button#submit').html('Update');
+				$('input.exercise-name-input').css('display', 'none');
+				$('section.best-lifts').css('display', 'inline-flex');
+				$('h1.exercise-name').css('display', 'block');
+				//console.log('existent');
+				$.ajax({
+					url: '/homebase/resources/forms/form-resources/return_exercise_info.php',
+					method: 'POST',
+					data: {
+						'exercise-id' : thisExerciseID,
+					},
+					success: function(data) {
+						selectedExercise = jQuery.parseJSON( data );
+						//console.log(selectedExercise);
+						$('h1.exercise-name').html(`${selectedExercise['name']} ( #${selectedExercise['id']} )`);
+						// Set muscle class appropriately
+						$('svg path.muscle').each(function() {
+							let muscleID = $(this).attr("data-muscle-id");
+							//let muscleHue = 0;
+							//let muscleLit = 100;
+							if ( selectedExercise['p_muscles'].includes(muscleID) ) {
+								//muscleHue = 0;
+								//muscleLit = 50;
+								$(this).addClass('primary');
+							}
+							else if ( selectedExercise['s_muscles'].includes(muscleID) ) {
+								//muscleHue = 50;
+								//muscleLit = 50;
+								$(this).addClass('secondary');
+							}
+							$(this).on('click', function() {
+								if ( $(this).hasClass('primary') ) {
+									$("svg path.muscle").each(function() {
+										if ( $(this).attr('data-muscle-id') == muscleID ) {
+											$(this).removeClass('primary');
+										}
+									});
+								}
+								else if ( $(this).hasClass('secondary') ) {
+									$("svg path.muscle").each(function() {
+										if ( $(this).attr('data-muscle-id') == muscleID ) {
+											$(this).addClass('primary').removeClass('secondary');
+										}
+									});
+								}
+								else {
+									$("svg path.muscle").each(function() {
+										if ( $(this).attr('data-muscle-id') == muscleID ) {
+											$(this).addClass('secondary');
+										}
+									});
+								}
+							});
+						});
+						// Set required equipment to checked
+						$('input.equipment').each(function() {
+							let equipmentID = $(this).val();
+							if (selectedExercise['equipments'].includes(equipmentID)) {
+								$(this).attr('checked', true);
+							}
+						});
+						changeColorOfEquipmentSpans();
+						// Display best lift info
+						//$('section.best-lifts').html('<h2>Best Lifts</h2>');
+						$.each(selectedExercise['workout_structures'], function( i, l ) {
+							let newDiv = $('<div>', {'class' : 'workout-structure'});
+							newDiv.append(`<h3>${l['name']}</h3>`);
+							newDiv.append(`<h4>${l['best_total_reps']} @ ${l['best_weight']}</h4>`);
+							$('section.best-lifts').append(newDiv);
+						});
+					}
+				});
+			}
+		});
+		
+		
+		
+		
+		$('button#submit').on('click', function() {
+			//console.log('submitted');
+			// If new exercise is created then we need to call an ajax function to create the exercise
+			if ( $('section.exercise-selection select').val() == 'new' ) {
+				let newExercise = {
+					name : $('input.exercise-name-input').val(),
+					p_muscles: [],
+					s_muscles: [],
+					equipments : [],
+				};
+				$('svg path.muscle').each(function() {
+					let muscleID = $(this).attr("data-muscle-id");
+					if ($(this).hasClass('primary') && ! newExercise['p_muscles'].includes(muscleID)) {
+						newExercise['p_muscles'].push(muscleID);
+					}
+					else if ($(this).hasClass('secondary') && ! newExercise['s_muscles'].includes(muscleID)) {
+						newExercise['s_muscles'].push(muscleID);
+					}
+				});
+				$('input.equipment').each(function() {
+					if ($(this).is(':checked')) {
+						let equipmentID = $(this).val();
+						newExercise['equipments'].push(equipmentID);
+					}
+				});
+				
+				
+				
+				//console.log(newExercise);
+				$.ajax({
+					url: '/homebase/resources/forms/form-resources/create_exercise.php',
+					method: 'POST',
+					data: {
+						'new-exercise' : JSON.stringify(newExercise),
+					},
+					success: function(data) {
+						if (data == 'success') {
+							location.reload();
+						}
+						else {
+							console.log(data);
+						}
+					}
+				});
+			}
+			else {
+				
+			}
+		});
+		
+		
 	</script>
 
 </body>
