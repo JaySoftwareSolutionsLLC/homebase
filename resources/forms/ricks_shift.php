@@ -12,17 +12,18 @@ $entry_msg = "Welcome to the Rick's on Main shift submission page.";
 
 // If variables have been posted insert into db
 if(isset($_POST['date'])) {
-	$qry = "INSERT INTO `finance_ricks_shifts`(`date`,`type`,`hours`,`tips`)
-	VALUES ('" . $_POST['date'] . "', '" . $_POST['type'] . "', '" . $_POST['hours'] . "', " . $_POST['tips'] . ");";
+	$qry = "INSERT INTO `finance_ricks_shifts`(`date`, `type`, `hours`, `tips`, `stress`, `enjoyment`, `description`)
+	VALUES ('" . $_POST['date'] . "', '" . $_POST['type'] . "', '" . $_POST['hours'] . "', " . $_POST['tips'] . ", " . $_POST['stress'] . ", " . $_POST['enjoyment'] . ", '" . $_POST['description'] . "')";
 
 	if ($conn->query($qry) === TRUE) {
     	$entry_msg = "New record created successfully";
 	} else {
     	$entry_msg = "Error with query: $qry <br> $conn->error";
+		var_dump($_POST);
 	}
 }
 
-$qry = "SELECT DAYNAME(date) AS 'dow', date, type, hours, tips FROM finance_ricks_shifts ORDER BY date DESC;";
+$qry = "SELECT LEFT(DAYNAME(date), 3) AS 'dow', date, type, hours, tips, stress, enjoyment, description FROM finance_ricks_shifts ORDER BY date DESC;";
 $res = $conn->query($qry);
 if ($res->num_rows > 0) {
 	$data_log = '';
@@ -31,6 +32,9 @@ if ($res->num_rows > 0) {
 		$tips = $row['tips'];
 		$hourly = number_format((($tips / $hours) + HOURLY_WAGE_RICKS), 2);
 		$total = number_format((($hours * HOURLY_WAGE_RICKS) + $tips), 2);
+		$stress = $row['stress'];
+		$enjoyment = $row['enjoyment'];
+		$description = $row['description'];
         $data_log .= "<tr>
 						<td>" . $row['date'] . "</td>
 						<td>" . $row['dow'] . "</td>
@@ -39,6 +43,9 @@ if ($res->num_rows > 0) {
 						<td>" . $tips . "</td>
 						<td>" . $hourly . "</td>
 						<td>" . $total . "</td>
+						<td>" . $stress . "</td>
+						<td>" . $enjoyment . "</td>
+						<td style='font-size: 0.625rem'>" . $description . "</td>
 						</tr>";
     }
 }
@@ -63,6 +70,7 @@ $conn->close();
 include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/css-files.php');
 
 ?>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="/homebase/resources/css/ricks_shift_form.css">
 
 	<body>
@@ -83,6 +91,12 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 				<input id='hours' type='number' name='hours' min='0' max='10' step='0.01'/>
 				<label for='tips'>Tips</label>
 				<input id='tips' type='number' name='tips' min='0' max='500' step='1'/>
+				<label for='stress'>Stress (Optional)</label>
+				<input id='stress' type='number' name='stress' min='1' max='10' step='1'/>
+				<label for='enjoyment'>Enjoyment (Optional)</label>
+				<input id='enjoyment' type='number' name='enjoyment' min='1' max='10' step='1'/>
+				<label for='description'>Description (Optional)</label>
+				<textarea id='description' name='description' maxlength='255' placeholder='Section 205. Very Busy. Worked with awesome crew...'></textarea>
 				<button type="submit">Submit</button>
 			</form>
 			
@@ -101,13 +115,16 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 			<table class='log' id='ricks-shifts-table'>
 				<thead>
 					<tr>
-						<th>Date</th>
+						<th style='width:15%;'>Date</th>
 						<th>Day</th>
 						<th>Type</th>
 						<th>Hours</th>
 						<th>Tips</th>
 						<th>Hourly</th>
 						<th>Net</th>
+						<th><i class="far fa-tired"></i></th>
+						<th><i class="far fa-smile-beam"></i></th>
+						<th><i class="fas fa-scroll"></i></th>
 					</tr>
 				</thead>
 				<?php echo $data_log; ?>

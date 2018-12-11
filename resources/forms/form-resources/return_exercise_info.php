@@ -23,6 +23,8 @@
 	if ($res->num_rows > 0) {
 		$row = $res->fetch_assoc();
 		$exercise->name = $row['name'];
+		$exercise->ref_url = $row['reference_url'];
+		$exercise->desc = $row['description'];
 	}
 
 	$q = " SELECT fpem.muscle_id, fpem.type

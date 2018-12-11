@@ -10,8 +10,10 @@ $entry_msg = "Welcome to the Seal & Design income submission page.";
 
 // If variables have been posted insert into db
 if(isset($_POST['date']) && isset($_POST['type']) && isset($_POST['amount'])) {
+	$start_payperiod = (empty($_POST['period-start'])) ? 'NULL' : "'" . $_POST['period-start'] . "'";
+	$end_payperiod = (empty($_POST['period-end'])) ? 'NULL' : "'" . $_POST['period-end'] . "'";
 	$qry = "INSERT INTO `finance_seal_income`(`date`,`type`,`amount`, `start_payperiod`, `end_payperiod`)
-	VALUES ('" . $_POST['date'] . "', '" . $_POST['type'] . "', '" . $_POST['amount'] . "', '" . $_POST['period-start'] . "', '" . $_POST['period-end'] . "');";
+	VALUES ('" . $_POST['date'] . "', '" . $_POST['type'] . "', '" . $_POST['amount'] . "', $start_payperiod, $end_payperiod );";
 
 	if ($conn->query($qry) === TRUE) {
     	$entry_msg = "New record created successfully";
@@ -20,7 +22,7 @@ if(isset($_POST['date']) && isset($_POST['type']) && isset($_POST['amount'])) {
 	}
 }
 
-$qry = "SELECT date, type, amount FROM finance_seal_income ORDER BY date DESC;";
+$qry = "SELECT date, type, amount, start_payperiod, end_payperiod FROM finance_seal_income ORDER BY date DESC;";
 $res = $conn->query($qry);
 if ($res->num_rows > 0) {
 	$data_log = '';
@@ -29,6 +31,8 @@ if ($res->num_rows > 0) {
 						<td>" . $row['date'] . "</td>
 						<td>" . $row['type'] . "</td>
 						<td>$" . $row['amount'] . "</td>
+						<td>" . $row['start_payperiod'] . "</td>
+						<td>" . $row['end_payperiod'] . "</td>
 						</tr>";
     }
 }
@@ -67,6 +71,8 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 						<th>Date</th>
 						<th>Type</th>
 						<th>Amount</th>
+						<th>Starting</th>
+						<th>Ending</th>
 					</tr>
 				</thead>
 				<?php echo $data_log; ?>

@@ -41,6 +41,8 @@ if ($generated) {
 	
 	// SEAL INCOME
 	$income_seal = 0;
+	$salary_seal = 0; // Calculated based on hourly wage during that time frame and subtracting out unpaid time off
+	$bonuses_seal = 0; // Calculated based on the date of the bonus on finance_seal_income table
 	$day_to_check = $date_start;
 	$fuse = 0;
 	while ($day_to_check <= $date_end) {
@@ -58,18 +60,29 @@ if ($generated) {
 					// TEST PASSED 2018.10.18 echo $correct_hourly;
 				}
 			}
-			$income_seal += ($correct_hourly * 8);
-			// TEST PASSED 2018.10.21 echo $income_seal;
+			$salary_seal += ($correct_hourly * 8);
 		}
 		$day_to_check = date('Y-m-d', strtotime($day_to_check.'+1day'));
-		// echo "DOW: $this_dow | INCOME: $income_seal | DAYTOCHECK: $day_to_check <br/>";
+		// echo "DOW: $this_dow | INCOME: salary_seal | DAYTOCHECK: $day_to_check <br/>";
 		$fuse++;
 		if ($fuse >= 10) {
 			echo "FUSE BLOWN";
 			exit;
 		}
 	}
-
+	
+		// SEAL BONUSES
+	$q = " 	SELECT SUM(amount) AS 'bonus value'
+			FROM `finance_seal_income`
+			WHERE 	date >= '$date_start'
+				AND date <= '$date_end'
+				AND type = 'bonus' ";
+	$res = $conn->query($q);
+	$row = mysqli_fetch_array($res);
+	$bonuses_seal = $row['bonus value'];
+	
+	$income_seal = $bonuses_seal + $salary_seal;
+	
 	
 	// RICKS TIPS
 	$q = "SELECT 
@@ -357,6 +370,15 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/weekly-report/r
 							}							
 						});
 					</script>
+				</div>
+			</div>
+			<div class='stats fitness'>
+				<div class='stat running'>
+					<div class='stat-text'>
+						<h3>Miles Run</h3>
+						<h4><?php echo '0.5 miles'; ?></h4>
+						<h5>Target: <?php echo '3 miles'; ?></h5>
+					</div>
 				</div>
 			</div>
 		</section>

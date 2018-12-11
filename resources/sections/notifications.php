@@ -14,6 +14,13 @@ if ($number_below_par_2018_goals != 0) {
 		<li class='caution'><i class="fas fa-exclamation-triangle"></i>You did not hit all of your running targets last week</li>
 		<li class='success'><i class="fas fa-thumbs-up"></i>You successfully met all lifting targets last week</li> -->
 	</ul>
+	
+	<div class="row">
+		<a href='resources/forms/notes.php' class="form notes" target='_blank'>
+			<img src='resources/assets/images/icon-note.png'/>
+			<figcaption>Notes</figcaption>
+		</a>
+	</div>
 </section>
 
 

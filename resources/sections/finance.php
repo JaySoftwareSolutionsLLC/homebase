@@ -73,7 +73,7 @@
 			<a href='resources/forms/seal_income.php' class="form seal-income" target="_blank">
 				<img src='resources/assets/images/seal-income.png'/>
 				<figcaption>S&D Income</figcaption>
-			<a>
+			</a>
 		</div>
 	</div>
 </section>

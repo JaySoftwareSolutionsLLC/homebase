@@ -50,7 +50,7 @@
     <meta name="description" content="change">
     <link rel="shortcut icon" href="/homebase/resources/assets/images/favicon.png" type="image/x-icon">
     <link rel="icon" href="/homebase/resources/assets/images/favicon.png" type="image/x-icon">
-    <title>Exercise - <?php echo $exercise->name; ?></title>
+    <title>Exercise</title>
 <?php 	//include($_SERVER["DOCUMENT_ROOT"] . '/brettjaybrewster/homebase/resources/forms/form-resources/css-files.php');
 		include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/css-files.php');
 		include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/js-files.php'); ?>
@@ -65,21 +65,22 @@
 		<h1 class='exercise-name'><?php //echo "$exercise->name (#$exercise->id)"; ?></h1>
 		<h2 class='msg'></h2>
 		<h3></h3>
-		
-		<section class='exercise-selection'>
-			<select style='width: 100%;'>
-				<option value='new'>New Exercise</option>
+		<form>
+			<section class='exercise-selection'>
+				<select style='width: 100%;'>
+					<option value='new'>New Exercise</option>
 <?php
-				//var_dump($exercises);
-				foreach ($exercises as $e) {
-					$str = "<option value='$e->id'>$e->name</option>";
-					echo $str;
-				}
+					//var_dump($exercises);
+					foreach ($exercises as $e) {
+						$str = "<option value='$e->id'>$e->name</option>";
+						echo $str;
+					}
 ?>
-			</select>
-			<input style='width: 100%;' type='text' name='exercise-name-input' value='' class='exercise-name-input' placeholder='Pushups' autocomplete="off"></input>
-			<input style='width: 100%;' type='text' name='exercise-href-input' value='' class='exercise-href-input' placeholder='https://www.bodybuilding.com/exercises/pushups' autocomplete="off"></input>
-			<textarea style='width: 100%;' type='text' name='exercise-desc-input' value='' class='exercise-desc-input' placeholder='Hands on ground. Back as straight as possible. Focus on feeling pecs contract on each rep.'></textarea>
+				</select>
+				<input style='width: 100%;' type='text' name='exercise-name-input' value='' class='exercise-name-input' placeholder='Pushups' autocomplete="off"></input>
+				<input style='width: 100%;' type='text' name='exercise-href-input' value='' class='exercise-href-input' placeholder='https://www.bodybuilding.com/exercises/pushups' autocomplete="off"></input>
+				<textarea style='width: 100%;' type='text' name='exercise-desc-input' value='' class='exercise-desc-input' placeholder='Hands on ground. Back as straight as possible. Focus on feeling pecs contract on each rep.'></textarea>
+			</form>
 		</section>
 		
 		<section class='muscle-selection'>
@@ -601,6 +602,8 @@
 			
 			//console.log('changed');
 			thisExerciseID = $(this).val();
+			thisExerciseName = $(this).html();
+			
 			if (thisExerciseID == 'new') {
 				$('button#submit').html('Create');
 				$('input.exercise-name-input').css('display', 'block');
@@ -621,8 +624,21 @@
 					},
 					success: function(data) {
 						selectedExercise = jQuery.parseJSON( data );
-						//console.log(selectedExercise);
+						console.log(selectedExercise);
 						$('h1.exercise-name').html(`${selectedExercise['name']} ( #${selectedExercise['id']} )`);
+						$(document).attr("title", `Exercise - ${selectedExercise['name']}`);
+						if (selectedExercise['ref_url'] != '' && selectedExercise['ref_url'] != 'null') {
+							$('input.exercise-href-input').val(`${selectedExercise['ref_url']}`);
+						}
+						else {
+							$('input.exercise-href-input').val('');
+						}
+						if (selectedExercise['desc'] != '' && selectedExercise['desc'] != 'null') {
+							$('textarea.exercise-desc-input').val(`${selectedExercise['desc']}`);
+						}
+						else {
+							$('textarea.exercise-desc-input').val('');
+						}
 						// Set muscle class appropriately
 						$('svg path.muscle').each(function() {
 							let muscleID = $(this).attr("data-muscle-id");

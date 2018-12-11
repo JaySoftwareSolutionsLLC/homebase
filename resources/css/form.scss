@@ -58,6 +58,15 @@ main ol li {
 	list-style: decimal;
 	padding: 0.5rem;
     text-transform: capitalize;
+	a {
+		color: hsl(190, 100%, 30%);
+		&:visited {
+			color: hsl(190, 100%, 30%);
+		}
+	}
+}
+textarea {
+	height: 10rem;
 }
 table.log {
 	box-sizing: border-box;
@@ -101,6 +110,19 @@ table.log td.liability {
 		max-width: none;
 		background: black;
 		color: white;
+		ol {
+			li {
+				a {
+					color: hsl(190, 100%, 50%);
+					&:visited {
+						color: hsl(190, 100%, 50%);
+					}
+				}
+				i {
+					cursor: pointer;
+				}
+			}
+		}
 	}
 	main form label {
 		font-size: 1.25rem;

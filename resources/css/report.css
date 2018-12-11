@@ -30,6 +30,7 @@ section.generated-report div.stats {
 	justify-content: space-between;
 	align-items: flex-start;
 	flex-wrap: wrap;
+	padding: 1rem 0;
 }
 
 section.generated-report div.stats .stat {
