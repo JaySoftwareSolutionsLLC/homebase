@@ -73,15 +73,16 @@ if ($res->num_rows > 0) {
 	}
 }
 
-if (isset($_POST['datetime']) && isset($_POST['workout-structure-id']) && isset($_POST['total-reps']) && isset($_POST['exercise-id']) && isset($_POST['weight'])) {
+if (isset($_POST['workout-structure-id']) && isset($_POST['total-reps']) && isset($_POST['exercise-id']) && isset($_POST['weight'])) {
 	//var_dump($_POST);
+	$datetime = (empty($_POST['datetime'])) ? 'CURRENT_TIMESTAMP' : "'" . $_POST['datetime'] . "'";
 	$post_weight = $_POST['weight'];
 	//var_dump($post_weight);
 	$post_total_reps = $_POST['total-reps'];
 	$post_exercise_id = $_POST['exercise-id'];
 	$post_workout_structure_id = $_POST['workout-structure-id'];
 	$qry = "INSERT INTO `fitness_lifts`(`exercise_id`,`workout_structure_id`,`total_reps`,`weight`,`datetime`)
-	VALUES ('" . $_POST['exercise-id'] . "', '" . $_POST['workout-structure-id'] . "', '" . $_POST['total-reps'] . "', '" . $_POST['weight'] . "', '" . $_POST['datetime'] . "');";
+	VALUES ('" . $_POST['exercise-id'] . "', '" . $_POST['workout-structure-id'] . "', '" . $_POST['total-reps'] . "', '" . $_POST['weight'] . "', $datetime);";
 
 	if ($conn->query($qry) === TRUE) {
     	$entry_msg = "New record created successfully <br/>";

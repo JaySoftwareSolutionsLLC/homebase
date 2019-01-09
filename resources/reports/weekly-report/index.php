@@ -1,20 +1,28 @@
 <?php 
 // Include resources
 include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/resources.php');
-include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/constants.php');
+if ( strtotime( set_post_value('start-date') ) < strtotime('2019-01-01') ) {
+	$report_year = '2018';
+	include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/constants-2018.php');
+}
+else {
+	$report_year = '2019';
+	include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/constants-2019.php');
+}
+
 
 // Connect to Database
 $conn = connect_to_db();
 
 // Initialize variables
-$title = 'Weekly Report Generator';
+$title = "WR - $report_year";
 $date_start = set_post_value('start-date');
 $date_end = set_post_value('end-date');
 $count_days = ( strtotime($date_end . "+1 days") - strtotime($date_start) ) / SEC_IN_DAY;
 $generated = ($date_start != '' && $date_end != '') ? true : false;
 
-$color_seal = 'hsl(200, 100%, 70%)';
-$color_ricks = 'hsl(30, 100%, 30%)';
+$color_seal = COLOR_SEAL_AND_DESIGN;
+$color_ricks = COLOR_RICKS_ON_MAIN;
 
 if ($generated) {
 	// SEAL HOURS
@@ -37,6 +45,16 @@ if ($generated) {
 	$res = $conn->query($q);
 	$row = mysqli_fetch_row($res);
 	$hours_ricks = round($row[0], 2);
+	// RICKS OTB HOURS
+	$q = "SELECT 
+			SUM(hours) 
+			FROM `finance_ricks_shifts` 
+			WHERE date >= '$date_start' 
+				AND date <= '$date_end'
+				AND type = 'otb' ";
+	$res = $conn->query($q);
+	$row = mysqli_fetch_row($res);
+	$hours_otb_ricks = round($row[0], 2);
 
 	
 	// SEAL INCOME
@@ -94,7 +112,7 @@ if ($generated) {
 	$row = mysqli_fetch_row($res);
 	$tips_ricks = round($row[0], 2);
 
-	$income_ricks = round(($tips_ricks + (HOURLY_WAGE_RICKS * $hours_ricks)), 2);
+	$income_ricks = round( ( $tips_ricks + ( HOURLY_WAGE_RICKS * ( $hours_ricks - $hours_otb_ricks ) ) ), 2);
 
 	
 	// SEAL HOURLY
@@ -153,11 +171,14 @@ if ($generated) {
     <meta name="description" content="change">
     <link rel="shortcut icon" href="../../assets/images/favicon.png" type="image/x-icon">
     <link rel="icon" href="../../assets/images/favicon.png" type="image/x-icon">
-    <title>Home Base 3.0</title>
+    <title><?php echo $title; ?></title>
     <link href="https://fonts.googleapis.com/css?family=Lobster|VT323|Orbitron:400,900" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../../css/reset.css">
     <link rel="stylesheet" type="text/css" href="../../css/main.css">
     <link rel="stylesheet" type="text/css" href="/homebase/resources/css/report.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="/homebase/resources/js/moment.js"></script>
+    <script src="/homebase/resources/js/keyfunctions.js"></script>
 
 </head>
 
@@ -183,41 +204,6 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/weekly-report/r
 			<h1>Weekly Report</h1>
 			<h2><?php echo "($date_start - $date_end)" ?></h2>
 			<div class='stats financial'>
-				<div class='stat income-differential'>
-					<div class='stat-text'>
-						<h3>Income Differential</h3>
-						<h4><?php echo $income_diff; ?></h4>
-						<h5>Target: <?php echo WEEKLY_INCOME_DIFF_TARGET; ?></h5>
-					</div>
-					<canvas id='net-income-diff-graph'></canvas>
-					<script>
-						new Chart(document.getElementById("net-income-diff-graph"),{
-							"type":"bar",
-							"data": {
-								"labels":["Income", "Expenditure"],
-								"datasets":[
-									{"data":[<?php echo "$income_net,$expenditure_net" ?>],
-									 "backgroundColor":["hsl(120, 100%, 50%)", "hsl(0, 100%, 50%)"],
-									 "borderColor":["white", "white"],
-									 "borderWidth":[0,0]
-									}
-								]
-							},
-							options: {
-								legend: {
-									display: false
-								},
-								scales: {
-									yAxes: [{
-										ticks: {
-											beginAtZero: true
-										}
-									}]
-								}
-							}							
-						});
-					</script>
-				</div>
 				<div class='stat income'>
 					<div class='stat-text'>
 						<h3>Income</h3>
@@ -234,7 +220,7 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/weekly-report/r
 								"datasets":[
 									{"label":"Weekly Income",
 									 "data":[<?php echo "$income_seal,$income_ricks" ?>],
-									 "backgroundColor":[<?php echo "'$color_seal','$color_ricks'" ?>],
+									 "backgroundColor":[<?php echo "'" . COLOR_SEAL_AND_DESIGN . "','$color_ricks'" ?>],
 									 "borderColor":["white", "white"],
 									 "borderWidth":[0,0]
 									}
@@ -303,6 +289,41 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/weekly-report/r
 						});
 					</script>
 				</div>
+				<div class='stat income-differential'>
+					<div class='stat-text'>
+						<h3>Income Differential</h3>
+						<h4><?php echo $income_diff; ?></h4>
+						<h5>Target: <?php echo WEEKLY_INCOME_DIFF_TARGET; ?></h5>
+					</div>
+					<canvas id='net-income-diff-graph'></canvas>
+					<script>
+						new Chart(document.getElementById("net-income-diff-graph"),{
+							"type":"bar",
+							"data": {
+								"labels":["Income", "Expenditure"],
+								"datasets":[
+									{"data":[<?php echo "$income_net,$expenditure_net" ?>],
+									 "backgroundColor":["hsl(120, 100%, 50%)", "hsl(0, 100%, 50%)"],
+									 "borderColor":["white", "white"],
+									 "borderWidth":[0,0]
+									}
+								]
+							},
+							options: {
+								legend: {
+									display: false
+								},
+								scales: {
+									yAxes: [{
+										ticks: {
+											beginAtZero: true
+										}
+									}]
+								}
+							}							
+						});
+					</script>
+				</div>
 				<div class='stat hours'>
 					<div class='stat-text'>
 						<h3>Hours</h3>
@@ -318,7 +339,7 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/weekly-report/r
 								"datasets":[
 									{"label":"Hours",
 									 "data":[<?php echo "$hours_seal,$hours_ricks" ?>],
-									 "backgroundColor":[<?php echo "'$color_seal','$color_ricks'" ?>],
+									 "backgroundColor":[<?php echo "'" . COLOR_SEAL_AND_DESIGN . "','$color_ricks'" ?>],
 									 "borderColor":["white", "white"],
 									 "borderWidth":[0,0]
 									}
@@ -350,7 +371,7 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/weekly-report/r
 								"labels":["S&D", "Ricks"],
 								"datasets":[
 									{"data":[<?php echo "$hourly_seal,$hourly_ricks" ?>],
-									 "backgroundColor":[<?php echo "'$color_seal','$color_ricks'" ?>],
+									 "backgroundColor":[<?php echo "'" . COLOR_SEAL_AND_DESIGN . "','$color_ricks'" ?>],
 									 "borderColor":["white", "white"],
 									 "borderWidth":[0,0]
 									}
@@ -383,4 +404,17 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/weekly-report/r
 			</div>
 		</section>
 <?php } ?>
-
+	<script>
+		$('button.previous-week').on('click', function() {
+			let dateStart = $('input#start-date').val();
+			let dateEnd = $('input#end-date').val();
+			$('input#start-date').val(moment(dateStart).subtract(7, 'days').format('YYYY-MM-DD'));
+			$('input#end-date').val(moment(dateStart).subtract(7, 'days').endOf('week').add(1, 'days').format('YYYY-MM-DD'));
+		});
+		$('button.next-week').on('click', function() {
+			let dateStart = $('input#start-date').val();
+			let dateEnd = $('input#end-date').val();
+			$('input#start-date').val(moment(dateStart).add(7, 'days').startOf('week').add(1, 'days').format('YYYY-MM-DD'));
+			$('input#end-date').val(moment(dateStart).add(7, 'days').endOf('week').add(1, 'days').format('YYYY-MM-DD'));
+		});
+	</script>

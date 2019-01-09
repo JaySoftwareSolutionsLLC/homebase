@@ -73,12 +73,18 @@ $("svg path.muscle").each(function() {
 	else if (muscleHue > 120) {
 		muscleHue = 120;
 	}
-	$(this).css('fill', `hsl(${muscleHue}, 100%, 50%)`);
-	let percIdeal = muscleObj['perc_ideal'];
-	// If the muscle is ready and far from ideal or if the muscle has been ready for more than a week then apply the flashing class
-	if ((percIdeal < 90 && muscleHUR <= 0) || muscleHUR < (-1 * 7 * 24))  {
-		$(this).addClass('flashing');
+	if (year == 2018) {
+		$(this).css('fill', `hsla(190, 100%, 50%, 0.1)`);
 	}
+	else {
+		$(this).css('fill', `hsl(${muscleHue}, 100%, 50%)`);
+		let percIdeal = muscleObj['perc_ideal'];
+		// If the muscle is ready and far from ideal or if the muscle has been ready for more than a week then apply the flashing class
+		if ((percIdeal < 90 && muscleHUR <= 0) || muscleHUR < (-1 * 7 * 24))  {
+			$(this).addClass('flashing');
+		}
+	}
+	
 });
 /*$("svg path.muscle").(function() {
 	let muscleID = $(this).attr("data-muscle-id");

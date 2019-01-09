@@ -34,13 +34,19 @@
 			</div>
 		</div>
 		<div class="stat income-projection-2018">
-			<h3>2018 Income Projection</h3>
+			<h3><?php echo $year; ?> Income Projection</h3>
 			<h4>$<?php echo $estimated_2018_income; ?></h4>
 		</div>
+<?php 
+	if ($year == '2018') {
+?>
 		<div class="stat income-projection-2019">
 			<h3>2019 Income Projection</h3>
 			<h4>$<?php echo $estimated_2019_income; ?></h4>
 		</div>
+<?php
+	}
+?>
 		<div class="stat proj-net-worth">
 			<h3>Projected EOY Net Worth</h3>
 			<h4>$<?php echo $estimated_EOY_net_worth; ?></h4>

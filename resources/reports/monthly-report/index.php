@@ -1,20 +1,27 @@
 <?php 
 // Include resources
 include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/resources.php');
-include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/constants.php');
+if ( strtotime( set_post_value('start-date') ) < strtotime('2019-01-01') ) {
+	$report_year = '2018';
+	include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/constants-2018.php');
+}
+else {
+	$report_year = '2019';
+	include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/constants-2019.php');
+}
 
 // Connect to Database
 $conn = connect_to_db();
 
 // Initialize variables
-$title = 'Monthly Report Generator';
+$title = "MR - $report_year";
 $date_start = set_post_value('start-date');
 $date_end = set_post_value('end-date');
 $count_days = ( strtotime($date_end . "+1 days") - strtotime($date_start) ) / SEC_IN_DAY;
 $generated = ($date_start != '' && $date_end != '') ? true : false;
 
-$color_seal = 'hsl(200, 100%, 70%)';
-$color_ricks = 'hsl(30, 100%, 30%)';
+$color_seal = COLOR_SEAL_AND_DESIGN;
+$color_ricks = COLOR_RICKS_ON_MAIN;
 
 if ($generated) {
 	// SEAL HOURS
@@ -37,6 +44,16 @@ if ($generated) {
 	$res = $conn->query($q);
 	$row = mysqli_fetch_row($res);
 	$hours_ricks = round($row[0], 2);
+	// RICKS OTB HOURS
+	$q = "SELECT 
+			SUM(hours) 
+			FROM `finance_ricks_shifts` 
+			WHERE date >= '$date_start' 
+				AND date <= '$date_end'
+				AND type = 'otb' ";
+	$res = $conn->query($q);
+	$row = mysqli_fetch_row($res);
+	$hours_otb_ricks = round($row[0], 2);
 
 	
 	// SEAL INCOME
@@ -93,7 +110,7 @@ if ($generated) {
 	$row = mysqli_fetch_row($res);
 	$tips_ricks = round($row[0], 2);
 
-	$income_ricks = round(($tips_ricks + (HOURLY_WAGE_RICKS * $hours_ricks)), 2);
+	$income_ricks = round( ( $tips_ricks + ( HOURLY_WAGE_RICKS * ( $hours_ricks - $hours_otb_ricks ) ) ), 2);
 
 	
 	// SEAL HOURLY
@@ -152,11 +169,13 @@ if ($generated) {
     <meta name="description" content="change">
     <link rel="shortcut icon" href="../../assets/images/favicon.png" type="image/x-icon">
     <link rel="icon" href="../../assets/images/favicon.png" type="image/x-icon">
-    <title>Home Base 3.0</title>
+    <title><?php echo $title; ?></title>
     <link href="https://fonts.googleapis.com/css?family=Lobster|VT323|Orbitron:400,900" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../../css/reset.css">
     <link rel="stylesheet" type="text/css" href="../../css/main.css">
     <link rel="stylesheet" type="text/css" href="/homebase/resources/css/report.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="/homebase/resources/js/keyfunctions.js"></script>
 
 </head>
 
@@ -373,4 +392,18 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/monthly-report/
 			</div>
 		</section>
 <?php } ?>
-
+		<script>
+			
+			$('button.next-month').on('click', function() {
+				let dateStart = $('input#start-date').val();
+				let dateEnd = $('input#end-date').val();
+				$('input#start-date').val(returnFirstDayNextMonthStr(dateStart));
+				$('input#end-date').val(returnLastDayNextMonthStr(dateEnd));
+			});
+			$('button.previous-month').on('click', function() {
+				let dateStart = $('input#start-date').val();
+				let dateEnd = $('input#end-date').val();
+				$('input#start-date').val(returnFirstDayPreviousMonthStr(dateStart));
+				$('input#end-date').val(returnLastDayPreviousMonthStr(dateEnd));
+			});
+		</script>

@@ -11,11 +11,11 @@ $entry_msg = "Welcome to the Notes submission page.";
 
 // If variables have been posted insert into db
 if(isset($_POST['summary']) && isset($_POST['description']) && isset($_POST['type'])) {
-	$datetime = (empty($_POST['datetime'])) ? 'CURRENT_TIMESTAMP' : $_POST['datetime'];
+	$datetime = (empty($_POST['datetime'])) ? 'CURRENT_TIMESTAMP' : "'" . $_POST['datetime'] . "'";
 	$type = "'" . $_POST['type'] . "'";
 	$summary = "'" . $_POST['summary'] . "'";
 	$description = "'" . $_POST['description'] . "'";
-	$reminder_datetime = (empty($_POST['reminder-datetime'])) ? 'NULL' : $_POST['reminder-datetime'];
+	$reminder_datetime = (empty($_POST['reminder-datetime'])) ? 'NULL' : "'" . $_POST['reminder-datetime'] . "'";
 	$qry = "INSERT INTO `personal_notes` (`id`, `datetime`, `type`, `summary`, `description`, `reminder_datetime`) 
 			VALUES (NULL, $datetime, $type, $summary, $description, $reminder_datetime);";
 	//echo $qry;
@@ -70,6 +70,8 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 					<option value='reminder'>Reminder</option>
 					<option value='idea'>Idea</option>
 					<option value='thought'>Thought</option>
+					<option value='quote'>Quote</option>
+					<option value='lesson'>Lesson</option>
 				</select>
 				<label for='summary'>Summary</label>
 				<input name='summary' type='text' placeholder='Heart to heart with Molly Bolzano'/>
@@ -100,7 +102,9 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/js
 ?>
 			<script>
 				$(document).ready( function () {
-					$('#runs-table').DataTable();
+					$('#runs-table').DataTable( {
+						"order": [ 0, 'desc' ]
+					} );
 				} );
 			</script>
 	</body>

@@ -10,21 +10,36 @@
 	$conn = connect_to_local_db();
 */
 
-
 //---INCLUDE RESOURCES--------------------------------------------------------------
 	include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/resources.php');
-	include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/constants.php');
+	$year = set_post_value('year') ?? date('Y');
+	if ( $year == '2018' ) {
+		include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/constants-2018.php');
+	}
+	else {
+		include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/constants-2019.php');
+	}
 
 //---CONNECT TO DATABASE------------------------------------------------------------
 	$conn = connect_to_db();
 
 
 //---INITIALIZE GLOBAL VARIABLES ---------------------------------------------------
-	$today_time = time();
-	$today_date = date('Y-m-d');
-	$today_datetime = new DateTime();
+	if ($year == '2018') {
+		$today_time = strtotime('December 31st 2018');
+		$today_date = date('Y/m/d', mktime(0, 0, 0, 12, 31, 2018));
+		$today_datetime = new DateTime('December 31st 2018');
+	}
+	else {
+		$today_time = time();
+		$today_datetime = new DateTime();
+		$today_date = date_format($today_datetime, 'Y/m/d');
+	}
+	//echo $today_time;
+	//var_dump( $today_datetime );
+	//var_dump( $today_date );
 	$last_sunday = "'" . date('Y/m/d', strtotime('last Sunday')) . "'";
-	$days_left_in_2018 = floor((strtotime('January 1st, 2019') - $today_time) / SEC_IN_DAY);
+	$days_left_in_year = floor((strtotime("January 1st, " . ($year + 1)) - $today_time) / SEC_IN_DAY); // Needs to stay this way for 2018 and 2019 to both work
 
 	// DEPRECATED 2018.10.28 $current_bench_press = 185;
 
@@ -34,9 +49,15 @@
 
 	// Time Related Variables
 	$start_date_financial = date('Y/m/d', strtotime(START_DATE_STRING_FINANCIAL));
+	$end_date_financial = $today_date;
 	$start_time_financial = strtotime($start_date_financial);
 	$days_active_financial = ceil(($today_time - $start_time_financial) / (SEC_IN_DAY));
-	$days_left_in_year_financial = (365 - (date('z') + 1));
+	if ($year == '2018') {
+		$days_left_in_year_financial = 0;
+	}
+	else {
+		$days_left_in_year_financial = (365 - (date('z') + 1));
+	}
 
 	// Retrieve Account Information
 	$all_account_names = array();
@@ -45,7 +66,12 @@
 	$current_assets = 0;
 	$current_liabilities = 0;
 
-	$qry = "SELECT name, MAX(date) AS date FROM finance_accounts GROUP BY name;";
+	if ($year == '2018') {
+		$qry = "SELECT name, MAX(date) AS date FROM finance_accounts WHERE date <= '2019-01-03' GROUP BY name;";
+	}
+	else {
+		$qry = "SELECT name, MAX(date) AS date FROM finance_accounts GROUP BY name;";
+	}
 	$res = $conn->query($qry);
 	if ($res->num_rows > 0) {
 		while($row = $res->fetch_assoc()) {
@@ -77,22 +103,28 @@
 	}
 
 	// Determine total expenses since start date
-	$q = "SELECT SUM(amount) FROM finance_expenses WHERE date >= '$start_date_financial'";
+	$q = "SELECT SUM(amount) FROM finance_expenses WHERE date >= '$start_date_financial' AND date <= '$end_date_financial'";
 	$res = $conn->query($q);
 	$row = mysqli_fetch_row($res);
 	$net_expenditure = $row[0];
 
 	// Seal Hours
-	$q = "SELECT SUM((time_to_sec(TIMEDIFF(departure_time, arrival_time)) / (60 * 60)) - 0.5) FROM finance_seal_shifts WHERE date >= '$start_date_financial'";
+	$q = "SELECT SUM((time_to_sec(TIMEDIFF(departure_time, arrival_time)) / (60 * 60)) - 0.5) FROM finance_seal_shifts WHERE date >= '$start_date_financial' AND date <= '$end_date_financial'";
 	$res = $conn->query($q);
 	$row = mysqli_fetch_row($res);
 	$net_seal_hours = $row[0];
 
 	// Ricks Hours
-	$q = "SELECT SUM(hours) FROM `finance_ricks_shifts` WHERE date >= '$start_date_financial'";
+	$q = "SELECT SUM(hours) FROM `finance_ricks_shifts` WHERE date >= '$start_date_financial' AND date <= '$end_date_financial'";
 	$res = $conn->query($q);
 	$row = mysqli_fetch_row($res);
 	$net_ricks_hours = $row[0];
+
+	// Ricks OTB Hours
+	$q = "SELECT SUM(hours) FROM `finance_ricks_shifts` WHERE date >= '$start_date_financial' AND date <= '$end_date_financial' AND type = 'otb' ";
+	$res = $conn->query($q);
+	$row = mysqli_fetch_row($res);
+	$net_ricks_otb_hours = $row[0] ?? 0;
 	
 	// Net Hours
 	$net_hours = $net_seal_hours + $net_ricks_hours;
@@ -101,59 +133,76 @@
 	// Determine total income since start date
 
 	// Ricks Income
-	$q = "SELECT SUM(tips) FROM finance_ricks_shifts WHERE date >= '$start_date_financial'";
+	$q = "SELECT SUM(tips) FROM finance_ricks_shifts WHERE date >= '$start_date_financial' AND date <= '$end_date_financial'";
 	$res = $conn->query($q);
 	$row = mysqli_fetch_row($res);
 	$net_ricks_tips = $row[0];
 
 	// Seal Income
 		// Seal income actually received
-	$q = "SELECT SUM(amount) FROM finance_seal_income WHERE date >= '$start_date_financial'";
+	$q = "SELECT SUM(amount) FROM finance_seal_income WHERE date >= '$start_date_financial' AND date <= '$end_date_financial'";
 	$res = $conn->query($q);
 	$row = mysqli_fetch_row($res);
 	$net_seal_income = $row[0];
-		// Seal income earned but not yet received
-		// UPDATE 07/03/18 - This functionality breaks if a check is deposited before the two weeks is up (ie. we get checks early due to a holiday) because a few days of $ came from May...The lag days were compensated by the few may days so it worked out but now it causes an issue if a check is deposited early :/
-	$may_check_adjustment = 3 * 8 * 21.63; // 3 days in my first check were from May work days. This program only checks June 1st on so those days should not count towards total
-	$q = "SELECT MAX(end_payperiod) FROM finance_seal_income WHERE date >= '$start_date_financial' AND type = 'check'";
+	if ($year == '2018') {
+		$annual_check_adjustment = -3 * 8 * 21.63; // 3 days in my first check were from May work days. This program only checks June 1st on so those days should not count towards total
+	}
+	else {
+		$annual_check_adjustment = (-1 * 11 * 8 * 25) + (-62.5);
+	}
+	$q = "SELECT MAX(end_payperiod) FROM finance_seal_income WHERE date >= '$start_date_financial' AND date <= '$end_date_financial' AND type = 'check'";
 	$res = $conn->query($q);
 	$row = mysqli_fetch_row($res);
 	$last_seal_check_date = $row[0]; // The most recent check date
 	$last_seal_check_time = strtotime($last_seal_check_date);
 	$four_pm_seconds = (60 * 60 * 16);
 	$unreceived_seal_income = 0;
-	$fuse = 0;
-	$this_time_to_check = $last_seal_check_time + SEC_IN_DAY + $four_pm_seconds;
-	while ($this_time_to_check < $today_time) {
-		$this_dow = date('D',$this_time_to_check);
-		$this_time_to_check += SEC_IN_DAY;
-		if ($this_dow != 'Sat' && $this_dow != 'Sun' && ($this_time_to_check < strtotime('July 14th 2018') || $this_time_to_check > strtotime('July 21st 2018'))) {
-			$num_hourly_wages = count(HOURLY_WAGES_DATESTRINGS_SEAL);
-			$i = 0;
-			for ($i; $i < $num_hourly_wages; $i++) {
-				if (strtotime(HOURLY_WAGES_DATESTRINGS_SEAL[$i]) > $this_time_to_check) {
-					break;
+	if ($year == '2018') {
+		$unreceived_seal_income = 140;
+	}
+	else {
+		$fuse = 0;
+		$this_time_to_check = $last_seal_check_time + SEC_IN_DAY + $four_pm_seconds;
+		while ($this_time_to_check < $today_time) {
+			$this_dow = date('D',$this_time_to_check);
+			$this_time_to_check += SEC_IN_DAY;
+			if ($this_dow != 'Sat' && $this_dow != 'Sun' && ($this_time_to_check < strtotime('July 14th 2018') || $this_time_to_check > strtotime('July 21st 2018'))) {
+				$num_hourly_wages = count(HOURLY_WAGES_DATESTRINGS_SEAL);
+				$i = 0;
+				for ($i; $i < $num_hourly_wages; $i++) {
+					if (strtotime(HOURLY_WAGES_DATESTRINGS_SEAL[$i]) > $this_time_to_check) {
+						break;
+					}
+					else {
+						$correct_hourly = HOURLY_WAGES_SEAL[$i];
+					}
 				}
-				else {
-					$correct_hourly = HOURLY_WAGES_SEAL[$i];
-				}
+				$unreceived_seal_income += ($correct_hourly * 8);
+				// TEST PASSED 2018.10.18 echo "$ $unreceived_seal_income | $days_active_financial days";
 			}
-			$unreceived_seal_income += ($correct_hourly * 8);
-			// TEST PASSED 2018.10.18 echo "$ $unreceived_seal_income | $days_active_financial days";
-		}
-		$fuse++;
-		if ($fuse > 30) {
-			echo 'FUSE BLOWN in finance.php';
-			break;
+			$fuse++;
+			if ($fuse > 30) {
+				echo 'FUSE BLOWN in finance.php';
+				break;
+			}
 		}
 	}
 
 	// NET INCOME : Hourlywage at ricks multiplied by ricks hours + net tips from ricks + net recorded income from seal and design + unreceived (but earned) income from seal and design
-	$net_income = (HOURLY_WAGE_RICKS * $net_ricks_hours) + $net_ricks_tips + $net_seal_income + $unreceived_seal_income - $may_check_adjustment;
+	$net_income = (HOURLY_WAGE_RICKS * ( $net_ricks_hours - $net_ricks_otb_hours ) ) + $net_ricks_tips + $net_seal_income + $unreceived_seal_income + $annual_check_adjustment;
+	// (46.2) + 106 + 2062.5 + 1000 - 2200
 
-	$adi = number_format($net_income / ($days_active_financial - 7), 2); // the 7 is subtracted from days_active_financial to make ADI reflect NON-UNPAID VACATION DAYS b/c in future all vacations should be paid (at least from S&D)
+	//echo "$net_income | $net_ricks_hours | $net_ricks_otb_hours | $net_ricks_tips | $net_seal_income | $unreceived_seal_income | $annual_check_adjustment ";
+
+	if ($year == '2018') {
+		$unpaid_vacation_adjustment = 7; // Factored in for week long trip to South Carolina (unpaid by S&D)
+	}
+	else {
+		$unpaid_vacation_adjustment = 0;
+	}
+	$adi = number_format($net_income / ($days_active_financial - $unpaid_vacation_adjustment), 2); // the 7 is subtracted from days_active_financial to make ADI reflect NON-UNPAID VACATION DAYS b/c in future all vacations should be paid (at least from S&D)
 	$ade = number_format($net_expenditure / ($days_active_financial), 2); // the 7 is NOT subtracted from days_active_financial because will take vacations in future
-	$awh = number_format(7 * $net_hours / ($days_active_financial - 7), 2); // the 7 is subtracted from days_active_financial to make AWH reflect NON-UNPAID VACATION DAYS b/c in future all vacations should be paid (at least from S&D)
+	$awh = number_format(7 * $net_hours / ($days_active_financial - $unpaid_vacation_adjustment), 2); // the 7 is subtracted from days_active_financial to make AWH reflect NON-UNPAID VACATION DAYS b/c in future all vacations should be paid (at least from S&D)
 	$ahw = number_format(7 * $adi / $awh, 2);
 
 	$current_net_worth = $current_assets + $current_cash - $current_liabilities;
@@ -168,31 +217,39 @@
 
 	// Running
 
-	$start_date_running = date('Y/m/d', strtotime(START_DATE_STRING_RUNNING));
+	$start_date_running = date('Y/m/d 00:00:00', strtotime(START_DATE_STRING_RUNNING));
+	$end_date_running = $today_date;
 	$start_time_running = strtotime($start_date_running);
 
 	$days_active_running = ceil(($today_time - $start_time_running) / (SEC_IN_DAY));
 
 	//DEPRECATED 2018.10.28 $q = "SELECT TOP(1) MIN(seconds) FROM `fitness_runs` WHERE miles >= 1 ORDER BY datetime DESC;";
-	$q = "SELECT seconds FROM `fitness_runs` WHERE miles = 1 ORDER BY datetime DESC LIMIT 1";
+	$q = "SELECT seconds FROM `fitness_runs` WHERE miles = 1 AND datetime <= '$end_date_running' AND datetime >= '$start_date_running' ORDER BY datetime DESC LIMIT 1";
 	$res = $conn->query($q);
 	$row = mysqli_fetch_row($res);
 	$best_mile_time = $row[0];
+	// TEST PASSED 2019/01/06 echo $q;
 
 	// Body Weight
 	
 	$start_date_body_weight = 	date('Y/m/d', strtotime(START_DATE_STRING_BODY_WEIGHT));
+	$end_date_body_weight = $today_date;
+	
 	$start_time_body_weight = 	strtotime($start_date_body_weight);
 
 	$days_active_body_weight =	ceil(($today_time - $start_time_body_weight) / (SEC_IN_DAY));
+	// echo "$days_active_body_weight <br/>";
 
-	$q = "SELECT pounds FROM `fitness_measurements_body_weight` WHERE datetime = (SELECT MAX(datetime) FROM `fitness_measurements_body_weight`)";
+	//echo "$start_date_body_weight | $end_date_body_weight<br/>";
+	$q = " SELECT pounds FROM `fitness_measurements_body_weight` WHERE datetime >= '$start_date_body_weight 00:00:00' AND datetime <= '$end_date_body_weight 23:59:59' ORDER BY datetime DESC LIMIT 1 ";
+	
 	$res = $conn->query($q);
 	$row = mysqli_fetch_row($res);
 	$most_recent_body_weight = $row[0];
+	//echo "$q | $most_recent_body_weight";
 
 	// Lifting
-	$q = "SELECT workout_structure_id FROM `fitness_cycles` WHERE start_date <= '$today_date' AND end_date >= '$today_date' LIMIT 1";
+	$q = "SELECT workout_structure_id FROM `fitness_cycles` WHERE start_date <= '$today_date' AND end_date >= '$today_date 23:59:59' LIMIT 1";
 	$res = $conn->query($q);
 	$row = mysqli_fetch_row($res);
 	$workout_structure = $row[0];
@@ -210,7 +267,7 @@
 	FROM `fitness_muscles` AS muscles 
 	INNER JOIN `fitness_circumferences` AS circs ON (muscles.circumference_id = circs.id)
 	INNER JOIN `fitness_ideal_recovery_times` AS rec_times ON (muscles.id = rec_times.muscle_id)
-	WHERE rec_times.workout_structure_id = $workout_structure";
+	WHERE rec_times.workout_structure_id = $workout_structure"; // ~~~BUG~~~ this is based off today's workout structure, but the lift could have been performed 3 days ago w/ a diff workout structure recovery time
 	$res = $conn->query($q);
 	if ($res->num_rows > 0) {
 		while($row = $res->fetch_assoc()) {
@@ -224,16 +281,17 @@
 			
 			$muscle_ideal_rest =		$row['ideal_recovery'];
 			
-			$q_current_circ = 			"SELECT value FROM fitness_measurements_circumferences WHERE circumference_id = $muscle_associated_circ_id ORDER BY datetime DESC LIMIT 1";
+			$q_current_circ = 			"SELECT value FROM fitness_measurements_circumferences WHERE circumference_id = $muscle_associated_circ_id AND datetime >= '$start_date_body_weight 00:00:00' AND datetime <= '$end_date_body_weight 23:59:59' ORDER BY datetime DESC LIMIT 1";
 			$res_current_circ = 		$conn->query($q_current_circ);
 			$row_current_circ = 		mysqli_fetch_row($res_current_circ);
 			$muscle_current_circ = 		$row_current_circ[0];
 			
-			$q_mrf = "SELECT datetime FROM `fitness_lifts` WHERE exercise_id IN (SELECT exercise_id FROM `fitness_pivot_exercises_muscles` WHERE muscle_id = $muscle_id AND type = 'primary') ORDER BY datetime DESC LIMIT 1";
+			$q_mrf = "SELECT datetime FROM `fitness_lifts` WHERE exercise_id IN (SELECT exercise_id FROM `fitness_pivot_exercises_muscles` WHERE muscle_id = $muscle_id AND datetime >= '$start_date_body_weight 00:00:00' AND datetime <= '$end_date_body_weight 23:59:59' AND type = 'primary') ORDER BY datetime DESC LIMIT 1";
 			$res_mrf =					$conn->query($q_mrf);
 			$row_mrf =					mysqli_fetch_row($res_mrf);
 			$muscle_mrf_time =			strtotime($row_mrf[0]); // Most Recent Failure as datetime
 			$muscle_mrf_hours =			ceil(($today_time - $muscle_mrf_time) / (60 * 60)); // Most Recent Failure as datetime
+			//echo "$muscle_id | $muscle_mrf_time | $muscle_mrf_hours" . date('Y/m/d H:i:s', $muscle_mrf_time) . " <br/>";
 			if ($muscle_mrf_hours > 999) { $muscle_mrf_hours = 999; }
 			
 			$hur =						$muscle_ideal_rest - $muscle_mrf_hours;
@@ -275,7 +333,7 @@
 	}
 
 	//$q = "SELECT MAX(weight) FROM `fitness_lifts` WHERE exercise_id = 23 AND ((workout_structure_id = 2 AND total_reps > 5) OR (workout_structure_id = 3 AND total_reps > 0)) ORDER BY datetime DESC";
-	$q = "SELECT MAX(weight) FROM `fitness_lifts` WHERE exercise_id = 23 AND workout_structure_id = 3 AND total_reps > 0 ORDER BY datetime DESC";
+	$q = "SELECT MAX(weight) FROM `fitness_lifts` WHERE exercise_id = 23 AND workout_structure_id = 3 AND datetime >= '$start_date_body_weight' AND datetime <= '$end_date_body_weight' AND total_reps > 0 ORDER BY datetime DESC";
 	$res = $conn->query($q);
 	$row = mysqli_fetch_row($res);
 	$current_bench_press = $row[0];
@@ -285,64 +343,81 @@
 	//var_dump($muscle_objects);
 
 	//---GOALS----------------------------------------------------------------------
+	if ($year == '2018') {
 
-	$percent_goal_debt_free = 	number_format(((JUNE_1ST_DEBT - $current_liabilities) / JUNE_1ST_DEBT) * 100, 2);
-	if ($percent_goal_debt_free >= 100) {
-		$percent_goal_debt_free = 100;
-	}
-	$percent_time_frame_debt_free = number_format((100 * $days_active_financial / (((strtotime('January 1st, 2019')) - strtotime(START_DATE_STRING_FINANCIAL)) / SEC_IN_DAY)), 2);
+		$percent_goal_debt_free_2018 = 	number_format(((JUNE_1ST_DEBT - $current_liabilities) / JUNE_1ST_DEBT) * 100, 2);
+		if ($percent_goal_debt_free_2018 >= 100) {
+			$percent_goal_debt_free_2018 = 100;
+		}
+		$percent_time_frame_debt_free_2018 = number_format((100 * $days_active_financial / (((strtotime('January 1st, 2019')) - strtotime(START_DATE_STRING_FINANCIAL)) / SEC_IN_DAY)), 2);
 
-	$percent_goal_net_worth = 	number_format((($current_cash + $current_assets - $current_liabilities - JUNE_1ST_NET_WORTH) / (END_OF_YEAR_NET_WORTH_TARGET - JUNE_1ST_NET_WORTH)) * 100, 2);
-	if ($percent_goal_net_worth >= 100) {
-		$percent_goal_net_worth = 100;
-	}
-	$percent_time_frame_net_worth = number_format((100 * $days_active_financial / (((strtotime('January 1st, 2019')) - strtotime(START_DATE_STRING_FINANCIAL)) / SEC_IN_DAY)), 2);
-	
-	// Case Tests: mrbw = 147 --> 0% | mrbw = 160 --> 100% | mrbw = 153.5 --> 50%
-	// All Case Tests PASS
-	$percent_goal_body_weight = number_format(($most_recent_body_weight - STARTING_BODY_WEIGHT) * (100 / (BODY_WEIGHT_TARGET -STARTING_BODY_WEIGHT)), 2);
-	if ($percent_goal_body_weight > 100) {
-		$percent_goal_body_weight = 100;
-	}
-	$percent_time_frame_body_weight = number_format((100 * $days_active_body_weight / (((strtotime('January 1st, 2019')) - strtotime(START_DATE_STRING_BODY_WEIGHT)) / SEC_IN_DAY)), 2);
+		$percent_goal_net_worth_2018 = 	number_format((($current_cash + $current_assets - $current_liabilities - JUNE_1ST_NET_WORTH) / (END_OF_YEAR_NET_WORTH_TARGET - JUNE_1ST_NET_WORTH)) * 100, 2);
+		if ($percent_goal_net_worth_2018 >= 100) {
+			$percent_goal_net_worth_2018 = 100;
+		}
+		$percent_time_frame_net_worth_2018 = number_format((100 * $days_active_financial / (((strtotime('January 1st, 2019')) - strtotime(START_DATE_STRING_FINANCIAL)) / SEC_IN_DAY)), 2);
 
-	// Case Tests: bmt = 405 --> 100% | bmt = 515 --> 0% | bmt = 460 --> 50%
-	// All Case Tests PASS
-	$percent_goal_mile_time = number_format(100 - (($best_mile_time - MILE_TIME_TARGET) * (100 / (STARTING_MILE_TIME - MILE_TIME_TARGET))), 2);
-	if ($percent_goal_mile_time >= 100) {
-		$percent_goal_mile_time = 100;
-	}
-	$percent_time_frame_running = number_format((100 * $days_active_running / (((strtotime('January 1st, 2019')) - strtotime(START_DATE_STRING_RUNNING)) / SEC_IN_DAY)), 2);
+		// Case Tests: mrbw = 147 --> 0% | mrbw = 160 --> 100% | mrbw = 153.5 --> 50%
+		// All Case Tests PASS
+		$percent_goal_body_weight_2018 = number_format(($most_recent_body_weight - STARTING_BODY_WEIGHT) * (100 / (BODY_WEIGHT_TARGET -STARTING_BODY_WEIGHT)), 2);
+		if ($percent_goal_body_weight_2018 > 100) {
+			$percent_goal_body_weight_2018 = 100;
+		}
+		$percent_time_frame_body_weight_2018 = number_format((100 * $days_active_body_weight / (((strtotime('January 1st, 2019')) - strtotime(START_DATE_STRING_BODY_WEIGHT)) / SEC_IN_DAY)), 2);
 
-	$percent_goal_bench_press = number_format( ( 100 * ( $current_bench_press - STARTING_BENCH_PRESS ) / ( END_OF_YEAR_BENCH_PRESS_TARGET - STARTING_BENCH_PRESS ) ), 2);
-	if ($percent_goal_bench_press >= 100) {
-		$percent_goal_bench_press = 100;
+		// Case Tests: bmt = 405 --> 100% | bmt = 515 --> 0% | bmt = 460 --> 50%
+		// All Case Tests PASS
+		$percent_goal_mile_time_2018 = number_format(100 - (($best_mile_time - MILE_TIME_TARGET) * (100 / (STARTING_MILE_TIME - MILE_TIME_TARGET))), 2);
+		if ($percent_goal_mile_time_2018 >= 100) {
+			$percent_goal_mile_time_2018 = 100;
+		}
+		$percent_time_frame_running_2018 = number_format((100 * $days_active_running / (((strtotime('January 1st, 2019')) - strtotime(START_DATE_STRING_RUNNING)) / SEC_IN_DAY)), 2);
+		//echo "$percent_goal_mile_time_2018 | $best_mile_time";
+		
+		$percent_goal_bench_press_2018 = number_format( ( 100 * ( $current_bench_press - STARTING_BENCH_PRESS ) / ( END_OF_YEAR_BENCH_PRESS_TARGET - STARTING_BENCH_PRESS ) ), 2);
+		if ($percent_goal_bench_press_2018 >= 100) {
+			$percent_goal_bench_press_2018 = 100;
+		}
+		$percent_time_frame_bench_press_2018 = $percent_time_frame_body_weight_2018; // Rather than redoing the calculation, just using the same time-frame as tracking body weight
 	}
-	$percent_time_frame_bench_press = $percent_time_frame_body_weight; // Rather than redoing the calculation, just using the same time-frame as tracking body weight
+	else if ($year == '2019') {
+		$percent_goal_net_worth_2019 = 	number_format((($current_cash + $current_assets - $current_liabilities - START_OF_YEAR_NET_WORTH) / (END_OF_YEAR_NET_WORTH_TARGET - START_OF_YEAR_NET_WORTH)) * 100, 2);
+		if ($percent_goal_net_worth_2019 >= 100) {
+			$percent_goal_net_worth_2019 = 100;
+		}
+		$percent_time_frame_net_worth_2019 = number_format((100 * $days_active_financial / 365), 2);
+		
+		$percent_goal_body_weight_2019 = number_format(($most_recent_body_weight - STARTING_BODY_WEIGHT) * (100 / (BODY_WEIGHT_TARGET -STARTING_BODY_WEIGHT)), 2);
+		if ($percent_goal_body_weight_2019 > 100) {
+			$percent_goal_body_weight_2019 = 100;
+		}
+		$percent_time_frame_body_weight_2019 = number_format((100 * $days_active_body_weight / (((strtotime('January 1st, 2020')) - strtotime(START_DATE_STRING_BODY_WEIGHT)) / SEC_IN_DAY)), 2);
+	}
 //---CLOSE DATABASE CONNECTION------------------------------------------------------
 
 //--- NOTIFICATIONS ----------------------------------------------------------------
 	// Goal Progress Test
-	$number_completed_2018_goals = 0;
-	$number_on_track_2018_goals = 0;
-	$number_below_par_2018_goals = 0;
-	function update_2018_goals_status($percent_goal, $percent_time) {
+	$number_completed_goals = 0;
+	$number_on_track_goals = 0;
+	$number_below_par_goals = 0;
+	function update_goals_status($percent_goal, $percent_time) {
 		if ($percent_goal >= 100) {
-			$GLOBALS['number_completed_2018_goals'] += 1;
+			$GLOBALS['number_completed_goals'] += 1;
 		}
 		else if ($percent_goal >= $percent_time) {
-			$GLOBALS['number_on_track_2018_goals'] += 1;
+			$GLOBALS['number_on_track_goals'] += 1;
 		}
 		else {
-			$GLOBALS['number_below_par_2018_goals'] += 1;
+			$GLOBALS['number_below_par_goals'] += 1;
 		}
 	}
-	update_2018_goals_status($percent_goal_debt_free, $percent_time_frame_debt_free);
-	update_2018_goals_status($percent_goal_net_worth, $percent_time_frame_net_worth);
-	update_2018_goals_status($percent_goal_body_weight, $percent_time_frame_body_weight);
-	update_2018_goals_status($percent_goal_mile_time, $percent_time_frame_running);
-	update_2018_goals_status($percent_goal_bench_press, $percent_time_frame_bench_press);
-
+	if ($year == '2018') {
+		update_goals_status($percent_goal_debt_free_2018, $percent_time_frame_debt_free_2018);
+		update_goals_status($percent_goal_net_worth_2018, $percent_time_frame_net_worth_2018);
+		update_goals_status($percent_goal_body_weight_2018, $percent_time_frame_body_weight_2018);
+		update_goals_status($percent_goal_mile_time_2018, $percent_time_frame_running_2018);
+		update_goals_status($percent_goal_bench_press_2018, $percent_time_frame_bench_press_2018);
+	}
 	$conn->close();
 
 ?>
@@ -380,7 +455,9 @@
 		include('resources/sections/weather.php');
 	?>
 	</main>
-
+	<script>
+		var year = <?php echo $year; ?>;
+	</script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
     <script type="text/javascript" src="resources/js/main.js"></script>
     <script type="text/javascript" src="resources/js/speech.js"></script>

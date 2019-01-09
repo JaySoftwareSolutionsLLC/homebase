@@ -19,7 +19,7 @@ function connect_to_db() {
 }
 
 function set_post_value($string) {
-	return (isset($_POST[$string]) && ($_POST[$string]) != '') ? $_POST[$string] : '';
+	return (isset($_POST[$string]) && ($_POST[$string]) != '') ? $_POST[$string] : null;
 }
 
 function post_is_set($string) {

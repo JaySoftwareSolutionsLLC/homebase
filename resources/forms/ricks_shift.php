@@ -30,15 +30,24 @@ if ($res->num_rows > 0) {
     while($row = $res->fetch_assoc()) {
 		$hours = $row['hours'];
 		$tips = $row['tips'];
-		$hourly = number_format((($tips / $hours) + HOURLY_WAGE_RICKS), 2);
-		$total = number_format((($hours * HOURLY_WAGE_RICKS) + $tips), 2);
+		$type = $row['type'];
+		$hourly = 0;
+		if ( $type == 'otb' ) {
+			$hourly = number_format( ( $tips / $hours ) , 2 );
+			$total = number_format( $tips , 2 );
+		}
+		else {
+			$hourly = number_format((($tips / $hours) + HOURLY_WAGE_RICKS), 2);
+			$total = number_format((($hours * HOURLY_WAGE_RICKS) + $tips), 2);
+		}
+		
 		$stress = $row['stress'];
 		$enjoyment = $row['enjoyment'];
 		$description = $row['description'];
         $data_log .= "<tr>
 						<td>" . $row['date'] . "</td>
 						<td>" . $row['dow'] . "</td>
-						<td>" . $row['type'] . "</td>
+						<td>" . $type . "</td>
 						<td>" . $hours . "</td>
 						<td>" . $tips . "</td>
 						<td>" . $hourly . "</td>
@@ -50,7 +59,7 @@ if ($res->num_rows > 0) {
     }
 }
 
-$qry = "SELECT DAYNAME(date) AS 'dow', type, AVG(tips + (hours * " . HOURLY_WAGE_RICKS . ")) AS 'net income', AVG((tips / hours) + 7.5) AS 'hourly wage' FROM `finance_ricks_shifts` GROUP BY DAYNAME(date), type ORDER BY DAYOFWEEK(date)";
+$qry = "SELECT DAYNAME(date) AS 'dow', type, AVG(tips + (hours * " . HOURLY_WAGE_RICKS . ")) AS 'net income', AVG((tips / hours) + 7.5) AS 'hourly wage' FROM `finance_ricks_shifts` WHERE type <> 'otb' GROUP BY DAYNAME(date), type ORDER BY DAYOFWEEK(date)";
 $res = $conn->query($qry);
 if ($res->num_rows > 0) {
 	$shifts = array();
@@ -86,6 +95,7 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 				<select id='type' name='type'>
 					<option value='am'>AM</option>
 					<option value='pm' selected>PM</option>
+					<option value='otb'>OTB</option>
 				</select>
 				<label for='hours'>Hours</label>
 				<input id='hours' type='number' name='hours' min='0' max='10' step='0.01'/>

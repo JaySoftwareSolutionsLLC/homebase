@@ -11,12 +11,14 @@ section.fitness svg .muscle.selected {
 	stroke-width: 2px;
 }
 section.fitness svg .muscle.flashing {
-	animation: flashing 1500ms linear 2s infinite;
+	animation: flashing 1200ms linear 2s infinite;
 }
 @keyframes flashing {
-	0% {stroke-width:0.5px;}
-	50% {stroke-width:2px;}
-	100% {stroke-width:0.5px;}
+	0% {fill:hsl(0, 100%, 50%);}
+	40% {fill:hsl(0, 100%, 70%);}
+	50% {fill:hsl(0, 100%, 95%);}
+	60% {fill:hsl(0, 100%, 70%);}
+	100% {fill:hsl(0, 100%, 50%);}
 }
 section.fitness svg .muscle:hover {
 	cursor: pointer;
