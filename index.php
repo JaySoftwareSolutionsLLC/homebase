@@ -158,7 +158,7 @@
 	$four_pm_seconds = (60 * 60 * 16);
 	$unreceived_seal_income = 0;
 	if ($year == '2018') {
-		$unreceived_seal_income = 140;
+		$unreceived_seal_income = 200;
 	}
 	else {
 		$fuse = 0;
@@ -188,6 +188,8 @@
 		}
 	}
 
+	$unreceived_after_tax_seal_income = (ESTIMATED_AFTER_TAX_PERCENTAGE * $unreceived_seal_income / 100);
+
 	// NET INCOME : Hourlywage at ricks multiplied by ricks hours + net tips from ricks + net recorded income from seal and design + unreceived (but earned) income from seal and design
 	$net_income = (HOURLY_WAGE_RICKS * ( $net_ricks_hours - $net_ricks_otb_hours ) ) + $net_ricks_tips + $net_seal_income + $unreceived_seal_income + $annual_check_adjustment;
 	// (46.2) + 106 + 2062.5 + 1000 - 2200
@@ -213,6 +215,8 @@
 
 	$estimated_EOY_net_worth = number_format($current_net_worth + ($unreceived_seal_income * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) + ((($adi * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) - $ade) * ($days_left_in_year_financial)), 0);
 
+	$current_est_net_worth = $unreceived_after_tax_seal_income + $current_assets + $current_cash - $current_liabilities;
+
 	//---FITNESS--------------------------------------------------------------------
 
 	// Running
@@ -224,7 +228,7 @@
 	$days_active_running = ceil(($today_time - $start_time_running) / (SEC_IN_DAY));
 
 	//DEPRECATED 2018.10.28 $q = "SELECT TOP(1) MIN(seconds) FROM `fitness_runs` WHERE miles >= 1 ORDER BY datetime DESC;";
-	$q = "SELECT seconds FROM `fitness_runs` WHERE miles = 1 AND datetime <= '$end_date_running' AND datetime >= '$start_date_running' ORDER BY datetime DESC LIMIT 1";
+	$q = "SELECT seconds FROM `fitness_runs` WHERE miles = 1 AND datetime <= '$end_date_running 23:59:59' AND datetime >= '$start_date_running' ORDER BY datetime DESC LIMIT 1";
 	$res = $conn->query($q);
 	$row = mysqli_fetch_row($res);
 	$best_mile_time = $row[0];
@@ -249,6 +253,8 @@
 	//echo "$q | $most_recent_body_weight";
 
 	// Lifting
+
+	$most_recent_upper_arm_size = 0;
 	$q = "SELECT workout_structure_id FROM `fitness_cycles` WHERE start_date <= '$today_date' AND end_date >= '$today_date 23:59:59' LIMIT 1";
 	$res = $conn->query($q);
 	$row = mysqli_fetch_row($res);
@@ -285,6 +291,9 @@
 			$res_current_circ = 		$conn->query($q_current_circ);
 			$row_current_circ = 		mysqli_fetch_row($res_current_circ);
 			$muscle_current_circ = 		$row_current_circ[0];
+			if ($muscle_id == 4) {
+				$most_recent_upper_arm_size = $muscle_current_circ;
+			}
 			
 			$q_mrf = "SELECT datetime FROM `fitness_lifts` WHERE exercise_id IN (SELECT exercise_id FROM `fitness_pivot_exercises_muscles` WHERE muscle_id = $muscle_id AND datetime >= '$start_date_body_weight 00:00:00' AND datetime <= '$end_date_body_weight 23:59:59' AND type = 'primary') ORDER BY datetime DESC LIMIT 1";
 			$res_mrf =					$conn->query($q_mrf);
@@ -381,17 +390,36 @@
 		$percent_time_frame_bench_press_2018 = $percent_time_frame_body_weight_2018; // Rather than redoing the calculation, just using the same time-frame as tracking body weight
 	}
 	else if ($year == '2019') {
-		$percent_goal_net_worth_2019 = 	number_format((($current_cash + $current_assets - $current_liabilities - START_OF_YEAR_NET_WORTH) / (END_OF_YEAR_NET_WORTH_TARGET - START_OF_YEAR_NET_WORTH)) * 100, 2);
+		// GOAL: Net Worth
+		$percent_goal_net_worth_2019 = 	number_format((((ESTIMATED_AFTER_TAX_PERCENTAGE * $unreceived_seal_income / 100) + $current_cash + $current_assets - $current_liabilities - START_OF_YEAR_NET_WORTH) / (END_OF_YEAR_NET_WORTH_TARGET - START_OF_YEAR_NET_WORTH)) * 100, 2);
 		if ($percent_goal_net_worth_2019 >= 100) {
 			$percent_goal_net_worth_2019 = 100;
 		}
 		$percent_time_frame_net_worth_2019 = number_format((100 * $days_active_financial / 365), 2);
-		
+		// GOAL: Body Weight
 		$percent_goal_body_weight_2019 = number_format(($most_recent_body_weight - STARTING_BODY_WEIGHT) * (100 / (BODY_WEIGHT_TARGET -STARTING_BODY_WEIGHT)), 2);
 		if ($percent_goal_body_weight_2019 > 100) {
 			$percent_goal_body_weight_2019 = 100;
 		}
 		$percent_time_frame_body_weight_2019 = number_format((100 * $days_active_body_weight / (((strtotime('January 1st, 2020')) - strtotime(START_DATE_STRING_BODY_WEIGHT)) / SEC_IN_DAY)), 2);
+		// GOAL: Arm Size
+		$start_date_upper_arm_size = date('Y/m/d 00:00:00', strtotime(START_DATE_STRING_UPPER_ARM_CIRC));
+		$end_date_upper_arm_size = $today_date;
+		$start_time_upper_arm_size = strtotime($start_date_upper_arm_size);
+		$days_active_upper_arm_size = ceil(($today_time - $start_time_upper_arm_size) / (SEC_IN_DAY));
+		
+		$percent_goal_upper_arm_size_2019 = number_format(($most_recent_upper_arm_size - STARTING_UPPER_ARM_CIRC) * (100 / (UPPER_ARM_CIRC_TARGET - STARTING_UPPER_ARM_CIRC)), 2);
+		if ($percent_goal_upper_arm_size_2019 > 100) {
+			$percent_goal_upper_arm_size_2019 = 100;
+		}
+		$percent_time_frame_upper_arm_size_2019 = number_format((100 * $days_active_upper_arm_size / (((strtotime('January 1st, 2020')) - strtotime(START_DATE_STRING_UPPER_ARM_CIRC)) / SEC_IN_DAY)), 2);
+		//echo " $percent_goal_upper_arm_size_2019 | $most_recent_upper_arm_size | " . STARTING_UPPER_ARM_CIRC . " | " . UPPER_ARM_CIRC_TARGET . " | " . STARTING_UPPER_ARM_CIRC . " | $days_active_upper_arm_size";
+		// GOAL: Mile Time
+		$percent_goal_mile_time_2019 = number_format(100 - (($best_mile_time - MILE_TIME_TARGET) * (100 / (STARTING_MILE_TIME - MILE_TIME_TARGET))), 2);
+		if ($percent_goal_mile_time_2019 >= 100) {
+			$percent_goal_mile_time_2019 = 100;
+		}
+		$percent_time_frame_running_2019 = number_format((100 * $days_active_running / (((strtotime('January 1st, 2020')) - strtotime(START_DATE_STRING_RUNNING)) / SEC_IN_DAY)), 2);
 	}
 //---CLOSE DATABASE CONNECTION------------------------------------------------------
 
@@ -434,10 +462,10 @@
     <link href="https://fonts.googleapis.com/css?family=Lobster|VT323|Orbitron:400,900" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="resources/css/reset.css">
-    <link rel="stylesheet" type="text/css" href="resources/css/main.css">
+    <link rel="stylesheet" type="text/css" href="resources/css/main-new.css">
     <link rel="stylesheet" type="text/css" href="resources/css/notifications.css">
     <link rel="stylesheet" type="text/css" href="resources/css/goals.css">
-    <link rel="stylesheet" type="text/css" href="resources/css/fitness.css">
+    <link rel="stylesheet" type="text/css" href="resources/css/fitness-new.css">
     <link rel="stylesheet" type="text/css" href="resources/css/weather.css">
     <link rel="stylesheet" type="text/css" href="resources/css/finance.css">
     

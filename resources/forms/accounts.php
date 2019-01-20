@@ -69,7 +69,7 @@ $conn->close();
 <!-- Link to style sheets -->
 <link href="https://fonts.googleapis.com/css?family=Lobster|VT323|Orbitron:400,900" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="../css/reset.css">
-<link rel="stylesheet" type="text/css" href="../css/main.css">
+<link rel="stylesheet" type="text/css" href="../css/main-new.css">
 <link rel="stylesheet" type="text/css" href="../css/form.css">
 
 <body>

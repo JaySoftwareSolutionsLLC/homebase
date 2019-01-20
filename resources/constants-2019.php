@@ -21,7 +21,7 @@ const HOURLY_WAGES_SEAL = 				array(25); // Array value must correspond with HOU
 const HOURLY_WAGES_DATESTRINGS_SEAL =	array('2018-12-03'); // Array date must correspond with HOURLY_WAGES_SEAL value. Referenced in reports/weekly-report/index.php
 
 
-const HOURLY_WAGE_RICKS = 				8.40; // This I believe to be accurate based off of this PDF https://labor.ny.gov/formsdocs/factsheets/pdfs/p717.pdf
+const HOURLY_WAGE_RICKS = 				7.50; // Looks like this doesnt change until 2020 when it will jump to 7.80
 const HOURLY_WAGE_TARGET =				28;
 
 const WEEKLY_INCOME_TARGET = 			AVG_DAILY_INCOME_TARGET * 7;
@@ -43,13 +43,17 @@ const END_OF_YEAR_NET_WORTH_TARGET =	75000; // Based off 36.5k NW @ end of 2018 
 // DEPRECATED FOR 2019...will (likely) break index.php const JUNE_1ST_DEBT =					17000;
 
 //--- Fitness Constants ---
-const START_DATE_STRING_RUNNING = 		'January 1st 2019';
-const STARTING_MILE_TIME =				464; // In seconds
-// TBD const MILE_TIME_TARGET =				390; // In seconds
+const START_DATE_STRING_RUNNING = 		'January 8th 2019';
+const STARTING_MILE_TIME =				475; // In seconds
+const MILE_TIME_TARGET =				390; // In seconds
 
-const START_DATE_STRING_BODY_WEIGHT =	'January 1st 2019';
-const STARTING_BODY_WEIGHT =			156.4; // In pounds
+const START_DATE_STRING_BODY_WEIGHT =	'January 5th 2019';
+const STARTING_BODY_WEIGHT =			152.6; // In pounds
 const BODY_WEIGHT_TARGET =				165.0; // In pounds
+
+const START_DATE_STRING_UPPER_ARM_CIRC = 'January 8th 2019';
+const STARTING_UPPER_ARM_CIRC = 		12.25; // In inches
+const UPPER_ARM_CIRC_TARGET =			13.5; // In inches
 
 /*
 const START_DATE_STRING_BENCH_PRESS = 	'June 4th 2018';

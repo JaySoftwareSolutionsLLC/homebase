@@ -1,0 +1,6 @@
+svg .outline {
+  stroke: black; }
+
+@media only screen and (max-width: 900px) {
+  svg .outline {
+    stroke: white; } }

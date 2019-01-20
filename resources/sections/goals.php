@@ -62,38 +62,15 @@
 <?php		
 	}
 	else if ($year == '2019') {
-?>
-			<div class="goal" id="goal-debt-free">
-				<h3>Net Worth</h3>
-				<div class="progress">
-					<div class="fill" style='width:<?php echo $percent_goal_net_worth_2019; ?>%' data-value="<?php echo $percent_goal_net_worth_2019; ?>">
-						
-					</div>
-					<div class="target-fill" style="width: <?php echo $percent_time_frame_net_worth_2019; ?>%;"></div>
-				</div>
-				<h5><?php echo $percent_goal_net_worth_2019; ?>%</h5>
-			</div>
-			<div class="goal" id="goal-body-weight">
-				<h3>Body Weight</h3>
-				<div class="progress">
-					<div class="fill" style='width:<?php echo $percent_goal_body_weight_2019; ?>%' data-value="<?php echo $percent_goal_body_weight_2019; ?>">
-						
-					</div>
-					<div class="target-fill" style="width: <?php echo $percent_time_frame_body_weight_2019; ?>%;"></div>
-				</div>
-				<h5><?php echo $percent_goal_body_weight_2019; ?>%</h5>
-			</div>
-			<div class="goal" id="goal-arm-size">
-				<h3>Arm Size</h3>
-				<div class="progress">
-					<div class="fill" style='width:<?php echo 0; ?>%' data-value="<?php echo 0; ?>">
-						
-					</div>
-					<div class="target-fill" style="width: <?php echo $percent_time_frame_body_weight_2019; ?>%;"></div>
-				</div>
-				<h5><?php echo 0; ?>%</h5>
-			</div>
-<?php
+		
+		echo return_goal_progress_bar_html('Net Worth', 'goal-net-worth', START_OF_YEAR_NET_WORTH, END_OF_YEAR_NET_WORTH_TARGET, $current_est_net_worth, '2019-01-01', '2019-12-31'); // Defined in homebase/resources/resources.php
+		
+		echo return_goal_progress_bar_html('Body Weight', 'goal-body-weight', STARTING_BODY_WEIGHT, BODY_WEIGHT_TARGET, $most_recent_body_weight, START_DATE_STRING_BODY_WEIGHT, '2019-12-31');
+		
+		echo return_goal_progress_bar_html('Arm Size', 'goal-arm-size', STARTING_UPPER_ARM_CIRC, UPPER_ARM_CIRC_TARGET, $most_recent_upper_arm_size, START_DATE_STRING_UPPER_ARM_CIRC, '2019-12-31');
+		
+		echo return_goal_progress_bar_html('Mile Time', 'goal-mile-time', STARTING_MILE_TIME, MILE_TIME_TARGET, $best_mile_time, START_DATE_STRING_RUNNING, '2019-12-31');
+		
 	}
 ?>
 

@@ -9,6 +9,11 @@
 			<h4>$<?php echo $current_net_worth; ?></h4>
 			<h5><?php echo $oldest_date; ?></h5>
 		</div>
+		<div class="stat unreceived-seal-income">
+			<h3>Unreceived Seal Income</h3>
+			<h4>$<?php echo $unreceived_seal_income; ?></h4>
+			<h5>(Est Take Home: $<?php echo (ESTIMATED_AFTER_TAX_PERCENTAGE * $unreceived_seal_income / 100); ?>)</h5>
+		</div>
 		<div class="row">
 			<div class="small stat adi">
 				<h3>ADI</h3>
