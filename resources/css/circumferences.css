@@ -1,6 +1,51 @@
 svg .outline {
-  stroke: black; }
+  stroke: black;
+}
+
+svg path.circumference.focused {
+  -webkit-animation: blinking 1200ms linear 2s infinite;
+          animation: blinking 1200ms linear 2s infinite;
+}
+
+@-webkit-keyframes blinking {
+  0% {
+    opacity: 0.1;
+  }
+  40% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 0.1;
+  }
+}
+
+@keyframes blinking {
+  0% {
+    opacity: 0.1;
+  }
+  40% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 0.1;
+  }
+}
 
 @media only screen and (max-width: 900px) {
   svg .outline {
-    stroke: white; } }
+    stroke: white;
+  }
+}
+/*# sourceMappingURL=circumferences.css.map */

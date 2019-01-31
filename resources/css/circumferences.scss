@@ -2,7 +2,21 @@ svg {
 	.outline {
 		stroke: black;
 	}
+	path.circumference {
+		&.focused {
+			animation: blinking 1200ms linear 2s infinite;
+		}
+	}
 }
+
+@keyframes blinking {
+	0% {opacity: 0.1;}
+	40% {opacity: 0.6;} 
+	50% {opacity: 1;}
+	60% {opacity: 0.6;}
+	100% {opacity: 0.1;}
+}
+
 @media only screen and (max-width: 900px) {
 	svg {
 		.outline {

@@ -1,14 +1,53 @@
 <?php
 //---INCLUDE RESOURCES--------------------------------------------------------------
-	//include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/resources.php');
-	//include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/constants.php');
+	include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/resources.php');
+	include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/constants.php');
+
+	// Connect to DB
+	$conn = connect_to_db();
+	// Initialize variables
+	$today = date('Y-m-d H:i:s');
 
 	function return_circ_input_html_str($label_str, $circ_str, $circ_id, $ideal_val) {
 		$str = "<label for='$circ_str-circ-input'>$label_str</label>
 				<input class='circ' id='$circ_str-circ-input' type='number' step='0.125' min='0' name='$circ_str-circ-input' data-circ-id='$circ_id' placeholder='$ideal_val'>";
 		return $str;
 	};
+	function check_for_value_and_insert($post_value, $circ_id, $datetime, $circ_str) {
+		global $conn, $entry_msg;
+		if ( empty( $post_value ) ) {
+			$entry_msg .= "<li>$circ_str value empty. No record input.</li>";
+			return;
+		}
+		else {
+			$value = $post_value;
+			$qry = "INSERT INTO `fitness_measurements_circumferences` (`id`, `circumference_id`, `value`, `datetime`) 
+			VALUES (NULL, $circ_id, $value, $datetime);";
+			//echo $qry;
+			if ($conn->query($qry) === TRUE) {
+				$entry_msg .= "<li>New $circ_str record created successfully</li>";
+			} else {
+				$entry_msg .= "<li>Error with query for $circ_str: $qry <br> $conn->error</li>";
+			}
+		}
+	}
 
+	$entry_msg = 'Welcome to the Circumference Entry Page<ul>';
+	// If datetime has been input and any other fields have been input then insert new rows into db
+	if( isset( $_POST['datetime'] ) ) {
+		//echo "datetime populated. Line 32 triggered.";
+		$datetime = (empty($_POST['datetime'])) ? 'CURRENT_TIMESTAMP' : "'" . $_POST['datetime'] . "'";
+		check_for_value_and_insert($_POST['neck-circ-input'], 1, $datetime, 'Neck');
+		check_for_value_and_insert($_POST['shoulder-circ-input'], 2, $datetime, 'Shoulder');
+		check_for_value_and_insert($_POST['chest-circ-input'], 3, $datetime, 'Chest');
+		check_for_value_and_insert($_POST['upper-arm-circ-input'], 4, $datetime, 'Upper Arm');
+		check_for_value_and_insert($_POST['fore-arm-circ-input'], 5, $datetime, 'Fore Arm');
+		check_for_value_and_insert($_POST['waist-circ-input'], 6, $datetime, 'Waist');
+		check_for_value_and_insert($_POST['hips-circ-input'], 7, $datetime, 'Hips');
+		check_for_value_and_insert($_POST['thigh-circ-input'], 8, $datetime, 'Thigh');
+		check_for_value_and_insert($_POST['calf-circ-input'], 9, $datetime, 'Calf');
+	}
+	//var_dump($_POST);
 //---CONNECT TO DATABASE------------------------------------------------------------
 	//$conn = connect_to_db();
 
@@ -26,6 +65,8 @@
 	//$conn->close();
 
 //---BEGIN HTML---------------------------------------------------------------------
+
+	$entry_msg .= "</ul>";
 ?>
 
 <!DOCTYPE html>
@@ -40,17 +81,17 @@
     <link href="https://fonts.googleapis.com/css?family=Lobster|VT323|Orbitron:400,900" rel="stylesheet">
 <?php
 	// Link to Style Sheets
-	include($_SERVER["DOCUMENT_ROOT"] . '/brettjaybrewster/homebase/resources/forms/form-resources/css-files.php');
+	include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/css-files.php');
 ?>
-    <link rel="stylesheet" type="text/css" href="../css	/circumferences.css">
+    <link rel="stylesheet" type="text/css" href="../css/circumferences.css">
 </head>
 
 <body>
 	<main>
 		<h1>Log Circumference(s)</h1>
-		<h2 class='msg'>Welcome to Circumference Entry Page</h2>
+		<h2 class='msg'><?php echo $entry_msg ?></h2>
 		<span style='display: inline-flex; flex-flow: row nowrap; width: 100%; height: 700px;'>
-			<form style='width: 70%'>
+			<form style='width: 70%' method='POST'>
 				<label for='datetime'>DateTime</label>
 				<input id='datetime' type='datetime-local' name='datetime' value=''/>
 <?php
@@ -64,6 +105,7 @@
 				echo return_circ_input_html_str('Thigh', 'thigh', '8', '22.5');
 				echo return_circ_input_html_str('Calf', 'calf', '9', '14.5');
 ?>
+				<button type='submit'>Submit</button>
 			</form>
 			<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 200 880" style='width: 50%;'>
 				<defs>
@@ -120,68 +162,68 @@
 					C 90,6 80,20 85,30
 					C 80,35 80,40 85,45
 					C 84,51 85,52 85,52" fill='hsla(0, 0%, 100%, 0.1)'/>
-					<g class='circumferences' stroke='hsl(190, 100%, 50%)' stroke-width="5" opacity='0.1'>
-						<path class="circumference neck" data-circ-id="1"
+					<g class='circumferences' stroke='hsl(190, 100%, 50%)' stroke-width="5">
+						<path class="circumference neck" data-circ-id="1" opacity='0.1'
 						d=" M 85,52
 							L 115,52						
 						"
 						/>
-						<path class="circumference shoulders" data-circ-id="2"
+						<path class="circumference shoulders" data-circ-id="2" opacity='0.1'
 						d=" M 27,90
 							L 173,90						
 						"
 						/>
-						<path class="circumference chest" data-circ-id="3"
+						<path class="circumference chest" data-circ-id="3" opacity='0.1'
 						d=" M 55,115
 							L 145,115						
 						"
 						/>
-						<path class="circumference left upper-arm" data-circ-id="4"
+						<path class="circumference left upper-arm" data-circ-id="4" opacity='0.1'
 						d=" M 140,130
 							L 175,115						
 						"
 						/>
-						<path class="circumference right upper-arm" data-circ-id="4"
+						<path class="circumference right upper-arm" data-circ-id="4" opacity='0.1'
 						d=" M 60,130
 							L 25,115						
 						"
 						/>
-						<path class="circumference left fore-arm" data-circ-id="5"
+						<path class="circumference left fore-arm" data-circ-id="5" opacity='0.1'
 						d=" M 150,160
 							L 183,153						
 						"
 						/>
-						<path class="circumference right fore-arm" data-circ-id="5"
+						<path class="circumference right fore-arm" data-circ-id="5" opacity='0.1'
 						d=" M 50,160
 							L 17,153						
 						"
 						/>
-						<path class="circumference waist" data-circ-id="6"
+						<path class="circumference waist" data-circ-id="6" opacity='0.1'
 						d=" M 67,160
 							L 133,160						
 						"
 						/>
-						<path class="circumference hips" data-circ-id="7"
+						<path class="circumference hips" data-circ-id="7" opacity='0.1'
 						d=" M 57,210
 							L 143,210						
 						"
 						/>
-						<path class="circumference left thigh" data-circ-id="8"
+						<path class="circumference left thigh" data-circ-id="8" opacity='0.1'
 						d=" M 103,240
 							L 145,235						
 						"
 						/>
-						<path class="circumference right thigh" data-circ-id="8"
+						<path class="circumference right thigh" data-circ-id="8" opacity='0.1'
 						d=" M 97,240
 							L 55,235						
 						"
 						/>
-						<path class="circumference left calf" data-circ-id="9"
+						<path class="circumference left calf" data-circ-id="9" opacity='0.1'
 						d=" M 104,305
 							L 138,303						
 						"
 						/>
-						<path class="circumference right calf" data-circ-id="9"
+						<path class="circumference right calf" data-circ-id="9" opacity='0.1'
 						d=" M 96,305
 							L 62,303						
 						"
@@ -199,14 +241,26 @@
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
     <script type="text/javascript" src=""></script>
 	<script>
-		$('input.circ').on('focus', function() {
-			let circID = $(this).attr('data-circ-id');
-			$('svg path.circumference').each(function() {
-				if ($(this).attr('data-circ-id') == circID) {
-					$(this).attr('opacity', 1);
-				}
+		function change_display_of_focused_circ() {
+			$('input.circ').on('focus', function() {
+				console.log($(this));
+				let circID = $(this).attr('data-circ-id');
+				console.log(circID);
+				$('svg path.circumference').each(function() {
+					if ($(this).attr('data-circ-id') == circID) {
+						console.log( $(this) );
+						$(this).css('opacity', '1');
+						$(this).addClass('focused');
+						//$(this).css('stroke', 'red');
+					}
+					else if ($(this).css('opacity') == '1') {
+						$(this).css('opacity', '0.5');
+						//$(this).css('stroke', 'hsl(190, 100%, 50%)');
+					}
+				});
 			});
-		});
+		}
+		change_display_of_focused_circ();
 	
 	</script>
 </body>

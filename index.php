@@ -188,6 +188,12 @@
 		}
 	}
 
+	// Software Dev Hours
+	$q = "SELECT SUM(software_dev_hours) FROM personal_day_info WHERE date >= '$start_date_financial' AND date <= '$end_date_financial'";
+	$res = $conn->query($q);
+	$row = mysqli_fetch_row($res);
+	$software_dev_hours = $row[0]; // The most recent check date
+
 	$unreceived_after_tax_seal_income = (ESTIMATED_AFTER_TAX_PERCENTAGE * $unreceived_seal_income / 100);
 
 	// NET INCOME : Hourlywage at ricks multiplied by ricks hours + net tips from ricks + net recorded income from seal and design + unreceived (but earned) income from seal and design
@@ -348,6 +354,12 @@
 	$current_bench_press = $row[0];
 
 	$body_net_percent_ideal =			number_format(($ideal_score / $number_total_muscles), 2);
+
+	// Mindfulness Hours
+	$q = "SELECT SUM(mindfulness_hours) FROM personal_day_info WHERE date >= '$start_date_financial' AND date <= '$end_date_financial'";
+	$res = $conn->query($q);
+	$row = mysqli_fetch_row($res);
+	$mindfulness_hours = $row[0]; // The most recent check date
 
 	//var_dump($muscle_objects);
 

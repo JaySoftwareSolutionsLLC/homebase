@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,IAAI,AAAA,gBAAgB,CAAC;EACpB,OAAO,EAAE,WAAW;EACjB,SAAS,EAAE,aAAa;EACxB,OAAO,EAAE,MAAM;EACf,WAAW,EAAE,MAAM;EACnB,MAAM,EAAE,GAAG,CAAC,KAAK,CAAC,OAAmB;EACrC,aAAa,EAAE,YAAY;EAC3B,MAAM,EAAE,MAAM;CAOjB;;AAdD,AAQC,IARG,AAAA,gBAAgB,AAQlB,QAAQ,CAAC;EACT,UAAU,EAAE,OAAmB;EAC/B,KAAK,EAAE,KAAK;EACZ,WAAW,EAAE,GAAG;CAChB",
+    "sources": [
+        "generate_lift_inputs.scss"
+    ],
+    "names": [],
+    "file": "generate_lift_inputs.css"
+}

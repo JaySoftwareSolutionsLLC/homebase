@@ -1,0 +1,49 @@
+html {
+    body {
+        main {
+            form {
+                width:                                                                          100%;
+                input#date-input {
+                    background:                                                                 none; 
+                    font-size:                                                                  2rem; 
+                    height:                                                                     2.5rem; 
+                    text-align:                                                                 center; 
+                    vertical-align:                                                             middle; 
+                    border:                                                                     none; 
+                    color:                                                                      hsl(190, 100%, 50%);
+                    &:focus {
+                        outline:                                                                none;
+                    }
+                }
+                section {
+                    width:                                                                      100%; 
+                    align-items:                                                                flex-start; 
+                    background:                                                                 hsla(190, 100%, 50%, 0.2);
+                    padding:                                                                    1rem;
+                    margin:                                                                     0.5rem auto;
+                    h3 {
+                        font-size:                                                              1.25rem; 
+                        text-decoration:                                                        underline;
+                        padding:                                                                0 0 1rem 0;
+                    }
+                    div.row {
+                        display:                                                                inline-flex;
+                        width:                                                                  100%;
+                        flex-flow:                                                              row nowrap;
+                        padding:                                                                0.25rem 0;
+                        span.input {
+                            display:                                                            inline-flex; 
+                            flex-flow:                                                          column nowrap;
+                            input, select {
+                                width:                                                          5rem;
+                                &.numeric {
+                                    text-align:                                                 right;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

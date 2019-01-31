@@ -1,0 +1,91 @@
+section.fitness svg g.body {
+	stroke-width: 0.5px;
+}
+section.fitness svg .muscles {
+	stroke-width: 0.5px;
+}
+section.fitness svg .muscle {
+	transition: 200ms 50ms linear;
+}
+section.fitness svg .muscle.selected {
+	stroke-width: 2px;
+}
+section.fitness svg .muscle.flashing {
+	animation: flashing 1200ms linear 2s infinite;
+}
+@keyframes flashing {
+	0% {fill:hsl(0, 100%, 50%);}
+	40% {fill:hsl(0, 100%, 70%);}
+	50% {fill:hsl(0, 100%, 95%);}
+	60% {fill:hsl(0, 100%, 70%);}
+	100% {fill:hsl(0, 100%, 50%);}
+}
+section.fitness svg .muscle:hover {
+	cursor: pointer;
+}
+section.fitness div.content {
+	width: 100%;
+}
+section.fitness div.stats {
+	width: 100%;
+	border: 1px solid hsl(180, 100%, 50%);
+	color: white;
+	display: inline-flex;
+	flex-flow: row wrap;
+	justify-content: space-between;
+	text-align: center;
+	padding: 0.5rem;
+}
+section.fitness div.stats h3 {
+	font-size: 1.25rem;
+	width: 100%;
+	padding: 0.5rem 0rem 1rem 0rem;
+}
+section.fitness div.stat {
+	width: 45%;
+	display: inline-flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 0.5rem;
+}
+section.fitness div.stat h4.name {
+	font-size: 0.625rem;
+}
+section.fitness div.stat h4.value {
+	font-size: 0.875rem;
+}
+section.fitness div.stat h3.title {
+	text-transform: capitalize;
+}
+section.fitness div.row {
+	width: 100%;
+	display: inline-flex;
+	flex-flow: row nowrap;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+}
+section.fitness .form {
+	width: 5rem;
+	height: 5rem;
+	box-sizing: border-box;
+	display: inline-flex;
+	flex-flow: column nowrap;
+	align-items: center;
+	justify-content: space-around;
+	margin: 1rem;
+	cursor: pointer;
+	text-decoration: none;
+	color: white;
+	border-radius: 1rem;
+}
+section.fitness .form:hover {
+	background: hsla(190, 100%, 50%, 0.6);
+}
+section.fitness .form img {
+	height: 3rem;
+	width: 3rem;
+}
+section.fitness .form figcaption {
+	font-size: 0.75rem;
+}

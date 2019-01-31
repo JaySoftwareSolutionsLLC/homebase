@@ -1,0 +1,10 @@
+[21-Dec-2018 18:32:50 America/New_York] PHP Fatal error:  Uncaught Error: Class 'Date' not found in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/reports/annual-report/index.php:12
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/reports/annual-report/index.php on line 12
+[21-Dec-2018 18:36:32 America/New_York] PHP Catchable fatal error:  Object of class DateTime could not be converted to string in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/reports/annual-report/index.php on line 23
+[01-Jan-2019 14:55:50 America/New_York] PHP Catchable fatal error:  Object of class DateTime could not be converted to string in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/reports/annual-report/index.php on line 17
+[04-Jan-2019 18:26:02 CST6CDT] PHP Parse error:  syntax error, unexpected 'a' (T_STRING) in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/reports/annual-report/index.php on line 457
+[04-Jan-2019 18:26:25 CST6CDT] PHP Parse error:  syntax error, unexpected 'a' (T_STRING) in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/reports/annual-report/index.php on line 474
+[04-Jan-2019 18:26:28 CST6CDT] PHP Parse error:  syntax error, unexpected 'a' (T_STRING) in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/reports/annual-report/index.php on line 474
+[04-Jan-2019 18:27:52 CST6CDT] PHP Parse error:  syntax error, unexpected ',' in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/reports/annual-report/index.php on line 495

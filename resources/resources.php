@@ -28,7 +28,11 @@ function post_is_set($string) {
 
 // Return an HTML Div with classes and ids to display progress towards a goal as well percent of time frame used
 // Tested this out with a gaining goal and a losing goal with negative and positive progress and all test cases passed
-function return_goal_progress_bar_html( $goal_str, $goal_id_str, $starting_value, $target_value, $current_value, $starting_date_str, $target_date_str, $today_date_str = 'now' ) { 
+function return_timed_goal_progress_bar_html( $goal_str, $goal_id_str, $starting_value, $target_value, $current_value, $starting_date_str, $target_date_str, $today_date_str = 'now' ) { 
+	$timed_goal = true;
+	if ( empty( $target_date_str ) || empty( $today_date_str ) ) {
+		$timed_goal = false;
+	}
 	// Initialize the values that will be calculated
 	$goal_percent_target = 0;
 	$goal_percent_time_frame = 0;
@@ -40,24 +44,35 @@ function return_goal_progress_bar_html( $goal_str, $goal_id_str, $starting_value
 		$goal_percent_target = 100;
 	}
 	// Calculate percent of goal time frame
-	$start_dt = new DateTime($starting_date_str);
-	$target_dt = new DateTime($target_date_str);
-	$today_dt = new DateTime($today_date_str);
-	$total_time_frame = $start_dt->diff($target_dt)->days;
-	$days_since_start = $start_dt->diff($today_dt)->days;
-	$goal_percent_time_frame = number_format( ( 100 * $days_since_start / $total_time_frame ) , 2 );	
+	if ( $timed_goal ) {
+		$start_dt = new DateTime($starting_date_str);
+		$target_dt = new DateTime($target_date_str);
+		$today_dt = new DateTime($today_date_str);
+		$total_time_frame = $start_dt->diff($target_dt)->days;
+		$days_since_start = $start_dt->diff($today_dt)->days;
+		$goal_percent_time_frame = number_format( ( 100 * $days_since_start / $total_time_frame ) , 2 );	
+	}
 	
 	$str = "<div class='goal' id='$goal_id_str'>
-				<h3>$goal_str</h3>
+				<span class='goal-info' style=''>
+					<div class='spacer' style='width: 1.5rem;'></div>
+					<h3 style=''>$goal_str</h3>
+					<i class='fas fa-info'></i>
+				</span>
 				<div class='progress'>
-					<div class='fill' style='width: $goal_percent_target%;' data-value='$goal_percent_target'>
-						
-					</div>
-					<div class='target-fill' style='width: $goal_percent_time_frame%;'></div>
-				</div>
+					<div class='fill' style='width: $goal_percent_target%;' data-value='$goal_percent_target'></div>";
+	if ( $timed_goal ) {
+		$str .= "		<div class='target-fill' style='width: $goal_percent_time_frame%;'></div>";
+	}
+	$str .= "	</div>
 				<h5>$goal_percent_target%</h5>
 			</div>";
 	return $str;
 }
 
-?>
+function time_conversion($input_type, $input_value, $output_type, $precision = 0) {
+	if ($input_type == 'hours' && $output_type == 'minutes') {
+		return round( ( $input_value * 60 ) , $precision );
+	}
+}
+

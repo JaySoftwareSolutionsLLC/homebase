@@ -1,0 +1,21 @@
+{
+  "ftp://ftp.jaysoftwaresolutions.com@brettjaybrewster@jaysoftwaresolutions.com": {
+    ".ftpquota": {
+      "type": "-",
+      "size": 4,
+      "lmtime": 0,
+      "modified": false
+    },
+    "cgi-bin": {},
+    "homebase": {},
+    "index.php": {
+      "type": "-",
+      "size": 887,
+      "lmtime": 0,
+      "modified": false
+    },
+    "pyt_dance_studio": {},
+    "resources": {}
+  },
+  "$version": 1
+}

@@ -1,0 +1,81 @@
+section.goals div.content {
+	width: 100%;
+	display: inline-flex;
+	flex-flow: row wrap;
+	justify-content: space-around;
+}
+section.goals div.content h3 {
+	width: 100%;
+	text-align: center;
+}
+section.goals div.content h5 {
+	font-size: 0.5rem;
+}
+section.goals div.content div.goal {
+	width: 17.5rem;
+	height: 5rem;
+	display: inline-flex;
+	flex-flow: column nowrap;
+	align-items: center;
+	justify-content: space-around;
+	margin: 0.25rem;
+	padding: 0.5rem;
+	border-top-left-radius: 0.75rem 3rem;
+	border-top-right-radius: 0.75rem 3rem;
+	border-bottom-left-radius: 0.75rem 3rem;
+	border-bottom-right-radius: 0.75rem 3rem;
+    background: black;
+    span.goal-info {
+        display: inline-flex; 
+        flex-flow: row nowrap; 
+        justify-content: space-between; 
+        align-items: center;
+        i {
+            font-size: 0.5rem; 
+            width: 1.75rem;
+            height: 1.5rem;
+            border: 1px solid white;
+            border-radius: 1rem;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            &:hover {
+                background: white;
+                color: black;
+            }
+        }
+    }
+}
+section.goals div.content div.goal h3 {
+	font-size: 1.5rem;
+    color: hsl(190, 100%, 50%);
+}
+section.goals div.content div.goal h4 {
+	font-size: 1.25rem;
+}
+section.goals div.content div.goal h5 {
+	font-size: 0.5rem;
+}
+section.goals div.content div.goal div.progress {
+	height: 1rem;
+	width: 80%;
+	border: 1px solid white;
+	border-radius: 0.5rem;
+}
+section.goals div.content div.goal div.fill {
+	height: 100%;
+	border: none;
+	border-radius: 0.5rem;
+	/*background: hsl(190, 100%, 50%);*/
+}
+section.goals div.content div.goal div.target-fill {
+	height: 14px; 
+	border-right: 1px dashed white; 
+	border-top-left-radius: 0.5rem;
+	border-bottom-left-radius: 0.5rem;
+	background: hsla(0, 0%, 100%, 0.5);
+	position: relative; 
+	bottom: 14px; 
+	z-index: 10;
+}

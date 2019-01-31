@@ -1,0 +1,11 @@
+[17-Jun-2018 01:03:56 America/New_York] PHP Parse error:  syntax error, unexpected '}', expecting ',' or ';' in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/reports/common/report-header.php on line 7
+[17-Jun-2018 10:29:59 America/New_York] PHP Fatal error:  Uncaught Error: Call to a member function fetch_assoc() on null in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/reports/weekly-report/index.php:69
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/reports/weekly-report/index.php on line 69
+[17-Jun-2018 10:31:18 America/New_York] PHP Fatal error:  Uncaught Error: Call to a member function fetch_assoc() on null in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/reports/weekly-report/index.php:69
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/reports/weekly-report/index.php on line 69
+[19-Jun-2018 20:12:48 America/New_York] PHP Parse error:  syntax error, unexpected '}', expecting ',' or ';' in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/reports/weekly-report/report-header.php on line 17
+[19-Jun-2018 21:11:21 CST6CDT] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO), expecting ',' or ';' in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/reports/weekly-report/index.php on line 147

@@ -47,7 +47,7 @@
 			<div class='equipment-inputs'>
 <?php
 			foreach ($equipments as $e) {
-				$str = "<span class='equipment-input'><label for='equipment-$e->id'>$e->name</label><input type='checkbox' name='equipments[]' id='equipment-$e->id' value='$e->id' class='equipment'></span>";
+				$str = "<span class='equipment-input checked'><label for='equipment-$e->id'>$e->name</label><input type='checkbox' name='equipments[]' id='equipment-$e->id' value='$e->id' class='equipment' checked></span>";
 				echo $str;
 			}
 ?>

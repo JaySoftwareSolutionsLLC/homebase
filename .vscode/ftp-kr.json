@@ -1,0 +1,16 @@
+{
+    "host": "ftp.jaysoftwaresolutions.com",
+    "username": "brettjaybrewster@jaysoftwaresolutions.com",
+    "password": "Su944jAk449",
+    "remotePath": "",
+    "protocol": "ftp",
+    "port": 0,
+    "fileNameEncoding": "utf8",
+    "autoUpload": true,
+    "autoDelete": false,
+    "autoDownload": false,
+    "ignore": [
+        ".git",
+        "/.vscode"
+    ]
+}

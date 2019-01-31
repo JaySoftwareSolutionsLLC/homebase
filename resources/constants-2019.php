@@ -55,6 +55,12 @@ const START_DATE_STRING_UPPER_ARM_CIRC = 'January 8th 2019';
 const STARTING_UPPER_ARM_CIRC = 		12.25; // In inches
 const UPPER_ARM_CIRC_TARGET =			13.5; // In inches
 
+const START_DATE_SOFTWARE_DEV_HOURS =   'January 29th 2019';
+const SOFTWARE_DEV_TARGET_HOURS =       480;
+
+const START_DATE_MINDFULNESS_HOURS =   'January 29th 2019';
+const MINDFULNESS_TARGET_HOURS =       80;
+
 /*
 const START_DATE_STRING_BENCH_PRESS = 	'June 4th 2018';
 const STARTING_BENCH_PRESS =			160; // In pounds

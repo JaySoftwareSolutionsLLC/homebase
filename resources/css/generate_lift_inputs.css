@@ -1,12 +1,23 @@
 span.equipment-input {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
   display: inline-flex;
-  flex-flow: column nowrap;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: column nowrap;
+          flex-flow: column nowrap;
   padding: 0.5rem;
-  align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   border: 3px solid #00d5ff;
   border-radius: 1rem 0.25rem;
-  margin: 0.5rem; }
-  span.equipment-input.checked {
-    background: #00d5ff;
-    color: white;
-    font-weight: 900; }
+  margin: 0.5rem;
+}
+
+span.equipment-input.checked {
+  background: #00d5ff;
+  color: white;
+  font-weight: 900;
+}
+/*# sourceMappingURL=generate_lift_inputs.css.map */

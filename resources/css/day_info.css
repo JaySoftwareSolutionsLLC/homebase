@@ -1,0 +1,64 @@
+html body main form {
+  width: 100%;
+}
+
+html body main form input#date-input {
+  background: none;
+  font-size: 2rem;
+  height: 2.5rem;
+  text-align: center;
+  vertical-align: middle;
+  border: none;
+  color: #00d5ff;
+}
+
+html body main form input#date-input:focus {
+  outline: none;
+}
+
+html body main form section {
+  width: 100%;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  background: rgba(0, 213, 255, 0.2);
+  padding: 1rem;
+  margin: 0.5rem auto;
+}
+
+html body main form section h3 {
+  font-size: 1.25rem;
+  text-decoration: underline;
+  padding: 0 0 1rem 0;
+}
+
+html body main form section div.row {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  width: 100%;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: row nowrap;
+          flex-flow: row nowrap;
+  padding: 0.25rem 0;
+}
+
+html body main form section div.row span.input {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: column nowrap;
+          flex-flow: column nowrap;
+}
+
+html body main form section div.row span.input input, html body main form section div.row span.input select {
+  width: 5rem;
+}
+
+html body main form section div.row span.input input.numeric, html body main form section div.row span.input select.numeric {
+  text-align: right;
+}
+/*# sourceMappingURL=day_info.css.map */

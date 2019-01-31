@@ -1,60 +1,123 @@
 section.goals div.content {
-	width: 100%;
-	display: inline-flex;
-	flex-flow: row wrap;
-	justify-content: space-around;
+  width: 100%;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: row wrap;
+          flex-flow: row wrap;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
 }
+
 section.goals div.content h3 {
-	width: 100%;
-	text-align: center;
+  width: 100%;
+  text-align: center;
 }
+
 section.goals div.content h5 {
-	font-size: 0.5rem;
+  font-size: 0.5rem;
 }
+
 section.goals div.content div.goal {
-	width: 17.5rem;
-	height: 5rem;
-	display: inline-flex;
-	flex-flow: column nowrap;
-	align-items: center;
-	justify-content: space-around;
-	margin: 0.25rem;
-	padding: 0.5rem;
-	border-top-left-radius: 0.75rem 3rem;
-	border-top-right-radius: 0.75rem 3rem;
-	border-bottom-left-radius: 0.75rem 3rem;
-	border-bottom-right-radius: 0.75rem 3rem;
-	background: black;
+  width: 17.5rem;
+  height: 5rem;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: column nowrap;
+          flex-flow: column nowrap;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  margin: 0.25rem;
+  padding: 0.5rem;
+  border-top-left-radius: 0.75rem 3rem;
+  border-top-right-radius: 0.75rem 3rem;
+  border-bottom-left-radius: 0.75rem 3rem;
+  border-bottom-right-radius: 0.75rem 3rem;
+  background: black;
 }
+
+section.goals div.content div.goal span.goal-info {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: row nowrap;
+          flex-flow: row nowrap;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+section.goals div.content div.goal span.goal-info i {
+  font-size: 0.5rem;
+  width: 1.75rem;
+  height: 1.5rem;
+  border: 1px solid white;
+  border-radius: 1rem;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  cursor: pointer;
+}
+
+section.goals div.content div.goal span.goal-info i:hover {
+  background: white;
+  color: black;
+}
+
 section.goals div.content div.goal h3 {
-	font-size: 1.5rem;
-	color: hsl(190, 100%, 50%);
+  font-size: 1.5rem;
+  color: #00d5ff;
 }
+
 section.goals div.content div.goal h4 {
-	font-size: 1.25rem;
+  font-size: 1.25rem;
 }
+
 section.goals div.content div.goal h5 {
-	font-size: 0.5rem;
+  font-size: 0.5rem;
 }
+
 section.goals div.content div.goal div.progress {
-	height: 1rem;
-	width: 80%;
-	border: 1px solid white;
-	border-radius: 0.5rem;
+  height: 1rem;
+  width: 80%;
+  border: 1px solid white;
+  border-radius: 0.5rem;
 }
+
 section.goals div.content div.goal div.fill {
-	height: 100%;
-	border: none;
-	border-radius: 0.5rem;
-	/*background: hsl(190, 100%, 50%);*/
+  height: 100%;
+  border: none;
+  border-radius: 0.5rem;
+  /*background: hsl(190, 100%, 50%);*/
 }
+
 section.goals div.content div.goal div.target-fill {
-	height: 14px; 
-	border-right: 1px dashed white; 
-	border-top-left-radius: 0.5rem;
-	border-bottom-left-radius: 0.5rem;
-	background: hsla(0, 0%, 100%, 0.5);
-	position: relative; 
-	bottom: 14px; 
-	z-index: 10;
+  height: 14px;
+  border-right: 1px dashed white;
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.5);
+  position: relative;
+  bottom: 14px;
+  z-index: 10;
 }
+/*# sourceMappingURL=goals.css.map */
