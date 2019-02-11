@@ -72,9 +72,11 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 					<option value='thought'>Thought</option>
 					<option value='quote'>Quote</option>
 					<option value='lesson'>Lesson</option>
+					<option value='book to read'>Book To Read</option>
+					<option value='learning resource'>Learning Resource</option>
 				</select>
 				<label for='summary'>Summary</label>
-				<input name='summary' type='text' placeholder='Heart to heart with Molly Bolzano'/>
+				<input name='summary' type='text' placeholder='Heart to heart with Molly Bolzano' maxlength='50'/>
 				<label for='description'>Description</label>
 				<textarea name='description' maxlength='255' placeholder='Had a heart to heart with Molly during shift today.'></textarea>
 				<label for='reminder-datetime'>Reminder Datetime (Optional)</label>

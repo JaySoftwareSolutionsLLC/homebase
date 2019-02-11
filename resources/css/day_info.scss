@@ -18,7 +18,8 @@ html {
                 section {
                     width:                                                                      100%; 
                     align-items:                                                                flex-start; 
-                    background:                                                                 hsla(190, 100%, 50%, 0.2);
+                    border:                                                                     1px solid hsla(190, 100%, 50%, 1);
+                    border-radius:                                                              0.5rem;
                     padding:                                                                    1rem;
                     margin:                                                                     0.5rem auto;
                     h3 {

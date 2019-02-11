@@ -192,7 +192,7 @@
 	$q = "SELECT SUM(software_dev_hours) FROM personal_day_info WHERE date >= '$start_date_financial' AND date <= '$end_date_financial'";
 	$res = $conn->query($q);
 	$row = mysqli_fetch_row($res);
-	$software_dev_hours = $row[0]; // The most recent check date
+	$software_dev_hours = $row[0];
 
 	$unreceived_after_tax_seal_income = (ESTIMATED_AFTER_TAX_PERCENTAGE * $unreceived_seal_income / 100);
 
@@ -261,7 +261,7 @@
 	// Lifting
 
 	$most_recent_upper_arm_size = 0;
-	$q = "SELECT workout_structure_id FROM `fitness_cycles` WHERE start_date <= '$today_date' AND end_date >= '$today_date 23:59:59' LIMIT 1";
+	$q = "SELECT workout_structure_id FROM `fitness_cycles` WHERE start_date <= '$today_date' AND end_date >= '$today_date 00:00:00' LIMIT 1";
 	$res = $conn->query($q);
 	$row = mysqli_fetch_row($res);
 	$workout_structure = $row[0];
@@ -275,12 +275,11 @@
 
 	$muscle_objects = array();
 	$q = "SELECT 
-	muscles.id, muscles.common_name, circs.id AS 'circ_id', circs.name AS 'circ_name', circs.ideal, rec_times.ideal_recovery
+	muscles.id, muscles.common_name, circs.id AS 'circ_id', circs.name AS 'circ_name', circs.ideal
 	FROM `fitness_muscles` AS muscles 
-	INNER JOIN `fitness_circumferences` AS circs ON (muscles.circumference_id = circs.id)
-	INNER JOIN `fitness_ideal_recovery_times` AS rec_times ON (muscles.id = rec_times.muscle_id)
-	WHERE rec_times.workout_structure_id = $workout_structure"; // ~~~BUG~~~ this is based off today's workout structure, but the lift could have been performed 3 days ago w/ a diff workout structure recovery time
+	INNER JOIN `fitness_circumferences` AS circs ON (muscles.circumference_id = circs.id)"; // ~~~BUG~~~ this is based off today's workout structure, but the lift could have been performed 3 days ago w/ a diff workout structure recovery time
 	$res = $conn->query($q);
+	//var_dump ($q);
 	if ($res->num_rows > 0) {
 		while($row = $res->fetch_assoc()) {
 			//var_dump($row);
@@ -291,7 +290,7 @@
 			$muscle_associated_circ = 	$row['circ_name'];
 			$muscle_ideal_circ = 		$row['ideal'];
 			
-			$muscle_ideal_rest =		$row['ideal_recovery'];
+			//$muscle_ideal_rest =		$row['ideal_recovery'];
 			
 			$q_current_circ = 			"SELECT value FROM fitness_measurements_circumferences WHERE circumference_id = $muscle_associated_circ_id AND datetime >= '$start_date_body_weight 00:00:00' AND datetime <= '$end_date_body_weight 23:59:59' ORDER BY datetime DESC LIMIT 1";
 			$res_current_circ = 		$conn->query($q_current_circ);
@@ -301,11 +300,20 @@
 				$most_recent_upper_arm_size = $muscle_current_circ;
 			}
 			
-			$q_mrf = "SELECT datetime FROM `fitness_lifts` WHERE exercise_id IN (SELECT exercise_id FROM `fitness_pivot_exercises_muscles` WHERE muscle_id = $muscle_id AND datetime >= '$start_date_body_weight 00:00:00' AND datetime <= '$end_date_body_weight 23:59:59' AND type = 'primary') ORDER BY datetime DESC LIMIT 1";
+			$q_mrf = "	SELECT fl.datetime, firt.ideal_recovery
+						FROM fitness_lifts AS fl
+						INNER JOIN fitness_ideal_recovery_times AS firt
+							ON (fl.workout_structure_id = firt.workout_structure_id
+							AND firt.muscle_id = $muscle_id)
+						WHERE fl.exercise_id IN 
+							(SELECT exercise_id FROM `fitness_pivot_exercises_muscles` WHERE muscle_id = $muscle_id AND datetime >= '$start_date_body_weight 00:00:00'  AND datetime <= '$end_date_body_weight 23:59:59'  AND type = 'primary')
+						ORDER BY datetime DESC LIMIT 1	";
 			$res_mrf =					$conn->query($q_mrf);
 			$row_mrf =					mysqli_fetch_row($res_mrf);
-			$muscle_mrf_time =			strtotime($row_mrf[0]); // Most Recent Failure as datetime
-			$muscle_mrf_hours =			ceil(($today_time - $muscle_mrf_time) / (60 * 60)); // Most Recent Failure as datetime
+			$muscle_mrf_time =			strtotime($row_mrf[0]); // Most Recent Failure as timestamp
+			$muscle_ideal_rest = 		$row_mrf[1];
+			//echo $muscle_ideal_rest;
+			$muscle_mrf_hours =			ceil(($today_time - $muscle_mrf_time) / (60 * 60)); // Most Recent Failure as timestamp
 			//echo "$muscle_id | $muscle_mrf_time | $muscle_mrf_hours" . date('Y/m/d H:i:s', $muscle_mrf_time) . " <br/>";
 			if ($muscle_mrf_hours > 999) { $muscle_mrf_hours = 999; }
 			
@@ -355,11 +363,13 @@
 
 	$body_net_percent_ideal =			number_format(($ideal_score / $number_total_muscles), 2);
 
+	//--HEALTH----------------------------------------------------------------------
+
 	// Mindfulness Hours
 	$q = "SELECT SUM(mindfulness_hours) FROM personal_day_info WHERE date >= '$start_date_financial' AND date <= '$end_date_financial'";
 	$res = $conn->query($q);
 	$row = mysqli_fetch_row($res);
-	$mindfulness_hours = $row[0]; // The most recent check date
+	$mindfulness_hours = $row[0];
 
 	//var_dump($muscle_objects);
 

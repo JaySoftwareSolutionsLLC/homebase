@@ -21,9 +21,9 @@
             WHERE id = $row_id; ";
     //echo $qry;
     if ( $conn->query($qry) === TRUE) {
-    	$feedback_str .= "$column_name successfully updated.";
+    	$feedback_str .= "<li>$column_name successfully updated to $value at id $row_id.</li>";
 	} else {
-    	$feedback_str .= "$column_name update failed! <br/> Error with query: $qry </br> $conn->error </br>";
+    	$feedback_str .= "<li>$column_name update failed! <br/> Error with query: $qry </br> $conn->error </br></li>";
     }
     echo $feedback_str;
 ?>

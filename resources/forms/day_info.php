@@ -1,7 +1,7 @@
 <?php
     //---INCLUDE RESOURCES--------------------------------------------------------------
     include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/resources.php');
-    include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/constants.php');
+    include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/constants-2019.php');
 
     //---RETRIEVE POST VARIABLES--------------------------------------------------------
     $date = $_POST['date-input'] ?? date("Y-m-d");
@@ -9,6 +9,10 @@
 
     //---CONNECT TO DATABASE------------------------------------------------------------
     $conn = connect_to_db();
+
+    //---INITIALIZE GLOBAL VARIABLES ---------------------------------------------------
+    $out_of_range = false;
+    $user_feedback = "";
 
     //---QUERY AGAINST DATABASE---------------------------------------------------------
     $day = new stdClass();
@@ -35,11 +39,39 @@
 		}
     }
     else { // If there are not results yet and the day in question is before or equal to today, create a new row for the day in question
-
+        $start_date = date('Y-m-d', strtotime( START_DATE_STRING_DAY_INFO ) );
+        $today = date('Y-m-d');
+        if ( $date <= $today && $date >= $start_date ) {
+            $user_feedback .= "<li>Generating row because $date is between $start_date and $today...</li>";
+            $qry = " INSERT INTO `personal_day_info` (`id`, `date`, `software_dev_hours`, `mindfulness_hours`, `optimal_health`) VALUES (NULL, '$date', '0.00', '0.00', NULL); ";
+            if ($conn->query($qry) === TRUE) {
+                $user_feedback = "<li>New row created successfully<li/>";
+                $qry_s = "SELECT id FROM `personal_day_info` WHERE date = '$date' ORDER BY id LIMIT 1";
+                $res_s = $conn->query($qry_s);
+                if ($res_s->num_rows > 0) {
+                    $row_s = $res_s->fetch_assoc();
+                    $day->id = $row_s['id'];
+		        	$day->date = $date;
+			        $day->software_dev_hours = 0;
+                    $day->mindfulness_hours = 0;
+                    $day->optimal_health = null;
+                    $user_feedback .= "<li>New ID is $day->id</li>";
+                }
+                else {
+                    $user_feedback .= "<li>Unable to retrieve ID</li>";
+                }
+            }
+            else {
+                $user_feedback .= "<li>Unable to insert new row</li>";
+            }
+        }
+        else {
+            $out_of_range = true;
+            echo "Sorry. The date you requested is out of range. Page will redirect in 2 seconds.";
+            sleep( 2 );
+            header('Location: https://www.brettjaybrewster.com/homebase/resources/forms/day_info.php');
+        }
     }
-
-    //---INITIALIZE GLOBAL VARIABLES ---------------------------------------------------
-    //echo $date; 
 ?>
 
 <html lang="en-US">
@@ -59,16 +91,19 @@
     <body>
 
         <main>
-            
-
             <form id='day-info-form' method='POST'>
                 <input class='day-input' type='date' name='date-input' id='date-input' value='<?php echo $date; ?>' style=''/>
+                <p class='user-feedback' <?php if ($user_feedback == '') { echo "style='display: none;'"; } ?> >
+                    <ul>
+                        <?php echo $user_feedback; ?>
+                    </ul>
+                </p>
                 <section style=''>
                     <h3 style=''>Notifications</h3>
                 </section>
                 <section style=''>
                     <h3 style=''>Fitness</h3>
-                </section>
+                </section>  
                 <section style=''>
                     <h3 style=''>Nutrition</h3>
                 </section>

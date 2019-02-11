@@ -56,10 +56,12 @@ const STARTING_UPPER_ARM_CIRC = 		12.25; // In inches
 const UPPER_ARM_CIRC_TARGET =			13.5; // In inches
 
 const START_DATE_SOFTWARE_DEV_HOURS =   'January 29th 2019';
-const SOFTWARE_DEV_TARGET_HOURS =       480;
+const SOFTWARE_DEV_TARGET_HOURS =       480; // Equates to ~10 hours / week
 
 const START_DATE_MINDFULNESS_HOURS =   'January 29th 2019';
-const MINDFULNESS_TARGET_HOURS =       80;
+const MINDFULNESS_TARGET_HOURS =       72; // Equates to 3 sessions / week @ 30 minutes each
+
+const START_DATE_STRING_DAY_INFO =      'January 29th 2019';
 
 /*
 const START_DATE_STRING_BENCH_PRESS = 	'June 4th 2018';

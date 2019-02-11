@@ -73,7 +73,7 @@
 
 		echo return_timed_goal_progress_bar_html('Dev Hours', 'goal-dev-hours', 0, SOFTWARE_DEV_TARGET_HOURS, $software_dev_hours, START_DATE_SOFTWARE_DEV_HOURS, '2019-12-31');
 
-		echo return_timed_goal_progress_bar_html('JSS Income', 'goal-jss-income', 0, 5000, 0, '2019-01-01', '2019-12-31');
+		echo return_timed_goal_progress_bar_html('JSS Income', 'goal-jss-income', 0, 5000, 0, null, null);
 
 		echo return_timed_goal_progress_bar_html('Mindful Sess.', 'goal-mindful-sessions', 0, MINDFULNESS_TARGET_HOURS, $mindfulness_hours, START_DATE_MINDFULNESS_HOURS, '2019-12-31');
 

@@ -28,6 +28,15 @@ main h2.msg {
 	font-size: 0.75rem;
 	margin-bottom: 1.5rem;
 }
+p.user-feedback { 
+	width: 80%;
+    background: hsl(190, 100%, 50%);
+    color: white;
+    padding: 0.5rem;
+    font-size: 0.75rem;
+    margin: 1rem auto;  
+    border-radius: 0.25rem 0.75rem;
+}
 main form {
 	width: 60%;
 	display: inline-flex;

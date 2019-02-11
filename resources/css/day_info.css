@@ -21,7 +21,8 @@ html body main form section {
   -webkit-box-align: start;
       -ms-flex-align: start;
           align-items: flex-start;
-  background: rgba(0, 213, 255, 0.2);
+  border: 1px solid #00d5ff;
+  border-radius: 0.5rem;
   padding: 1rem;
   margin: 0.5rem auto;
 }

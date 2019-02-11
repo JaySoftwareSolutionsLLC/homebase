@@ -42,6 +42,16 @@ main h2.msg {
   margin-bottom: 1.5rem;
 }
 
+p.user-feedback {
+  width: 80%;
+  background: #00d5ff;
+  color: white;
+  padding: 0.5rem;
+  font-size: 0.75rem;
+  margin: 1rem auto;
+  border-radius: 0.25rem 0.75rem;
+}
+
 main form {
   width: 60%;
   display: -webkit-inline-box;

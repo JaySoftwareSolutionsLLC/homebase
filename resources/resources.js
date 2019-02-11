@@ -1,6 +1,7 @@
 function ajaxPostUpdate(phpPage, jsonPostData, troubleshooting = false) { 
             if (troubleshooting) {
                 $.post( phpPage, jsonPostData , function() {
+                    $('p.notifications').html('Success!');
                     alert( "success");
                 } )
                 .done(function( response ) {
@@ -19,7 +20,11 @@ function ajaxPostUpdate(phpPage, jsonPostData, troubleshooting = false) {
            else {
             $.post( phpPage, jsonPostData , function() { } )
             .done(function( response ) {
-                alert( response );
+                //alert( response );
+                $('p.user-feedback').append( response );
+                if ( $('p.user-feedback').css('display') == 'none') {
+                    $('p.user-feedback').css('display', 'inline');
+                }
             })
             }
         };
