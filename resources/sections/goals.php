@@ -75,7 +75,7 @@
 
 		echo return_timed_goal_progress_bar_html('JSS Income', 'goal-jss-income', 0, 5000, 0, null, null);
 
-		echo return_timed_goal_progress_bar_html('Mindful Sess.', 'goal-mindful-sessions', 0, MINDFULNESS_TARGET_HOURS, $mindfulness_hours, START_DATE_MINDFULNESS_HOURS, '2019-12-31');
+		echo return_timed_goal_progress_bar_html('Mindful Sess.', 'goal-mindful-sessions', 30, MINDFULNESS_TARGET_HOURS, $mindfulness_hours, START_DATE_MINDFULNESS_HOURS, '2019-12-31');
 
 		echo return_timed_goal_progress_bar_html('Opt. Health', 'goal-optimal-health', 0, 85, 0, null, null);
 		
