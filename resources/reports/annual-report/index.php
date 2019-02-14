@@ -14,7 +14,7 @@ $conn = connect_to_db();
 
 // Initialize variables
 $title = "AR - $year";
-$date_start_dt = ($year == '2018') ? new DateTime("June 01 2018") : $date_start_dt = new DateTime("first day of $year");
+$date_start_dt = ($year == '2018') ? new DateTime("June 01 2018") : $date_start_dt = new DateTime("first day of January $year");
 $date_end_dt = new DateTime("last day of december $year");
 if (new DateTime() < $date_end_dt) {
 	//var_dump( $date_end_dt );
@@ -22,6 +22,7 @@ if (new DateTime() < $date_end_dt) {
 	$date_end_dt = new DateTime();
 	//var_dump( $date_end_dt );
 }
+var_dump( $date_start_dt );
 $date_start = date_format($date_start_dt, 'Y-m-d');
 $date_end = date_format($date_end_dt, 'Y-m-d');
 $count_days = ( strtotime($date_end . "+1 days") - strtotime($date_start) ) / SEC_IN_DAY;

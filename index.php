@@ -300,9 +300,9 @@
 				$most_recent_upper_arm_size = $muscle_current_circ;
 			}
 			
-			$q_mrf = "	SELECT fl.datetime, firt.ideal_recovery
+			$q_mrf = "	SELECT fl.datetime, IFNULL( firt.ideal_recovery , 48 ) AS 'ideal_recovery'
 						FROM fitness_lifts AS fl
-						INNER JOIN fitness_ideal_recovery_times AS firt
+						LEFT JOIN fitness_ideal_recovery_times AS firt
 							ON (fl.workout_structure_id = firt.workout_structure_id
 							AND firt.muscle_id = $muscle_id)
 						WHERE fl.exercise_id IN 
