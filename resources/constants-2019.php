@@ -22,7 +22,7 @@ const HOURLY_WAGES_DATESTRINGS_SEAL =	array('2018-12-03'); // Array date must co
 
 
 const HOURLY_WAGE_RICKS = 				7.50; // Looks like this doesnt change until 2020 when it will jump to 7.80
-const HOURLY_WAGE_TARGET =				28;
+const HOURLY_WAGE_TARGET =				28.75;
 
 const WEEKLY_INCOME_TARGET = 			AVG_DAILY_INCOME_TARGET * 7;
 const WEEKLY_EXPENDITURE_TARGET = 		AVG_DAILY_EXPENDITURE_TARGET * 7;

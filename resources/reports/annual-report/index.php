@@ -1,7 +1,7 @@
 <?php 
 // Include resources
 include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/resources.php');
-$year = set_post_value('year') ?? '2018';
+$year = set_post_value('year') ?? date('Y');
 if ( $year == '2018' ) {
 	include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/constants-2018.php');
 }
@@ -22,7 +22,6 @@ if (new DateTime() < $date_end_dt) {
 	$date_end_dt = new DateTime();
 	//var_dump( $date_end_dt );
 }
-var_dump( $date_start_dt );
 $date_start = date_format($date_start_dt, 'Y-m-d');
 $date_end = date_format($date_end_dt, 'Y-m-d');
 $count_days = ( strtotime($date_end . "+1 days") - strtotime($date_start) ) / SEC_IN_DAY;
