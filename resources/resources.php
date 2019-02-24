@@ -26,9 +26,9 @@ function post_is_set($string) {
 	return (isset($_POST[$string]) && $_POST[$string] != '') ? true : false;
 }
 
-// Return an HTML Div with classes and ids to display progress towards a goal as well percent of time frame used
+// Return an HTML Div with classes and ids to display progress towards a goal as well as percent of time frame used
 // Tested this out with a gaining goal and a losing goal with negative and positive progress and all test cases passed
-function return_timed_goal_progress_bar_html( $goal_str, $goal_id_str, $starting_value, $target_value, $current_value, $starting_date_str, $target_date_str, $today_date_str = 'now' ) { 
+function return_timed_goal_progress_bar_html( $goal_str, $goal_id_str, $starting_value, $target_value, $current_value, $starting_date_str, $target_date_str, $today_date_str = 'now', $goal_description = null ) {
 	$timed_goal = true;
 	if ( empty( $target_date_str ) || empty( $today_date_str ) ) {
 		$timed_goal = false;
@@ -52,12 +52,12 @@ function return_timed_goal_progress_bar_html( $goal_str, $goal_id_str, $starting
 		$days_since_start = $start_dt->diff($today_dt)->days;
 		$goal_percent_time_frame = number_format( ( 100 * $days_since_start / $total_time_frame ) , 2 );	
 	}
-	
+	$goal_description = $goal_description ?? "<h2>$goal_str</h2><h3>Starting Value: $starting_value</h3><h3>Target Value: $target_value</h3><h3>Starting Date: $starting_date_str</h3><h3>Target Date: $target_date_str</h3>";
 	$str = "<div class='goal' id='$goal_id_str'>
 				<span class='goal-info' style=''>
 					<div class='spacer' style='width: 1.5rem;'></div>
 					<h3 style=''>$goal_str</h3>
-					<i class='fas fa-info'></i>
+					<i class='fas fa-info' data-goal-description='$goal_description'></i>
 				</span>
 				<div class='progress'>
 					<div class='fill' style='width: $goal_percent_target%;' data-value='$goal_percent_target'></div>";

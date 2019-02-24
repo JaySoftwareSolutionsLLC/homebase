@@ -496,6 +496,7 @@
 <body>
 	<main>
 	<?php
+		include('resources/sections/modal.php');
 		include('resources/sections/header.php');
 		include('resources/sections/notifications.php');
 		include('resources/sections/habits.php');

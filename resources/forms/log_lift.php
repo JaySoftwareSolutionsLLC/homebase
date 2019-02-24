@@ -75,7 +75,7 @@ if ($res->num_rows > 0) {
 
 if (isset($_POST['workout-structure-id']) && isset($_POST['total-reps']) && isset($_POST['exercise-id']) && isset($_POST['weight'])) {
 	//var_dump($_POST);
-	$datetime = (empty($_POST['datetime'])) ? 'CURRENT_TIMESTAMP' : "'" . $_POST['datetime'] . "'";
+	$datetime = (empty($_POST['datetime'])) ? 'DATE_ADD(NOW(), INTERVAL 1 HOUR)' : "'" . $_POST['datetime'] . "'";
 	$post_weight = $_POST['weight'];
 	//var_dump($post_weight);
 	$post_total_reps = $_POST['total-reps'];

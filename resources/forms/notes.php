@@ -74,6 +74,7 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 					<option value='lesson'>Lesson</option>
 					<option value='book to read'>Book To Read</option>
 					<option value='learning resource'>Learning Resource</option>
+					<option value='homebase enhancement'>HomeBase Enhancement</option>
 				</select>
 				<label for='summary'>Summary</label>
 				<input name='summary' type='text' placeholder='Heart to heart with Molly Bolzano' maxlength='50'/>

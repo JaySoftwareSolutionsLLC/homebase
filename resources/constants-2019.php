@@ -20,7 +20,6 @@ define("AVG_DAILY_EXPENDITURE_TARGET", number_format((ANNUAL_EXPENDITURE_TARGET 
 const HOURLY_WAGES_SEAL = 				array(25); // Array value must correspond with HOURLY_WAGES_DATESTRINGS_SEAL date. Referenced in reports/weekly-report/index.php
 const HOURLY_WAGES_DATESTRINGS_SEAL =	array('2018-12-03'); // Array date must correspond with HOURLY_WAGES_SEAL value. Referenced in reports/weekly-report/index.php
 
-
 const HOURLY_WAGE_RICKS = 				7.50; // Looks like this doesnt change until 2020 when it will jump to 7.80
 const HOURLY_WAGE_TARGET =				28.75;
 
@@ -40,6 +39,7 @@ const ESTIMATED_AFTER_TAX_PERCENTAGE =	73; // Based off of Effective Tax Rate fr
 // DEPRECATED FOR 2019...will (likely) break index.php const JUNE_1ST_NET_WORTH = 				10000;
 const START_OF_YEAR_NET_WORTH =			36519;
 const END_OF_YEAR_NET_WORTH_TARGET =	75000; // Based off 36.5k NW @ end of 2018 + 40k contribution
+const ANNUAL_NET_WORTH_CONTRIBUTION =   END_OF_YEAR_NET_WORTH_TARGET - START_OF_YEAR_NET_WORTH;
 // DEPRECATED FOR 2019...will (likely) break index.php const JUNE_1ST_DEBT =					17000;
 
 //--- Fitness Constants ---
