@@ -15,7 +15,7 @@ define("AVG_DAILY_EXPENDITURE_TARGET", number_format((ANNUAL_EXPENDITURE_TARGET 
 const HOURLY_WAGE_SEAL = 				21.63;
 const HOURLY_WAGES_SEAL = 				array(21.63, 22.12, 25); // Array value must correspond with HOURLY_WAGES_DATESTRINGS_SEAL date. Referenced in reports/weekly-report/index.php
 const HOURLY_WAGES_DATESTRINGS_SEAL =	array('2018-05-29', '2018-08-27', '2018-12-03'); // Array date must correspond with HOURLY_WAGES_SEAL value. Referenced in reports/weekly-report/index.php
-
+const CASHABLE_PTO_HOURS =              0;
 
 const HOURLY_WAGE_RICKS = 				7.50;
 const HOURLY_WAGE_TARGET =				26;
@@ -36,6 +36,7 @@ const ESTIMATED_AFTER_TAX_PERCENTAGE =	75;
 const JUNE_1ST_NET_WORTH = 				10000;
 const END_OF_YEAR_NET_WORTH_TARGET =	30000;
 const JUNE_1ST_DEBT =					17000;
+const ANNUAL_NET_WORTH_CONTRIBUTION_TARGET =   END_OF_YEAR_NET_WORTH_TARGET + JUNE_1ST_DEBT - JUNE_1ST_NET_WORTH;
 
 //--- Fitness Constants ---
 const START_DATE_STRING_RUNNING = 		'June 29th 2018';

@@ -1,5 +1,13 @@
 <?php
-
+	if ( $opportunity_surplus > 2000 ) { // If opportunity surplus is greater than $2,000 then set color to green
+		$opportunity_surplus_font_color = 'hsl(120, 100%, 50%)'; 
+	}
+	else if ( $opportunity_surplus > 0 ) { // If opportunity surplus is positive then set color to white
+		$opportunity_surplus_font_color = 'hsl(0, 100%, 100%)'; 
+	}
+	else { // Otherwise the surplus must be negative so set the color to red
+		$opportunity_surplus_font_color = 'hsl(0, 100%, 50%)'; 
+	}
 ?>
 <section class="column finance">
 	<h2>Finances</h2>
@@ -12,7 +20,7 @@
 		<div class="stat unreceived-seal-income">
 			<h3>Unreceived Seal Income</h3>
 			<h4>$<?php echo $unreceived_seal_income; ?></h4>
-			<h5>(Est Take Home: $<?php echo (ESTIMATED_AFTER_TAX_PERCENTAGE * $unreceived_seal_income / 100); ?>)</h5>
+			<h5>(Est Take Home: $<?php echo $unreceived_after_tax_seal_income; ?>)</h5>
 		</div>
 		<div class="row">
 			<div class="small stat adi">
@@ -38,6 +46,12 @@
 				<h5><?php echo HOURLY_WAGE_TARGET; ?></h5>
 			</div>
 		</div>
+<?php if ($year != '2018') { ?>
+		<div class="stat opportunity-surplus">
+			<h3>Opportunity Surplus</h3>
+			<h4 style='color: <?php echo $opportunity_surplus_font_color ?>;'>$<?php echo $opportunity_surplus; ?></h4>
+		</div>
+<?php } ?>
 		<div class="stat income-projection-2018">
 			<h3><?php echo $year; ?> Income Projection</h3>
 			<h4>$<?php echo $estimated_2018_income; ?></h4>
@@ -58,7 +72,7 @@
 		</div>
 		<div class="stat graphic account-allocation">
 			<h3>Accounts Allocation</h3>
-			<canvas id='account-allocation-graph'></canvas>
+			<div id='account-allocation-graph' style='height: 10rem; width: 15rem;'></div>
 		</div>
 		
 		
@@ -89,31 +103,50 @@
 	</div>
 </section>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js" integrity="sha256-XF29CBwU1MWLaGEnsELogU6Y6rcc5nCkhhx89nFMIDQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/canvasjs/1.7.0/canvasjs.min.js"></script>
 <script>
-	new Chart(document.getElementById("account-allocation-graph"),{
-		"type":"doughnut",
-		"data": {
-			"labels":["$","Asts.","Lbls."],
-			"datasets":[
-				{"label":"Asset Allocation",
-				 "data":[<?php echo "$current_cash, $current_assets, $current_liabilities" ?>],
-				 "backgroundColor":["hsl(120, 100%, 50%)", "hsl(200, 100%, 50%)", "hsl(0, 100%, 50%)"],
-				 "borderColor":["black", "black", "black"],
-				 "borderWidth":[1,1,1]
-				}
-			]
-		},
-		options: {
-			legend: {
-				labels: {
-					fontColor: 'white',
-					boxWidth: 15,
-					fontFamily: "'Orbitron', sans-serif"
-				}
-			}
+var chart = new CanvasJS.Chart("account-allocation-graph", {
+	backgroundColor: 'black',
+	animationEnabled: true,
+	data: [{
+		type: "doughnut",
+		startAngle: 270,
+      	innerRadius: 5,
+		radius: 100,
+		toolTipContent: "<b>{name}</b>: ${y}",
+		dataPoints: [
+<?php
+	arsort($account_types); // Associative row sort (desc)
+	foreach ($account_types as $name=>$val) {
+		$str = "{ y: $val, name: '$name' ";
+		switch ( $name ) {
+			case 'liability' :
+				$str .= " , color: 'hsl(0, 100%, 50%)' ";
+				break;
+			case 'liquid cash' :
+				$str .= " , color: 'hsl(210, 100%, 50%)' ";
+				break;
+			case 'retirement account' :
+				$str .= " , color: 'hsl(120, 100%, 50%)' ";
+				break;
+			case 'taxable account' :
+				$str .= " , color: 'hsl(150, 100%, 50%)' ";
+				break;
+			case 'unreceived ATI' :
+				$str .= " , color: 'hsl(210, 0%, 50%)' ";
+				break;
+			case 'depreciating asset' :
+				$str .= " , color: 'hsl(50, 100%, 50%)' ";
+				break;
 		}
-	});
+		$str .= " }, ";
+		echo $str;
+	}
+?>
+		]
+	}]
+});
+chart.render();
 </script>
 <script>
 	var activeDays = "<?php echo $days_active ?>";

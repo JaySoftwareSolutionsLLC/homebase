@@ -17,8 +17,9 @@ define("AVG_DAILY_INCOME_TARGET", number_format((ANNUAL_INCOME_TARGET / 365), 2)
 define("AVG_DAILY_EXPENDITURE_TARGET", number_format((ANNUAL_EXPENDITURE_TARGET / 365), 2));
 
 // DEPRECATED...should not break anything const HOURLY_WAGE_SEAL = 				21.63;
-const HOURLY_WAGES_SEAL = 				array(25); // Array value must correspond with HOURLY_WAGES_DATESTRINGS_SEAL date. Referenced in reports/weekly-report/index.php
-const HOURLY_WAGES_DATESTRINGS_SEAL =	array('2018-12-03'); // Array date must correspond with HOURLY_WAGES_SEAL value. Referenced in reports/weekly-report/index.php
+const HOURLY_WAGES_SEAL = 				array(25, 25.96); // Array value must correspond with HOURLY_WAGES_DATESTRINGS_SEAL date. Referenced in reports/weekly-report/index.php
+const HOURLY_WAGES_DATESTRINGS_SEAL =	array('2018-12-03', '2019-02-25'); // Array date must correspond with HOURLY_WAGES_SEAL value. Referenced in reports/weekly-report/index.php
+const CASHABLE_PTO_HOURS =              44; // Dont like this setup currently, because as PTO is used and as extra PTO is received I will have to derive and update this. Note: This will drop to zero in May 2019 because all cashable hours will have been cashed out
 
 const HOURLY_WAGE_RICKS = 				7.50; // Looks like this doesnt change until 2020 when it will jump to 7.80
 const HOURLY_WAGE_TARGET =				28.75;
@@ -39,7 +40,7 @@ const ESTIMATED_AFTER_TAX_PERCENTAGE =	73; // Based off of Effective Tax Rate fr
 // DEPRECATED FOR 2019...will (likely) break index.php const JUNE_1ST_NET_WORTH = 				10000;
 const START_OF_YEAR_NET_WORTH =			36519;
 const END_OF_YEAR_NET_WORTH_TARGET =	75000; // Based off 36.5k NW @ end of 2018 + 40k contribution
-const ANNUAL_NET_WORTH_CONTRIBUTION =   END_OF_YEAR_NET_WORTH_TARGET - START_OF_YEAR_NET_WORTH;
+const ANNUAL_NET_WORTH_CONTRIBUTION_TARGET =   END_OF_YEAR_NET_WORTH_TARGET - START_OF_YEAR_NET_WORTH;
 // DEPRECATED FOR 2019...will (likely) break index.php const JUNE_1ST_DEBT =					17000;
 
 //--- Fitness Constants ---

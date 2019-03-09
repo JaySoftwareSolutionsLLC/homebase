@@ -60,6 +60,57 @@
 	}
 
 	// Retrieve Account Information
+	$accounts = array(); // Array to house account objects
+	if ($year == '2018') {
+		$qry = " SELECT f_a.*, ( 	SELECT value
+									FROM finance_account_log AS f_a_l
+									WHERE 	f_a.id = f_a_l.account_id
+										AND f_a_l.date <= '2019-01-03'
+									ORDER BY f_a_l.date DESC, f_a_l.id DESC
+									LIMIT 1) AS 'most recent value'
+				FROM finance_accounts AS f_a
+				WHERE f_a.closed_on >= '2019-01-03'
+					OR f_a.closed_on IS NULL
+				GROUP BY f_a.id, f_a.name, f_a.type, f_a.expected_annual_return ";
+	}
+	else {
+		$qry = " SELECT f_a.*, ( 	SELECT value
+									FROM finance_account_log AS f_a_l
+									WHERE f_a.id = f_a_l.account_id
+									ORDER BY f_a_l.date DESC, f_a_l.id DESC
+									LIMIT 1) AS 'most recent value'
+				FROM finance_accounts AS f_a
+				WHERE f_a.closed_on IS NULL
+				GROUP BY f_a.id, f_a.name, f_a.type, f_a.expected_annual_return ";
+	}
+	$res = $conn->query($qry);
+	if ($res->num_rows > 0) {
+		while($row = $res->fetch_assoc()) {
+			$account = new stdClass();
+			$account_id = $row['id'];
+			$account->name = $row['name'];
+			$account->type = $row['type'];
+			$account->exp_roi = $row['expected_annual_return'];
+			$account->mrv = $row['most recent value'];
+			//var_dump($account);
+			//echo "<br/><br/>";
+			$accounts[] = $account;
+		}
+	}
+	$account_types = array();
+	foreach ($accounts as $a) {
+		if ( empty( $account_types["$a->type"] ) ) {
+			$account_types["$a->type"] = intval($a->mrv);
+			//echo $a->mrv;
+		}
+		else {
+			$account_types["$a->type"] += intval($a->mrv);
+			//echo $a->mrv;
+		}
+	}
+	//echo "<br/><br/><br/><br/><br/>";
+	//var_dump($account_types);
+	/*
 	$all_account_names = array();
 	$oldest_date = "2550-01-01";
 	$current_cash = 0;
@@ -78,7 +129,9 @@
 			$all_account_names[$row['name']] = $row['date'];
 		}
 	}
-
+	*/
+	
+	/*
 	foreach ($all_account_names as $name => $date) {
 		$qry = "SELECT name, date, value, type FROM finance_accounts WHERE name = '$name' AND date = '$date';";
 		$res = $conn->query($qry);
@@ -101,6 +154,7 @@
 			$oldest_date = $acnt_date;
 		}
 	}
+	*/
 
 	// Determine total expenses since start date
 	$q = "SELECT SUM(amount) FROM finance_expenses WHERE date >= '$start_date_financial' AND date <= '$end_date_financial'";
@@ -148,7 +202,7 @@
 		$annual_check_adjustment = -3 * 8 * 21.63; // 3 days in my first check were from May work days. This program only checks June 1st on so those days should not count towards total
 	}
 	else {
-		$annual_check_adjustment = (-1 * 11 * 8 * 25) + (-62.5);
+		$annual_check_adjustment = (-1 * 11 * 8 * 25) + (-62.5); // 11 days in 2019 checks were from hours worked in 2018 plus a $62.50 healthcare waive bonus 
 	}
 	$q = "SELECT MAX(end_payperiod) FROM finance_seal_income WHERE date >= '$start_date_financial' AND date <= '$end_date_financial' AND type = 'check'";
 	$res = $conn->query($q);
@@ -194,13 +248,15 @@
 	$row = mysqli_fetch_row($res);
 	$software_dev_hours = $row[0];
 
-	$unreceived_after_tax_seal_income = (ESTIMATED_AFTER_TAX_PERCENTAGE * $unreceived_seal_income / 100);
+	$unreceived_after_tax_seal_income = round( (ESTIMATED_AFTER_TAX_PERCENTAGE * $unreceived_seal_income / 100) , 2);
+
+	$account_types['unreceived ATI'] = $unreceived_after_tax_seal_income;
 
 	// NET INCOME : Hourlywage at ricks multiplied by ricks hours + net tips from ricks + net recorded income from seal and design + unreceived (but earned) income from seal and design
 	$net_income = (HOURLY_WAGE_RICKS * ( $net_ricks_hours - $net_ricks_otb_hours ) ) + $net_ricks_tips + $net_seal_income + $unreceived_seal_income + $annual_check_adjustment;
 	// (46.2) + 106 + 2062.5 + 1000 - 2200
 
-	//echo "$net_income | $net_ricks_hours | $net_ricks_otb_hours | $net_ricks_tips | $net_seal_income | $unreceived_seal_income | $annual_check_adjustment ";
+	// echo "$net_income | $net_ricks_hours | $net_ricks_otb_hours | $net_ricks_tips | $net_seal_income | $unreceived_seal_income | $annual_check_adjustment ";
 
 	if ($year == '2018') {
 		$unpaid_vacation_adjustment = 7; // Factored in for week long trip to South Carolina (unpaid by S&D)
@@ -213,7 +269,11 @@
 	$awh = number_format(7 * $net_hours / ($days_active_financial - $unpaid_vacation_adjustment), 2); // the 7 is subtracted from days_active_financial to make AWH reflect NON-UNPAID VACATION DAYS b/c in future all vacations should be paid (at least from S&D)
 	$ahw = number_format(7 * $adi / $awh, 2);
 
-	$current_net_worth = $current_assets + $current_cash - $current_liabilities;
+	$current_net_worth = 0;
+	foreach ($account_types as $name=>$val) {
+		$current_net_worth += $val;
+	}
+	//$current_net_worth = $current_assets + $current_cash - $current_liabilities;
 
 	$estimated_2018_income = number_format(PRE_JUNE_RICKS_INCOME + ($adi  * ($days_left_in_year_financial + $days_active_financial)), 0);
 
@@ -221,7 +281,55 @@
 
 	$estimated_EOY_net_worth = number_format($current_net_worth + ($unreceived_seal_income * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) + ((($adi * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) - $ade) * ($days_left_in_year_financial)), 0);
 
-	$current_est_net_worth = $unreceived_after_tax_seal_income + $current_assets + $current_cash - $current_liabilities;
+	$avg_monday_pm_net_income = 0;
+	$avg_thursday_pm_net_income = 0;
+	$avg_saturday_pm_net_income = 0;
+	$qry = "	SELECT 	
+					DAYNAME(date) AS 'dow',
+					ROUND( 
+						AVG(
+							CASE
+								WHEN type IN ('AM', 'PM') THEN (tips + (hours * 7.5))
+								WHEN type IN ('OTB') THEN (tips)
+								ELSE 0
+							END
+						) , 2
+					) AS 'AVG income',
+					ROUND( AVG(hours) , 2 ) AS 'AVG hours'
+				FROM `finance_ricks_shifts` 
+				WHERE   type = 'PM'
+				AND (
+					MONTH(date) > MONTH(CURRENT_DATE)
+					OR 
+					(MONTH(date) = MONTH(CURRENT_DATE)
+					AND DAY(date) >= DAY(CURRENT_DATE) ) 
+					)
+				GROUP BY DAYNAME(date) ";
+	$res = $conn->query($qry);
+	if ($res->num_rows > 0) {
+		while($row = $res->fetch_assoc()) {
+			switch ($row['dow']) {
+				case 'Monday':
+					$avg_monday_pm_net_income = $row['AVG income'];
+					break;
+				case 'Thursday':
+					$avg_thursday_pm_net_income = $row['AVG income'];
+					break;
+				case 'Saturday':
+					$avg_saturday_pm_net_income = $row['AVG income'];
+					break;
+				default:
+					break;
+			}
+		}
+	}
+	$avg_full_week_ricks_income = $avg_monday_pm_net_income + $avg_thursday_pm_net_income + $avg_saturday_pm_net_income;
+
+	$avg_full_week_seal_income = 40 * $correct_hourly;
+	$weeks_left_in_year = $days_left_in_year / 7;
+
+	$opportunity_surplus = number_format(((($net_income + ( CASHABLE_PTO_HOURS * $correct_hourly) + (($avg_full_week_ricks_income + $avg_full_week_seal_income) * $weeks_left_in_year)) * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) - (365 * $ade)) - ANNUAL_NET_WORTH_CONTRIBUTION_TARGET , 0 );
+	// echo ("Opportunity Cost Surplus: $opportunity_surplus | $net_income | $avg_full_week_ricks_income | $avg_full_week_seal_income | $weeks_left_in_year <br/><br/><br/>");
 
 	//---FITNESS--------------------------------------------------------------------
 
@@ -485,6 +593,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="resources/css/reset.css">
     <link rel="stylesheet" type="text/css" href="resources/css/main-new.css">
+    <link rel="stylesheet" type="text/css" href="resources/css/modal.css">
     <link rel="stylesheet" type="text/css" href="resources/css/notifications.css">
     <link rel="stylesheet" type="text/css" href="resources/css/goals.css">
     <link rel="stylesheet" type="text/css" href="resources/css/fitness-new.css">

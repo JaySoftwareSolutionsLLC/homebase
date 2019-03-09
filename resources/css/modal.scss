@@ -1,0 +1,31 @@
+div#modal {
+    opacity:                                                                        0.8;
+    display:                                                                        none; 
+    position:                                                                       fixed; 
+    top:                                                                            50%; 
+    left:                                                                           50%;
+    height:                                                                         12.5rem;
+    width:                                                                          25rem;
+    margin-left:                                                                    -12.5rem;
+    margin-top:                                                                     -6.25rem;
+    border:                                                                         0.25rem solid hsl(190, 100%, 50%);
+    border-radius:                                                                  5rem 1rem;
+    flex-flow:                                                                      column nowrap; 
+    align-items:                                                                    space-between; 
+    z-index:                                                                        99999; 
+    background:                                                                     black; 
+    color:                                                                          white; 
+    padding:                                                                        2rem;
+    &:hover {
+        opacity:                                                                    1;
+    }
+    h2 {
+        font-size:                                                                  1.5rem;
+        text-decoration:                                                            underline;
+    }
+    h3 {
+        display:                                                                    inline-flex;
+        justify-content:                                                            space-between;
+        font-family:                                                                monospace;
+    }
+}

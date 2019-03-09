@@ -1,18 +1,37 @@
 <?php
+	$notifications = array(); // Array to house notification objects
+	$notifications[] = return_metric_based_notification_object($account_types['liquid cash'], 'Current Cash', 5400, 10800, 2700, 14000, "Cash on hand low", "Cash on hand very low", "Cash on hand high", "Cash on hand very high" );
+	foreach ($muscle_objects as $mo) {
+		if ($mo->name == 'triceps') {
+			$tricep_mo = $mo;
+		}
+		else if ($mo->name == 'biceps') {
+			$bicep_mo = $mo;
+		}
+	}
+	$notifications[] = 
+	return_metric_based_notification_object($tricep_mo->hur, 'Tricep HUR', 0, 999, -24, 999, 'Tricep lift overdue', 'Tricep lift far overdue', '', '');
+	$notifications[] = 
+	return_metric_based_notification_object($bicep_mo->hur, 'Bicep HUR', 0, 999, -24, 999, 'Bicep lift overdue', 'Bicep lift far overdue', '', '');
 
 ?>
 <section class="column notifications">
 <h2>Notifications</h2>
 	<ul>
 <?php 
-if ($number_below_par_2018_goals != 0) {
-	echo "<li class='warning'><i class='fas fa-skull-crossbones'></i> &nbsp; $number_below_par_2018_goals annual goals are not on track!</li>";
+foreach ($notifications as $n) {
+	switch ($n->type) {
+		case 'success' :
+			break;
+		case 'caution' :
+			echo "<li><i style='color: hsl(50, 100%, 50%);' class='fas fa-exclamation-triangle'></i>&emsp;$n->message</li>";
+			break;
+		case 'warning' :
+			echo "<li><i style='color: hsl(0, 100%, 50%);' class='fas fa-skull-crossbones'></i>&emsp;$n->message</li>";
+			break;
+	}
 }
 ?>
-		<!--
-		<li class='warning'><i class="fas fa-skull-crossbones"></i>A check is missing a start/end date</li>
-		<li class='caution'><i class="fas fa-exclamation-triangle"></i>You did not hit all of your running targets last week</li>
-		<li class='success'><i class="fas fa-thumbs-up"></i>You successfully met all lifting targets last week</li> -->
 	</ul>
 	
 	<div class="row">

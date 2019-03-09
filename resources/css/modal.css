@@ -1,0 +1,44 @@
+div#modal {
+  opacity: 0.8;
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  height: 12.5rem;
+  width: 25rem;
+  margin-left: -12.5rem;
+  margin-top: -6.25rem;
+  border: 0.25rem solid #00d5ff;
+  border-radius: 5rem 1rem;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: column nowrap;
+          flex-flow: column nowrap;
+  -webkit-box-align: space-between;
+      -ms-flex-align: space-between;
+          align-items: space-between;
+  z-index: 99999;
+  background: black;
+  color: white;
+  padding: 2rem;
+}
+
+div#modal:hover {
+  opacity: 1;
+}
+
+div#modal h2 {
+  font-size: 1.5rem;
+  text-decoration: underline;
+}
+
+div#modal h3 {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  font-family: monospace;
+}
+/*# sourceMappingURL=modal.css.map */

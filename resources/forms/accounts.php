@@ -9,8 +9,8 @@ $today = date('Y-m-d');
 $entry_msg = "Welcome to the accounts page.";
 
 // If variables have been posted insert into db
-if(isset($_POST['date']) && isset($_POST['name']) && isset($_POST['value']) && isset($_POST['type'])) {
-	$qry = "INSERT INTO finance_accounts (date, name, value, type) VALUES ('" . $_POST['date'] . "','" . $_POST['name'] . "'," . $_POST['value'] . ",'" . $_POST['type'] . "');";
+if(isset($_POST['date']) && isset($_POST['name']) && isset($_POST['value'])) {
+	$qry = "INSERT INTO finance_account_log (date, account_id, value) VALUES ('" . $_POST['date'] . "','" . $_POST['name'] . "'," . $_POST['value'] . ");";
 
 	if ($conn->query($qry) === TRUE) {
     	$entry_msg = "New record created successfully";
@@ -19,48 +19,41 @@ if(isset($_POST['date']) && isset($_POST['name']) && isset($_POST['value']) && i
 	}
 }
 
-$all_account_names = array();
-$oldest_date = "2050-01-01";
-$current_cash = 0;
-$current_assets = 0;
-$current_liabilities = 0;
-
-$qry = "SELECT name, MAX(date) AS date FROM finance_accounts GROUP BY name;";
+$data_log = '';
+$accounts = array();
+$qry = " SELECT f_a.*, ( 	SELECT value
+							FROM finance_account_log AS f_a_l
+							WHERE f_a.id = f_a_l.account_id
+							ORDER BY f_a_l.date DESC, f_a_l.id DESC
+							LIMIT 1) AS 'most recent value', 
+							( 	SELECT date
+							FROM finance_account_log AS f_a_l
+							WHERE f_a.id = f_a_l.account_id
+							ORDER BY f_a_l.date DESC, f_a_l.id DESC
+							LIMIT 1) AS 'most recent date' 
+		FROM finance_accounts AS f_a
+		WHERE f_a.closed_on IS NULL
+		GROUP BY f_a.id, f_a.name, f_a.type, f_a.expected_annual_return ";
 $res = $conn->query($qry);
 if ($res->num_rows > 0) {
 	while($row = $res->fetch_assoc()) {
-		$all_account_names[$row['name']] = $row['date'];
-	}
-}
+		$account = new stdClass();
+		$account->id = $row['id'];
+		$account->name = $row['name'];
+		$account->type = $row['type'];
+		$account->expected_annual_return = $row['expected_annual_return'];
+		$account->mrdate = $row['most recent date'];
+		$account->mrval = $row['most recent value'];
 
-$data_log = '';
-foreach ($all_account_names as $name => $date) {
-	$qry = "SELECT name, date, value, type FROM finance_accounts WHERE name = '$name' AND date = '$date';";
-	$res = $conn->query($qry);
-	$row = $res->fetch_assoc();
-	$acnt_type = $row['type'];
-	$acnt_date = $row['date'];
-	if ($acnt_type == 'cash') {
-		$current_cash += $row['value'];
+		$data_log .= "<tr>
+						<td>" . $account->name . "</td>
+						<td>" . $account->mrdate. "</td>
+						<td class='" . $acnt_type . "'>" . $account->mrval . "</td>
+						<td>" . $account->type . "</td>
+						<td>" . $account->expected_annual_return . "</td>
+					</tr>";
+		$accounts[] = $account;
 	}
-	else if ($acnt_type == 'asset') {
-		$current_assets += $row['value'];
-	}
-	else if ($acnt_type == 'liability') {
-		$current_liabilities += $row['value'];
-	}
-	else {
-		echo "ERROR IN DETERMINING ACCOUNT VALUES";
-	}
-	if ($acnt_date < $oldest_date) {
-		$oldest_date = $acnt_date;
-	}
-	$data_log .= "<tr>
-						<td>" . $row['name'] . "</td>
-						<td>" . $row['date'] . "</td>
-						<td class='" . $acnt_type . "'>" . $row['value'] . "</td>
-						<td>" . $row['type'] . "</td>
-						</tr>";
 }
 
 $conn->close();
@@ -79,18 +72,18 @@ $conn->close();
 		<h2 class='msg'><?php echo $entry_msg ?></h2>
 		
 		<form method='post'>
-			<label for='name'>Name</label>
-			<input id='name' type='text' name='name' placeholder='BoA savings' autocomplete/>
+			<label for='name'>Account</label>
+			<select name='name' id='name'>
+<?php
+	foreach ($accounts as $a) {
+		echo "<option value='$a->id'>$a->name</option>";
+	}
+?>
+			</select>
 			<label for='date'>Date</label>
 			<input id='date' type='date' name='date' value="<?php echo $today;?>"/>
 			<label for='value'>Value</label>
 			<input id='value' type='number' name='value' min='0' step='1'/>
-			<label for='type'>Type</label>
-			<select id='type' name='type'>
-				<option value='cash'>Cash</option>
-				<option value='asset'>Asset</option>
-				<option value='liability'>Liability</option>
-			</select>
 			<button type="submit">Submit</button>
 		</form>
 		
@@ -103,6 +96,7 @@ $conn->close();
 				<th>Date</th>
 				<th>Value</th>
 				<th>Type</th>
+				<th>Exp. ROI</th>
 			</tr>
 			<?php echo $data_log; ?>
 		</table>
