@@ -63,7 +63,7 @@
 	}
 	else if ($year == '2019') {
 		
-		echo return_timed_goal_progress_bar_html('Net Worth', 'goal-net-worth', START_OF_YEAR_NET_WORTH, END_OF_YEAR_NET_WORTH_TARGET, $current_net_worth, '2019-01-01', '2019-12-31'); // Defined in homebase/resources/resources.php
+		echo return_timed_goal_progress_bar_html('NW Cont.', 'goal-net-worth-cont', 0, ANNUAL_NET_WORTH_CONTRIBUTION_TARGET, $current_est_nw_contribution, '2019-01-01', '2019-12-31'); // Defined in homebase/resources/resources.php
 		
 		echo return_timed_goal_progress_bar_html('Body Weight', 'goal-body-weight', STARTING_BODY_WEIGHT, BODY_WEIGHT_TARGET, $most_recent_body_weight, START_DATE_STRING_BODY_WEIGHT, '2019-12-31', 'now', 'polynomial', null); // Defined in homebase/resources/resources.php
 		

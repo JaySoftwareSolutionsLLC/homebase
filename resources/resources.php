@@ -79,7 +79,6 @@ function return_timed_goal_progress_bar_html( $goal_str, $goal_id_str, $starting
 	$goal_description = $goal_description ?? $default_goal_description;
 	$str = "<div class='goal' id='$goal_id_str'>
 				<span class='goal-info' style=''>
-					<div class='spacer' style='width: 1.5rem;'></div>
 					<h3 style=''>$goal_str</h3>
 					<i class='fas fa-info' data-goal-description='$goal_description'></i>
 				</span>

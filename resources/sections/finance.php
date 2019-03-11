@@ -1,5 +1,5 @@
 <?php
-	if ( $opportunity_surplus > 2000 ) { // If opportunity surplus is greater than $2,000 then set color to green
+	if ( $opportunity_surplus > 2500 ) { // If opportunity surplus is greater than $2,000 then set color to green
 		$opportunity_surplus_font_color = 'hsl(120, 100%, 50%)'; 
 	}
 	else if ( $opportunity_surplus > 0 ) { // If opportunity surplus is positive then set color to white
@@ -14,14 +14,18 @@
 	<div class="content">
 		<div class="stat net-worth">
 			<h3>Current Net Worth</h3>
-			<h4>$<?php echo $current_net_worth; ?></h4>
+			<h4>$<?php echo number_format($current_net_worth); ?></h4>
+<?php 	if ($year == '2018') { ?>
 			<h5><?php echo $oldest_date; ?></h5>
+<?php	} ?>
 		</div>
+<?php 	if ($year == '2018') { ?>
 		<div class="stat unreceived-seal-income">
 			<h3>Unreceived Seal Income</h3>
-			<h4>$<?php echo $unreceived_seal_income; ?></h4>
-			<h5>(Est Take Home: $<?php echo $unreceived_after_tax_seal_income; ?>)</h5>
+			<h4>$<?php echo number_format($unreceived_seal_income, 2); ?></h4>
+			<h5>(Est Take Home: $<?php echo number_format($unreceived_after_tax_seal_income, 2); ?>)</h5>
 		</div>
+<?php	} ?>
 		<div class="row">
 			<div class="small stat adi">
 				<h3>ADI</h3>
@@ -49,16 +53,24 @@
 <?php if ($year != '2018') { ?>
 		<div class="stat opportunity-surplus">
 			<h3>Opportunity Surplus</h3>
-			<h4 style='color: <?php echo $opportunity_surplus_font_color ?>;'>$<?php echo $opportunity_surplus; ?></h4>
+			<h4 style='color: <?php echo $opportunity_surplus_font_color ?>;'>$<?php echo number_format($opportunity_surplus); ?></h4>
+		</div>
+		<div class="stat theoretical-net-worth">
+			<h3>Theoretical EOY Net Worth</h3>
+			<h4>$<?php echo number_format($theoretical_EOY_net_worth); ?></h4>
+		</div>
+		<div class="stat theoretical-income">
+			<h3>Theoretical Income</h3>
+			<h4>$<?php echo number_format($theoretical_income_this_year); ?></h4>
 		</div>
 <?php } ?>
+<?php 
+	if ($year == '2018') {
+		?>
 		<div class="stat income-projection-2018">
 			<h3><?php echo $year; ?> Income Projection</h3>
 			<h4>$<?php echo $estimated_2018_income; ?></h4>
 		</div>
-<?php 
-	if ($year == '2018') {
-?>
 		<div class="stat income-projection-2019">
 			<h3>2019 Income Projection</h3>
 			<h4>$<?php echo $estimated_2019_income; ?></h4>
@@ -66,16 +78,10 @@
 <?php
 	}
 ?>
-		<div class="stat proj-net-worth">
-			<h3>Projected EOY Net Worth</h3>
-			<h4>$<?php echo $estimated_EOY_net_worth; ?></h4>
-		</div>
 		<div class="stat graphic account-allocation">
 			<h3>Accounts Allocation</h3>
 			<div id='account-allocation-graph' style='height: 10rem; width: 15rem;'></div>
 		</div>
-		
-		
 		<div class="row">
 			<a href='resources/forms/expense.php' class="form expense" target='_blank'>
 				<img src='resources/assets/images/expense.png'/>
@@ -121,22 +127,22 @@ var chart = new CanvasJS.Chart("account-allocation-graph", {
 		$str = "{ y: $val, name: '$name' ";
 		switch ( $name ) {
 			case 'liability' :
-				$str .= " , color: 'hsl(0, 100%, 50%)' ";
+				$str .= " , color: 'hsl(0, 100%, 50%)', /*exploded: true,*/ ";
 				break;
 			case 'liquid cash' :
-				$str .= " , color: 'hsl(210, 100%, 50%)' ";
+				$str .= " , color: 'hsl(120, 100%, 50%)', /*exploded: true,*/ ";
 				break;
 			case 'retirement account' :
-				$str .= " , color: 'hsl(120, 100%, 50%)' ";
+				$str .= " , color: 'hsl(190, 100%, 50%)', /*exploded: true,*/ ";
 				break;
 			case 'taxable account' :
-				$str .= " , color: 'hsl(150, 100%, 50%)' ";
+				$str .= " , color: 'hsl(160, 100%, 50%)', /*exploded: true,*/ ";
 				break;
 			case 'unreceived ATI' :
-				$str .= " , color: 'hsl(210, 0%, 50%)' ";
+				$str .= " , color: 'hsl(90, 100%, 100%)', /*exploded: true,*/ ";
 				break;
 			case 'depreciating asset' :
-				$str .= " , color: 'hsl(50, 100%, 50%)' ";
+				$str .= " , color: 'hsl(40, 100%, 50%)', /*exploded: true,*/ ";
 				break;
 		}
 		$str .= " }, ";

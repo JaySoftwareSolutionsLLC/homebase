@@ -10,6 +10,7 @@ const SEC_IN_DAY = 						(60 * 60 * 24);
 //--- Financial Constants ---
 const START_DATE_STRING_FINANCIAL = 	'January 1st 2019';
 
+const ANNUAL_NET_WORTH_CONTRIBUTION_TARGET = 40000;
 const ANNUAL_INCOME_TARGET = 			82250;	// If hit, annual After Tax Income ~$60,000
 const ANNUAL_EXPENDITURE_TARGET =		20000;	// If hit and Income Target hit...net worth contribution ~$40,000
 
@@ -38,9 +39,9 @@ const MONTHLY_HOURS_TARGET = 			WEEKLY_HOURS_TARGET * 52 / 12;
 const ESTIMATED_AFTER_TAX_PERCENTAGE =	73; // Based off of Effective Tax Rate from smartasset.com
 
 // DEPRECATED FOR 2019...will (likely) break index.php const JUNE_1ST_NET_WORTH = 				10000;
-const START_OF_YEAR_NET_WORTH =			36519;
-const END_OF_YEAR_NET_WORTH_TARGET =	75000; // Based off 36.5k NW @ end of 2018 + 40k contribution
-const ANNUAL_NET_WORTH_CONTRIBUTION_TARGET =   END_OF_YEAR_NET_WORTH_TARGET - START_OF_YEAR_NET_WORTH;
+const START_OF_YEAR_NET_WORTH =			39880;
+const END_OF_YEAR_NET_WORTH_TARGET =	81000; // Based off 39.9k NW @ end of 2018 + 40k contribution + 7% ROI on investments
+// DEPRECATED 03.09.2019 due to market influence const ANNUAL_NET_WORTH_CONTRIBUTION_TARGET =   END_OF_YEAR_NET_WORTH_TARGET - START_OF_YEAR_NET_WORTH;
 // DEPRECATED FOR 2019...will (likely) break index.php const JUNE_1ST_DEBT =					17000;
 
 //--- Fitness Constants ---

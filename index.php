@@ -108,53 +108,6 @@
 			//echo $a->mrv;
 		}
 	}
-	//echo "<br/><br/><br/><br/><br/>";
-	//var_dump($account_types);
-	/*
-	$all_account_names = array();
-	$oldest_date = "2550-01-01";
-	$current_cash = 0;
-	$current_assets = 0;
-	$current_liabilities = 0;
-
-	if ($year == '2018') {
-		$qry = "SELECT name, MAX(date) AS date FROM finance_accounts WHERE date <= '2019-01-03' GROUP BY name;";
-	}
-	else {
-		$qry = "SELECT name, MAX(date) AS date FROM finance_accounts GROUP BY name;";
-	}
-	$res = $conn->query($qry);
-	if ($res->num_rows > 0) {
-		while($row = $res->fetch_assoc()) {
-			$all_account_names[$row['name']] = $row['date'];
-		}
-	}
-	*/
-	
-	/*
-	foreach ($all_account_names as $name => $date) {
-		$qry = "SELECT name, date, value, type FROM finance_accounts WHERE name = '$name' AND date = '$date';";
-		$res = $conn->query($qry);
-		$row = $res->fetch_assoc();
-		$acnt_type = $row['type'];
-		$acnt_date = $row['date'];
-		if ($acnt_type == 'cash') {
-			$current_cash += $row['value'];
-		}
-		else if ($acnt_type == 'asset') {
-			$current_assets += $row['value'];
-		}
-		else if ($acnt_type == 'liability') {
-			$current_liabilities += $row['value'];
-		}
-		else {
-			echo "ERROR IN DETERMINING ACCOUNT VALUES";
-		}
-		if ($acnt_date < $oldest_date) {
-			$oldest_date = $acnt_date;
-		}
-	}
-	*/
 
 	// Determine total expenses since start date
 	$q = "SELECT SUM(amount) FROM finance_expenses WHERE date >= '$start_date_financial' AND date <= '$end_date_financial'";
@@ -279,8 +232,6 @@
 
 	$estimated_2019_income = number_format(($adi * 365), 0);
 
-	$estimated_EOY_net_worth = number_format($current_net_worth + ($unreceived_seal_income * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) + ((($adi * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) - $ade) * ($days_left_in_year_financial)), 0);
-
 	$avg_monday_pm_net_income = 0;
 	$avg_thursday_pm_net_income = 0;
 	$avg_saturday_pm_net_income = 0;
@@ -327,8 +278,39 @@
 
 	$avg_full_week_seal_income = 40 * $correct_hourly;
 	$weeks_left_in_year = $days_left_in_year / 7;
+	// Calculate estimated EOY Net Worth
+	$appreciated_EOY_accounts_total = 0;
+	foreach ($accounts as $a) { // For each account value, calculate its expected EOY value due to de/appreciation
+		if ( empty( $a->exp_roi ) ) { // If it will not de/appreciate then just add current value
+			$appreciated_EOY_accounts_total += $a->mrv;
+			continue;
+		}
+		else { // If it will de/appreciate then add the projected EOY value
+			$p = $a->mrv;
+			$end_of_2019_val = round( ( $p * pow( ( 1 + ( $a->exp_roi / 100 ) ), ($days_left_in_year / 365) ) ) , 0 );
+			$appreciated_EOY_accounts_total += $end_of_2019_val;
+			continue;
+		}
+	}
+	$appreciated_EOY_accounts_total += $account_types['unreceived ATI']; // Add unreceived ATI because this is not housed in accounts array
 
-	$opportunity_surplus = number_format(((($net_income + ( CASHABLE_PTO_HOURS * $correct_hourly) + (($avg_full_week_ricks_income + $avg_full_week_seal_income) * $weeks_left_in_year)) * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) - (365 * $ade)) - ANNUAL_NET_WORTH_CONTRIBUTION_TARGET , 0 );
+	$theoretical_future_pretax_income = ( CASHABLE_PTO_HOURS * $correct_hourly) + (($avg_full_week_ricks_income + $avg_full_week_seal_income) * $weeks_left_in_year);
+	//echo "$theoretical_future_pretax_income<br/><br/>";
+	$theoretical_EOY_net_worth = $appreciated_EOY_accounts_total + round((($theoretical_future_pretax_income) * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) - (AVG_DAILY_EXPENDITURE_TARGET * $days_left_in_year) , 0 ); // In addition to projected account values
+	$theoretical_income_this_year = $net_income + $theoretical_future_pretax_income;
+	//echo "$theoretical_income_this_year<br/><br/>";
+	/*
+	echo "$appreciated_EOY_accounts_total<br/><br/>";
+	echo "$theoretical_EOY_net_worth <br/><br/>";
+	echo "$appreciated_EOY_accounts_total + round(((( CASHABLE_PTO_HOURS * $correct_hourly) + (($avg_full_week_ricks_income + $avg_full_week_seal_income) * $weeks_left_in_year)) * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) - (AVG_DAILY_EXPENDITURE_TARGET * $days_left_in_year) , 0 );";
+	*/
+	// DEPRECATED: Doesn't account for seasonality well enough $estimated_EOY_net_worth += ( ( ( $adi * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100) ) - $ade ) * $days_left_in_year_financial );
+
+	$theoretical_net_worth_contribution = round((($net_income + ( CASHABLE_PTO_HOURS * $correct_hourly) + (($avg_full_week_ricks_income + $avg_full_week_seal_income) * $weeks_left_in_year)) * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) - ($net_expenditure + (AVG_DAILY_EXPENDITURE_TARGET * $days_left_in_year)) , 0 ); // Theoretical NW Cont. if I grind out 3 days/week @ Ricks and don't take any PTO @ S&D
+	//echo $theoretical_net_worth_contribution;
+	$opportunity_surplus = round($theoretical_net_worth_contribution - ANNUAL_NET_WORTH_CONTRIBUTION_TARGET , 0 );
+	
+	$current_est_nw_contribution = ( $net_income * ( ESTIMATED_AFTER_TAX_PERCENTAGE / 100 ) ) - ( $net_expenditure );
 	// echo ("Opportunity Cost Surplus: $opportunity_surplus | $net_income | $avg_full_week_ricks_income | $avg_full_week_seal_income | $weeks_left_in_year <br/><br/><br/>");
 
 	//---FITNESS--------------------------------------------------------------------
