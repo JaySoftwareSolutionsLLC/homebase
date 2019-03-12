@@ -1,6 +1,6 @@
 <?php
 	$notifications = array(); // Array to house notification objects
-	$notifications[] = return_metric_based_notification_object($account_types['liquid cash'], 'Current Cash', 5400, 10800, 2700, 14000, "Cash on hand low", "Cash on hand very low", "Cash on hand high", "Cash on hand very high" );
+	$notifications[] = return_metric_based_notification_object($account_types['liquid cash'], 'Current Cash', 5400, 10800, 2700, 14000, "Liquid cash low", "Liquid cash very low", "Liquid cash high", "Liquid cash very high" );
 	foreach ($muscle_objects as $mo) {
 		if ($mo->name == 'triceps') {
 			$tricep_mo = $mo;
@@ -10,9 +10,9 @@
 		}
 	}
 	$notifications[] = 
-	return_metric_based_notification_object($tricep_mo->hur, 'Tricep HUR', 0, 999, -24, 999, 'Tricep lift overdue', 'Tricep lift far overdue', '', '');
+	return_metric_based_notification_object($tricep_mo->hur, 'Tricep HUR', 1, 999, -24, 999, 'Triceps ready', 'Tricep lift overdue', 'Triceps ready soon', '');
 	$notifications[] = 
-	return_metric_based_notification_object($bicep_mo->hur, 'Bicep HUR', 0, 999, -24, 999, 'Bicep lift overdue', 'Bicep lift far overdue', '', '');
+	return_metric_based_notification_object($bicep_mo->hur, 'Bicep HUR', 1, 999, -24, 999, 'Biceps ready', 'Bicep lift overdue', 'Biceps ready soon', '');
 
 ?>
 <section class="column notifications">

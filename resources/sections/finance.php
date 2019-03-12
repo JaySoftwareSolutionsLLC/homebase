@@ -1,4 +1,35 @@
 <?php
+	$birthdate = return_date_from_str('April 28th 1994', 'datetime');
+	$birthdate_age_sixty = clone $birthdate;
+	$birthdate_age_sixty->modify('+60 years');
+	$today_dt = return_date_from_str('today', 'datetime');
+	$interval_until_60 = date_diff($today_dt, $birthdate_age_sixty, false);
+	$days_until_60 = $interval_until_60->days;
+	$years_until_60 = round( $days_until_60 / 365.25 , 2 );
+
+	$theoretical_age_60_net_worth = 0;
+	$theoretical_age_60_annual_withdrawal_rate = 0;
+	foreach ($accounts as $a) { // For each account determine the estimated value at age 60
+		$curr_principle = $a->mrv;
+
+		$age_60_val = ( $curr_principle * pow( (1 + ($a->exp_roi / 100)) , $years_until_60 ) );
+		if ($age_60_val < 0) {
+			$age_60_val = 0;
+		}
+		$theoretical_age_60_net_worth += $age_60_val;
+		if ($a->type == 'ROTH') { // If the account is a ROTH then no taxes or capital gains need to be paid
+			$theoretical_age_60_annual_withdrawal_rate += round( $age_60_val * 0.04 , 2 ); // Assuming a 4% withdraw rate
+		}
+		elseif ($a->type == 'traditional 401k') { // If the account is a traditional 401k then taxes need to be paid
+			$theoretical_age_60_annual_withdrawal_rate += round( ($age_60_val * 0.04) * 0.7 , 2 ); // Assuming a 30% Tax Rate
+		}
+		elseif ($a->type == 'taxable account') { // If the account 
+			$percent_growth = ($age_60_val - $curr_principle) / $age_60_val;
+			$theoretical_age_60_annual_withdrawal_rate += round( ($age_60_val * 0.04) - ( ($age_60_val * 0.04) * $percent_growth * 0.15) , 2); // Assuming a 15% Capital Gains Rate
+		}
+		// TEST PASSED 2019.03.12 echo "$a->name: $age_60_val | $theoretical_age_60_net_worth | $theoretical_age_60_annual_withdrawal_rate <br/>";
+	}
+
 	if ( $opportunity_surplus > 2500 ) { // If opportunity surplus is greater than $2,000 then set color to green
 		$opportunity_surplus_font_color = 'hsl(120, 100%, 50%)'; 
 	}
@@ -62,6 +93,10 @@
 		<div class="stat theoretical-income">
 			<h3>Theoretical Income</h3>
 			<h4>$<?php echo number_format($theoretical_income_this_year); ?></h4>
+		</div>
+		<div class="stat theoretical-age-60-ADW">
+			<h3>Theoretical Retirement ADW</h3>
+			<h4>$<?php echo number_format($theoretical_age_60_annual_withdrawal_rate / 365.25 , 2); ?></h4>
 		</div>
 <?php } ?>
 <?php 
