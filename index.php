@@ -1,12 +1,12 @@
 <?php
+/* Local DB Connection will become useful if we are able to mirror databases which would allow offline work to be done efficiently...DEPRECATED until then
 //---CONNECT TO LOCAL DB------------------------------------------------------------
-/*
+
 	error_reporting(E_ERROR);
 //---INCLUDE RESOURCES--------------------------------------------------------------
 	include($_SERVER["DOCUMENT_ROOT"] . '/brettjaybrewster/homebase/resources/resources.php');
 	include($_SERVER["DOCUMENT_ROOT"] . '/brettjaybrewster/homebase/resources/constants.php');
 
-//---CONNECT TO DATABASE------------------------------------------------------------
 	$conn = connect_to_local_db();
 */
 
@@ -348,6 +348,24 @@
 	$most_recent_body_weight = $row[0];
 	//echo "$q | $most_recent_body_weight";
 
+	// Circumference Tracking
+
+	$most_recent_upper_arm_circ_measurement = 0;
+	$qry_most_recent_upper_arm_circ_measurement = " SELECT datetime
+													FROM `fitness_measurements_circumferences`
+													WHERE circumference_id = 4
+													ORDER BY datetime DESC
+													LIMIT 1 ";
+	$res_most_recent_upper_arm_circ_measurement = $conn->query($qry_most_recent_upper_arm_circ_measurement);
+	$row_most_recent_upper_arm_circ_measurement = $res_most_recent_upper_arm_circ_measurement->fetch_assoc();
+	$most_recent_upper_arm_circ_measurement = $row_most_recent_upper_arm_circ_measurement['datetime'];
+		// Turn the following 3 lines into a return_datediff function
+	$most_recent_upper_arm_circ_measurement_dt = return_date_from_str($most_recent_upper_arm_circ_measurement, 'datetime');
+	$interval_since_most_recent_upper_arm_circ_measurement = date_diff($today_datetime, $most_recent_upper_arm_circ_measurement_dt);
+	$days_since_most_recent_upper_arm_circ_measurement = $interval_since_most_recent_upper_arm_circ_measurement->days;
+
+
+
 	// Lifting
 
 	$most_recent_upper_arm_size = 0;
@@ -502,6 +520,8 @@
 		$percent_time_frame_bench_press_2018 = $percent_time_frame_body_weight_2018; // Rather than redoing the calculation, just using the same time-frame as tracking body weight
 	}
 	else if ($year == '2019') {
+
+		/*
 		// GOAL: Net Worth
 		$percent_goal_net_worth_2019 = 	number_format((((ESTIMATED_AFTER_TAX_PERCENTAGE * $unreceived_seal_income / 100) + $current_cash + $current_assets - $current_liabilities - START_OF_YEAR_NET_WORTH) / (END_OF_YEAR_NET_WORTH_TARGET - START_OF_YEAR_NET_WORTH)) * 100, 2);
 		if ($percent_goal_net_worth_2019 >= 100) {
@@ -532,6 +552,21 @@
 			$percent_goal_mile_time_2019 = 100;
 		}
 		$percent_time_frame_running_2019 = number_format((100 * $days_active_running / (((strtotime('January 1st, 2020')) - strtotime(START_DATE_STRING_RUNNING)) / SEC_IN_DAY)), 2);
+		*/
+		// Most Recent Expense Review
+		$qry_most_recent_expense_review = " SELECT date
+											FROM `personal_day_info`
+											WHERE expense_review
+											ORDER BY date DESC
+											LIMIT 1 ";
+		$res_most_recent_expense_review = $conn->query($qry_most_recent_expense_review);
+		$row_most_recent_expense_review = $res_most_recent_expense_review->fetch_assoc();
+		$most_recent_expense_review = $row_most_recent_expense_review['date'];
+			// Turn the following 3 lines into a return_datediff function
+		$most_recent_expense_review_dt = return_date_from_str($most_recent_expense_review, 'datetime');
+		$interval_since_most_recent_expense_review = date_diff($today_datetime, $most_recent_expense_review_dt);
+		$days_since_most_recent_expense_review = $interval_since_most_recent_expense_review->days;
+	
 	}
 //---CLOSE DATABASE CONNECTION------------------------------------------------------
 
@@ -601,6 +636,7 @@
 		var year = <?php echo $year; ?>;
 	</script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="resources/resources.js"></script>
     <script type="text/javascript" src="resources/js/main.js"></script>
     <script type="text/javascript" src="resources/js/speech.js"></script>
     <script type="text/javascript" src="resources/js/greeting.js"></script>

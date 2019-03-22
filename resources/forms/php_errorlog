@@ -42,3 +42,17 @@ Stack trace:
 Stack trace:
 #0 {main}
   thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/day_info.php on line 2
+[30-Jan-2019 14:22:56 CST6CDT] PHP Parse error:  syntax error, unexpected '}' in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/day_info.php on line 26
+[30-Jan-2019 18:50:33 CST6CDT] PHP Parse error:  syntax error, unexpected ';' in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/day_info.php on line 98
+[02-Feb-2019 11:27:30 America/New_York] PHP Fatal error:  Uncaught Error: Call to undefined function confirm() in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/day_info.php:39
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/day_info.php on line 39
+[02-Feb-2019 11:27:54 America/New_York] PHP Fatal error:  Uncaught Error: Call to undefined function confirm() in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/day_info.php:39
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/day_info.php on line 39
+[02-Feb-2019 10:29:51 CST6CDT] PHP Parse error:  syntax error, unexpected '}', expecting ',' or ';' in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/day_info.php on line 42
+[02-Feb-2019 10:38:27 CST6CDT] PHP Parse error:  syntax error, unexpected '}' in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/day_info.php on line 47
+[02-Feb-2019 10:50:23 CST6CDT] PHP Parse error:  syntax error, unexpected end of file in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/day_info.php on line 156
+[02-Feb-2019 10:51:18 CST6CDT] PHP Parse error:  syntax error, unexpected '}' in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/day_info.php on line 65

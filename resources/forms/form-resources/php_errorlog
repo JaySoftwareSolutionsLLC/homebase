@@ -2,3 +2,11 @@
 Stack trace:
 #0 {main}
   thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/form-resources/create_exercise.php on line 9
+[30-Jan-2019 18:13:50 CST6CDT] PHP Fatal error:  Uncaught Error: Call to a member function query() on null in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/form-resources/update_day_info_cell.php:15
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/form-resources/update_day_info_cell.php on line 15
+[30-Jan-2019 18:13:54 CST6CDT] PHP Fatal error:  Uncaught Error: Call to a member function query() on null in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/form-resources/update_day_info_cell.php:15
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/form-resources/update_day_info_cell.php on line 15

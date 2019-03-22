@@ -26,7 +26,7 @@
 		return (isset($_POST[$string]) && $_POST[$string] != '') ? true : false;
 	}
 
-	// Return an HTML Div with classes and ids to display progress towards a goal as well as percent of time frame used
+	// Return an HTML div with classes and ids to display progress towards a goal as well as percent of time frame used
 	// Tested this out with a gaining goal and a losing goal with negative and positive progress and all test cases passed
 	function return_timed_goal_progress_bar_html( $goal_str, $goal_id_str, $starting_value, $target_value, $current_value, $starting_date_str, $target_date_str, $today_date_str = 'now', $projection = 'linear', $goal_description = null ) {
 		$timed_goal = true;
@@ -90,6 +90,28 @@
 		$str .= "	</div>
 					<h5>$goal_percent_target%</h5>
 				</div>";
+		return $str;
+	}
+	// Return an HTML div with classes
+	function return_finance_stat_html($title = 'New Stat', $main_metric_value = '$69.69/hr', $sub_metric_value = '', $stat_size = '',  $stat_info = 'Really cool new stat to show something relevant to my financial situation' ) {
+		$str = "<div class='$stat_size stat ahw'>
+					<h3>$title</h3>
+					<h4>$main_metric_value</h4>
+					<h5>$sub_metric_value</h5>
+					<i class='fas fa-info' data-stat-description='$stat_info'></i>
+				</div>";
+		return $str;
+	}
+	function return_finance_stat_info_html($title, $concept = '', $formula = '', $assumptions = array(), $notes = '') {
+		$str = "<h2>$title</h2>
+		<h3><span>Concept:</span><span>$concept</span></h3>
+		<h3><span>Formula:</span><span>$formula</span></h3>";
+		$str .= "<h3><span>Assumptions:</span><span><ul>";
+		foreach ($assumptions as $a) {
+			$str .= "<li>$a</li>";
+		}
+		$str .= "</ul></span></h3>
+		<h3><span>Notes:</span><span>$notes</span></h3>";
 		return $str;
 	}
 

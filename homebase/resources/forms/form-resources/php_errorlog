@@ -1,4 +1,0 @@
-[11-Nov-2018 11:19:27 CST6CDT] PHP Fatal error:  Uncaught Error: Call to undefined function json() in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/form-resources/create_exercise.php:9
-Stack trace:
-#0 {main}
-  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/form-resources/create_exercise.php on line 9

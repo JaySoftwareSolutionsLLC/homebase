@@ -19,7 +19,7 @@ define("AVG_DAILY_EXPENDITURE_TARGET", number_format((ANNUAL_EXPENDITURE_TARGET 
 
 // DEPRECATED...should not break anything const HOURLY_WAGE_SEAL = 				21.63;
 const HOURLY_WAGES_SEAL = 				array(25, 25.96); // Array value must correspond with HOURLY_WAGES_DATESTRINGS_SEAL date. Referenced in reports/weekly-report/index.php
-const HOURLY_WAGES_DATESTRINGS_SEAL =	array('2018-12-03', '2019-02-25'); // Array date must correspond with HOURLY_WAGES_SEAL value. Referenced in reports/weekly-report/index.php
+const HOURLY_WAGES_DATESTRINGS_SEAL =	array('2018-12-03', '2019-03-11'); // Array date must correspond with HOURLY_WAGES_SEAL value. Referenced in reports/weekly-report/index.php
 const CASHABLE_PTO_HOURS =              44; // Dont like this setup currently, because as PTO is used and as extra PTO is received I will have to derive and update this. Note: This will drop to zero in May 2019 because all cashable hours will have been cashed out
 
 const HOURLY_WAGE_RICKS = 				7.50; // Looks like this doesnt change until 2020 when it will jump to 7.80

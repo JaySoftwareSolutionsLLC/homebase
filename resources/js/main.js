@@ -1,5 +1,14 @@
+// Main is used to perform functions related to entire website. Different from resources in that it is applying concepts rather than just instantiating them
+
 var getCurrentDate;
 $(document).ready(function() {
+  $('#modal').on('click', function(event) {
+    event.stopPropagation(); // Prevent modal close if click is inside of modal box
+  });
+  $('body').on('click', function() {
+		console.log('hide modal');
+		hideModal();
+	});
 	
 	
 

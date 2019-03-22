@@ -1,3 +1,5 @@
+// Resources page is used to instantiate functions which may be used by multiple different sections throughout the site
+
 function ajaxPostUpdate(phpPage, jsonPostData, troubleshooting = false) { 
             if (troubleshooting) {
                 $.post( phpPage, jsonPostData , function() {
@@ -36,4 +38,15 @@ function elegantRounding(number, precision) {
     }
     console.log(factor);
     return Math.round( number * factor ) / (factor);
+}
+function showModal(event, content) {
+    event.stopPropagation();
+    console.log('show modal');
+    $('div#modal').html(content);
+    $('div#modal-housing').css('display', 'flex');
+}
+function hideModal() {
+    console.log('hide modal');
+    $('div#modal').empty();
+    $('div#modal-housing').css('display', 'none');
 }

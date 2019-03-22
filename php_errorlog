@@ -45,3 +45,18 @@ Stack trace:
 #1 {main}
   thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/sections/goals.php on line 74
 [20-Jan-2019 12:56:07 CST6CDT] PHP Parse error:  syntax error, unexpected 'fas' (T_STRING) in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 53
+[05-Mar-2019 20:47:43 America/New_York] PHP Fatal error:  Uncaught Error: Call to undefined function push_notification_object() in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/sections/notifications.php:11
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/index.php(553): include()
+#1 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/sections/notifications.php on line 11
+[06-Mar-2019 20:09:31 America/New_York] PHP Fatal error:  Uncaught Error: Call to undefined function int() in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/index.php:103
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/index.php on line 103
+[09-Mar-2019 12:55:06 CST6CDT] PHP Parse error:  syntax error, unexpected '$estimated_EOY_net_worth' (T_VARIABLE), expecting ',' or ';' in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/index.php on line 302
+[12-Mar-2019 18:20:19 America/New_York] PHP Fatal error:  Uncaught Error: Call to undefined function rounddown() in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/sections/finance.php:8
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/index.php(596): include()
+#1 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/sections/finance.php on line 8

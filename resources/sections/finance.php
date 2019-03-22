@@ -81,22 +81,14 @@
 				<h5><?php echo HOURLY_WAGE_TARGET; ?></h5>
 			</div>
 		</div>
+		<div class="small stat theoretical-age-60-ADW">
+			<h3>Age 60 ADW</h3>
+			<h4>$<?php echo number_format($theoretical_age_60_annual_withdrawal_rate / 365.25 , 2); ?></h4>
+		</div>
 <?php if ($year != '2018') { ?>
 		<div class="stat opportunity-surplus">
 			<h3>Opportunity Surplus</h3>
 			<h4 style='color: <?php echo $opportunity_surplus_font_color ?>;'>$<?php echo number_format($opportunity_surplus); ?></h4>
-		</div>
-		<div class="stat theoretical-net-worth">
-			<h3>Theoretical EOY Net Worth</h3>
-			<h4>$<?php echo number_format($theoretical_EOY_net_worth); ?></h4>
-		</div>
-		<div class="stat theoretical-income">
-			<h3>Theoretical Income</h3>
-			<h4>$<?php echo number_format($theoretical_income_this_year); ?></h4>
-		</div>
-		<div class="stat theoretical-age-60-ADW">
-			<h3>Theoretical Retirement ADW</h3>
-			<h4>$<?php echo number_format($theoretical_age_60_annual_withdrawal_rate / 365.25 , 2); ?></h4>
 		</div>
 <?php } ?>
 <?php 
@@ -112,6 +104,15 @@
 		</div>
 <?php
 	}
+
+	$theoretical_age_60_ADW_info = return_finance_stat_info_html('Theoretical Age 60 ADW', 'Determine Average Daily Withdrawal from Investments at age 60', '', array('exp_roi is hit each year for each account'), 'Only considers ROTH and taxable account types.');
+	echo return_finance_stat_html( 'Age 60 ADW', number_format( $theoretical_age_60_annual_withdrawal_rate / 365.25 , 2 ), '', 'small', $theoretical_age_60_ADW_info );
+
+	$theoretical_eoy_nw_info = return_finance_stat_info_html('Theoretical EOY Net Worth', 'Determine Net Worth on last day of year if I earn expected ROI on investments and earn my theoretical income amount.', 'appreciated account values + (theoretical future income * take home %) - (Target ADE * days left in year)');
+	echo return_finance_stat_html('Theoretical EOY Net Worth', number_format($theoretical_EOY_net_worth), '', '', $theoretical_eoy_nw_info);
+
+	$theoretical_income_info = return_finance_stat_info_html('Theoretical Income', 'Determine 2019 pre-tax income', 'Current Income + (Cashable PTO Hours * Current Hourly Wage) + ((Avg Weekly Ricks Income + Avg Weekly Seal Income) * Weeks left in year )', array('Work all regular shifts', 'Cashout all PTO', 'No raises', 'No bonuses'), 'Accounts for seasonality');
+	echo return_finance_stat_html('Theoretical Income', number_format($theoretical_income_this_year), '', '', $theoretical_income_info);
 ?>
 		<div class="stat graphic account-allocation">
 			<h3>Accounts Allocation</h3>
