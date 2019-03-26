@@ -168,7 +168,7 @@ var chart = new CanvasJS.Chart("account-allocation-graph", {
 			case 'liquid cash' :
 				$str .= " , color: 'hsl(120, 100%, 50%)', /*exploded: true,*/ ";
 				break;
-			case 'retirement account' :
+			case 'ROTH' :
 				$str .= " , color: 'hsl(190, 100%, 50%)', /*exploded: true,*/ ";
 				break;
 			case 'taxable account' :

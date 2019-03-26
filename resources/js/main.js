@@ -6,12 +6,11 @@ $(document).ready(function() {
     event.stopPropagation(); // Prevent modal close if click is inside of modal box
   });
   $('body').on('click', function() {
-		console.log('hide modal');
 		hideModal();
 	});
 	
 	
-
+/*
 	getCurrentDate = function() {
     	return new Date();
 	}
@@ -744,6 +743,7 @@ $(document).ready(function() {
     }
   }
   dailyHabitsFunctionality();
+*/
 
 });
 

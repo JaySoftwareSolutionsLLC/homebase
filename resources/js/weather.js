@@ -22,7 +22,8 @@ $(document).ready(function() {
 					city.weather = data.data.weather[0];
 					city.windChill = data.currentobservation.WindChill;
 					city.image = data.data.iconLink[0];
-					$("div." + city.name + " img").attr("src", city.image);
+					var secureImg = city.image.replace('http:', 'https:');
+					$("div." + city.name + " img").attr("src", secureImg);
 					$("div." + city.name).append("<h3>" + city.displayName + "</h3>");
 					$("div." + city.name).append("<h4>" + city.temp + "°F</h4>");
 					if (getCurrentDate().getHours() >= 4 && getCurrentDate().getHours() <= 16) {

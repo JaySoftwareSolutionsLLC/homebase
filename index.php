@@ -1,4 +1,5 @@
 <?php
+
 /* Local DB Connection will become useful if we are able to mirror databases which would allow offline work to be done efficiently...DEPRECATED until then
 //---CONNECT TO LOCAL DB------------------------------------------------------------
 
@@ -6,10 +7,10 @@
 //---INCLUDE RESOURCES--------------------------------------------------------------
 	include($_SERVER["DOCUMENT_ROOT"] . '/brettjaybrewster/homebase/resources/resources.php');
 	include($_SERVER["DOCUMENT_ROOT"] . '/brettjaybrewster/homebase/resources/constants.php');
-
+	
 	$conn = connect_to_local_db();
-*/
-
+	*/
+	
 //---INCLUDE RESOURCES--------------------------------------------------------------
 	include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/resources.php');
 	$year = set_post_value('year') ?? date('Y');
@@ -361,7 +362,7 @@
 	$most_recent_upper_arm_circ_measurement = $row_most_recent_upper_arm_circ_measurement['datetime'];
 		// Turn the following 3 lines into a return_datediff function
 	$most_recent_upper_arm_circ_measurement_dt = return_date_from_str($most_recent_upper_arm_circ_measurement, 'datetime');
-	$interval_since_most_recent_upper_arm_circ_measurement = date_diff($today_datetime, $most_recent_upper_arm_circ_measurement_dt);
+	$interval_since_most_recent_upper_arm_circ_measurement = date_diff($today_datetime, $most_recent_upper_arm_circ_measurement_dt, true);
 	$days_since_most_recent_upper_arm_circ_measurement = $interval_since_most_recent_upper_arm_circ_measurement->days;
 
 
@@ -479,7 +480,12 @@
 	$row = mysqli_fetch_row($res);
 	$mindfulness_hours = $row[0];
 
-	//var_dump($muscle_objects);
+	// Optimal Health
+	$q = "SELECT (SUM(optimal_health) / COUNT(*)) FROM personal_day_info WHERE date >= '$start_date_financial' AND date <= '$end_date_financial' AND optimal_health IS NOT NULL";
+	$res = $conn->query($q);
+	$row = mysqli_fetch_row($res);
+	$optimal_health_percentage = $row[0];
+	//echo $optimal_health_percentage;
 
 	//---GOALS----------------------------------------------------------------------
 	if ($year == '2018') {
@@ -564,8 +570,10 @@
 		$most_recent_expense_review = $row_most_recent_expense_review['date'];
 			// Turn the following 3 lines into a return_datediff function
 		$most_recent_expense_review_dt = return_date_from_str($most_recent_expense_review, 'datetime');
-		$interval_since_most_recent_expense_review = date_diff($today_datetime, $most_recent_expense_review_dt);
+		$interval_since_most_recent_expense_review = date_diff($today_datetime, $most_recent_expense_review_dt, true);
 		$days_since_most_recent_expense_review = $interval_since_most_recent_expense_review->days;
+
+		// Optimal Health
 	
 	}
 //---CLOSE DATABASE CONNECTION------------------------------------------------------
@@ -594,9 +602,8 @@
 		update_goals_status($percent_goal_bench_press_2018, $percent_time_frame_bench_press_2018);
 	}
 	$conn->close();
-
+ 
 ?>
-
 <!DOCTYPE html>
 <html lang="en-US">
 

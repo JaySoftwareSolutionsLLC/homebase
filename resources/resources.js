@@ -50,3 +50,6 @@ function hideModal() {
     $('div#modal').empty();
     $('div#modal-housing').css('display', 'none');
 }
+function getCurrentDate() { // Used on weather.js currently
+    return new Date();
+}
