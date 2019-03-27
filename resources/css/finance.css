@@ -37,7 +37,6 @@ section.finance div.content div.stat {
   transition: all 750ms 50ms;
   background: black;
   border: 1px solid black;
-  cursor: pointer;
 }
 
 section.finance div.content div.stat h3 {

@@ -98,25 +98,25 @@
 	
 		echo "<div class='row'>"; // Create a row div for 2 small stats
 		
-		$adi_info = return_finance_stat_info_html('Average Daily Income', 'Determine Average Daily Income (YTD)', 'Net Income / Day of year', array(''), 'Pre-tax amount');
-		echo return_finance_stat_html( 'ADI', "$" . number_format( $adi, 2 ) . "/day", '', 'small', $adi_info, '#0F0' );
+		$adi_info = return_finance_stat_info_html('Average Daily Income', 'Determine Average Daily Income (YTD)', 'Net Income / Day of year', array(), 'Pre-tax amount');
+		echo return_finance_stat_html( 'ADI', "$" . number_format( $adi, 2 ) . "/day", AVG_DAILY_INCOME_TARGET, 'small', $adi_info, '#0F0' );
 
-		$ade_info = return_finance_stat_info_html('Average Daily Expenditure', 'Determine Average Daily Expenses (YTD)', 'Net Expenditure / Day of year', array(''), '');
-		echo return_finance_stat_html( 'ADE', "$" . number_format( $ade, 2 ) . "/day", '', 'small', $ade_info, '#F00' );
+		$ade_info = return_finance_stat_info_html('Average Daily Expenditure', 'Determine Average Daily Expenses (YTD)', 'Net Expenditure / Day of year', array(), '');
+		echo return_finance_stat_html( 'ADE', "$" . number_format( $ade, 2 ) . "/day", AVG_DAILY_EXPENDITURE_TARGET, 'small', $ade_info, '#F00' );
 
 		echo "</div>"; // End row div
 
 		echo "<div class='row'>"; // Create a row div for 2 small stats
 		
-		$awh_info = return_finance_stat_info_html('Average Working Hours', 'Determine average hours worked per week (YTD)', 'Net Hours / (Day of year / 7)', array(''), '');
-		echo return_finance_stat_html( 'AWH', number_format( $awh, 2 ) . " hrs/wk", '', 'small', $awh_info );
+		$awh_info = return_finance_stat_info_html('Average Working Hours', 'Determine average hours worked per week (YTD)', 'Net Hours / (Day of year / 7)', array(), '');
+		echo return_finance_stat_html( 'AWH', number_format( $awh, 2 ) . " hrs/wk", WEEKLY_HOURS_TARGET, 'small', $awh_info );
 
 		$ahw_info = return_finance_stat_info_html('Average Hourls Wage', 'Determine Average Hourly Wage (YTD)', 'Net Income / Hours Worked', array('All shifts are recorded properly', '30 minute lunches @ S&D'), '');
-		echo return_finance_stat_html( 'AHW', "$" . number_format( $ahw, 2 ) . "/hr", '', 'small', $ahw_info );
+		echo return_finance_stat_html( 'AHW', "$" . number_format( $ahw, 2 ) . "/hr", HOURLY_WAGE_TARGET, 'small', $ahw_info );
 
 		echo "</div>"; // End row div
 
-		$opportunity_surplus_info = return_finance_stat_info_html('Opportunity Surplus', 'Determine amount of $ I can spend and still hit annual net worth contribution goal', '', array('Work every Mon Thu Sat PMs @ Ricks', 'Cash out all PTO'), 'Accounts for seasonality');
+		$opportunity_surplus_info = return_finance_stat_info_html('Opportunity Surplus', 'Determine amount of $ I can spend and still hit annual net worth contribution goal', '(($net_income + ( CASHABLE_PTO_HOURS * $correct_hourly) + (($avg_full_week_ricks_income + $avg_full_week_seal_income) * $weeks_left_in_year)) * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) - ($net_expenditure + (AVG_DAILY_EXPENDITURE_TARGET * $days_left_in_year)) - ANNUAL_NET_WORTH_CONTRIBUTION_TARGET', array('Work Mon/Thu/Sat PMs @ Ricks', 'Cash out all PTO', 'Future ADE = Target ADE'), 'Accounts for seasonality');
 		echo return_finance_stat_html( 'Opportunity Surplus', "$" . number_format($opportunity_surplus), '', '', $opportunity_surplus_info, $opportunity_surplus_font_color );
 	
 		$theoretical_age_60_ADW_info = return_finance_stat_info_html('Theoretical Age 60 ADW', 'Determine Average Daily Withdrawal from Investments at age 60', '', array('exp_roi is hit each year for each account'), 'Only considers ROTH and taxable account types.');
