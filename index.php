@@ -309,8 +309,8 @@
 
 	$theoretical_net_worth_contribution = round((($net_income + ( CASHABLE_PTO_HOURS * $correct_hourly) + (($avg_full_week_ricks_income + $avg_full_week_seal_income) * $weeks_left_in_year)) * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) - ($net_expenditure + (AVG_DAILY_EXPENDITURE_TARGET * $days_left_in_year)) , 0 ); // Theoretical NW Cont. if I grind out 3 days/week @ Ricks and don't take any PTO @ S&D
 	//echo $theoretical_net_worth_contribution;
-	$opportunity_surplus = round($theoretical_net_worth_contribution - ANNUAL_NET_WORTH_CONTRIBUTION_TARGET , 0 );
-	
+	$opportunity_surplus = round($theoretical_net_worth_contribution - ANNUAL_NET_WORTH_CONTRIBUTION_TARGET , 0 );	
+
 	$current_est_nw_contribution = ( $net_income * ( ESTIMATED_AFTER_TAX_PERCENTAGE / 100 ) ) - ( $net_expenditure );
 	// echo ("Opportunity Cost Surplus: $opportunity_surplus | $net_income | $avg_full_week_ricks_income | $avg_full_week_seal_income | $weeks_left_in_year <br/><br/><br/>");
 

@@ -93,10 +93,10 @@
 		return $str;
 	}
 	// Return an HTML div with classes
-	function return_finance_stat_html($title = 'New Stat', $main_metric_value = '$69.69/hr', $sub_metric_value = '', $stat_size = '',  $stat_info = 'Really cool new stat to show something relevant to my financial situation' ) {
-		$str = "<div class='$stat_size stat ahw'>
+	function return_finance_stat_html($title = 'New Stat', $main_metric_value = '$69.69/hr', $sub_metric_value = '', $stat_size = '',  $stat_info = 'Really cool new stat to show something relevant to my financial situation', $stat_color = '#FFF' ) {
+		$str = "<div class='$stat_size stat'>
 					<h3>$title</h3>
-					<h4>$main_metric_value</h4>
+					<h4 style='color: $stat_color;'>$main_metric_value</h4>
 					<h5>$sub_metric_value</h5>
 					<i class='fas fa-info' data-stat-description='$stat_info'></i>
 				</div>";
