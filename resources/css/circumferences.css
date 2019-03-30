@@ -3,8 +3,13 @@ svg .outline {
 }
 
 svg path.circumference.focused {
-  -webkit-animation: blinking 1200ms linear 2s infinite;
-          animation: blinking 1200ms linear 2s infinite;
+  -webkit-animation: blinking 1200ms linear 600ms infinite;
+          animation: blinking 1200ms linear 600ms infinite;
+}
+
+svg path.circumference.adjusted {
+  -webkit-animation: none;
+          animation: none;
 }
 
 @-webkit-keyframes blinking {

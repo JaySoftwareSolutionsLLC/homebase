@@ -4,7 +4,10 @@ svg {
 	}
 	path.circumference {
 		&.focused {
-			animation: blinking 1200ms linear 2s infinite;
+			animation: blinking 1200ms linear 600ms infinite;
+		}
+		&.adjusted {
+			animation: none;
 		}
 	}
 }

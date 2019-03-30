@@ -243,14 +243,32 @@
 	<script>
 		function change_display_of_focused_circ() {
 			$('input.circ').on('focus', function() {
-				console.log($(this));
+				//console.log($(this));
 				let circID = $(this).attr('data-circ-id');
-				console.log(circID);
+				//console.log(circID);
 				$('svg path.circumference').each(function() {
 					if ($(this).attr('data-circ-id') == circID) {
-						console.log( $(this) );
+						//console.log( $(this) );
 						$(this).css('opacity', '1');
 						$(this).addClass('focused');
+						//$(this).css('stroke', 'red');
+					}
+					else if ($(this).css('opacity') == '1') {
+						$(this).css('opacity', '0.5');
+						//$(this).css('stroke', 'hsl(190, 100%, 50%)');
+					}
+				});
+			});
+			$('input.circ').on('blur', function() {
+				//console.log($(this));
+				let circID = $(this).attr('data-circ-id');
+				//console.log(circID);
+				$('svg path.circumference').each(function() {
+					if ($(this).attr('data-circ-id') == circID) {
+						//console.log( $(this) );
+						$(this).css('opacity', '1');
+						$(this).removeClass('focused');
+						$(this).addClass('adjusted');
 						//$(this).css('stroke', 'red');
 					}
 					else if ($(this).css('opacity') == '1') {

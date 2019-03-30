@@ -20,7 +20,7 @@ div#modal-housing div#modal {
   display: -ms-inline-flexbox;
   display: inline-flex;
   max-height: 25rem;
-  max-width: 50rem;
+  max-width: 45rem;
   border: 0.25rem solid #00d5ff;
   border-radius: 5rem 1rem;
   -webkit-box-orient: vertical;

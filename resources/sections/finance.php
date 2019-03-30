@@ -111,7 +111,7 @@
 		$awh_info = return_finance_stat_info_html('Average Working Hours', 'Determine average hours worked per week (YTD)', 'Net Hours / (Day of year / 7)', array(), '');
 		echo return_finance_stat_html( 'AWH', number_format( $awh, 2 ) . " hrs/wk", WEEKLY_HOURS_TARGET, 'small', $awh_info );
 
-		$ahw_info = return_finance_stat_info_html('Average Hourls Wage', 'Determine Average Hourly Wage (YTD)', 'Net Income / Hours Worked', array('All shifts are recorded properly', '30 minute lunches @ S&D'), '');
+		$ahw_info = return_finance_stat_info_html('Average Hourly Wage', 'Determine Average Hourly Wage (YTD)', 'Net Income / Hours Worked', array('All shifts are recorded properly', '30 minute lunches @ S&D'), '');
 		echo return_finance_stat_html( 'AHW', "$" . number_format( $ahw, 2 ) . "/hr", HOURLY_WAGE_TARGET, 'small', $ahw_info );
 
 		echo "</div>"; // End row div
