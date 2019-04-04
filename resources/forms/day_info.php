@@ -12,7 +12,7 @@
 
     //---INITIALIZE GLOBAL VARIABLES ---------------------------------------------------
     $out_of_range = false;
-    $user_feedback = "";
+    $notifications = "";
 
     //---QUERY AGAINST DATABASE---------------------------------------------------------
     $day = new stdClass();
@@ -21,7 +21,11 @@
 	if ($res->num_rows > 0) { // If there are results then pull them up
 		while($row = $res->fetch_assoc()) {
 			$day->id = $row['id'];
-			$day->date = $row['date'];
+            $day->date = $row['date'];
+            $day->datetime = new DateTime($day->date);
+            $day->day_of_week = date_format($day->datetime, 'l');
+            $day->yesterday = date_format((clone $day->datetime)->modify('-1 day'), 'Y-m-d');
+            $day->tomorrow = date_format((clone $day->datetime)->modify('+1 days'), 'Y-m-d');
 			$day->software_dev_hours = $row['software_dev_hours'];
             $day->mindfulness_hours = $row['mindfulness_hours'];
             $day->optimal_health = $row['optimal_health'];
@@ -42,10 +46,10 @@
         $start_date = date('Y-m-d', strtotime( START_DATE_STRING_DAY_INFO ) );
         $today = date('Y-m-d');
         if ( $date <= $today && $date >= $start_date ) {
-            $user_feedback .= "<li>Generating row because $date is between $start_date and $today...</li>";
+            $notifications .= "<li>Generating row because $date is between $start_date and $today...</li>";
             $qry = " INSERT INTO `personal_day_info` (`id`, `date`, `software_dev_hours`, `mindfulness_hours`, `optimal_health`) VALUES (NULL, '$date', '0.00', '0.00', NULL); ";
             if ($conn->query($qry) === TRUE) {
-                $user_feedback = "<li>New row created successfully<li/>";
+                $notifications = "<li>New row created successfully<li/>";
                 $qry_s = "SELECT id FROM `personal_day_info` WHERE date = '$date' ORDER BY id LIMIT 1";
                 $res_s = $conn->query($qry_s);
                 if ($res_s->num_rows > 0) {
@@ -55,14 +59,14 @@
 			        $day->software_dev_hours = 0;
                     $day->mindfulness_hours = 0;
                     $day->optimal_health = null;
-                    $user_feedback .= "<li>New ID is $day->id</li>";
+                    $notifications .= "<li>New ID is $day->id</li>";
                 }
                 else {
-                    $user_feedback .= "<li>Unable to retrieve ID</li>";
+                    $notifications .= "<li>Unable to retrieve ID</li>";
                 }
             }
             else {
-                $user_feedback .= "<li>Unable to insert new row</li>";
+                $notifications .= "<li>Unable to insert new row</li>";
             }
         }
         else {
@@ -72,6 +76,35 @@
             header('Location: https://www.brettjaybrewster.com/homebase/resources/forms/day_info.php');
         }
     }
+    // Push into day object other relevant information derived from other tables such as income, expenditure, lifts performed, miles ran, etc.
+    // Ricks Income
+    $q = "  SELECT 
+                (SELECT SUM(
+                            CASE 
+                                WHEN frs.type = 'OTB' THEN frs.tips
+                                ELSE (frs.hours * " . HOURLY_WAGE_RICKS . ") + frs.tips
+                            END
+                        )
+                FROM finance_ricks_shifts AS frs
+                WHERE date = '$date') AS 'Ricks Income',
+                (SELECT SUM(fe.amount)
+                FROM finance_expenses AS fe 
+                WHERE fe.date = '$date') AS 'Expenditure'";
+    $res = $conn->query($q);
+    if ($res->num_rows > 0) {
+        while($row = $res->fetch_assoc()) {
+            $day->ricks_income = round( $row['Ricks Income'] , 2 );
+            $day->expenditure = round( $row['Expenditure'] , 2 );
+        }
+    }
+    // S&D Income
+    if ($day->day_of_week !== 'Saturday' && $day->day_of_week !== 'Sunday') {
+        $day->seal_income = round( ( 8 * HOURLY_WAGES_SEAL[1] ) , 2 ); // WIP NEEDS TO BE CHANGED TO PULL CORRECT WAGE INFORMATION BASED ON DATE
+    }
+    $day->income = $day->seal_income + $day->ricks_income;
+    // Estimated Net Cont.
+    $day->est_net_cont = round( ($day->income * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) - $day->expenditure , 2 );
+
 ?>
 
 <html lang="en-US">
@@ -86,16 +119,29 @@
             include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/css-files.php');
             include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/js-files.php'); ?>
         <link rel="stylesheet" type="text/css" href="../css/day_info.css">
+        <link rel="stylesheet" type="text/css" href="/homebase/resources/css/modal.css">
+        <link rel="stylesheet" type="text/css" href="/homebase/resources/fontawesome-free-5.8.1-web/css/all.min.css">
     </head>
 
     <body>
-
+<?php 
+    include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/sections/modal.php');
+?>
         <main>
             <form id='day-info-form' method='POST'>
-                <input class='day-input' type='date' name='date-input' id='date-input' value='<?php echo $date; ?>' style=''/>
-                <p class='user-feedback' <?php if ($user_feedback == '') { echo "style='display: none;'"; } ?> >
+                <span style='display: inline-flex; justify-content: center; align-items: center; font-size: 2rem; color: hsl(190, 100%, 50%);'>
+                    <span class='minus-one-day' style='cursor: pointer;'>
+                        <i class='fas fa-chevron-left' style='margin-right: 3rem;'></i>
+                    </span>
+                    <h1 style='width: auto;'><?php echo $day->day_of_week ?></h1>
+                    <input class='day-input' type='date' name='date-input' id='date-input' value='<?php echo $date; ?>' style=''/>
+                    <span class='plus-one-day' style='cursor: pointer;'>
+                        <i class='fas fa-chevron-right'></i>
+                    </span>
+                </span>
+                <p class='notifications' <?php if ($notifications == '') { echo "style='display: none;'"; } ?> >
                     <ul>
-                        <?php echo $user_feedback; ?>
+                        <?php echo $notifications; ?>
                     </ul>
                 </p>
                 <section style=''>
@@ -114,6 +160,23 @@
                             <label for='software-dev-minutes-input'>Dev Min.</label>
                             <input type='number' step='5' min='0' max='1440' name='software-dev-minutes-input' id='software-dev-minutes-input' class='numeric' value='<?php echo time_conversion( 'hours', $day->software_dev_hours, 'minutes' ); ?>'>
                         </span>
+                        <span class='timer' id='dev-min-timer'>
+                            <i class='fas fa-stopwatch'></i>
+                        </span>
+                    </div>
+                    <div class='row'>
+                        <span class='input' style=''>
+                            <label for='estimated-income'>Income</label>
+                            <input disabled='true' type='number' name='estimated-income' id='estimated-income' class='numeric' value='<?php echo ($day->income); ?>'>
+                        </span>
+                        <span class='input' style=''>
+                            <label for='estimated-expenditure'>Expenditure</label>
+                            <input disabled='true' type='number' name='estimated-expenditure' id='estimated-expenditure' class='numeric' value='<?php echo $day->expenditure; ?>'>
+                        </span>
+                        <span class='input' style=''>
+                            <label for='estimated-net-worth-cont'>NW Cont.</label>
+                            <input disabled='true' type='number' name='estimated-net-worth-cont' id='estimated-net-worth-cont' class='numeric' value='<?php echo $day->est_net_cont; ?>'>
+                        </span>
                     </div>
                 </section>
                 <section style=''>
@@ -122,6 +185,9 @@
                         <span class='input' style=''>
                             <label for='mindfulness-minutes-input'>Mindful Min.</label>
                             <input type='number' step='5' min='0' max='1440' name='mindfulness-minutes-input' id='mindfulness-minutes-input' class='numeric' value='<?php echo time_conversion( 'hours', $day->mindfulness_hours, 'minutes' ); ?>'>
+                        </span>
+                        <span class='timer' id='mindfulness-min-timer'>
+                            <i class='fas fa-stopwatch'></i>
                         </span>
                     </div>
                     <div class='row'>
@@ -139,6 +205,9 @@
 
         </main>
 
+        <script type="text/javascript" src="/homebase/resources/resources.js"></script>
+        <script type="text/javascript" src="/homebase/resources/js/day_info.js"></script>
+        <script type="text/javascript" src="/homebase/resources/fontawesome-free-5.8.1-web/js/all.min.js"></script>
         <script>
             $('input#date-input').on('change', function() {
                 $('form#day-info-form').submit();
@@ -153,7 +222,14 @@
                 console.log('trig-1');
                 ajaxPostUpdate( "/homebase/resources/forms/form-resources/update_day_info_cell.php", { 'column-name' : 'optimal_health', 'value' : $('select#optimal-health-input').children("option:selected").val() , 'id' : <?php echo $day->id; ?> }, false );
             });
-            
+            $('span.minus-one-day').on('click', function() {
+                $('input#date-input').val('<?php echo $day->yesterday; ?>');
+                $('form#day-info-form').submit();
+            });
+            $('span.plus-one-day').on('click', function() {
+                $('input#date-input').val('<?php echo $day->tomorrow; ?>');
+                $('form#day-info-form').submit();
+            });
         </script>
 
     </body>

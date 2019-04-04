@@ -35,6 +35,7 @@ html {
                         span.input {
                             display:                                                            inline-flex; 
                             flex-flow:                                                          column nowrap;
+                            margin:                                                             0 1rem;
                             input, select {
                                 width:                                                          5rem;
                                 &.numeric {
@@ -42,9 +43,30 @@ html {
                                 }
                             }
                         }
+                        span.timer {
+                            align-self:                                                         center;
+                            font-size:                                                          1.25rem;
+                            cursor:                                                             pointer;
+                        }
                     }
                 }
             }
         }
+    }
+}
+div#modal {
+    .blink {
+        animation: blink 3s 200ms linear infinite;
+    }
+}
+@keyframes blink {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.1;
+    }
+    100% {
+        opacity: 1;
     }
 }

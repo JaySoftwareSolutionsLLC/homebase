@@ -53,6 +53,7 @@ html body main form section div.row span.input {
   -webkit-box-direction: normal;
       -ms-flex-flow: column nowrap;
           flex-flow: column nowrap;
+  margin: 0 1rem;
 }
 
 html body main form section div.row span.input input, html body main form section div.row span.input select {
@@ -61,5 +62,42 @@ html body main form section div.row span.input input, html body main form sectio
 
 html body main form section div.row span.input input.numeric, html body main form section div.row span.input select.numeric {
   text-align: right;
+}
+
+html body main form section div.row span.timer {
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+div#modal .blink {
+  -webkit-animation: blink 3s 200ms linear infinite;
+          animation: blink 3s 200ms linear infinite;
+}
+
+@-webkit-keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.1;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 /*# sourceMappingURL=day_info.css.map */
