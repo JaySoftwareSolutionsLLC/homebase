@@ -29,6 +29,9 @@
 			$day->software_dev_hours = $row['software_dev_hours'];
             $day->mindfulness_hours = $row['mindfulness_hours'];
             $day->optimal_health = $row['optimal_health'];
+            $day->expense_review = $row['expense_review'];
+            $day->tanning_minutes = $row['tanning_minutes'];
+            $day->tanning_uv_index = $row['tanning_uv_index'];
             if ($day->optimal_health === null) {
                 // echo $day->optimal_health;
             }
@@ -59,6 +62,9 @@
 			        $day->software_dev_hours = 0;
                     $day->mindfulness_hours = 0;
                     $day->optimal_health = null;
+                    $day->expense_review = 0;
+                    $day->tanning_minutes = 0;
+                    $day->tanning_uv_index = null;
                     $notifications .= "<li>New ID is $day->id</li>";
                 }
                 else {
@@ -98,8 +104,12 @@
         }
     }
     // S&D Income
-    if ($day->day_of_week !== 'Saturday' && $day->day_of_week !== 'Sunday') {
+    // echo $day->day_of_week;
+    if ($day->day_of_week != 'Saturday' && $day->day_of_week != 'Sunday') {
         $day->seal_income = round( ( 8 * HOURLY_WAGES_SEAL[1] ) , 2 ); // WIP NEEDS TO BE CHANGED TO PULL CORRECT WAGE INFORMATION BASED ON DATE
+    }
+    else {
+        $day->seal_income = 0;
     }
     $day->income = $day->seal_income + $day->ricks_income;
     // Estimated Net Cont.
@@ -200,6 +210,31 @@
                             </select>
                         </span>
                     </div>
+                    <div class='row'>
+                        <span class='input' style=''>
+                            <label for='tanning-minutes-input'>Tanning Min.</label>
+                            <input type='number' step='5' min='0' max='255' name='tanning-minutes-input' id='tanning-minutes-input' class='numeric' value='<?php echo $day->tanning_minutes ?? '0'; ?>'>
+                        </span>
+                        <span class='timer' id='tanning-min-timer'>
+                            <i class='fas fa-stopwatch'></i>
+                        </span>
+                        <span class='input' style=''>
+                            <label for='avg-uv-input'>Avg. UV Index</label>
+                            <input type='number' step='1' min='0' max='15' name='avg-uv-input' id='avg-uv-input' class='numeric' value='<?php echo $day->tanning_uv_index; ?>'>
+                        </span>
+                    </div>
+                </section>
+                <section>
+                    <h3>Tasks</h3>
+                    <div class='row'>
+                        <span class='input' style=''>
+                            <label for='expense-review-input'>Expenses Reviewed</label>
+                            <select name='expense-review-input' id='expense-review-input'>
+                                <option value='1' <?php echo ( $day->expense_review == '1' ) ? 'selected' : ''; ?> >True</option>
+                                <option value='0' <?php echo ( $day->expense_review == 0 || empty($day->expense_review) ) ? 'selected' : ''; ?> >False</option>
+                            </select>
+                        </span>
+                    </div>
                 </section>
             </form>
 
@@ -218,6 +253,12 @@
             $('input#mindfulness-minutes-input').on('change', function() {
                 ajaxPostUpdate( "/homebase/resources/forms/form-resources/update_day_info_cell.php", { 'column-name' : 'mindfulness_hours', 'value' : elegantRounding( ( $('input#mindfulness-minutes-input').val() / 60 ) , 2 ) , 'id' : <?php echo $day->id; ?> }, false );
             });
+            $('input#tanning-minutes-input').on('change', function() {
+                ajaxPostUpdate( "/homebase/resources/forms/form-resources/update_day_info_cell.php", { 'column-name' : 'tanning_minutes', 'value' : $('input#tanning-minutes-input').val() , 'id' : <?php echo $day->id; ?> }, false );
+            });
+            $('input#avg-uv-input').on('change', function() {
+                ajaxPostUpdate( "/homebase/resources/forms/form-resources/update_day_info_cell.php", { 'column-name' : 'tanning_uv_index', 'value' : $('input#avg-uv-input').val() , 'id' : <?php echo $day->id; ?> }, false );
+            });
             $('select#optimal-health-input').on('change', function() {
                 console.log('trig-1');
                 ajaxPostUpdate( "/homebase/resources/forms/form-resources/update_day_info_cell.php", { 'column-name' : 'optimal_health', 'value' : $('select#optimal-health-input').children("option:selected").val() , 'id' : <?php echo $day->id; ?> }, false );
@@ -230,6 +271,10 @@
                 $('input#date-input').val('<?php echo $day->tomorrow; ?>');
                 $('form#day-info-form').submit();
             });
+            $('select#expense-review-input').on('change', function() {
+                ajaxPostUpdate( "/homebase/resources/forms/form-resources/update_day_info_cell.php", { 'column-name' : 'expense_review', 'value' : $('select#expense-review-input').children("option:selected").val() , 'id' : <?php echo $day->id; ?> }, false );
+            });
+            
         </script>
 
     </body>

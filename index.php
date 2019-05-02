@@ -594,6 +594,39 @@
 			$GLOBALS['number_below_par_goals'] += 1;
 		}
 	}
+
+	// Note related cautions/warnings
+	$notifications = array(); // Array to house notification objects
+	$qry_caution_notes = "SELECT *
+							FROM `personal_notes`
+							WHERE 	caution_datetime <= '" . date_format( $today_datetime, 'Y/m/d H:i:s' ) . "'
+								AND (warning_datetime IS NULL OR warning_datetime > '" . date_format( $today_datetime, 'Y/m/d H:i:s' ) . "')
+								AND complete_datetime IS NULL;";
+	$res_caution_notes = $conn->query($qry_caution_notes);
+	if ($res_caution_notes->num_rows > 0) {
+		while($row = $res_caution_notes->fetch_assoc()) {
+			$notification = new stdClass();
+			$notification->type = 'caution';
+			$notification->message = "(" . str_replace(' ', ' @ ', $row['caution_datetime']) . ") " . $row['summary'];
+			$notifications[] = $notification;
+		}
+	}
+	$qry_warning_notes = "	SELECT warning_datetime, summary
+							FROM `personal_notes`
+							WHERE 	warning_datetime <= '" . date_format( $today_datetime, 'Y/m/d H:i:s' ) . "'
+								AND complete_datetime IS NULL; ";
+	$res_warning_notes = $conn->query($qry_warning_notes);
+	if ($res_warning_notes->num_rows > 0) {
+		while($row = $res_warning_notes->fetch_assoc()) {
+			$notification = new stdClass();
+			$notification->type = 'warning';
+			$notification->message = "(" . str_replace(' ', ' @ ', $row['warning_datetime']) . ") " . $row['summary'];
+			$notifications[] = $notification;
+		}
+	}
+
+	$warning_notes = array();
+
 	if ($year == '2018') {
 		update_goals_status($percent_goal_debt_free_2018, $percent_time_frame_debt_free_2018);
 		update_goals_status($percent_goal_net_worth_2018, $percent_time_frame_net_worth_2018);

@@ -18,9 +18,22 @@
 			<a href="https://secure332.sgcpanel.com:2083/cpsess9548072040/frontend/Crystal/index.php" target="_blank">cPanel</a>
 			<a href="https://secure332.sgcpanel.com:2083/cpsess6924724625/3rdparty/phpMyAdmin/index.php" target="_blank">phpMyAdmin</a>
 			<a href="https://secure332.sgcpanel.com:2096/cpsess0106124978/webmail/Crystal/index.html?mailclient=horde" target="_blank">webmail</a>
-			<a href="/homebase/resources/reports/weekly-report/index.php" target="_blank">Weekly Report</a>
-			<a href="/homebase/resources/reports/monthly-report/index.php" target="_blank">Monthly Report</a>
-			<!--<a href="https://quizlet.com/215065234/programming-terminology-flash-cards/" target="_blank">Quizlet</a>-->
+			<a href="/homebase/resources/forms/day_info.php" target="_blank">Daily</a>
+			<a href="/homebase/resources/reports/weekly-report/index.php" target="_blank">Week</a>
+			<a href="/homebase/resources/reports/monthly-report/index.php" target="_blank">Month</a>
+			<a href="/homebase/resources/reports/annual-report/index.php" target="_blank">Annual</a>
+		</nav>
+	</div>
+	<div class='right-mobile'>
+		<img src='/homebase/resources/assets/images/icon-hamburger-nav-white.png'/>
+		<nav>
+			<a href="https://secure332.sgcpanel.com:2083/cpsess9548072040/frontend/Crystal/index.php" target="_blank">cPanel</a>
+			<a href="https://secure332.sgcpanel.com:2083/cpsess6924724625/3rdparty/phpMyAdmin/index.php" target="_blank">phpMyAdmin</a>
+			<a href="https://secure332.sgcpanel.com:2096/cpsess0106124978/webmail/Crystal/index.html?mailclient=horde" target="_blank">webmail</a>
+			<a href="/homebase/resources/forms/day_info.php" target="_blank">Daily</a>
+			<a href="/homebase/resources/reports/weekly-report/index.php" target="_blank">Week</a>
+			<a href="/homebase/resources/reports/monthly-report/index.php" target="_blank">Month</a>
+			<a href="/homebase/resources/reports/annual-report/index.php" target="_blank">Annual</a>
 		</nav>
 	</div>
 </header>

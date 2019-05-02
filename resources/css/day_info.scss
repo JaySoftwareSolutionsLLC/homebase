@@ -37,7 +37,7 @@ html {
                             flex-flow:                                                          column nowrap;
                             margin:                                                             0 1rem;
                             input, select {
-                                width:                                                          5rem;
+                                width:                                                          5rem; 
                                 &.numeric {
                                     text-align:                                                 right;
                                 }
@@ -45,7 +45,7 @@ html {
                         }
                         span.timer {
                             align-self:                                                         center;
-                            font-size:                                                          1.25rem;
+                            font-size:                                                          1.75rem;
                             cursor:                                                             pointer;
                         }
                     }

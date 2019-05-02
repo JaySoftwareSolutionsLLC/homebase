@@ -89,3 +89,9 @@ section h2 {
 	margin-bottom: 2rem;
 /*	color: hsla(190, 100%, 50%, 1);*/
 }
+
+@media only screen and (max-width: 900px) {
+  header div.right {
+    display: none;
+  }
+}

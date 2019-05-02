@@ -1,5 +1,6 @@
 <?php
-	$notifications = array(); // Array to house notification objects
+	//$notifications = array(); // Array to house notification objects
+	//var_dump($notifications);
 	foreach ($muscle_objects as $mo) {
 		if ($mo->name == 'triceps') {
 			$tricep_mo = $mo;

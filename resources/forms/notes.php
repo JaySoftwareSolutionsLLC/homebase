@@ -15,9 +15,10 @@ if(isset($_POST['summary']) && isset($_POST['description']) && isset($_POST['typ
 	$type = "'" . $_POST['type'] . "'";
 	$summary = "'" . $_POST['summary'] . "'";
 	$description = "'" . $_POST['description'] . "'";
-	$reminder_datetime = (empty($_POST['reminder-datetime'])) ? 'NULL' : "'" . $_POST['reminder-datetime'] . "'";
-	$qry = "INSERT INTO `personal_notes` (`id`, `datetime`, `type`, `summary`, `description`, `reminder_datetime`) 
-			VALUES (NULL, $datetime, $type, $summary, $description, $reminder_datetime);";
+	$caution_datetime = (empty($_POST['caution-datetime'])) ? 'NULL' : "'" . $_POST['caution-datetime'] . "'";
+	$warning_datetime = (empty($_POST['warning-datetime'])) ? 'NULL' : "'" . $_POST['warning-datetime'] . "'";
+	$qry = "INSERT INTO `personal_notes` (`datetime`, `type`, `summary`, `description`, `caution_datetime`, `warning_datetime`) 
+			VALUES ($datetime, $type, $summary, $description, $caution_datetime, $warning_datetime);";
 	//echo $qry;
 	if ($conn->query($qry) === TRUE) {
     	$entry_msg = "New record created successfully";
@@ -35,15 +36,28 @@ $res = $conn->query($qry);
 if ($res->num_rows > 0) {
 	$data_log = '';
     while($row = $res->fetch_assoc()) {
+		if ( ! empty( $row['complete_datetime'] ) ) {
+			$complete_date_formatted = new DateTime( $row['complete_datetime'] );
+			$complete_date_formatted = date_format($complete_date_formatted, 'Y-m-d\TH:i');
+		}
+		else {
+			$complete_date_formatted = '';
+		}
         $data_log .= "
 					<tr>
 						<td>" . $row['datetime'] . "</td>
 						<td>" . $row['summary'] . "</td>
 						<td>" . $row['description'] . "</td>
 						<td>" . $row['type'] . "</td>
-						<td>" . $row['reminder_datetime'] . "</td>
-						<td></td>
-					</tr>";
+						<td>" . $row['caution_datetime'] . "</td>
+						<td>" . $row['warning_datetime'] . "</td>";
+		if ($row['caution_datetime'] != '' || $row['warning_datetime'] != '') {
+			$data_log .= "<td><input data-id='" . $row['id'] . "' type='datetime-local' name='complete-datetime' class='complete-datetime' value='$complete_date_formatted'/></td>";
+		}
+		else {
+			$data_log .= "<td></td>";
+		}
+			$data_log .= "</tr>";
     }
 }
 
@@ -62,7 +76,7 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 
 			<form method='post'>
 				<label for='datetime'>Datetime (Optional)</label>
-				<input type='datetime-local' name='datetime' value="<?php echo $today;?>"/>
+				<input type='datetime-local' name='datetime'/>
 				<label for='type'>Type</label>
 				<select name='type'>
 					<option value='positive experience'>Positive Experience</option>
@@ -80,8 +94,10 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 				<input name='summary' type='text' placeholder='Heart to heart with Molly Bolzano' maxlength='50'/>
 				<label for='description'>Description</label>
 				<textarea name='description' maxlength='255' placeholder='Had a heart to heart with Molly during shift today.'></textarea>
-				<label for='reminder-datetime'>Reminder Datetime (Optional)</label>
-				<input type='datetime-local' name='reminder-datetime'/>
+				<label for='caution-datetime'>Caution Datetime (Optional)</label>
+				<input type='datetime-local' name='caution-datetime'/>
+				<label for='warning-datetime'>Warning Datetime (Optional)</label>
+				<input type='datetime-local' name='warning-datetime'/>
 				<button type="submit">Submit</button>
 			</form>
 
@@ -92,7 +108,8 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 						<th>Subject</th>
 						<th>Description</th>
 						<th>Type</th>
-						<th>Reminder</th>
+						<th>Caution DT</th>
+						<th>Warning DT</th>
 						<th>Complete</th>
 					</tr>				
 				</thead>
@@ -103,11 +120,22 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 <?php
 include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/js-files.php');
 ?>
+	        <script type="text/javascript" src="/homebase/resources/resources.js"></script>
 			<script>
 				$(document).ready( function () {
 					$('#runs-table').DataTable( {
 						"order": [ 0, 'desc' ]
 					} );
+
+					$('input.complete-datetime').on('blur', function() {
+						let val = "'" + $(this).val() + "'";
+						if (val == "''") {
+							val = "NULL";
+						}
+						let id = $(this).attr('data-id');
+						console.log("CHANGE!");
+						ajaxPostUpdate("/homebase/resources/forms/form-resources/update_note.php", { 'column-name' : 'complete_datetime', 'value' : val , 'id' : id }, true );
+					});
 				} );
 			</script>
 	</body>
