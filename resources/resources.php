@@ -1,5 +1,4 @@
 <?php 
-
 	function connect_to_local_db() {
 		date_default_timezone_set('America/New_York');
 		$serv = 'localhost';
@@ -8,7 +7,6 @@
 		$db = 'jaysoftw_homebase';
 		return new mysqli($serv, $user, $pass, $db);
 	}
-
 	function connect_to_db() {
 		date_default_timezone_set('America/New_York');
 		$serv = 'localhost';
@@ -18,12 +16,37 @@
 		return new mysqli($serv, $user, $pass, $db);
 	}
 
+	// Not sure this can be done with MySQL connection
+	/*
+	function sql_srv_connect_to_db() {
+		date_default_timezone_set('America/New_York');
+		$serv = 'localhost';
+		$user = 'jaysoftw_brett';
+		$pass = 'Su944jAk127456';
+		$db = 'jaysoftw_homebase';
+		$connection_info = array("Database"=>$db, "UID"=>$user, "PWD"=>$pass, "CharacterSet"=>"UTF-8");
+		return sqlsrv_connect($serv, $connection_info);
+	}
+	*/
+
 	function set_post_value($string) {
 		return (isset($_POST[$string]) && ($_POST[$string]) != '') ? $_POST[$string] : null;
 	}
-
 	function post_is_set($string) {
 		return (isset($_POST[$string]) && $_POST[$string] != '') ? true : false;
+	}
+	function hidden_var_dump($prm) {
+		echo "<div style='display: none;'>";
+		var_dump($prm);
+		echo "</div>";
+	}
+
+	function php_dt_to_js_datestr($datetime) {
+		$month_str = ( date_format($datetime, 'm') - 1 ); // JavaScript months are zero based. PHP months are based at 1.
+		if ($month_str == 0) {
+			$month_str = '00';
+		}
+		return date_format($datetime, 'Y') . ", $month_str, " .  date_format($datetime, 'd');
 	}
 
 	// Return an HTML div with classes and ids to display progress towards a goal as well as percent of time frame used
@@ -71,7 +94,7 @@
 		}
 		else if ( $projection == 'polynomial' ) {
 			$default_goal_description .= "<h3><span>Polynomial Target:</span><span>" . number_format($polynomial_target, 2) . "</span></h3>";
-
+		
 		}
 		$default_goal_description .= "<h3><span>Target Value:</span><span>" . number_format($target_value, 2) . "</span></h3>
 		<h3><span>Starting Date:</span><span>$starting_date_str</span></h3>
@@ -92,6 +115,7 @@
 				</div>";
 		return $str;
 	}
+
 	// Return an HTML div with classes
 	function return_finance_stat_html($title = 'New Stat', $main_metric_value = '$69.69/hr', $sub_metric_value = '', $stat_size = '',  $stat_info = 'Really cool new stat to show something relevant to my financial situation', $stat_color = '#FFF' ) {
 		$str = "<div class='$stat_size stat'>
@@ -114,7 +138,6 @@
 		<h3><span>Notes:</span><span>$notes</span></h3>";
 		return $str;
 	}
-
 	/*
 	function push_notification_object($notifications_array, $metric, $name, $warning_direction = 'greater than', $warning_threshold, $warning_message, $caution_direction = 'greater than', $caution_threshold, $caution_message ) {
 		$notification = new stdClass;
@@ -139,41 +162,43 @@
 		}
 	}
 	*/
-	function return_metric_based_notification_object( $metric, $name, $target_min, $target_max, $warning_min, $warning_max, $caution_min_message, $warning_min_message, $caution_max_message, $warning_max_message ) {
+	function return_metric_based_notification_object( $metric, $name, $target_min, $target_max, $warning_min, $warning_max, $caution_min_message, $warning_min_message, $caution_max_message, $warning_max_message, $est_min_to_complete ) {
+		$notification = new stdClass();
+		$notification->name = $name;
+		$notification->est_min_to_comp = $est_min_to_complete;
 		if ( $metric >= $target_min && $metric <= $target_max ) { // If metric is in target then do nothing
-			$notification = new stdClass();
-			$notification->name = $name;
 			$notification->type = 'success';
 			$notification->message = '';
 		}
 		else if ( $metric < $target_min && $metric >= $warning_min ) { // If metric is between target min and warning min give caution message
-			$notification = new stdClass();
-			$notification->name = $name;
 			$notification->type = 'caution';
 			$notification->message = $caution_min_message;
 		}
 		else if ( $metric < $warning_min ) { // If metric is below warning min give warning message
-			$notification = new stdClass();
-			$notification->name = $name;
 			$notification->type = 'warning';
 			$notification->message = $warning_min_message;
 		}
 		else if ( $metric > $target_max && $metric <= $warning_max ) { // If metric is between target min and warning min give caution message
-			$notification = new stdClass();
-			$notification->name = $name;
 			$notification->type = 'caution';
 			$notification->message = $caution_max_message;
 		}
 		else if ( $metric > $warning_max ) { // If metric is below warning min give warning message
-			$notification = new stdClass();
-			$notification->name = $name;
 			$notification->type = 'warning';
 			$notification->message = $warning_max_message;
 		}
 		return $notification;
 	}
 
-// Date & Time Functions
+// Generic HTML functions
+function return_label_and_input($id, $name, $type, $display) {
+	$str = "<span style='display: inline-flex; flex-flow: column nowrap;'>";
+	$str .= "<label for='$id'>$display</label>";
+	$str .= "<input type='$type' name='$name' id='$id'/>";
+	$str .= "</span>";
+	return $str;
+}
+
+// Date & Time functions
 	function time_conversion($input_type, $input_value, $output_type, $precision = 0) {
 		if ($input_type == 'hours' && $output_type == 'minutes') {
 			return round( ( $input_value * 60 ) , $precision );
@@ -195,4 +220,155 @@
         else if ($output_type == 'datetime') {
             return $dt;
         }
-    }
+	}
+	function return_days_between_dates($earlier_datestr, $later_datestr) {
+		$dt1 = return_date_from_str($earlier_datestr, 'datetime');
+		$dt2 = return_date_from_str($later_datestr, 'datetime');
+		$int = $dt1->diff($dt2);
+		return ($int->invert) ? (-1 * $int->days) : $int->days;
+	}
+	function return_end_of_day($date_str, $output_type = 'string', $format = 'Y-m-d H:i:s') {
+		$dt = new datetime($date_str);
+		$dt->setTime(23, 59, 59);
+		if ($output_type == 'datetime') {
+			return $dt;
+		}
+		else if ($output_type == 'string') {
+			return date_format($dt, $format);
+		}
+	}
+	
+// Query functions
+
+	// Seal & Design
+	function return_seal_hours($conn, $date_start, $date_end) {
+		$query = "	SELECT SUM( ( time_to_sec( TIMEDIFF( departure_time, arrival_time ) ) / ( 60 * 60 ) ) - ( break_min / 60 ) ) AS 'Seal Hours'
+					FROM finance_seal_shifts
+					WHERE 	date >= '$date_start'
+						AND date <= '$date_end' ";
+		$res = $conn->query($query);
+		$row = mysqli_fetch_array($res);
+		return round( $row['Seal Hours'], 2 );
+	}
+	function return_seal_hourly_wage($conn, $day_to_check) { // Perhaps PTO should be tracked in a similar fashion to income / expenditure but all in one table
+															// ie. 05/29/2019 (approval date) | 32 (hrs)
+		$query = "	SELECT *
+					FROM `finance_seal_hourly`
+					WHERE 	start_date <= '$day_to_check'
+						AND ( end_date >= '$day_to_check' OR end_date IS NULL ); 
+				";
+		$res = $conn->query($query);
+		$row = mysqli_fetch_array($res);
+		return $row['hourly_wage'];
+	}
+	function return_seal_pre_tax_salary($conn, $date_start, $date_end, $fuse_length) {
+		$day_to_check = $date_start; // Start checking from today
+		$pre_tax_salary = 0;
+		$fuse = 0;
+		while ($day_to_check <= $date_end) {
+			$this_dow = date('D', strtotime($day_to_check));
+			if ($this_dow != 'Sat' && $this_dow != 'Sun' && ($day_to_check < date('Y-m-d', strtotime('July 14th 2018')) || $day_to_check > date('Y-m-d', strtotime('July 21st 2018')))) { // Ideally unpaid PTO should be stored in an array in constants or in a table inside of MySQL DB
+				$pre_tax_salary += ( return_seal_hourly_wage($conn, $day_to_check) * 8 );
+			}
+			$day_to_check = date('Y-m-d', strtotime($day_to_check.'+1day'));
+			$fuse++;
+			if ($fuse >= $fuse_length) {
+				echo "FUSE BLOWN";
+				exit;
+			}
+		}
+		return $pre_tax_salary;
+	}
+	function return_seal_pre_tax_bonus($conn, $date_start, $date_end) {
+		$query = " 	SELECT SUM(amount) AS 'bonus value'
+					FROM `finance_seal_income`
+					WHERE 	date >= '$date_start'
+						AND date <= '$date_end'
+						AND type = 'bonus' ";
+		$res = $conn->query($query);
+		$row = mysqli_fetch_array($res);
+		return $row['bonus value'];
+	}
+	function return_seal_received_income($conn, $date_start, $date_end) {
+		$query = " 	SELECT SUM(amount) AS 'value'
+					FROM `finance_seal_income`
+					WHERE 	date >= '$date_start'
+						AND date <= '$date_end' ";
+		$res = $conn->query($query);
+		$row = mysqli_fetch_array($res);
+		return $row['value'];
+	}
+
+	// Ricks on Main
+	function return_ricks_hours($conn, $date_start, $date_end) {
+		$query = "	SELECT SUM(hours) AS 'Ricks Hours'
+					FROM `finance_ricks_shifts` 
+					WHERE date >= '$date_start' 
+						AND date <= '$date_end' ";
+		$res = $conn->query($query);
+		$row = mysqli_fetch_array($res);
+		return round( $row['Ricks Hours'], 2 );
+	}
+	function return_ricks_otb_hours($conn, $date_start, $date_end) {
+		$query = "	SELECT SUM(hours) AS 'Ricks OTB Hours'
+					FROM `finance_ricks_shifts` 
+					WHERE date >= '$date_start' 
+						AND date <= '$date_end'
+						AND type = 'otb' ";
+		$res = $conn->query($query);
+		$row = mysqli_fetch_array($res);
+		return round( $row['Ricks OTB Hours'], 2 );
+	}
+	function return_ricks_tips($conn, $date_start, $date_end) {
+		$query = "	SELECT SUM(tips) 
+					FROM finance_ricks_shifts 
+					WHERE date >= '$date_start'
+						AND date <='$date_end'";
+		$res = $conn->query($query);
+		$row = mysqli_fetch_row($res);
+		return round($row[0], 2);
+	}
+	function return_ricks_pre_tax_income($conn, $date_start, $date_end, $hourly_wage) { // Ideally, hourly wage should be stored in a table similar to seal hourly. Otherwise, if Ricks hourly changes mid-way through a week/month/year then this will be slightly off
+		$ricks_total_hours = return_ricks_hours($conn, $date_start, $date_end);
+		$ricks_otb_hours = return_ricks_otb_hours($conn, $date_start, $date_end);
+		$ricks_billable_hours = $ricks_total_hours - $ricks_otb_hours;
+		return (return_ricks_tips($conn, $date_start, $date_end) + ($ricks_billable_hours * $hourly_wage));
+	}
+
+	// JSS
+	function return_jss_income($conn, $date_start, $date_end) { // CAUTION: date end must be 23:59:59 to appropriately capture entire end day
+		$date_end = return_end_of_day($date_end);
+		
+		$query = "	SELECT SUM(profit) AS 'Net Profit'
+					FROM `finance_jss_income` 
+					WHERE datetime >= '$date_start' 
+						AND datetime <= '$date_end' ";
+		$res = $conn->query($query);
+		$row = mysqli_fetch_array($res);
+		return round( $row['Net Profit'], 2 );
+	}
+
+	// Expenditure
+	function return_expenditure($conn, $date_start, $date_end) {
+		$query = "	SELECT SUM(amount) AS 'Net Expenditure'
+					FROM finance_expenses 
+					WHERE 	date >= '$date_start' 
+						AND date <= '$date_end'";
+		$res = $conn->query($query);
+		$row = mysqli_fetch_array($res);
+		return round($row['Net Expenditure'], 2);
+	}
+	function return_expenditure_array($conn, $date_start, $date_end) {
+		$expenditure_array = array();
+		$query = "	SELECT type, SUM(amount) AS 'Expenditure'
+					FROM finance_expenses
+					WHERE 	date >= '$date_start'
+						AND date <= '$date_end'
+					GROUP BY type 
+					ORDER BY SUM(amount) DESC; ";
+		$res = $conn->query($query);
+		while ( $row = mysqli_fetch_array($res) ) {
+			$expenditure_array[] = $row;
+		}
+		return $expenditure_array;
+	}

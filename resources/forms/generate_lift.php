@@ -34,7 +34,7 @@
 	$cadence 						= $row['cadence'];
 	$rest							= $row['rest'];
 	$workout_structure_name			= $row['name'];
-	$estimated_sec_per_muscle		= ($num_sets * (($cadence * $reps_per_set) + ($rest))) + $weight_redistribution_time;
+	$estimated_sec_per_muscle		= ( ( $num_sets * ( $cadence * $reps_per_set ) ) + ( ($num_sets - 1) * $rest) ) + $weight_redistribution_time;
 	$estimated_num_exercises 		= floor(($user_input_time_to_lift * 60) / $estimated_sec_per_muscle);
 
 	//TEST PASSED echo "$workout_structure_name : <br/> $reps_per_set * $num_sets @ $cadence" . "sec/rep w/ $rest" . " sec/set. <br/>";
@@ -215,7 +215,7 @@
 	<main>
 		
 		<h1 data-workout-structure-id='<?php echo $workout_structure; ?>' data-equipments='<?php echo serialize($equipments); ?>'><?php echo $workout_structure_name; ?></h1>
-		<h2 class='msg'><?php echo "($reps_per_set" . "reps * $num_sets" . "sets @ $cadence" . "sec/rep w/ $rest" . " sec/set)"; ?></h2>
+		<h2 class='msg'><?php echo "($reps_per_set" . "reps * $num_sets" . "sets @ $cadence" . "sec/rep w/ $rest" . " sec rest between each set)"; ?></h2>
 		<h3>Estimated Time: <?php echo $time_estimate; ?> minutes</h3>
 		<ol style='width: 80%;'>
 			<?php echo $workout_str; ?>

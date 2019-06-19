@@ -117,7 +117,7 @@
 	$net_expenditure = $row[0];
 
 	// Seal Hours
-	$q = "SELECT SUM((time_to_sec(TIMEDIFF(departure_time, arrival_time)) / (60 * 60)) - 0.5) FROM finance_seal_shifts WHERE date >= '$start_date_financial' AND date <= '$end_date_financial'";
+	$q = "SELECT SUM((time_to_sec(TIMEDIFF(departure_time, arrival_time)) / (60 * 60)) - (break_min / 60)) FROM finance_seal_shifts WHERE date >= '$start_date_financial' AND date <= '$end_date_financial'";
 	$res = $conn->query($q);
 	$row = mysqli_fetch_row($res);
 	$net_seal_hours = $row[0];
@@ -136,7 +136,6 @@
 	
 	// Net Hours
 	$net_hours = $net_seal_hours + $net_ricks_hours;
-
 
 	// Determine total income since start date
 
@@ -597,30 +596,34 @@
 
 	// Note related cautions/warnings
 	$notifications = array(); // Array to house notification objects
-	$qry_caution_notes = "SELECT *
+	$qry_caution_notes = "SELECT caution_datetime, summary, est_min_to_comp
 							FROM `personal_notes`
 							WHERE 	caution_datetime <= '" . date_format( $today_datetime, 'Y/m/d H:i:s' ) . "'
 								AND (warning_datetime IS NULL OR warning_datetime > '" . date_format( $today_datetime, 'Y/m/d H:i:s' ) . "')
-								AND complete_datetime IS NULL;";
+								AND complete_datetime IS NULL
+							ORDER BY caution_datetime ASC; ";
 	$res_caution_notes = $conn->query($qry_caution_notes);
 	if ($res_caution_notes->num_rows > 0) {
 		while($row = $res_caution_notes->fetch_assoc()) {
 			$notification = new stdClass();
 			$notification->type = 'caution';
-			$notification->message = "(" . str_replace(' ', ' @ ', $row['caution_datetime']) . ") " . $row['summary'];
+			$notification->message = /* "(" . str_replace(' ', ' @ ', $row['caution_datetime']) . ") " . */ $row['summary'];
+			$notification->est_min_to_comp = $row['est_min_to_comp'];
 			$notifications[] = $notification;
 		}
 	}
-	$qry_warning_notes = "	SELECT warning_datetime, summary
+	$qry_warning_notes = "	SELECT warning_datetime, summary, est_min_to_comp
 							FROM `personal_notes`
 							WHERE 	warning_datetime <= '" . date_format( $today_datetime, 'Y/m/d H:i:s' ) . "'
-								AND complete_datetime IS NULL; ";
+								AND complete_datetime IS NULL
+								ORDER BY warning_datetime ASC; ; ";
 	$res_warning_notes = $conn->query($qry_warning_notes);
 	if ($res_warning_notes->num_rows > 0) {
 		while($row = $res_warning_notes->fetch_assoc()) {
 			$notification = new stdClass();
 			$notification->type = 'warning';
-			$notification->message = "(" . str_replace(' ', ' @ ', $row['warning_datetime']) . ") " . $row['summary'];
+			$notification->message = /* "(" . str_replace(' ', ' @ ', $row['warning_datetime']) . ") " . */ $row['summary'];
+			$notification->est_min_to_comp = $row['est_min_to_comp'];
 			$notifications[] = $notification;
 		}
 	}

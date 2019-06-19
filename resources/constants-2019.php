@@ -20,7 +20,7 @@ define("AVG_DAILY_EXPENDITURE_TARGET", number_format((ANNUAL_EXPENDITURE_TARGET 
 // DEPRECATED...should not break anything const HOURLY_WAGE_SEAL = 				21.63;
 const HOURLY_WAGES_SEAL = 				array(25, 25.96); // Array value must correspond with HOURLY_WAGES_DATESTRINGS_SEAL date. Referenced in reports/weekly-report/index.php
 const HOURLY_WAGES_DATESTRINGS_SEAL =	array('2018-12-03', '2019-03-11'); // Array date must correspond with HOURLY_WAGES_SEAL value. Referenced in reports/weekly-report/index.php
-const CASHABLE_PTO_HOURS =              44; // Dont like this setup currently, because as PTO is used and as extra PTO is received I will have to derive and update this. Note: This will drop to zero in May 2019 because all cashable hours will have been cashed out
+const CASHABLE_PTO_HOURS =              0;//12; // Dont like this setup currently, because as PTO is used and as extra PTO is received I will have to derive and update this. Note: This will drop to zero in June 2019 because all cashable hours will have been cashed out
 
 const HOURLY_WAGE_RICKS = 				7.50; // Looks like this doesnt change until 2020 when it will jump to 7.80
 const HOURLY_WAGE_TARGET =				28.75;
@@ -34,6 +34,8 @@ const MONTHLY_INCOME_TARGET = 			AVG_DAILY_INCOME_TARGET * 365 / 12;
 const MONTHLY_EXPENDITURE_TARGET =		AVG_DAILY_EXPENDITURE_TARGET * 365 / 12;
 const MONTHLY_INCOME_DIFF_TARGET = 		MONTHLY_INCOME_TARGET - MONTHLY_EXPENDITURE_TARGET;
 const MONTHLY_HOURS_TARGET = 			WEEKLY_HOURS_TARGET * 52 / 12;
+
+const LUXURY_EXPENDITURES =             array('entertainment', 'clothing', 'personal', 'giving', 'travel', /*'fee',*/ 'office'); // List of the finance_expenses.type which correspond with non-necessary expenses. Some are necessary such as clothing and fee, but as a guideline these are avoidable.
 
 // DEPRECATED FOR 2019...will (likely) break index.php const PRE_JUNE_RICKS_INCOME =			12914;
 const ESTIMATED_AFTER_TAX_PERCENTAGE =	73; // Based off of Effective Tax Rate from smartasset.com
@@ -60,8 +62,8 @@ const UPPER_ARM_CIRC_TARGET =			13.5; // In inches
 const START_DATE_SOFTWARE_DEV_HOURS =   'January 29th 2019';
 const SOFTWARE_DEV_TARGET_HOURS =       480; // Equates to ~10 hours / week
 
-const START_DATE_MINDFULNESS_HOURS =   'January 29th 2019';
-const MINDFULNESS_TARGET_HOURS =       72; // Equates to 3 sessions / week @ 30 minutes each
+const START_DATE_MINDFULNESS_HOURS =    'January 29th 2019';
+const MINDFULNESS_TARGET_HOURS =        72; // Equates to 3 sessions / week @ 30 minutes each
 
 const START_DATE_STRING_DAY_INFO =      'January 29th 2019';
 

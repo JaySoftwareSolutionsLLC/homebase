@@ -237,4 +237,49 @@ svg path.muscle.primary {
 svg path.muscle.secondary {
   fill: #ffd500;
 }
+
+div.card {
+  position: relative;
+}
+
+div.card i {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  font-size: 1.125rem;
+}
+
+div.card span.est-min-to-comp {
+  position: absolute;
+  top: 1.5rem;
+  right: 0.125rem;
+  border-radius: 2rem;
+  border: 2px solid black;
+  padding: 0.125rem;
+  font-size: 0.5rem;
+  background: black;
+  color: white;
+}
+
+div.card.actionable {
+  background: black;
+  color: white;
+}
+
+div.card.caution {
+  background: rgba(255, 170, 0, 0.3);
+}
+
+div.card.warning {
+  background: rgba(255, 0, 0, 0.3);
+}
+
+div.card.completed {
+  opacity: 0.4;
+  background: rgba(0, 255, 0, 0.4);
+}
+
+div.card.completed h3 {
+  text-decoration: line-through;
+}
 /*# sourceMappingURL=form.css.map */

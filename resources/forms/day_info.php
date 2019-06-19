@@ -81,37 +81,22 @@
             sleep( 2 );
             header('Location: https://www.brettjaybrewster.com/homebase/resources/forms/day_info.php');
         }
+        
     }
     // Push into day object other relevant information derived from other tables such as income, expenditure, lifts performed, miles ran, etc.
-    // Ricks Income
-    $q = "  SELECT 
-                (SELECT SUM(
-                            CASE 
-                                WHEN frs.type = 'OTB' THEN frs.tips
-                                ELSE (frs.hours * " . HOURLY_WAGE_RICKS . ") + frs.tips
-                            END
-                        )
-                FROM finance_ricks_shifts AS frs
-                WHERE date = '$date') AS 'Ricks Income',
-                (SELECT SUM(fe.amount)
-                FROM finance_expenses AS fe 
-                WHERE fe.date = '$date') AS 'Expenditure'";
-    $res = $conn->query($q);
-    if ($res->num_rows > 0) {
-        while($row = $res->fetch_assoc()) {
-            $day->ricks_income = round( $row['Ricks Income'] , 2 );
-            $day->expenditure = round( $row['Expenditure'] , 2 );
-        }
-    }
-    // S&D Income
-    // echo $day->day_of_week;
-    if ($day->day_of_week != 'Saturday' && $day->day_of_week != 'Sunday') {
-        $day->seal_income = round( ( 8 * HOURLY_WAGES_SEAL[1] ) , 2 ); // WIP NEEDS TO BE CHANGED TO PULL CORRECT WAGE INFORMATION BASED ON DATE
-    }
-    else {
-        $day->seal_income = 0;
-    }
+
+    $day->ricks_hours = return_ricks_hours($conn, $day->date, $day->date);
+    $day->ricks_income = return_ricks_pre_tax_income($conn, $day->date, $day->date, 7.5);
+
+    $day->seal_hours = return_seal_hours($conn, $day->date, $day->date);
+    $day->seal_income = return_seal_pre_tax_salary($conn, $day->date, $day->date, 3);
+
     $day->income = $day->seal_income + $day->ricks_income;
+    $day->net_working_hours = $day->seal_hours + $day->ricks_hours;
+
+    $day->net_hourly = ($day->net_working_hours > 0) ? round( $day->income / $day->net_working_hours , 2 ) : 0;
+    
+    $day->expenditure = return_expenditure($conn, $day->date, $day->date);
     // Estimated Net Cont.
     $day->est_net_cont = round( ($day->income * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) - $day->expenditure , 2 );
 
@@ -177,16 +162,36 @@
                     <div class='row'>
                         <span class='input' style=''>
                             <label for='estimated-income'>Income</label>
-                            <input disabled='true' type='number' name='estimated-income' id='estimated-income' class='numeric' value='<?php echo ($day->income); ?>'>
+                            <input disabled='true' type='number' name='estimated-income' id='estimated-income' class='numeric' value='<?php echo ($day->income); ?>'/>
                         </span>
                         <span class='input' style=''>
                             <label for='estimated-expenditure'>Expenditure</label>
-                            <input disabled='true' type='number' name='estimated-expenditure' id='estimated-expenditure' class='numeric' value='<?php echo $day->expenditure; ?>'>
+                            <input disabled='true' type='number' name='estimated-expenditure' id='estimated-expenditure' class='numeric' value='<?php echo $day->expenditure; ?>'/>
                         </span>
                         <span class='input' style=''>
                             <label for='estimated-net-worth-cont'>NW Cont.</label>
-                            <input disabled='true' type='number' name='estimated-net-worth-cont' id='estimated-net-worth-cont' class='numeric' value='<?php echo $day->est_net_cont; ?>'>
+                            <input disabled='true' type='number' name='estimated-net-worth-cont' id='estimated-net-worth-cont' class='numeric' value='<?php echo $day->est_net_cont; ?>'/>
                         </span>
+                    </div>
+                    <div class='row'>
+                        <span class='input' style=''>
+                            <label for='seal-hours-input'>Seal Hours</label>
+                            <input disabled='true' type='number' name='seal-hours-input' id='seal-hours-input' class='numeric' value='<?php echo $day->seal_hours; ?>'/>
+                        </span>    
+                        <span class='input' style=''>
+                            <label for='ricks-hours-input'>Ricks Hours</label>
+                            <input disabled='true' type='number' name='ricks-hours-input' id='ricks-hours-input' class='numeric' value='<?php echo $day->ricks_hours; ?>'/>
+                        </span>    
+                        <span class='input' style=''>
+                            <label for='net-working-hours-input'>Net Working Hours</label>
+                            <input disabled='true' type='number' name='net-working-hours-input' id='net-working-hours-input' class='numeric' value='<?php echo $day->net_working_hours; ?>'/>
+                        </span>    
+                    </div>
+                    <div class='row'>
+                        <span class='input' style=''>
+                            <label for='hourly'>Hourly</label>
+                            <input disabled='true' type='number' name='hourly-input' id='hourly-input' class='numeric' value='<?php echo $day->net_hourly; ?>'/>
+                        </span>      
                     </div>
                 </section>
                 <section style=''>

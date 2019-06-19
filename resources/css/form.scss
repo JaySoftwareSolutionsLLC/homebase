@@ -1,3 +1,4 @@
+
 body {
 	width: 100%;
 	align-items: center;
@@ -184,5 +185,43 @@ svg path.muscle {
 	}
 	&.secondary {
 		fill: 		hsl(50, 100%, 50%);
+	}
+}
+
+div.card {
+	position: relative;
+	i {
+		position: absolute;
+		top: 0.25rem;
+		right: 0.25rem;
+		font-size: 1.125rem;
+	}
+	span.est-min-to-comp {
+		position: absolute;
+		top: 1.5rem;
+		right: 0.125rem;
+		border-radius: 2rem;
+		border: 2px solid black;
+		padding: 0.125rem;
+		font-size: 0.5rem;
+		background: black;
+		color: white;
+	}
+	&.actionable {
+		background: black;
+		color: white;
+	}
+	&.caution {
+		background: hsla(40, 100%, 50%, 0.3);
+	}
+	&.warning {
+		background: hsla(0, 100%, 50%, 0.3);
+	}
+	&.completed {
+		opacity: 0.4;
+		background: hsla(120, 100%, 50%, 0.4);
+		h3 {
+			text-decoration: line-through;
+		}
 	}
 }
