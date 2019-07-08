@@ -186,9 +186,15 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/js
 					});
 
 					$('textarea.description').on('keyup', function() {
-						let charCount = $(this).val();
-						charCount = charCount.length;
+						let enteredText = $(this).val();
+						charCount = enteredText.length;
+						lineBreakCount = (enteredText.match(/\n/g)||[]).length; // Because we're converting newlines to <br /> we need to account for that in the character count
+						lineBreakSizeDifferential = 5;
+						charCount += lineBreakCount * lineBreakSizeDifferential;
 						$('h3.desc-char-used').html(`${charCount}/255`);
+						if (charCount > 255) {
+							$('h3.desc-char-used').css('color: red');
+						}
 					});
 
 					$.ajax({

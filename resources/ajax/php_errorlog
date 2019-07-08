@@ -1,0 +1,5 @@
+[05-Jun-2019 19:23:12 America/New_York] PHP Fatal error:  Uncaught Error: Cannot use object of type DateInterval as array in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php:226
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/ajax/note_cards.php(29): return_days_between_dates(NULL, '2019/06/05')
+#1 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 226

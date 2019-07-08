@@ -9,3 +9,12 @@ Stack trace:
   thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/reports/weekly-report/index.php on line 69
 [19-Jun-2018 20:12:48 America/New_York] PHP Parse error:  syntax error, unexpected '}', expecting ',' or ';' in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/reports/weekly-report/report-header.php on line 17
 [19-Jun-2018 21:11:21 CST6CDT] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO), expecting ',' or ';' in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/reports/weekly-report/index.php on line 147
+[15-May-2019 10:12:50 America/New_York] PHP Fatal error:  Uncaught Error: Call to undefined function mysql_fetch_array() in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php:222
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/reports/weekly-report/index.php(29): return_seal_hours(Object(mysqli), '2019-05-13', '2019-05-15')
+#1 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 222
+[15-May-2019 10:36:21 America/New_York] PHP Fatal error:  Uncaught Error: Call to undefined function return_ricks_pre_tax_income() in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/reports/weekly-report/index.php:132
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/reports/weekly-report/index.php on line 132

@@ -1,4 +1,5 @@
 <?php 
+// Database Functions
 	function connect_to_local_db() {
 		date_default_timezone_set('America/New_York');
 		$serv = 'localhost';
@@ -14,6 +15,25 @@
 		$pass = 'Su944jAk127456';
 		$db = 'jaysoftw_homebase';
 		return new mysqli($serv, $user, $pass, $db);
+	}
+	function insert_row($conn, $table_name, $row_values = array()) {
+		$qry = "INSERT INTO $table_name (";
+		foreach($row_values as $key => $val) {
+			$qry .= "$key, ";
+		}
+		$qry = rtrim($qry, ", ");
+		$qry .= ") ";
+		$qry .= "VALUES (";
+		foreach($row_values as $key => $val) {
+			$qry .= "'$val', ";
+		}
+		$qry = rtrim($qry, ", ");
+		$qry .= ")";
+		if ($conn->query($qry) === TRUE) {
+			return "New record created successfully";
+		} else {
+			return "Error with query: $qry <br> $conn->error";
+		}
 	}
 
 	// Not sure this can be done with MySQL connection
@@ -39,6 +59,16 @@
 		echo "<div style='display: none;'>";
 		var_dump($prm);
 		echo "</div>";
+	}
+	function post_values_are_set($array_of_str = array()) { // WIP
+		$all_values_set = true;
+		foreach($array_of_str as $str) {
+			if ( ! isset( $_POST[$str] ) ) {
+				$all_values_set = false;
+				break;
+			}
+		}
+		return $all_values_set;
 	}
 
 	function php_dt_to_js_datestr($datetime) {
@@ -190,13 +220,17 @@
 	}
 
 // Generic HTML functions
-function return_label_and_input($id, $name, $type, $display) {
-	$str = "<span style='display: inline-flex; flex-flow: column nowrap;'>";
-	$str .= "<label for='$id'>$display</label>";
-	$str .= "<input type='$type' name='$name' id='$id'/>";
-	$str .= "</span>";
-	return $str;
-}
+	function return_label_and_input($id, $name, $type, $display, $attributes = array()) {
+		$str = "<span style='display: inline-flex; flex-flow: column nowrap;'>";
+		$str .= "<label for='$id'>$display</label>";
+		$str .= "<input type='$type' name='$name' id='$id'";
+		foreach($attributes as $a) {
+			$str .= " $a ";
+		}
+		$str .= "/>";
+		$str .= "</span>";
+		return $str;
+	}
 
 // Date & Time functions
 	function time_conversion($input_type, $input_value, $output_type, $precision = 0) {
@@ -371,4 +405,15 @@ function return_label_and_input($id, $name, $type, $display) {
 			$expenditure_array[] = $row;
 		}
 		return $expenditure_array;
+	}
+	
+	// Goals & Metric tracking
+	function return_dev_hours($conn, $date_start, $date_end, $precision = 2) {
+		$query = "	SELECT SUM(software_dev_hours) AS 'Net Dev Hours'
+					FROM personal_day_info
+					WHERE 	date >= '$date_start'
+						AND date <= '$date_end' ";
+		$res = $conn->query($query);
+		$row = mysqli_fetch_array($res);
+		return round($row['Net Dev Hours'], $precision);
 	}
