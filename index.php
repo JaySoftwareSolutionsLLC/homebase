@@ -61,6 +61,8 @@
 	}
 
 	// Retrieve Account Information
+	$accounts = return_accounts_array($conn, $year);
+	/*
 	$accounts = array(); // Array to house account objects
 	if ($year == '2018') {
 		$qry = " SELECT f_a.*, ( 	SELECT value
@@ -98,6 +100,7 @@
 			$accounts[] = $account;
 		}
 	}
+	*/
 	$account_types = array();
 	foreach ($accounts as $a) {
 		if ( empty( $account_types["$a->type"] ) ) {

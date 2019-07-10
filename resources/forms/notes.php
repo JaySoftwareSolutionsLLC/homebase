@@ -168,16 +168,17 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/js
 						"order": [ 0, 'desc' ],
 						"pageLength": 250,
 					} );
-
-					$('input.complete-datetime').on('change blur', function() {
-						let val = "'" + $(this).val() + "'";
-						if (val == "''") {
-							val = "NULL";
-						}
-						let id = $(this).attr('data-id');
-						console.log("CHANGE!");
-						ajaxPostUpdate("/homebase/resources/forms/form-resources/update_note.php", { 'column-name' : 'complete_datetime', 'value' : val , 'id' : id }, false );
-					});
+					function allowCompleteDatetimeToBeUpdated() {
+						$('input.complete-datetime').on('change blur', function() {
+							let val = "'" + $(this).val() + "'";
+							if (val == "''") {
+								val = "NULL";
+							}
+							let id = $(this).attr('data-id');
+							console.log("CHANGE!");
+							ajaxPostUpdate("/homebase/resources/forms/form-resources/update_note.php", { 'column-name' : 'complete_datetime', 'value' : val , 'id' : id }, false );
+						});
+					}
 
 					$('input.summary').on('keyup', function() {
 						let charCount = $(this).val();
@@ -206,6 +207,7 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/js
 					})
 					.done(function(response) {
 						$('section.card-deck').empty().html(response);
+						allowCompleteDatetimeToBeUpdated();
 					});
 					
 					$('section.card-deck-parameters input').on('change', function() {
@@ -224,6 +226,7 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/js
 						})
 						.done(function(response) {
 							$('section.card-deck').empty().html(response);
+							allowCompleteDatetimeToBeUpdated();
 						});
 					});
 					

@@ -609,6 +609,9 @@
 				$('input.exercise-name-input').css('display', 'block');
 				$('section.best-lifts').css('display', 'none');
 				$('h1.exercise-name').css('display', 'none');
+				$('input.exercise-name-input').val('');
+				$('input.exercise-href-input').val('');
+				$('textarea.exercise-desc-input').val('');
 			}
 			else {
 				$('button#submit').html('Update');

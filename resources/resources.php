@@ -1,5 +1,5 @@
 <?php 
-// Database Functions
+	// Database Functions
 	function connect_to_local_db() {
 		date_default_timezone_set('America/New_York');
 		$serv = 'localhost';

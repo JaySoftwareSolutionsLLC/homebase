@@ -58,5 +58,5 @@ $('#modal').on('click', function(event) {
     event.stopPropagation(); // Prevent modal close if click is inside of modal box
 });
 $('body').on('click', function() {
-    hideModal();
+    stopTimer($('div#modal button'));
 });
