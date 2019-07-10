@@ -396,9 +396,9 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/weekly-report/r
 			<div class='stats fitness'>
 				<div class='stat running'>
 					<div class='stat-text'>
-						<h3>Miles Run</h3>
-						<h4><?php echo '0.5 miles'; ?></h4>
-						<h5>Target: <?php echo '3 miles'; ?></h5>
+						<h3>Dev Hours</h3>
+						<h4><?= return_dev_hours($conn, $date_start, $date_end, 2) ?></h4>
+						<h5>Target: <?php echo '10 hours'; ?></h5>
 					</div>
 				</div>
 			</div>

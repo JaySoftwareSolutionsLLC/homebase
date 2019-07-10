@@ -54,6 +54,30 @@ section.finance div.content div.stat h5 {
   color: white;
 }
 
+section.finance div.content div.stat div.variant-row {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 70%;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+section.finance div.content div.stat div.variant-row button {
+  padding: 0.125rem;
+  margin: 0;
+  background: none;
+  color: white;
+  border: 1px solid #00d5ff;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+section.finance div.content div.stat div.variant-row button:hover, section.finance div.content div.stat div.variant-row button.active {
+  background: #00d5ff;
+}
+
 section.finance div.content div.stat i {
   font-size: 0.375rem;
   width: 0.875rem;

@@ -1,4 +1,5 @@
 <?php 
+// Database Functions
 	function connect_to_local_db() {
 		date_default_timezone_set('America/New_York');
 		$serv = 'localhost';
@@ -14,6 +15,25 @@
 		$pass = 'Su944jAk127456';
 		$db = 'jaysoftw_homebase';
 		return new mysqli($serv, $user, $pass, $db);
+	}
+	function insert_row($conn, $table_name, $row_values = array()) {
+		$qry = "INSERT INTO $table_name (";
+		foreach($row_values as $key => $val) {
+			$qry .= "$key, ";
+		}
+		$qry = rtrim($qry, ", ");
+		$qry .= ") ";
+		$qry .= "VALUES (";
+		foreach($row_values as $key => $val) {
+			$qry .= "'$val', ";
+		}
+		$qry = rtrim($qry, ", ");
+		$qry .= ")";
+		if ($conn->query($qry) === TRUE) {
+			return "New record created successfully";
+		} else {
+			return "Error with query: $qry <br> $conn->error";
+		}
 	}
 
 	// Not sure this can be done with MySQL connection
@@ -40,7 +60,17 @@
 		var_dump($prm);
 		echo "</div>";
 	}
-
+	function post_values_are_set($array_of_str = array()) { // WIP
+		$all_values_set = true;
+		foreach($array_of_str as $str) {
+			if ( ! isset( $_POST[$str] ) ) {
+				$all_values_set = false;
+				break;
+			}
+		}
+		return $all_values_set;
+	}
+	
 	function php_dt_to_js_datestr($datetime) {
 		$month_str = ( date_format($datetime, 'm') - 1 ); // JavaScript months are zero based. PHP months are based at 1.
 		if ($month_str == 0) {
@@ -117,10 +147,20 @@
 	}
 
 	// Return an HTML div with classes
-	function return_finance_stat_html($title = 'New Stat', $main_metric_value = '$69.69/hr', $sub_metric_value = '', $stat_size = '',  $stat_info = 'Really cool new stat to show something relevant to my financial situation', $stat_color = '#FFF' ) {
-		$str = "<div class='$stat_size stat'>
-					<h3>$title</h3>
-					<h4 style='color: $stat_color;'>$main_metric_value</h4>
+	function return_finance_stat_html($title = 'New Stat', $main_metric_value = '$69.69/hr', $sub_metric_value = '', $stat_size = '',  $stat_info = 'Really cool new stat to show something relevant to my financial situation', $stat_color = '#FFF', $stat_id='', $variants_array = array() ) {
+		$str = "<div class='$stat_size stat' ";
+		$str .= (empty($stat_id)) ? "" : " id='$stat_id' ";
+		$str .= (count($variants_array)) ? " style='height: 5rem;' " : "";
+		$str .= ">
+					<h3>$title</h3>";
+		if (count($variants_array)) {
+			$str .= "<div class='variant-row' style='display: flex'>";
+			foreach ($variants_array as $val => $disp) {
+				$str .= "<button data-val='$val'>$disp</button>";
+			}
+			$str .= "</div>";
+		}
+		$str .= "	<h4 style='color: $stat_color;' class='main-metric-val'>$main_metric_value</h4>
 					<h5>$sub_metric_value</h5>
 					<i class='fas fa-info' data-stat-description='$stat_info'></i>
 				</div>";
@@ -190,13 +230,17 @@
 	}
 
 // Generic HTML functions
-function return_label_and_input($id, $name, $type, $display) {
+function return_label_and_input($id, $name, $type, $display, $attributes = array()) {
 	$str = "<span style='display: inline-flex; flex-flow: column nowrap;'>";
 	$str .= "<label for='$id'>$display</label>";
-	$str .= "<input type='$type' name='$name' id='$id'/>";
-	$str .= "</span>";
-	return $str;
-}
+	$str .= "<input type='$type' name='$name' id='$id'";
+	foreach($attributes as $a) {
+		$str .= " $a ";
+	}
+	$str .= "/>";
+		$str .= "</span>";
+		return $str;
+	}
 
 // Date & Time functions
 	function time_conversion($input_type, $input_value, $output_type, $precision = 0) {
@@ -371,4 +415,88 @@ function return_label_and_input($id, $name, $type, $display) {
 			$expenditure_array[] = $row;
 		}
 		return $expenditure_array;
+	}
+
+	// Accounts
+	function return_accounts_array($conn, $year) {
+		$accounts = array(); // Array to house account objects
+		if ($year == '2018') {
+			$qry = " SELECT f_a.*, ( 	SELECT value
+										FROM finance_account_log AS f_a_l
+										WHERE 	f_a.id = f_a_l.account_id
+											AND f_a_l.date <= '2019-01-03'
+										ORDER BY f_a_l.date DESC, f_a_l.id DESC
+										LIMIT 1) AS 'most recent value'
+					FROM finance_accounts AS f_a
+					WHERE f_a.closed_on >= '2019-01-03'
+						OR f_a.closed_on IS NULL
+					GROUP BY f_a.id, f_a.name, f_a.type, f_a.expected_annual_return ";
+		}
+		else {
+			$qry = " SELECT f_a.*, ( 	SELECT value
+										FROM finance_account_log AS f_a_l
+										WHERE f_a.id = f_a_l.account_id
+										ORDER BY f_a_l.date DESC, f_a_l.id DESC
+										LIMIT 1) AS 'most recent value'
+					FROM finance_accounts AS f_a
+					WHERE f_a.closed_on IS NULL
+					GROUP BY f_a.id, f_a.name, f_a.type, f_a.expected_annual_return ";
+		}
+		$res = $conn->query($qry);
+		if ($res->num_rows > 0) {
+			while($row = $res->fetch_assoc()) {
+				$account = new stdClass();
+				$account_id = $row['id'];
+				$account->name = $row['name'];
+				$account->type = $row['type'];
+				$account->exp_roi = $row['expected_annual_return'];
+				$account->mrv = $row['most recent value'];
+				//var_dump($account);
+				//echo "<br/><br/>";
+				$accounts[] = $account;
+			}
+		}
+		return $accounts;
+	}
+
+	// Goals & Metric tracking
+	function return_dev_hours($conn, $date_start, $date_end, $precision = 2) {
+		$query = "	SELECT SUM(software_dev_hours) AS 'Net Dev Hours'
+					FROM personal_day_info
+					WHERE 	date >= '$date_start'
+						AND date <= '$date_end' ";
+		$res = $conn->query($query);
+		$row = mysqli_fetch_array($res);
+		return round($row['Net Dev Hours'], $precision);
+	}
+
+	// Calculations
+	function return_theoretical_age_60_withdrawal_rate($accounts = array(), $years_until_60 = 34.75, $exp_roi = null ) {
+		$theoretical_age_60_net_worth = 0;
+		$theoretical_age_60_annual_withdrawal_rate = 0;
+		foreach ($accounts as $a) { // For each account determine the estimated value at age 60
+			$curr_principle = $a->mrv;
+			if (is_null($exp_roi)) { // If an ROI is not given then use the value on this account
+				$age_60_val = ( $curr_principle * pow( (1 + ($a->exp_roi / 100)) , $years_until_60 ) );
+			}
+			else { // If an ROI is given then use that value to determine future value of this account
+				$age_60_val = ( $curr_principle * pow( (1 + ($exp_roi / 100)) , $years_until_60 ) );
+			}
+			if ($age_60_val < 0) { // For depreciating assets and liabilities
+				$age_60_val = 0;
+			}
+			$theoretical_age_60_net_worth += $age_60_val;
+			if ($a->type == 'ROTH') { // If the account is a ROTH then no taxes or capital gains need to be paid
+				$theoretical_age_60_annual_withdrawal_rate += round( $age_60_val * 0.04 , 2 ); // Assuming a 4% withdraw rate
+			}
+			elseif ($a->type == 'traditional 401k') { // If the account is a traditional 401k then taxes need to be paid
+				$theoretical_age_60_annual_withdrawal_rate += round( ($age_60_val * 0.04) * 0.7 , 2 ); // Assuming a 30% Tax Rate
+			}
+			elseif ($a->type == 'taxable account') { // If the account 
+				$percent_growth = ($age_60_val - $curr_principle) / $age_60_val;
+				$theoretical_age_60_annual_withdrawal_rate += round( ($age_60_val * 0.04) - ( ($age_60_val * 0.04) * $percent_growth * 0.15) , 2); // Assuming a 15% Capital Gains Rate
+			}
+			// TEST PASSED 2019.03.12 echo "$a->name: $age_60_val | $theoretical_age_60_net_worth | $theoretical_age_60_annual_withdrawal_rate <br/>";
+		}
+		return $theoretical_age_60_annual_withdrawal_rate;
 	}

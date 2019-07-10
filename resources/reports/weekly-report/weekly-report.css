@@ -61,7 +61,11 @@ section.generated-report div.stats .stat .stat-text h5 {
 	font-size: 0.625rem;
 }
 
-
+circle.progress-ring {
+	transition: stroke-dashoffset 0.35s;
+  	transform: rotate(-90deg);
+  	transform-origin: 50% 50%,
+}
 
 @media print {
 	@page {

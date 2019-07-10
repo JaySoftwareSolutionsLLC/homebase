@@ -7,28 +7,7 @@
 	$days_until_60 = $interval_until_60->days;
 	$years_until_60 = round( $days_until_60 / 365.25 , 2 );
 
-	$theoretical_age_60_net_worth = 0;
-	$theoretical_age_60_annual_withdrawal_rate = 0;
-	foreach ($accounts as $a) { // For each account determine the estimated value at age 60
-		$curr_principle = $a->mrv;
-
-		$age_60_val = ( $curr_principle * pow( (1 + ($a->exp_roi / 100)) , $years_until_60 ) );
-		if ($age_60_val < 0) {
-			$age_60_val = 0;
-		}
-		$theoretical_age_60_net_worth += $age_60_val;
-		if ($a->type == 'ROTH') { // If the account is a ROTH then no taxes or capital gains need to be paid
-			$theoretical_age_60_annual_withdrawal_rate += round( $age_60_val * 0.04 , 2 ); // Assuming a 4% withdraw rate
-		}
-		elseif ($a->type == 'traditional 401k') { // If the account is a traditional 401k then taxes need to be paid
-			$theoretical_age_60_annual_withdrawal_rate += round( ($age_60_val * 0.04) * 0.7 , 2 ); // Assuming a 30% Tax Rate
-		}
-		elseif ($a->type == 'taxable account') { // If the account 
-			$percent_growth = ($age_60_val - $curr_principle) / $age_60_val;
-			$theoretical_age_60_annual_withdrawal_rate += round( ($age_60_val * 0.04) - ( ($age_60_val * 0.04) * $percent_growth * 0.15) , 2); // Assuming a 15% Capital Gains Rate
-		}
-		// TEST PASSED 2019.03.12 echo "$a->name: $age_60_val | $theoretical_age_60_net_worth | $theoretical_age_60_annual_withdrawal_rate <br/>";
-	}
+	$theoretical_age_60_annual_withdrawal_rate = return_theoretical_age_60_withdrawal_rate($accounts, $years_until_60);
 
 	if ( $opportunity_surplus > 2500 ) { // If opportunity surplus is greater than $2,000 then set color to green
 		$opportunity_surplus_font_color = 'hsl(120, 100%, 50%)'; 
@@ -111,7 +90,7 @@
 		$awh_info = return_finance_stat_info_html('Average Working Hours', 'Determine average hours worked per week (YTD)', 'Net Hours / (Day of year / 7)', array(), '');
 		echo return_finance_stat_html( 'AWH', number_format( $awh, 2 ) . " hrs/wk", WEEKLY_HOURS_TARGET, 'small', $awh_info );
 
-		$ahw_info = return_finance_stat_info_html('Average Hourly Wage', 'Determine Average Hourly Wage (YTD)', 'Net Income / Hours Worked', array('All shifts are recorded properly', '30 minute lunches @ S&D'), '');
+		$ahw_info = return_finance_stat_info_html('Average Hourly Wage', 'Determine Average Hourly Wage (YTD)', 'Net Income / Hours Worked', array('All shifts are recorded properly'), '');
 		echo return_finance_stat_html( 'AHW', "$" . number_format( $ahw, 2 ) . "/hr", HOURLY_WAGE_TARGET, 'small', $ahw_info );
 
 		echo "</div>"; // End row div
@@ -119,8 +98,8 @@
 		$opportunity_surplus_info = return_finance_stat_info_html('Opportunity Surplus', 'Determine amount of $ I can spend and still hit annual net worth contribution goal', '(($net_income + ( CASHABLE_PTO_HOURS * $correct_hourly) + (($avg_full_week_ricks_income + $avg_full_week_seal_income) * $weeks_left_in_year)) * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) - ($net_expenditure + (AVG_DAILY_EXPENDITURE_TARGET * $days_left_in_year)) - ANNUAL_NET_WORTH_CONTRIBUTION_TARGET', array('Work Mon/Thu/Sat PMs @ Ricks', 'Cash out all PTO', 'Future ADE = Target ADE'), 'Accounts for seasonality');
 		echo return_finance_stat_html( 'Opportunity Surplus', "$" . number_format($opportunity_surplus), '', '', $opportunity_surplus_info, $opportunity_surplus_font_color );
 	
-		$theoretical_age_60_ADW_info = return_finance_stat_info_html('Theoretical Age 60 ADW', 'Determine Average Daily Withdrawal from Investments at age 60', '', array('exp_roi is hit each year for each account'), 'Only considers ROTH and taxable account types.');
-		echo return_finance_stat_html( 'Age 60 ADW', "$" . number_format( $theoretical_age_60_annual_withdrawal_rate / 365.25 , 2 ) . "/day", '', 'small', $theoretical_age_60_ADW_info );
+		$theoretical_age_60_ADW_info = return_finance_stat_info_html('Theoretical Age 60 ADW', 'Determine Average Daily Withdrawal from Investments at age 60', '', array('exp_roi is hit each year for each account (or avg ROI is equal to selected variant)'), 'Only considers ROTH and taxable account types.');
+		echo return_finance_stat_html( 'Age 60 ADW', "$" . number_format( $theoretical_age_60_annual_withdrawal_rate / 365.25 , 2 ) . "/day", '', '', $theoretical_age_60_ADW_info, '#FFF', 'stat-age-60-adw', array('5' => '5%', '7' => '7%','8' => '8%','10' => '10%','12' => '12%') );
 	
 		$theoretical_eoy_nw_info = return_finance_stat_info_html('Theoretical EOY Net Worth', 'Determine Net Worth on last day of year if I earn expected ROI on investments and earn my theoretical income amount.', 'appreciated account values + (theoretical future income * take home %) - (Target ADE * days left in year)');
 		echo return_finance_stat_html('Theoretical EOY Net Worth',"$" . number_format($theoretical_EOY_net_worth), '', '', $theoretical_eoy_nw_info);

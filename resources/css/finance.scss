@@ -3,7 +3,7 @@ section.finance {
         width: 100%;
         display: inline-flex;
         flex-flow: row wrap;
-        justify-content: space-around;
+        justify-content: space-around; 
         div.stat {
             position: relative; // Must be set to relative to allow info icon to be placed absolutely
             width: 15rem;
@@ -32,6 +32,23 @@ section.finance {
             h5 {
                 font-size: 0.5rem;
                 color: white;
+            }
+            div.variant-row {
+                display: flex;
+                width: 70%;
+                justify-content: space-between;
+                button {
+                    padding: 0.125rem;
+                    margin: 0;
+                    background: none;
+                    color: white;
+                    border: 1px solid hsl(190, 100%, 50%);
+                    border-radius: 0.25rem;
+                    cursor: pointer;
+                    &:hover, &.active {
+                        background: hsl(190, 100%, 50%);
+                    }
+                }
             }
             i {
                 font-size: 0.375rem; 
