@@ -1,5 +1,5 @@
 <?php 
-// Database Functions
+	// Database Functions
 	function connect_to_local_db() {
 		date_default_timezone_set('America/New_York');
 		$serv = 'localhost';
@@ -70,7 +70,6 @@
 		}
 		return $all_values_set;
 	}
-	
 	function php_dt_to_js_datestr($datetime) {
 		$month_str = ( date_format($datetime, 'm') - 1 ); // JavaScript months are zero based. PHP months are based at 1.
 		if ($month_str == 0) {
@@ -230,14 +229,14 @@
 	}
 
 // Generic HTML functions
-function return_label_and_input($id, $name, $type, $display, $attributes = array()) {
-	$str = "<span style='display: inline-flex; flex-flow: column nowrap;'>";
-	$str .= "<label for='$id'>$display</label>";
-	$str .= "<input type='$type' name='$name' id='$id'";
-	foreach($attributes as $a) {
-		$str .= " $a ";
-	}
-	$str .= "/>";
+	function return_label_and_input($id, $name, $type, $display, $attributes = array()) {
+		$str = "<span style='display: inline-flex; flex-flow: column nowrap;'>";
+		$str .= "<label for='$id'>$display</label>";
+		$str .= "<input type='$type' name='$name' id='$id'";
+		foreach($attributes as $a) {
+			$str .= " $a ";
+		}
+		$str .= "/>";
 		$str .= "</span>";
 		return $str;
 	}

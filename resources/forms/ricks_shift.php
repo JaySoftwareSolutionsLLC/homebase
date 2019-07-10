@@ -12,12 +12,16 @@ $entry_msg = "Welcome to the Rick's on Main shift submission page.";
 
 // If variables have been posted insert into db
 if(isset($_POST['date'])) {
+	$description = "'" . htmlspecialchars( $_POST['description'], ENT_QUOTES ) . "'";
+	$stress = ( isset($_POST['stress'] ) ) ? "'" . $_POST['stress'] . "'" : 'NULL';
+	$enjoyment = ( isset($_POST['enjoyment'] ) ) ? "'" . $_POST['enjoyment'] . "'" : 'NULL';
 	$qry = "INSERT INTO `finance_ricks_shifts`(`date`, `type`, `hours`, `tips`, `stress`, `enjoyment`, `description`)
-	VALUES ('" . $_POST['date'] . "', '" . $_POST['type'] . "', '" . $_POST['hours'] . "', " . $_POST['tips'] . ", " . $_POST['stress'] . ", " . $_POST['enjoyment'] . ", '" . $_POST['description'] . "')";
+	VALUES ('" . $_POST['date'] . "', '" . $_POST['type'] . "', '" . $_POST['hours'] . "', " . $_POST['tips'] . ", $stress, $enjoyment, $description)";
 
 	if ($conn->query($qry) === TRUE) {
     	$entry_msg = "New record created successfully";
-	} else {
+	} 
+	else {
     	$entry_msg = "Error with query: $qry <br> $conn->error";
 		var_dump($_POST);
 	}
@@ -106,7 +110,11 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 				<label for='enjoyment'>Enjoyment (Optional)</label>
 				<input id='enjoyment' type='number' name='enjoyment' min='1' max='10' step='1'/>
 				<label for='description'>Description (Optional)</label>
-				<textarea id='description' name='description' maxlength='255' placeholder='Section 205. Very Busy. Worked with awesome crew...'></textarea>
+				<span style='position: relative;'>
+					<textarea name='description' class='description' maxlength='255' placeholder='Section 205. Very Busy. Worked with awesome crew...' style='width: 100%;'></textarea>
+					<h3 class='desc-char-used' style='position: absolute; bottom: 0.5rem; right: 0.5rem; color: hsla(0, 0%, 0%, 0.5);'>0/255</h3>
+				</span>
+				<!--<textarea id='description' name='description' maxlength='255' placeholder='Section 205. Very Busy. Worked with awesome crew...'></textarea>-->
 				<button type="submit">Submit</button>
 			</form>
 			
@@ -146,9 +154,17 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/js
 ?>
 		<script>
 			$(document).ready( function () {
+				
 				$('#ricks-shifts-table').DataTable( {
 					"order": [[ 0, "desc" ]]
 				} );
+
+				$('textarea.description').on('keyup', function() {
+					let charCount = $(this).val();
+					charCount = charCount.length;
+					$('h3.desc-char-used').html(`${charCount}/255`);
+				});
+
 			} );
 		</script>
 	</body>

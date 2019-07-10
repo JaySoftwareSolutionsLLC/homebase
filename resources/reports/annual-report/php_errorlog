@@ -8,3 +8,9 @@ Stack trace:
 [04-Jan-2019 18:26:25 CST6CDT] PHP Parse error:  syntax error, unexpected 'a' (T_STRING) in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/reports/annual-report/index.php on line 474
 [04-Jan-2019 18:26:28 CST6CDT] PHP Parse error:  syntax error, unexpected 'a' (T_STRING) in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/reports/annual-report/index.php on line 474
 [04-Jan-2019 18:27:52 CST6CDT] PHP Parse error:  syntax error, unexpected ',' in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/reports/annual-report/index.php on line 495
+[20-May-2019 12:14:50 America/New_York] PHP Fatal error:  Uncaught Error: Call to a member function modify() on null in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/reports/annual-report/index.php:59
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/reports/annual-report/index.php on line 59
+[31-May-2019 13:19:41 CST6CDT] PHP Parse error:  syntax error, unexpected ';' in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/reports/annual-report/index.php on line 777
+[31-May-2019 13:20:57 CST6CDT] PHP Parse error:  syntax error, unexpected '}' in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/reports/annual-report/index.php on line 778

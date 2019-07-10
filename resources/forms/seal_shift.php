@@ -10,9 +10,15 @@ $types_of_expenses; // pull this from DB enumerated field of type
 $entry_msg = "Welcome to the Seal & Design shift submission page.";
 
 // If variables have been posted insert into db
-if(isset($_POST['date']) && isset($_POST['arrival_time']) && isset($_POST['departure_time'])) {
-	$qry = "INSERT INTO `finance_seal_shifts`(`date`,`arrival_time`,`departure_time`,`strain`,`feedback`,`stress`)
-	VALUES ('" . $_POST['date'] . "', '" . $_POST['arrival_time'] . "', '" . $_POST['departure_time'] . "', " . $_POST['strain'] . ", " . $_POST['feedback'] . ", " . $_POST['stress'] . ");";
+if ( isset( $_POST['date'] ) && isset( $_POST['arrival_time'] ) && isset( $_POST['departure_time'] ) && isset( $_POST['break_min'] ) ) {
+	if ( empty( $_POST['description'] ) ) {
+		$desc = "NULL";
+	}
+	else {
+		$desc = "'" . htmlspecialchars( $_POST['description'], ENT_QUOTES ) . "'";
+	}
+	$qry = "INSERT INTO `finance_seal_shifts` (`date`, `arrival_time`, `departure_time`, `strain`, `feedback`, `stress`, `description`, `break_min`)
+	VALUES ('" . $_POST['date'] . "', '" . $_POST['arrival_time'] . "', '" . $_POST['departure_time'] . "', " . $_POST['strain'] . ", " . $_POST['feedback'] . ", " . $_POST['stress']  . ", " . $desc . ", " . $_POST['break_min'] . ");";
 
 	if ($conn->query($qry) === TRUE) {
     	$entry_msg = "New record created successfully";
@@ -21,14 +27,16 @@ if(isset($_POST['date']) && isset($_POST['arrival_time']) && isset($_POST['depar
 	}
 }
 
-$qry = "SELECT 	date, 
-				DAYNAME(date) AS 'dow', 
-				arrival_time, 
-				departure_time,
-				((time_to_sec(TIMEDIFF(departure_time, arrival_time)) / (60 * 60)) - 0.5) AS 'hours',
-				strain, 
-				feedback, 
-				stress 
+$qry = "SELECT 	date,
+				DAYNAME(date) AS 'dow'
+				,arrival_time
+				,departure_time
+				,( ( time_to_sec( TIMEDIFF( departure_time, arrival_time ) ) / ( 60 * 60 ) ) - ( break_min / 60 ) ) AS 'hours'
+				,break_min
+				,strain
+				,feedback
+				,stress
+				,description
 		FROM finance_seal_shifts ORDER BY date DESC;";
 $res = $conn->query($qry);
 if ($res->num_rows > 0) {
@@ -39,11 +47,13 @@ if ($res->num_rows > 0) {
 						<td>" . substr($row['dow'], 0, 3) . "</td>
 						<td>" . substr($row['arrival_time'], 0, 5) . "</td>
 						<td>" . substr($row['departure_time'], 0, 5) . "</td>
+						<td>" . $row['break_min'] . "</td>
 						<td>" . round($row['hours'], 2) . "</td>
 						<td>" . $row['strain'] . "</td>
 						<td>" . $row['feedback'] . "</td>
 						<td>" . $row['stress'] . "</td>
-						</tr>";
+						<td>" . $row['description'] . "</td>
+					</tr>";
     }
 }
 
@@ -73,6 +83,13 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 				<input id='feedback' type='number' name='feedback' min='1' max='10' step='1'/>
 				<label for='stress'>Stress</label>
 				<input id='stress' type='number' name='stress' min='1' max='10' step='1'/>
+				<label for='break_min'>Break Minutes</label>
+				<input id='break_min' type='number' name='break_min' min='0' max='255' step='1' value='30'/>
+				<label for='description'>Description (Optional)</label>
+				<span style='position: relative;'>
+					<textarea name='description' class='description' maxlength='255' placeholder='Epicor Upgrade Meeting with Jim. Spent most of day writing SQL queries...' style='width: 100%;'></textarea>
+					<h3 class='desc-char-used' style='position: absolute; bottom: 0.5rem; right: 0.5rem; color: hsla(0, 0%, 0%, 0.5);'>0/255</h3>
+				</span>
 				<button type="submit">Submit</button>
 			</form>
 
@@ -83,10 +100,12 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 						<th>Day</th>
 						<th>Arr.</th>
 						<th>Dep.</th>
+						<th>Brk. Min</th>
 						<th>Hrs</th>
 						<th>Strain</th>
 						<th>Feedback</th>
 						<th>Stress</th>
+						<th>Description</th>
 					</tr>				
 				</thead>
 				<?php echo $data_log; ?>
@@ -101,6 +120,13 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/js
 					$('#seal-and-design-shifts-table').DataTable( {
 						"order": [[ 0, "desc" ]]
 					} );
+
+					$('textarea.description').on('keyup', function() {
+						let charCount = $(this).val();
+						charCount = charCount.length;
+						$('h3.desc-char-used').html(`${charCount}/255`);
+					});
+
 				} );
 			</script>
 	</body>
