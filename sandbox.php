@@ -22,4 +22,17 @@
     echo return_ricks_pre_tax_income($conn, '2018-06-01', '2019-05-31', 7.5);
     echo "<br/>";
     echo return_seal_received_income($conn, '2018-06-01', '2019-05-31', 370);
+    echo "<br/>";
+    echo "<pre>";
+    var_dump(return_accounts_array($conn, 2019));
+    echo "</pre>";
+    $accounts = return_accounts_array($conn, 2019);
+    $updated_accounts = $accounts;
+    foreach($updated_accounts as $ua) {
+        if ($ua->name == 'Schwab Beneficiary') {
+            $ua->mrv += 13000;
+        }
+    }
+    echo "<pre>" . var_dump($updated_accounts). "</pre>";
+    echo return_theoretical_age_60_withdrawal_rate($updated_accounts, 34.75, null);
 ?>
