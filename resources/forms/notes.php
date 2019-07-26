@@ -90,6 +90,7 @@ $conn->close();
 include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/css-files.php');
 
 ?>
+		<title>Note Form</title>
 	</head>
 	<body>
 		<main style='width: 95%; max-width: none;'>
@@ -102,11 +103,11 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 				<input type='datetime-local' name='datetime'/>
 				<label for='type'>Type</label>
 				<select name='type'>
+					<option value='thought'>Thought</option>
+					<option value='idea'>Idea</option>
+					<option value='reminder'>Reminder</option>
 					<option value='positive experience'>Positive Experience</option>
 					<option value='negative experience'>Negative Experience</option>
-					<option value='reminder'>Reminder</option>
-					<option value='idea'>Idea</option>
-					<option value='thought'>Thought</option>
 					<option value='quote'>Quote</option>
 					<option value='lesson'>Lesson</option>
 					<option value='book to read'>Book To Read</option>

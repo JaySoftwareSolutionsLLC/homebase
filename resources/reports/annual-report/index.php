@@ -680,6 +680,7 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/annual-report/r
 			</script>
 
 			<div id='monthly-expenditure-chart-container' style='height: 300px; width: 100%;'></div>
+			<button id='toggle-all-expenses'>All Expenses</button>
 			<button id='toggle-luxury-expenses'>Luxury Expenses</button>
 			<button id='toggle-non-luxury-expenses'>Non Luxury Expenses</button>
 			<script>
@@ -712,7 +713,7 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/annual-report/r
 							let str = "";
 							var arr = [];
 							for(var i = 0; i < e.entries.length; i++) {
-								if(e.entries[i].dataPoint.y != 0) {
+								if(e.entries[i].dataPoint.y != 0 && e.entries[i].dataSeries.visible) {
 									let dataPointStr = " <span class='tooltip'><span style='font-weight: 900; color: " + e.entries[i].dataSeries.color + "' class=''>" + e.entries[i].dataSeries.name + " : &nbsp; &nbsp; &nbsp; </span>" + e.entries[i].dataPoint.y.toLocaleString('us', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + "</span>";
 									arr.push(dataPointStr);
 								}
@@ -784,6 +785,32 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/annual-report/r
 				
 						]
 					},
+					{
+						type: "line",
+						name: "Non-Luxury",
+						showInLegend: true,
+						yValueFormatString: "$#,##0",
+						color: 'grey',
+						lineDashType: 'solid',
+						markerType: 'triangle',
+						dataPoints: [
+							
+<?php
+	
+	foreach ($months as $m) {
+		$val = 0;
+		foreach($m->expenditures as $e) {
+			if ( ! in_array($e['type'], LUXURY_EXPENDITURES ) ) {
+				$val += $e['Expenditure'];
+			}
+		}
+		echo "{ x: new Date( " . php_dt_to_js_datestr($m->start_dt, 'Y') . " ), y: $val },";
+	}
+	
+?>
+				
+						]
+					},
 					
 <?php
 	foreach ($expenditure_types as $et) {
@@ -834,6 +861,13 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/annual-report/r
 						else {
 							item.visible = true;
 						}
+					});
+					monthlyExpenditureChart.render();
+				});
+				$('button#toggle-all-expenses').on('click', function() {
+					data = monthlyExpenditureChart.options.data;
+					data.forEach(function(item, index) {
+						item.visible = true;
 					});
 					monthlyExpenditureChart.render();
 				});
