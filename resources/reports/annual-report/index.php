@@ -843,7 +843,7 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/annual-report/r
 				$('button#toggle-luxury-expenses').on('click', function() {
 					data = monthlyExpenditureChart.options.data;
 					data.forEach(function(item, index) {
-						if ( item.name != 'Luxury' && item.name != 'Net' && item.name != 'Target' && ! luxuryExpenses.includes(item.name) ) {
+						if ( item.name != 'Luxury' && ! luxuryExpenses.includes(item.name) ) {
 							item.visible = false;
 						}
 						else {
@@ -855,7 +855,7 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/annual-report/r
 				$('button#toggle-non-luxury-expenses').on('click', function() {
 					data = monthlyExpenditureChart.options.data;
 					data.forEach(function(item, index) {
-						if ( luxuryExpenses.includes(item.name) || item.name == 'Luxury' ) {
+						if ( luxuryExpenses.includes(item.name) || item.name == 'Luxury' || item.name == 'Net' || item.name == 'Target' ) {
 							item.visible = false;
 						}
 						else {
