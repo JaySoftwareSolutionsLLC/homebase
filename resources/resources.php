@@ -499,3 +499,62 @@
 		}
 		return $theoretical_age_60_annual_withdrawal_rate;
 	}
+
+	function return_estimated_commute_time($conn, $date_start, $date_end, $precision = 2) {
+		$commute_min = 0; // Holds commute in units of minutes
+		$q = "SELECT 	rs.date
+						, CASE
+							WHEN EXISTS(	SELECT *
+											FROM finance_seal_shifts AS fss1
+											WHERE fss1.date = rs.date	)
+							AND EXISTS(	SELECT *
+											FROM finance_ricks_shifts AS frs1
+											WHERE frs1.date = rs.date	)
+							THEN 'BOTH'
+							WHEN EXISTS(	SELECT *
+											FROM finance_seal_shifts AS fss1
+											WHERE fss1.date = rs.date	)
+							AND NOT EXISTS(	SELECT *
+											FROM finance_ricks_shifts AS frs1
+											WHERE frs1.date = rs.date	)
+							THEN 'S&D Only'
+							WHEN NOT EXISTS(	SELECT *
+											FROM finance_seal_shifts AS fss1
+											WHERE fss1.date = rs.date	)
+							AND EXISTS(	SELECT *
+											FROM finance_ricks_shifts AS frs1
+											WHERE frs1.date = rs.date	)
+							THEN 'Ricks Only'
+							ELSE '???'
+						END AS 'Shifts Type'
+					
+			FROM (
+				SELECT fss.date
+				FROM finance_seal_shifts AS fss
+				UNION
+				SELECT frs.date
+				FROM finance_ricks_shifts AS frs
+				) AS rs
+			WHERE rs.date >= '$date_start'
+				AND rs.date <= '$date_end'
+			ORDER BY rs.date ";
+		$res = $conn->query($q);
+		if ($res->num_rows > 0) {
+			while($row = $res->fetch_assoc()) {
+				switch ($row['Shifts Type']) {
+					case 'BOTH':
+						$commute_min += 65;
+						break;
+					case 'S&D Only':
+						$commute_min += 55;
+						break;
+					case 'Ricks Only':
+						$commute_min += 25;
+						break;
+					default:
+						break;
+				}
+			}
+		}
+		return round(($commute_min / 60), $precision);
+	}

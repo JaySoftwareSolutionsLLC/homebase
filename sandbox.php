@@ -7,8 +7,8 @@
     //var_dump(post_values_are_set(array('test')));
     //var_dump( return_date_from_str('2019-02-28 13:54:00', 'datetime') );
     //echo return_days_between_dates('2019-06-09 08:00:00', return_date_from_str());
-    $sd = '2018-07-01';
-    $ed = '2019-06-30';
+    $sd = return_date_relative_to_today('-365 days');
+    $ed = return_date_from_str('today');
     //echo return_end_of_day($ed);
     //echo return_jss_income($conn, $sd, $ed);
     //echo insert_row($conn, 'personal_notes', array('summary' => 'Test', 'description' => 'Testing...1,2,3', 'type' => 'positive experience'));
@@ -19,10 +19,18 @@
     */
 
     // 2019.06.11
-    echo return_ricks_pre_tax_income($conn, $sd, $ed, 7.5);
-    echo "<br/>";
-    echo return_seal_received_income($conn, '2018-06-01', '2019-05-31', 370);
-    echo "<br/>";
+    $ricks_pre_tax_income = return_ricks_pre_tax_income($conn, $sd, $ed, 7.5);
+    $seal_received_income = return_seal_received_income($conn, $sd, $ed, 370);
+    $past_365_day_income = $ricks_pre_tax_income + $seal_received_income;
+    echo $ricks_pre_tax_income . "<br/>";
+    echo $seal_received_income . "<br/>";
+    echo $past_365_day_income . " Net Income (not including unreceived) <br/>";
+
+    $past_365_day_hours_worked = return_seal_hours($conn, $sd, $ed) + return_ricks_hours($conn, $sd, $ed);
+    echo $past_365_day_hours_worked . " Net Hours Worked.<br/>";
+    $past_365_day_hours_commuted = return_estimated_commute_time($conn, $sd, $ed);
+    echo $past_365_day_hours_commuted . " Net Hours Commuted (Estimate).<br/>";
+
     echo "<pre>";
     var_dump(return_accounts_array($conn, 2019));
     echo "</pre>";

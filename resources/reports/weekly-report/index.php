@@ -401,6 +401,12 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/weekly-report/r
 						<h5>Target: <?php echo '10 hours'; ?></h5>
 					</div>
 				</div>
+				<div class='stat commute-hours'>
+					<div class='stat-text'>
+						<h3>Commute Hours (Est.)</h3>
+						<h4><?= return_estimated_commute_time($conn, $date_start, $date_end, 2) ?></h4>
+					</div>
+				</div>
 			</div>
 		</section>
 <?php } ?>
