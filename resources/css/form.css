@@ -249,6 +249,13 @@ div.card i {
   font-size: 1.125rem;
 }
 
+div.card i.edit {
+  font-size: 0.75rem;
+  left: 0.25rem;
+  cursor: pointer;
+  color: black;
+}
+
 div.card span.est-min-to-comp {
   position: absolute;
   top: 1.5rem;
