@@ -63,16 +63,18 @@ if ($res->num_rows > 0) {
 
 		$tiles .= "	<div class='card $status' style='border: 1px solid black; padding: 1rem; margin: 1rem; width: 15%; min-width: 20rem; border-radius: 0.5rem;'>
 						<h3 style='font-weight: 900; font-size: 0.875rem; z-index: 10;'>" . $row['summary'] . "</h3>
-						<p style='font-size: 0.625rem; height: 7rem;'>" . $row['description'] . "</p>
-						<h4 style='font-family: monospace; width: 100%; display: inline-flex; flex-flow: row nowrap; justify-content: space-between;'><span>Created:</span><span>" . $row['datetime'] . "</span></h4>
+						<p style='font-size: 0.625rem; height: 9rem;'>" . nl2br($row['description']) . "</p> ";
+						/*
+						"<h4 style='font-family: monospace; width: 100%; display: inline-flex; flex-flow: row nowrap; justify-content: space-between;'><span>Created:</span><span>" . $row['datetime'] . "</span></h4>
 						<h4 style='font-family: monospace; width: 100%; display: inline-flex; flex-flow: row nowrap; justify-content: space-between;'><span>Caution:</span><span>" . $row['caution_datetime'] . "</span></h4>
-						<h4 style='font-family: monospace; width: 100%; display: inline-flex; flex-flow: row nowrap; justify-content: space-between;'><span>Warning:</span><span>" . $row['warning_datetime'] . "</span></h4>";
+						<h4 style='font-family: monospace; width: 100%; display: inline-flex; flex-flow: row nowrap; justify-content: space-between;'><span>Warning:</span><span>" . $row['warning_datetime'] . "</span></h4>"; */
+						/*
 		if ( ($row['caution_datetime'] != '' || $row['warning_datetime'] != '') && $complete_date_formatted == '' ) {
 			$tiles .= "<h4 style='font-family: monospace; width: 100%; display: inline-flex; flex-flow: row nowrap; justify-content: space-between;'><span>Completed:</span><span><input data-id='" . $row['id'] . "' type='datetime-local' name='complete-datetime' class='complete-datetime' value='$complete_date_formatted' style='font-size: 0.75rem;'/></span></h4>";
 		}
 		else {
 			$tiles .= "<h4 style='font-family: monospace; width: 100%; display: inline-flex; flex-flow: row nowrap; justify-content: space-between;'><span>Completed:</span><span>$complete_date_formatted</span></h4>";
-		}
+		}				*/
 		foreach ($note_type_icons as $key => $val) {
 			if ($key == $row['type']) {
 				hidden_var_dump($val);
@@ -82,6 +84,7 @@ if ($res->num_rows > 0) {
 		if ( ! empty( $row['est_min_to_comp'] ) ) {
 			$tiles .= "<span class='est-min-to-comp'>" . $row['est_min_to_comp'] . "</span>";
 		}
+		$tiles .= "<a href='/homebase/resources/forms/notes.php?id=" . $row['id'] . "'><i class='fas fa-edit edit'></i></a>";
 		$tiles .= "	</div>";
 	}
 }

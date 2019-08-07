@@ -8,25 +8,60 @@ $today = date('Y-m-d H:i:s');
 
 $entry_msg = "Welcome to the Notes submission page.";
 
+$id = $_GET['id'] ?? 0;
+$page_type = ($id === 0) ? 'create' : 'update';
 
 // If variables have been posted insert into db
 if(isset($_POST['summary']) && isset($_POST['description']) && isset($_POST['type'])) {
 	$datetime = (empty($_POST['datetime'])) ? 'CURRENT_TIMESTAMP' : "'" . $_POST['datetime'] . "'";
 	$type = "'" . $_POST['type'] . "'";
 	$summary = "'" . htmlspecialchars( $_POST['summary'], ENT_QUOTES ) . "'";
-	$description = "'" . nl2br( htmlspecialchars( $_POST['description'], ENT_QUOTES ) ) . "'";
+	$description = "'" . htmlspecialchars( $_POST['description'], ENT_QUOTES ) . "'";
 	$caution_datetime = (empty($_POST['caution-datetime'])) ? 'NULL' : "'" . $_POST['caution-datetime'] . "'"; // Not DRY...should be turned into function
 	$warning_datetime = (empty($_POST['warning-datetime'])) ? 'NULL' : "'" . $_POST['warning-datetime'] . "'";
+	$complete_datetime = (empty($_POST['complete-datetime'])) ? 'NULL' : "'" . $_POST['complete-datetime'] . "'";
 	$est_min_to_comp = (empty($_POST['est-min-to-comp'])) ? 'NULL' : "'" . $_POST['est-min-to-comp'] . "'";
-	$qry = "INSERT INTO `personal_notes` (`datetime`, `type`, `summary`, `description`, `caution_datetime`, `warning_datetime`, `est_min_to_comp`) 
-			VALUES ($datetime, $type, $summary, $description, $caution_datetime, $warning_datetime, $est_min_to_comp);";
-	//echo $qry;
-	if ($conn->query($qry) === TRUE) {
-    	$entry_msg = "New record created successfully";
-	} else {
-    	$entry_msg = "Error with query: $qry <br> $conn->error";
+	// If id is not zero, then this is an update
+	if ($page_type == 'update') {
+		$id == $_POST['id'];
+		//echo "$id<br/>";
+		$qry = "UPDATE personal_notes
+				SET datetime = $datetime
+					,type = $type
+					,summary = $summary
+					,description = $description
+					,caution_datetime = $caution_datetime
+					,warning_datetime = $warning_datetime
+					,complete_datetime = $complete_datetime
+					,est_min_to_comp = $est_min_to_comp
+				WHERE id = $id ";
+		if ($conn->query($qry) === TRUE) {
+			$entry_msg = "Row updated successfully";
+		} else {
+			$entry_msg = "Error with query: $qry <br> $conn->error";
+		}
 	}
-	
+	// If id is zero then this is a new record
+	else if ($page_type == 'create') {
+		$qry = "INSERT INTO `personal_notes` (`datetime`, `type`, `summary`, `description`, `caution_datetime`, `warning_datetime`, `complete_datetime`, `est_min_to_comp`)
+				VALUES ($datetime, $type, $summary, $description, $caution_datetime, $warning_datetime, $complete_datetime, $est_min_to_comp);";
+		//echo $qry;
+		if ($conn->query($qry) === TRUE) {
+			$entry_msg = "New record created successfully";
+		} else {
+			$entry_msg = "Error with query: $qry <br> $conn->error";
+		}
+	}
+}	
+
+// Populate page with current database info
+if ($page_type == 'update') {
+	$q = "	SELECT *
+			FROM personal_notes 
+			WHERE id = $id; ";
+	$res = $conn->query($q);
+	$old_info = $res->fetch_assoc();
+	//var_dump($old_info);
 }
 
 /*
@@ -90,6 +125,7 @@ $conn->close();
 include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/css-files.php');
 
 ?>
+		<title>Note Form</title>
 	</head>
 	<body>
 		<main style='width: 95%; max-width: none;'>
@@ -98,38 +134,42 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 			<h2 class='msg'><?php echo $entry_msg ?></h2>
 
 			<form method='post'>
+				<label for='id'>ID</label>
+				<input type='number' id='id' name='id' value='<?= $id; ?>' disabled />
 				<label for='datetime'>Datetime (Optional)</label>
-				<input type='datetime-local' name='datetime'/>
+				<input type='datetime-local' name='datetime' <?php echo is_null($old_info['datetime']) ? "" : " value='" . date('Y-m-d\TH:i', strtotime($old_info['datetime'])) . "'" ?> />
 				<label for='type'>Type</label>
 				<select name='type'>
-					<option value='positive experience'>Positive Experience</option>
-					<option value='negative experience'>Negative Experience</option>
-					<option value='reminder'>Reminder</option>
-					<option value='idea'>Idea</option>
-					<option value='thought'>Thought</option>
-					<option value='quote'>Quote</option>
-					<option value='lesson'>Lesson</option>
-					<option value='book to read'>Book To Read</option>
-					<option value='learning resource'>Learning Resource</option>
-					<option value='homebase enhancement'>HomeBase Enhancement</option>
+					<option value='thought' <?php if ($old_info['type'] == 'thought') echo "selected"; ?> >Thought</option>
+					<option value='idea' <?php if ($old_info['type'] == 'idea') echo "selected"; ?> >Idea</option>
+					<option value='reminder' <?php if ($old_info['type'] == 'reminder') echo "selected"; ?> >Reminder</option>
+					<option value='positive experience' <?php if ($old_info['positive experience'] == 'reminder') echo "selected"; ?> >Positive Experience</option>
+					<option value='negative experience' <?php if ($old_info['negative experience'] == 'reminder') echo "selected"; ?> >Negative Experience</option>
+					<option value='quote' <?php if ($old_info['type'] == 'quote') echo "selected"; ?> >Quote</option>
+					<option value='lesson' <?php if ($old_info['type'] == 'lesson') echo "selected"; ?> >Lesson</option>
+					<option value='book to read' <?php if ($old_info['book to read'] == 'reminder') echo "selected"; ?> >Book To Read</option>
+					<option value='learning resource' <?php if ($old_info['learning resource'] == 'reminder') echo "selected"; ?> >Learning Resource</option>
+					<option value='homebase enhancement' <?php if ($old_info['homebase enhancement'] == 'reminder') echo "selected"; ?> >HomeBase Enhancement</option>
 				</select>
 				<label for='summary-input'>Summary</label>
 				<span style='position: relative;'>
-					<input class='summary' name='summary' id='summary-input' type='text' placeholder='Heart to heart with Molly Bolzano' maxlength='50' style='width: 100%;'/>
+					<input class='summary' name='summary' id='summary-input' type='text' placeholder='Heart to heart with Molly Bolzano' maxlength='50' style='width: 100%;' value='<?php echo $old_info['summary'] ?>'/>
 					<h3 class='summary-char-used' style='position: absolute; bottom: 0.5rem; right: 0.5rem; color: hsla(0, 0%, 0%, 0.5);'>0/50</h3>
 				</span>
 				<label for='description-input'>Description</label>
 				<span style='position: relative;'>
-					<textarea name='description' class='description' id='description-input' maxlength='255' placeholder='Had a heart to heart with Molly during shift today.' style='width: 100%;'></textarea>
+					<textarea name='description' class='description' id='description-input' maxlength='255' placeholder='Had a heart to heart with Molly during shift today.' style='width: 100%;'><?php echo htmlspecialchars_decode($old_info['description']); ?></textarea>
 					<h3 class='desc-char-used' style='position: absolute; bottom: 0.5rem; right: 0.5rem; color: hsla(0, 0%, 0%, 0.5);'>0/255</h3>
 				</span>
 				<label for='caution-datetime-input'>Caution Datetime (Optional)</label>
-				<input type='datetime-local' name='caution-datetime' id='caution-datetime-input'/>
+				<input type='datetime-local' name='caution-datetime' id='caution-datetime-input' <?php echo is_null($old_info['caution_datetime']) ? "" : " value='" . date('Y-m-d\TH:i', strtotime($old_info['caution_datetime'])) . "'" ?> />
 				<label for='warning-datetime-input'>Warning Datetime (Optional)</label>
-				<input type='datetime-local' name='warning-datetime' id='warning-datetime-input'/>
+				<input type='datetime-local' name='warning-datetime' id='warning-datetime-input' <?php echo is_null($old_info['warning_datetime']) ? "" : " value='" . date('Y-m-d\TH:i', strtotime($old_info['warning_datetime'])) . "'" ?> />
+				<label for='complete-datetime-input'>Complete Datetime (Optional)</label>
+				<input type='datetime-local' name='complete-datetime' id='complete-datetime-input' <?php echo is_null($old_info['complete_datetime']) ? "" : " value='" . date('Y-m-d\TH:i', strtotime($old_info['complete_datetime'])) . "'" ?> />
 				<label for='est-min-to-comp-input'>Est Min. to Comp. (Optional)</label>
-				<input type='number' name='est-min-to-comp' id='est-min-to-comp-input' min='0' max='65535'/>
-				<button type="submit">Submit</button>
+				<input type='number' name='est-min-to-comp' id='est-min-to-comp-input' min='0' max='65535' <?php echo is_null($old_info['est_min_to_comp']) ? "" : " value='" . $old_info['est_min_to_comp'] . "'" ?> />
+				<button type="submit"><?php echo $page_type == 'update' ? 'Update' : 'Submit' ?></button>
 			</form>
 
 			<!--
