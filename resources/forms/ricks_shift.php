@@ -74,8 +74,14 @@ if ($res->num_rows > 0) {
 else {
 	echo "NO RESULTS";
 }
+$ricks_on_main_monthly_array = return_ricks_on_main_monthly_array($conn, '2018-06-01', $today, 7.5);
 
 // var_dump($shifts); // NOT WORKING
+/*
+	echo "<pre>";
+	var_dump($ricks_on_main_monthly_array);
+	echo "</pre>";
+*/
 
 $conn->close();
 
@@ -129,6 +135,9 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 			}
 ?>
 			</section>
+			<section class='master-graph' style='margin: 1rem 0; padding: 0; width: 100%;'>
+				<div id='ricks-master-graph' style='height: 20rem; width: 100%; display: inline-flex;'></div>
+			</section>
 
 			<table class='log' id='ricks-shifts-table'>
 				<thead>
@@ -152,6 +161,7 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 <?php
 include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/js-files.php');
 ?>
+		<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 		<script>
 			$(document).ready( function () {
 				
@@ -164,6 +174,115 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/js
 					charCount = charCount.length;
 					$('h3.desc-char-used').html(`${charCount}/255`);
 				});
+
+				function toggleDataSeries(e) {
+					if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+						e.dataSeries.visible = false;
+					} else {
+						e.dataSeries.visible = true;
+					}
+					e.chart.render();
+				}
+
+				var ricksMasterChart = new CanvasJS.Chart("ricks-master-graph", {
+					title:{
+						text: "Ricks Monthly Stats"
+					},
+					toolTip: {
+						enabled: true,
+						shared: true,
+						cornerRadius: 5,
+						borderThickness: 3,
+						borderColor: 'hsl(190, 100%, 50%)',
+						//backgroundColor: '#960B39',
+						//fontColor: 'white',
+						contentFormatter: function ( e ) {
+							let str = "<div style='font-size: 1.25rem; font-weight: 900;'>" + e.entries[0].dataPoint.x.toLocaleDateString('en-US', { year: 'numeric', month: 'long' }) + "</div><br/>";
+							var arr = [];
+							for(var i = 0; i < e.entries.length; i++) {
+								if(e.entries[i].dataPoint.y != 0 && e.entries[i].dataSeries.visible) {
+									let dataPointStr = " <span class='tooltip'><span style='font-weight: 900; color: " + e.entries[i].dataSeries.color + "' class=''>" + e.entries[i].dataSeries.name + " : &nbsp; &nbsp; &nbsp; </span>" + e.entries[i].dataPoint.y + "</span>";
+									arr.push(dataPointStr);
+								}
+							}
+							str += arr.join('<br/>');
+							return str || 'No Expenditures';
+						}  
+					},
+					legend: {
+						cursor: "pointer",
+						itemclick: toggleDataSeries
+					},
+					axisX: {
+						intervalType: 'month',
+						interval: 1
+					},
+					axisY: [{
+							includeZero: false,
+							title: '$/shift'
+							}
+							,{
+							includeZero: false,
+							title: '$/hr'
+							},
+					],
+					axisY2: {
+						includeZero: false,
+						title: 'hours'
+					},
+					data: [
+						{        
+						type: "line",
+						name: "AVG $/Shift",
+						showInLegend: true,
+						yValueFormatString: "$#,##0/shift",
+						color: 'green',
+						lineDashType: 'solid',
+						dataPoints: [
+<?php
+	foreach ($ricks_on_main_monthly_array as $m) {
+		echo "{ x: new Date(" . php_dt_to_js_datestr($m->start_dt) . "), y: " . $m->avg_income . " },";
+	}
+?>
+						]
+					}
+					,{
+						type: "line",
+						name: "AVG $/hr",
+						showInLegend: true,
+						yValueFormatString: "$#,##0/hour",
+						axisYIndex: 1,
+						color: 'blue',
+						lineDashType: 'solid',
+						dataPoints: [
+<?php
+	foreach ($ricks_on_main_monthly_array as $m) {
+		echo "{ x: new Date(" . php_dt_to_js_datestr($m->start_dt) . "), y: " . $m->avg_hourly . " },";
+	}
+?>
+						]
+					}
+
+					,{        
+						type: "line",
+						name: "AVG Hours / Shift",
+						showInLegend: true,
+						yValueFormatString: "#,##0 / shiftt",
+						axisYType: "secondary",
+						color: 'red',
+						lineDashType: 'solid',
+						dataPoints: [
+<?php
+	foreach ($ricks_on_main_monthly_array as $m) {
+		echo "{ x: new Date(" . php_dt_to_js_datestr($m->start_dt) . "), y: " . $m->avg_hours . " },";
+	}
+?>
+						]
+					}
+					]
+				});
+
+				ricksMasterChart.render();
 
 			} );
 		</script>

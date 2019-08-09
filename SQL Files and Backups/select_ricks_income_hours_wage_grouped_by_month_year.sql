@@ -1,5 +1,6 @@
 SELECT 	YEAR(date) AS 'year'
 		,MONTH(date) AS 'month'
+        ,MONTHNAME(date) AS 'monthname'
         ,DAYNAME(date) AS 'dow'
 		,ROUND( 
             AVG(
@@ -20,7 +21,7 @@ SELECT 	YEAR(date) AS 'year'
                 )
                /
                AVG(hours)
-              , 2) AS 'AVG Hourly'
+              , 2) AS 'AVG hourly'
      	,COUNT(*) AS 'Occurances'
 FROM `finance_ricks_shifts`
 WHERE   type = 'PM'
