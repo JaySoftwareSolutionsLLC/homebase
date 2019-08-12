@@ -7,8 +7,10 @@ $(document).ready(function() {
   });
   $('body').on('click', function() {
 		hideModal();
-	});
-	
+  });
+  $('section h2').on('click', function() {
+    $(this).siblings('div.content').toggle();;
+  });
 	
 /*
 	getCurrentDate = function() {
