@@ -377,6 +377,75 @@
 		$ricks_billable_hours = $ricks_total_hours - $ricks_otb_hours;
 		return (return_ricks_tips($conn, $date_start, $date_end) + ($ricks_billable_hours * $hourly_wage));
 	}
+	function return_ricks_on_main_monthly_array($conn, $date_start, $date_end, $hourly_wage, $shift_type = 'all', $daystr = 'all') {
+		$ricks_monthly_array = array();
+		$q = "	SELECT 	YEAR(date) AS 'year'
+						,MONTH(date) AS 'month'
+						,MONTHNAME(date) AS 'monthname'
+						/*DN ,DAYNAME(date) AS 'dow' DN*/
+						,ROUND( 
+							AVG(
+								CASE
+									WHEN type IN ('AM', 'PM') THEN (tips + (hours * $hourly_wage))
+									WHEN type IN ('OTB') THEN (tips)
+									ELSE 0
+								END
+							) , 2
+						) AS 'AVG income'
+						,ROUND( AVG(hours) , 2 ) AS 'AVG hours'
+						,ROUND( AVG(
+									CASE
+										WHEN type IN ('AM', 'PM') THEN (tips + (hours * $hourly_wage))
+										WHEN type IN ('OTB') THEN (tips)
+										ELSE 0
+									END
+								)
+							/
+							AVG(hours)
+							, 2) AS 'AVG hourly'
+						,COUNT(*) AS 'Occurances'
+				FROM `finance_ricks_shifts`
+				WHERE  	date >= '$date_start'
+					AND date <= '$date_end'
+					AND type = 'PM' /* WIP this is to be changed when get preg replace working */
+					/*ST AND type = '$shift_type' ST*/
+					/*DN AND DAYNAME(date) = '$daystr' DN*/
+				GROUP BY 	YEAR(date)
+							, MONTH(date)
+							/*DN , DAYNAME(date) DN*/
+				ORDER BY YEAR(date), MONTH(date)
+				 ";
+				 // WIP
+		if ($shift_type != 'all') {
+			echo "SHIFT TRIGGER";
+			//preg_replace('', '', $q);
+			//preg_replace('/ST/g', '', $q);
+		}
+		if ($daystr != 'all') {
+			echo "DAY TRIGGER";
+			//str_replace('/*DN', '', $q);
+			//str_replace('DN*/', '', $q);
+		}
+		//echo "<pre>";
+		//echo $q;
+		//echo "</pre>";
+		$res = $conn->query($q);
+		while ( $row = mysqli_fetch_array($res) ) {
+			$month = new stdClass();
+			$month->year = $row['year'];
+			$month->month = $row['month'];
+			$month->month_name = $row['monthname'];
+			if ($daystr != 'all') {
+				$month->dow = $row['dow'];
+			}
+			$month->avg_income = $row['AVG income'];
+			$month->avg_hours = $row['AVG hours'];
+			$month->avg_hourly = $row['AVG hourly'];
+			$month->start_dt = new datetime("first day of " . $month->month_name . " " . $month->year);
+			$ricks_monthly_array[] = $month;
+		}
+		return $ricks_monthly_array;
+	}
 
 	// JSS
 	function return_jss_income($conn, $date_start, $date_end) { // CAUTION: date end must be 23:59:59 to appropriately capture entire end day

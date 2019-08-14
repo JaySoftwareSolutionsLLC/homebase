@@ -1,10 +1,5 @@
 $( document ).ready(function() {
 	
-	$('h2.fitness-title').on('click', function() {
-		if ($('div.fitness-content').css('display') != 'none') {
-			$('div.fitness-content').css('display', 'none');
-		}
-	});
 	//console.log("BIGG");
 
 let grn = 'hsl(100, 100%, 50%)';

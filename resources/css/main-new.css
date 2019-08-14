@@ -142,6 +142,7 @@ section {
 section h2 {
   font-size: 3rem;
   margin-bottom: 2rem;
+  cursor: pointer;
 }
 
 @media only screen and (max-width: 1280px) {

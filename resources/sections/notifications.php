@@ -20,8 +20,9 @@
 	hidden_var_dump($notifications); // Instantiated in epicor-web/common/resources.php
 ?>
 <section class="column notifications">
-<h2>Notifications</h2>
-	<ul>
+	<h2>Notifications</h2>
+	<div class='content'>
+		<ul>
 <?php
 $net_time_requirement = 0;
 foreach ($notifications as $n) { // Print out warnings first
@@ -70,13 +71,14 @@ foreach ($notifications as $n) { // Print out cautions second
 }
 echo "<li><i class='fas fa-stopwatch'></i>$net_time_requirement minutes</li>";
 ?>
-	</ul>
-	
-	<div class="row">
-		<a href='resources/forms/notes.php' class="form notes" target='_blank'>
-			<img src='resources/assets/images/icon-note.png'/>
-			<figcaption>Notes</figcaption>
-		</a>
+		</ul>
+		
+		<div class="row">
+			<a href='resources/forms/notes.php' class="form notes" target='_blank'>
+				<img src='resources/assets/images/icon-note.png'/>
+				<figcaption>Notes</figcaption>
+			</a>
+		</div>
 	</div>
 </section>
 
