@@ -45,7 +45,7 @@ html body main form section div.row {
   padding: 0.25rem 0;
 }
 
-html body main form section div.row span.input {
+html body main form section div.row span.input, html body main form section div.row span.flex-input {
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
@@ -56,12 +56,28 @@ html body main form section div.row span.input {
   margin: 0 1rem;
 }
 
-html body main form section div.row span.input input, html body main form section div.row span.input select {
+html body main form section div.row span.input input, html body main form section div.row span.input select, html body main form section div.row span.flex-input input, html body main form section div.row span.flex-input select {
   width: 5rem;
 }
 
-html body main form section div.row span.input input.numeric, html body main form section div.row span.input select.numeric {
+html body main form section div.row span.input input.numeric, html body main form section div.row span.input select.numeric, html body main form section div.row span.flex-input input.numeric, html body main form section div.row span.flex-input select.numeric {
   text-align: right;
+}
+
+html body main form section div.row span.input input::-webkit-input-placeholder, html body main form section div.row span.input select::-webkit-input-placeholder, html body main form section div.row span.flex-input input::-webkit-input-placeholder, html body main form section div.row span.flex-input select::-webkit-input-placeholder {
+  color: rgba(0, 0, 0, 0.2);
+}
+
+html body main form section div.row span.input input:-ms-input-placeholder, html body main form section div.row span.input select:-ms-input-placeholder, html body main form section div.row span.flex-input input:-ms-input-placeholder, html body main form section div.row span.flex-input select:-ms-input-placeholder {
+  color: rgba(0, 0, 0, 0.2);
+}
+
+html body main form section div.row span.input input::-ms-input-placeholder, html body main form section div.row span.input select::-ms-input-placeholder, html body main form section div.row span.flex-input input::-ms-input-placeholder, html body main form section div.row span.flex-input select::-ms-input-placeholder {
+  color: rgba(0, 0, 0, 0.2);
+}
+
+html body main form section div.row span.input input::placeholder, html body main form section div.row span.input select::placeholder, html body main form section div.row span.flex-input input::placeholder, html body main form section div.row span.flex-input select::placeholder {
+  color: rgba(0, 0, 0, 0.2);
 }
 
 html body main form section div.row span.timer {

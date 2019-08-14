@@ -32,7 +32,7 @@ html {
                         width:                                                                  100%;
                         flex-flow:                                                              row nowrap;
                         padding:                                                                0.25rem 0;
-                        span.input {
+                        span.input, span.flex-input {
                             display:                                                            inline-flex; 
                             flex-flow:                                                          column nowrap;
                             margin:                                                             0 1rem;
@@ -40,6 +40,9 @@ html {
                                 width:                                                          5rem; 
                                 &.numeric {
                                     text-align:                                                 right;
+                                }
+                                &::placeholder {
+                                    color:                                                      hsla(0, 0%, 0%, 0.2);
                                 }
                             }
                         }

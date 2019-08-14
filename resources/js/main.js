@@ -7,6 +7,7 @@ $(document).ready(function() {
   });
   $('body').on('click', function() {
     hideModal();
+    // If nav is showing then on body click toggle hamburger img and nav
     if ($('header div.right-mobile img').css('display') == 'none') {
       $('header div.right-mobile img, header div.right-mobile nav').toggle();
     }
