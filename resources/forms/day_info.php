@@ -147,6 +147,28 @@
                 </section>  
                 <section style=''>
                     <h3 style=''>Nutrition</h3>
+                    <div class='row'>
+                        <span class='flex-input' style=''>
+                            <label for='consumption-timewindow'>Consumption Window (hrs)</label>
+                            <input disabled='true' type='number' name='consumption-timewindow' id='consumption-timewindow' value='' placeholder='9' />
+                        </span>
+                        <span class='flex-input' style=''>
+                            <label for='consumption-sugar'>Sugar (g)</label>
+                            <input disabled='true' type='number' name='consumption-sugar' id='consumption-sugar' value='' placeholder='25' />
+                        </span>
+                        <span class='flex-input' style=''>
+                            <label for='consumption-fat-percentage'>Fat %</label>
+                            <input disabled='true' type='number' name='consumption-fat-percentage' id='consumption-fat-percentage' value='' placeholder='' />
+                        </span>
+                        <span class='flex-input' style=''>
+                            <label for='consumption-protein-percentage'>Protein %</label>
+                            <input disabled='true' type='number' name='consumption-protein-percentage' id='consumption-protein-percentage' value='' placeholder='' />
+                        </span>
+                        <span class='flex-input' style=''>
+                            <label for='consumption-carb-percentage'>Carb %</label>
+                            <input disabled='true' type='number' name='consumption-carb-percentage' id='consumption-carb-percentage' value='' placeholder='' />
+                        </span>
+                    </div>
                 </section>
                 <section style=''>
                     <h3 style=''>Finance</h3>

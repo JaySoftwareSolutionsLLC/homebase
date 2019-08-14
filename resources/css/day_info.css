@@ -45,7 +45,7 @@ html body main form section div.row {
   padding: 0.25rem 0;
 }
 
-html body main form section div.row span.input {
+html body main form section div.row span.input, html body main form section div.row span.flex-input {
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
@@ -56,11 +56,11 @@ html body main form section div.row span.input {
   margin: 0 1rem;
 }
 
-html body main form section div.row span.input input, html body main form section div.row span.input select {
+html body main form section div.row span.input input, html body main form section div.row span.input select, html body main form section div.row span.flex-input input, html body main form section div.row span.flex-input select {
   width: 5rem;
 }
 
-html body main form section div.row span.input input.numeric, html body main form section div.row span.input select.numeric {
+html body main form section div.row span.input input.numeric, html body main form section div.row span.input select.numeric, html body main form section div.row span.flex-input input.numeric, html body main form section div.row span.flex-input select.numeric {
   text-align: right;
 }
 
