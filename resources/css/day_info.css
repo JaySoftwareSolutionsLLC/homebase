@@ -64,6 +64,22 @@ html body main form section div.row span.input input.numeric, html body main for
   text-align: right;
 }
 
+html body main form section div.row span.input input::-webkit-input-placeholder, html body main form section div.row span.input select::-webkit-input-placeholder, html body main form section div.row span.flex-input input::-webkit-input-placeholder, html body main form section div.row span.flex-input select::-webkit-input-placeholder {
+  color: rgba(0, 0, 0, 0.2);
+}
+
+html body main form section div.row span.input input:-ms-input-placeholder, html body main form section div.row span.input select:-ms-input-placeholder, html body main form section div.row span.flex-input input:-ms-input-placeholder, html body main form section div.row span.flex-input select:-ms-input-placeholder {
+  color: rgba(0, 0, 0, 0.2);
+}
+
+html body main form section div.row span.input input::-ms-input-placeholder, html body main form section div.row span.input select::-ms-input-placeholder, html body main form section div.row span.flex-input input::-ms-input-placeholder, html body main form section div.row span.flex-input select::-ms-input-placeholder {
+  color: rgba(0, 0, 0, 0.2);
+}
+
+html body main form section div.row span.input input::placeholder, html body main form section div.row span.input select::placeholder, html body main form section div.row span.flex-input input::placeholder, html body main form section div.row span.flex-input select::placeholder {
+  color: rgba(0, 0, 0, 0.2);
+}
+
 html body main form section div.row span.timer {
   -ms-flex-item-align: center;
       -ms-grid-row-align: center;

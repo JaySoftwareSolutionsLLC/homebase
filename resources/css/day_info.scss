@@ -41,6 +41,9 @@ html {
                                 &.numeric {
                                     text-align:                                                 right;
                                 }
+                                &::placeholder {
+                                    color:                                                      hsla(0, 0%, 0%, 0.2);
+                                }
                             }
                         }
                         span.timer {
