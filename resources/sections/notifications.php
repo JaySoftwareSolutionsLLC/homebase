@@ -36,7 +36,9 @@ foreach ($notifications as $n) { // Print out warnings first
 			break;
 		*/
 		case 'warning' :
-			echo "<li><i style='color: hsl(0, 100%, 50%);' class='fas fa-skull-crossbones'></i>$n->message [~$n->est_min_to_comp min.]</li>";
+			echo "<li><i style='color: hsl(0, 100%, 50%);' class='fas fa-skull-crossbones'></i>$n->message";
+			if (!empty($n->est_min_to_comp)) echo "[~$n->est_min_to_comp min.]";
+			echo "</li>";
 			$net_time_requirement += $n->est_min_to_comp;
 			break;
 		default:
@@ -51,7 +53,9 @@ foreach ($notifications as $n) { // Print out cautions second
 			break;
 		*/
 		case 'caution' :
-			echo "<li><i style='color: hsl(50, 100%, 50%);' class='fas fa-exclamation-triangle'></i>$n->message [~$n->est_min_to_comp min.]</li>";
+			echo "<li><i style='color: hsl(50, 100%, 50%);' class='fas fa-exclamation-triangle'></i>$n->message";
+			if (!empty($n->est_min_to_comp)) echo "[~$n->est_min_to_comp min.]";
+			echo "</li>";
 			$net_time_requirement += $n->est_min_to_comp;
 			break;
 		/*
