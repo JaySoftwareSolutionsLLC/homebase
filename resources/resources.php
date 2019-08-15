@@ -246,6 +246,13 @@
 		if ($input_type == 'hours' && $output_type == 'minutes') {
 			return round( ( $input_value * 60 ) , $precision );
 		}
+		if ($input_type == 'min' && $output_type == 'object') {
+			$obj = new stdClass;
+			$obj->days = floor(($input_value / (60 * 24)));
+			$obj->hours = floor((($input_value % (60 * 24)) / 60));
+			$obj->minutes = ($input_value % 60);
+			return $obj;
+		}
 	}
 	function return_date_relative_to_today($modification_str = '+0 days', $output_type = 'string', $output_format = 'Y/m/d') {
 		$today_dt = new datetime();

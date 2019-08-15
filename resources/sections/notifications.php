@@ -69,7 +69,13 @@ foreach ($notifications as $n) { // Print out cautions second
 			break;
 	}
 }
-echo "<li><i class='fas fa-stopwatch'></i>$net_time_requirement minutes</li>";
+$net_time_obj = time_conversion('min', $net_time_requirement, 'object');
+//var_dump($net_time_obj);
+echo "<li><i class='fas fa-stopwatch'></i>";
+if ($net_time_obj->days > 0) echo " $net_time_obj->days days";
+if ($net_time_obj->hours > 0) echo " $net_time_obj->hours hours";
+if ($net_time_obj->minutes > 0) echo " $net_time_obj->minutes minutes";
+echo "</li>";
 ?>
 		</ul>
 		
