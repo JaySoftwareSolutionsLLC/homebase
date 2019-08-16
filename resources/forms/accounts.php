@@ -56,7 +56,27 @@ if ($res->num_rows > 0) {
 	}
 }
 
-$conn->close();
+$relevant_accounts = return_relevant_accounts_info_array($conn, $today);
+hidden_var_dump( $relevant_accounts );
+foreach ($relevant_accounts as $a_id => $a_name) {
+	$str = "{        
+		type: 'line',
+		name: '$a_name',
+		showInLegend: true,
+		yValueFormatString: '$#,##0',
+		dataPoints: [";
+	$values = return_account_value_over_time($conn, '2019-01-01', $today, $a_id);
+	//hidden_var_dump($values);
+	foreach ($values as $date => $val) {
+		$dt = new Datetime($date);
+		//hidden_echo( $date . " | " . $val );
+		$str .= "{ x: new Date(" . php_dt_to_js_datestr($dt) . "), y: $val },";
+	}
+	$str .= "]},";
+	//echo $str;
+}
+
+//$conn->close();
 
 // Link to Style Sheets
 include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/css-files.php');
@@ -89,6 +109,10 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 			<input id='value' type='number' name='value' min='0' step='1'/>
 			<button type="submit">Submit</button>
 		</form>
+
+		<section class='master-graph' style='margin: 1rem 0; padding: 0; width: 100%;'>
+			<div id='accounts-master-graph' style='height: 20rem; width: 100%; display: inline-flex;'></div>
+		</section>
 		
 		<table id='accounts-log-table' class='log'>
 			<thead>
@@ -111,12 +135,83 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 <?php
 	include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/js-files.php');
 ?>
+	<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 	<script>
 		$(document).ready( function () {
 				
 				$('#accounts-log-table').DataTable( {
 					"order": [[ 1, "desc" ]]
 				} );
+
+				function toggleDataSeries(e) {
+					if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+						e.dataSeries.visible = false;
+					} else {
+						e.dataSeries.visible = true;
+					}
+					e.chart.render();
+				}
+
+				var accountsMasterChart = new CanvasJS.Chart("accounts-master-graph", {
+					title:{
+						text: "Account Values"
+					},
+					toolTip: {
+						enabled: true,
+						shared: true,
+						cornerRadius: 5,
+						borderThickness: 3,
+						borderColor: 'hsl(190, 100%, 50%)',
+						//backgroundColor: '#960B39',
+						//fontColor: 'white',
+						contentFormatter: function ( e ) {
+							let str = "<div style='font-size: 1.25rem; font-weight: 900;'>" + e.entries[0].dataPoint.x.toLocaleDateString('en-US'/*, { year: 'numeric', month: 'long',  }*/) + "</div><br/>";
+							var arr = [];
+							for(var i = 0; i < e.entries.length; i++) {
+								if(e.entries[i].dataSeries.visible) {
+									let dataPointStr = " <span class='tooltip'><span style='font-weight: 900; color: " + e.entries[i].dataSeries.color + "' class=''>" + e.entries[i].dataSeries.name + " : &nbsp; &nbsp; &nbsp; </span>" + e.entries[i].dataPoint.y + "</span>";
+									arr.push(dataPointStr);
+								}
+							}
+							str += arr.join('<br/>');
+							return str || 'No Expenditures';
+						}  
+					},
+					legend: {
+						cursor: "pointer",
+						itemclick: toggleDataSeries
+					},
+					axisX: {
+						intervalType: 'month',
+						interval: 1
+					},
+					data: [
+<?php
+	$relevant_accounts = return_relevant_accounts_info_array($conn, $today);
+	foreach ($relevant_accounts as $a_id => $a_name) {
+		$str = "{        
+			type: 'line',
+			name: '$a_name',
+			showInLegend: true,
+			yValueFormatString: '$#,##0',
+			dataPoints: [";
+		$values = return_account_value_over_time($conn, '2019-01-01', $today, $a_id);
+		//hidden_var_dump($values);
+		foreach ($values as $date => $val) {
+			$dt = new Datetime($date);
+			//hidden_echo( $date . " | " . $val );
+			$str .= "{ x: new Date(" . php_dt_to_js_datestr($dt) . "), y: $val },";
+		}
+		$str .= "]},";
+		echo $str;
+	}
+
+	$conn->close();
+?>
+					]
+				});
+
+				accountsMasterChart.render();
 
 		});
 	</script>

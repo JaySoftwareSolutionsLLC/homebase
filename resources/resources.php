@@ -56,9 +56,14 @@
 		return (isset($_POST[$string]) && $_POST[$string] != '') ? true : false;
 	}
 	function hidden_var_dump($prm) {
-		echo "<div style='display: none;'>";
+		echo "<div style='display: none;'><pre>";
 		var_dump($prm);
-		echo "</div>";
+		echo "</pre></div>";
+	}
+	function hidden_echo($prm) {
+		echo "<div style='display: none;'><pre>";
+		echo($prm);
+		echo "</pre></div>";
 	}
 	function post_values_are_set($array_of_str = array()) { // WIP
 		$all_values_set = true;
@@ -493,30 +498,41 @@
 	}
 
 	// Accounts
-	function return_accounts_array($conn, $year) {
+	function return_relevant_accounts_info_array($conn, $date) {
+		$account_ids = array(); // Array to house account names
+		$qry = " SELECT f_a.id, f_a.name
+				FROM finance_accounts AS f_a
+				WHERE 	(f_a.closed_on IS NULL 
+				 	OR f_a.closed_on >= '$date')
+					AND EXISTS(	SELECT value
+								FROM finance_account_log AS f_a_l
+								WHERE f_a.id = f_a_l.account_id
+									AND f_a_l.date <= '$date' ) ";
+		$res = $conn->query($qry);
+		if ($res->num_rows > 0) {
+			while($row = $res->fetch_assoc()) {
+				$account_ids[$row['id']] = $row['name'];
+			}
+		}
+		return $account_ids;
+	}
+
+	function return_accounts_array($conn, $year = '2019', $date = null) { // $year is deprecated but needs to be left here until cleanup can be performed on all reports/forms
 		$accounts = array(); // Array to house account objects
-		if ($year == '2018') {
-			$qry = " SELECT f_a.*, ( 	SELECT value
-										FROM finance_account_log AS f_a_l
-										WHERE 	f_a.id = f_a_l.account_id
-											AND f_a_l.date <= '2019-01-03'
-										ORDER BY f_a_l.date DESC, f_a_l.id DESC
-										LIMIT 1) AS 'most recent value'
-					FROM finance_accounts AS f_a
-					WHERE f_a.closed_on >= '2019-01-03'
-						OR f_a.closed_on IS NULL
-					GROUP BY f_a.id, f_a.name, f_a.type, f_a.expected_annual_return ";
+		$qry = " SELECT f_a.*, ( 	SELECT value
+									FROM finance_account_log AS f_a_l
+									WHERE f_a.id = f_a_l.account_id ";
+		if (!is_null($date)) {
+			$qry .= " 					AND f_a_l.date <= '$date' ";
 		}
-		else {
-			$qry = " SELECT f_a.*, ( 	SELECT value
-										FROM finance_account_log AS f_a_l
-										WHERE f_a.id = f_a_l.account_id
-										ORDER BY f_a_l.date DESC, f_a_l.id DESC
-										LIMIT 1) AS 'most recent value'
-					FROM finance_accounts AS f_a
-					WHERE f_a.closed_on IS NULL
-					GROUP BY f_a.id, f_a.name, f_a.type, f_a.expected_annual_return ";
+		$qry .= "					ORDER BY f_a_l.date DESC, f_a_l.id DESC
+									LIMIT 1) AS 'most recent value'
+				FROM finance_accounts AS f_a
+				WHERE 	f_a.closed_on IS NULL ";
+		if (!is_null($date)) {
+			$qry .= " OR f_a.closed_on >= '$date' "; // Be cautious of this OR if additional where clauses are added to this query
 		}
+		$qry .= " GROUP BY f_a.id, f_a.name, f_a.type, f_a.expected_annual_return ";
 		$res = $conn->query($qry);
 		if ($res->num_rows > 0) {
 			while($row = $res->fetch_assoc()) {
@@ -532,6 +548,41 @@
 			}
 		}
 		return $accounts;
+	}
+
+	function return_account_value_over_time($conn, $date_start, $date_end, $account_id = 'all') {
+		$array = array();
+		if ($account_id == 'all') { // If all is set then we determine Net Worth
+			$qry = " 	SELECT f_a.name, f_a_l.date, f_a_l.value
+						FROM finance_account_log AS f_a_l
+						INNER JOIN finance_accounts AS f_a
+							ON (f_a_l.account_id = f_a.id)
+						WHERE 	date >= '$date_start'
+							AND date <= '$date_end'
+							AND account_id = $account_id ";
+			$res = $conn->query($qry);
+			if ($res->num_rows > 0) {
+				while($row = $res->fetch_assoc()) {
+					$array[$row['date']] = $row['value'];
+				}
+			}
+		}
+		else { // Otherwise, we are determining for a single account
+			$qry = " 	SELECT f_a.name, f_a_l.date, f_a_l.value
+						FROM finance_account_log AS f_a_l
+						INNER JOIN finance_accounts AS f_a
+							ON (f_a_l.account_id = f_a.id)
+						WHERE 	date >= '$date_start'
+							AND date <= '$date_end'
+							AND account_id = $account_id ";
+			$res = $conn->query($qry);
+			if ($res->num_rows > 0) {
+				while($row = $res->fetch_assoc()) {
+					$array[$row['date']] = $row['value'];
+				}
+			}
+		}
+		return $array;
 	}
 
 	// Goals & Metric tracking
