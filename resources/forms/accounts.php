@@ -58,6 +58,9 @@ if ($res->num_rows > 0) {
 
 $conn->close();
 
+// Link to Style Sheets
+include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/css-files.php');
+
 ?>
 <!-- Link to style sheets -->
 <link href="https://fonts.googleapis.com/css?family=Lobster|VT323|Orbitron:400,900" rel="stylesheet">
@@ -87,18 +90,34 @@ $conn->close();
 			<button type="submit">Submit</button>
 		</form>
 		
-		<table class='log'>
-			<tr>
-				<th colspan='4'>Recent Account Entries</th>
-			</tr>
-			<tr>
-				<th>Name</th>
-				<th>Date</th>
-				<th>Value</th>
-				<th>Type</th>
-				<th>Exp. ROI</th>
-			</tr>
+		<table id='accounts-log-table' class='log'>
+			<thead>
+				<tr>
+					<th colspan='5'>Recent Account Entries</th>
+				</tr>
+				<tr>
+					<th>Name</th>
+					<th>Date</th>
+					<th>Value</th>
+					<th>Type</th>
+					<th>Exp. ROI</th>
+				</tr>
+			</thead>
+			<tbody>
 			<?php echo $data_log; ?>
+			</tbody>
 		</table>
 	</main>
+<?php
+	include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/js-files.php');
+?>
+	<script>
+		$(document).ready( function () {
+				
+				$('#accounts-log-table').DataTable( {
+					"order": [[ 1, "desc" ]]
+				} );
+
+		});
+	</script>
 </body>
