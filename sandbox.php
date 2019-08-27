@@ -7,7 +7,7 @@
     //var_dump(post_values_are_set(array('test')));
     //var_dump( return_date_from_str('2019-02-28 13:54:00', 'datetime') );
     //echo return_days_between_dates('2019-06-09 08:00:00', return_date_from_str());
-    $sd = return_date_relative_to_today('-365 days');
+    $sd = return_date_relative_to_today('-364 days');
     $ed = return_date_from_str('today');
     //echo return_end_of_day($ed);
     //echo return_jss_income($conn, $sd, $ed);
