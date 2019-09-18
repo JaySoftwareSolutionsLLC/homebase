@@ -157,22 +157,22 @@ var chart = new CanvasJS.Chart("account-allocation-graph", {
 		$str = "{ y: $val, name: '$name' ";
 		switch ( $name ) {
 			case 'liability' :
-				$str .= " , color: 'hsl(0, 100%, 50%)', /*exploded: true,*/ ";
+				$str .= " , color: 'hsl(0, 100%, 50%)', exploded: true, ";
 				break;
 			case 'liquid cash' :
-				$str .= " , color: 'hsl(120, 100%, 50%)', /*exploded: true,*/ ";
+				$str .= " , color: 'hsl(120, 100%, 50%)', exploded: true, ";
 				break;
 			case 'ROTH' :
-				$str .= " , color: 'hsl(190, 100%, 50%)', /*exploded: true,*/ ";
+				$str .= " , color: 'hsl(190, 100%, 50%)', exploded: true, ";
 				break;
 			case 'taxable account' :
-				$str .= " , color: 'hsl(160, 100%, 50%)', /*exploded: true,*/ ";
+				$str .= " , color: 'hsl(160, 100%, 50%)', exploded: true, ";
 				break;
 			case 'unreceived ATI' :
-				$str .= " , color: 'hsl(90, 100%, 100%)', /*exploded: true,*/ ";
+				$str .= " , color: 'hsl(90, 100%, 100%)', exploded: true, ";
 				break;
 			case 'depreciating asset' :
-				$str .= " , color: 'hsl(40, 100%, 50%)', /*exploded: true,*/ ";
+				$str .= " , color: 'hsl(40, 100%, 50%)', exploded: true, ";
 				break;
 		}
 		$str .= " }, ";

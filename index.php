@@ -61,46 +61,8 @@
 	}
 
 	// Retrieve Account Information
-	$accounts = return_accounts_array($conn, $year);
-	/*
-	$accounts = array(); // Array to house account objects
-	if ($year == '2018') {
-		$qry = " SELECT f_a.*, ( 	SELECT value
-									FROM finance_account_log AS f_a_l
-									WHERE 	f_a.id = f_a_l.account_id
-										AND f_a_l.date <= '2019-01-03'
-									ORDER BY f_a_l.date DESC, f_a_l.id DESC
-									LIMIT 1) AS 'most recent value'
-				FROM finance_accounts AS f_a
-				WHERE f_a.closed_on >= '2019-01-03'
-					OR f_a.closed_on IS NULL
-				GROUP BY f_a.id, f_a.name, f_a.type, f_a.expected_annual_return ";
-	}
-	else {
-		$qry = " SELECT f_a.*, ( 	SELECT value
-									FROM finance_account_log AS f_a_l
-									WHERE f_a.id = f_a_l.account_id
-									ORDER BY f_a_l.date DESC, f_a_l.id DESC
-									LIMIT 1) AS 'most recent value'
-				FROM finance_accounts AS f_a
-				WHERE f_a.closed_on IS NULL
-				GROUP BY f_a.id, f_a.name, f_a.type, f_a.expected_annual_return ";
-	}
-	$res = $conn->query($qry);
-	if ($res->num_rows > 0) {
-		while($row = $res->fetch_assoc()) {
-			$account = new stdClass();
-			$account_id = $row['id'];
-			$account->name = $row['name'];
-			$account->type = $row['type'];
-			$account->exp_roi = $row['expected_annual_return'];
-			$account->mrv = $row['most recent value'];
-			//var_dump($account);
-			//echo "<br/><br/>";
-			$accounts[] = $account;
-		}
-	}
-	*/
+	$accounts = return_accounts_array($conn, $year, $today_date);
+
 	$account_types = array();
 	foreach ($accounts as $a) {
 		if ( empty( $account_types["$a->type"] ) ) {
@@ -671,7 +633,7 @@
 		include('resources/sections/modal.php');
 		include('resources/sections/header.php');
 		include('resources/sections/notifications.php');
-		include('resources/sections/habits.php');
+		//include('resources/sections/habits.php');
 		include('resources/sections/goals.php');
 		include('resources/sections/fitness.php');
 		include('resources/sections/finance.php');
