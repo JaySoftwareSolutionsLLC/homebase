@@ -232,10 +232,78 @@
 		}
 		return $notification;
 	}
+	function generate_named_date_range($name, $date_start, $date_end, $predefined_dates, $first_range_label = 'Start', $second_range_label = 'End', $first_range_id = 'date-start', $second_range_id = 'date-end', $predefined_range_id = 'predefined-dates') {
+		$str = "<tr>
+			<td class='M nrb'><legend>$name</legend></td>
+			<td class='M nlb' colspan='4'><span class='flex-input'><label for='$first_range_id'>$first_range_label:</label><input type='date' class='datepicker' name='$first_range_id' autocomplete='off' id='$first_range_id' value='";
+		$str .= $date_start;
+		$str .= "' /></span>
+			<!-- END DATE -->
+				<span class='flex-input'><label for='$second_range_id'>$second_range_label:</label><input type='date' class='datepicker' name='$second_range_id' autocomplete='off' id='$second_range_id' value='";
+		$str .= $date_end;
+		$str .= "' /></span>";
+		if ( ! empty ( $predefined_dates ) ) {
+			$str .= "
+				<span class='flex-input' style='height: 100%;'>
+				<label>Predefined Range:</label>
+				<select id='$predefined_range_id' name='$predefined_range_id'>
+				<option value='none'></option>";
+			$str .= generate_predefined_date_options($predefined_dates);
+			$str .= "
+				</select>
+				</span>
+
+			</td>
+		</tr>";
+		}
+		return $str;
+	}
+	// Returns a string of html options to be put inside of the predefined date range select html element
+	function generate_predefined_date_options($predefined_dates) {
+		$str = "";
+		$str .= in_array('today', $predefined_dates) ? "<option value='today'>Today</option>" : "";
+
+		$str .= in_array('plus one day', $predefined_dates) ? "<option value='plus one day'>+1 Day</option>" : "";
+		$str .= in_array('plus two days', $predefined_dates) ? "<option value='plus two days'>+2 Days</option>" : "";
+		$str .= in_array('plus three days', $predefined_dates) ? "<option value='plus three days'>+3 Days</option>" : "";
+		$str .= in_array('plus four days', $predefined_dates) ? "<option value='plus four days'>+4 Days</option>" : "";
+		$str .= in_array('plus five days', $predefined_dates) ? "<option value='plus five days'>+5 Days</option>" : "";
+		$str .= in_array('through end of week', $predefined_dates) ? "<option value='through end of week'>Through End of Week</option>" : "";
+		$str .= in_array('through next week', $predefined_dates) ? "<option value='through next week'>Through Next Week</option>" : "";
+		$str .= in_array('through end of month', $predefined_dates) ? "<option value='through end of month'>Through End of Month</option>" : "";
+		$str .= in_array('through next month', $predefined_dates) ? "<option value='through next month'>Through Next Month</option>" : "";
+		$str .= in_array('through end of quarter', $predefined_dates) ? "<option value='through end of quarter'>Through End of Quarter</option>" : "";
+
+		$str .= in_array('yesterday', $predefined_dates) ? "<option value='yesterday'>Yesterday</option>" : "";
+		$str .= in_array('day before yesterday', $predefined_dates) ? "<option value='day before yesterday'>Day Before Yesterday</option>" : "";
+		$str .= in_array('30 days', $predefined_dates) ? "<option value='30 days'>Last 30 days</option>" : "";
+		$str .= in_array('90 days', $predefined_dates) ? "<option value='90 days'>Last 90 days</option>" : "";
+		$str .= in_array('365 days', $predefined_dates) ? "<option value='365 days'>Last 365 days</option>" : "";
+		$str .= in_array('this week', $predefined_dates) ? "<option value='this week'>This Week (WTD)</option>" : "";
+		$str .= in_array('last week', $predefined_dates) ? "<option value='last week'>Last Week</option>" : "";
+		$str .= in_array('week before last', $predefined_dates) ? "<option value='week before last'>Week Before Last</option>" : "";
+		$str .= in_array('this month', $predefined_dates) ? "<option value='this month'>This Month (MTD)</option>" : "";
+		$str .= in_array('last month', $predefined_dates) ? "<option value='last month'>Last Month</option>" : "";
+		$str .= in_array('month before last', $predefined_dates) ? "<option value='month before last'>Month Before Last</option>" : "";
+		$str .= in_array('this quarter', $predefined_dates) ? "<option value='this quarter'>This Quarter</option>" : "";
+		$str .= in_array('last quarter', $predefined_dates) ? "<option value='last quarter'>Last Quarter</option>" : "";
+		$str .= in_array('this year', $predefined_dates) ? "<option value='this year'>This Year (YTD)</option>" : "";
+		$str .= in_array('last year', $predefined_dates) ? "<option value='last year'>Last Year</option>" : "";
+		$str .= in_array('year before last', $predefined_dates) ? "<option value='year before last'>Year Before Last</option>" : "";
+		$str .= in_array('two years before last', $predefined_dates) ? "<option value='two years before last'>2 Years Before Last</option>" : "";
+		$str .= in_array('last 3 months', $predefined_dates) ? "<option value='last 3 months'>Last 3 Months</option>" : "";
+		$str .= in_array('last 6 months', $predefined_dates) ? "<option value='last 6 months'>Last 6 Months</option>" : "";
+		$str .= in_array('6mo ago to 1yr ago', $predefined_dates) ? "<option value='6mo ago to 1yr ago'>6 Mo - 1 Yr</option>" : "";
+		$str .= in_array('1yr ago to 18mo ago', $predefined_dates) ? "<option value='1yr ago to 18mo ago'>1 Yr - 18 Mo</option>" : "";
+		$str .= in_array('18mo ago to 2yr ago', $predefined_dates) ? "<option value='18mo ago to 2yr ago'>18 Mo - 2 Yr</option>" : "";
+		$str .= in_array('more than 2yr ago', $predefined_dates) ? "<option value='more than 2yr ago'>More than 2 Yr</option>" : "";
+		
+		return $str;
+	}
 
 // Generic HTML functions
 	function return_label_and_input($id, $name, $type, $display, $attributes = array()) {
-		$str = "<span style='display: inline-flex; flex-flow: column nowrap;'>";
+		$str = "<span class='flex-input'>";
 		$str .= "<label for='$id'>$display</label>";
 		$str .= "<input type='$type' name='$name' id='$id'";
 		foreach($attributes as $a) {

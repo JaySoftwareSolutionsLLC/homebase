@@ -60,3 +60,10 @@ Stack trace:
 #0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/index.php(596): include()
 #1 {main}
   thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/sections/finance.php on line 8
+[09-Aug-2019 15:14:32 America/New_York] PHP Fatal error:  Uncaught ArgumentCountError: Too few arguments to function return_ricks_pre_tax_income(), 3 passed in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php on line 22 and exactly 4 expected in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php:374
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php(22): return_ricks_pre_tax_income(Object(mysqli), '2018/08/09', '2018/12/31')
+#1 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 374
+[16-Aug-2019 14:42:22 CST6CDT] PHP Parse error:  syntax error, unexpected '}' in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 516
+[16-Aug-2019 14:42:41 CST6CDT] PHP Parse error:  syntax error, unexpected 'function' (T_FUNCTION), expecting '(' in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 543

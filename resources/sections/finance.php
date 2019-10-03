@@ -81,7 +81,7 @@
 		echo return_finance_stat_html( 'ADI', "$" . number_format( $adi, 2 ) . "/day", AVG_DAILY_INCOME_TARGET, 'small', $adi_info, '#0F0' );
 
 		$ade_info = return_finance_stat_info_html('Average Daily Expenditure', 'Determine Average Daily Expenses (YTD)', 'Net Expenditure / Day of year', array(), '');
-		echo return_finance_stat_html( 'ADE', "$" . number_format( $ade, 2 ) . "/day", AVG_DAILY_EXPENDITURE_TARGET, 'small', $ade_info, '#F00' );
+		echo return_finance_stat_html( 'ADE', "$" . number_format( $ade, 2 ) . "/day", AVG_DAILY_EXPENDITURE_TARGET, 'small', $ade_info, '#F00', 'stat-ade', array('all' => 'all', 'luxury' => 'luxury', 'non-luxury' => 'non-luxury')  );
 
 		echo "</div>"; // End row div
 

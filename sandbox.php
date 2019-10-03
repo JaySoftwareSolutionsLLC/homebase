@@ -9,7 +9,6 @@
     //echo return_days_between_dates('2019-06-09 08:00:00', return_date_from_str());
     $sd = return_date_relative_to_today('-364 days');
     $ed = return_date_from_str('today');
-    echo "Date Range: $sd - $ed<br/>";
     //echo return_end_of_day($ed);
     //echo return_jss_income($conn, $sd, $ed);
     //echo insert_row($conn, 'personal_notes', array('summary' => 'Test', 'description' => 'Testing...1,2,3', 'type' => 'positive experience'));
@@ -36,7 +35,7 @@
     echo $past_365_day_hours_worked . " Net Hours Worked.<br/>";
     $past_365_day_hours_commuted = return_estimated_commute_time($conn, $sd, $ed);
     echo $past_365_day_hours_commuted . " Net Hours Commuted (Estimate).<br/>";
-    /*
+
     echo "<pre>";
     var_dump(return_accounts_array($conn, 2019));
     echo "</pre>";
@@ -47,7 +46,6 @@
             $ua->mrv += 13000;
         }
     }
-    */
-    //echo "<pre>" . var_dump($updated_accounts). "</pre>";
-    //echo return_theoretical_age_60_withdrawal_rate($updated_accounts, 34.75, null);
+    echo "<pre>" . var_dump($updated_accounts). "</pre>";
+    echo return_theoretical_age_60_withdrawal_rate($updated_accounts, 34.75, null);
 ?>

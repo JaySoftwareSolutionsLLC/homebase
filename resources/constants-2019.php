@@ -67,8 +67,6 @@ const MINDFULNESS_TARGET_HOURS =        72; // Equates to 3 sessions / week @ 30
 
 const START_DATE_STRING_DAY_INFO =      'January 29th 2019';
 
-const nutrient_database_api_key =       'yqJUdbNVgWpkR6cR91zwOs6CGGa9bTGNaWGYrH1V';
-
 /*
 const START_DATE_STRING_BENCH_PRESS = 	'June 4th 2018';
 const STARTING_BENCH_PRESS =			160; // In pounds

@@ -56,3 +56,34 @@ Stack trace:
 [02-Feb-2019 10:38:27 CST6CDT] PHP Parse error:  syntax error, unexpected '}' in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/day_info.php on line 47
 [02-Feb-2019 10:50:23 CST6CDT] PHP Parse error:  syntax error, unexpected end of file in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/day_info.php on line 156
 [02-Feb-2019 10:51:18 CST6CDT] PHP Parse error:  syntax error, unexpected '}' in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/day_info.php on line 65
+[30-Jul-2019 13:10:10 America/New_York] PHP Fatal error:  Uncaught Error: Call to undefined function fetch_assoc() in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/notes.php:18
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/notes.php on line 18
+[30-Jul-2019 13:20:35 America/New_York] PHP Fatal error:  Uncaught Error: Call to a member function format() on null in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/notes.php:158
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/notes.php on line 158
+[30-Jul-2019 13:20:46 America/New_York] PHP Fatal error:  Uncaught Error: Call to a member function format() on null in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/notes.php:158
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/notes.php on line 158
+[30-Jul-2019 13:21:24 America/New_York] PHP Fatal error:  Uncaught Error: Call to undefined function html_entities() in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/notes.php:154
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/notes.php on line 154
+[30-Jul-2019 13:21:47 America/New_York] PHP Fatal error:  Uncaught Error: Call to a member function format() on null in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/notes.php:158
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/notes.php on line 158
+[30-Jul-2019 12:27:57 CST6CDT] PHP Parse error:  syntax error, unexpected '->' (T_OBJECT_OPERATOR), expecting ',' or ';' in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/notes.php on line 133
+[30-Jul-2019 12:40:23 CST6CDT] PHP Parse error:  syntax error, unexpected ':', expecting ',' or ')' in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/notes.php on line 158
+[09-Aug-2019 16:13:23 CST6CDT] PHP Parse error:  syntax error, unexpected '}' in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 421
+[09-Aug-2019 16:43:07 CST6CDT] PHP Parse error:  syntax error, unexpected '.' in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/ricks_shift.php on line 188
+[09-Aug-2019 16:43:23 CST6CDT] PHP Parse error:  syntax error, unexpected '.' in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/ricks_shift.php on line 188
+[16-Aug-2019 15:26:58 CST6CDT] PHP Parse error:  syntax error, unexpected '}', expecting ',' or ';' in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/accounts.php on line 174
+[16-Aug-2019 15:27:10 CST6CDT] PHP Parse error:  syntax error, unexpected '}', expecting ',' or ';' in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/accounts.php on line 176
+[16-Aug-2019 16:31:05 America/New_York] PHP Fatal error:  Uncaught Error: Call to undefined function hidden_echo() in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/accounts.php:72
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/accounts.php on line 72
