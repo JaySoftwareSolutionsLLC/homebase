@@ -4,12 +4,16 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/resources.php');
 // Connect to DB
 $conn = connect_to_db();
 // Initialize variables
-$today = date('Y-m-d H:i:s');
+$today = date('Y-m-d');
 
 $entry_msg = "Welcome to the Notes submission page.";
 
 $id = $_GET['id'] ?? 0;
 $page_type = ($id === 0) ? 'create' : 'update';
+
+$five_days_ago = return_date_relative_to_today('-5 days', 'string', 'Y-m-d');
+$date_start = $date_start ?? $_POST['date-start'] ?? $five_days_ago;
+$date_end = $date_end ?? $_POST['date-end'] ?? $today;
 
 $predefined_dates = ['this week', 'last week', 'week before last', 'this month', 'last month', 'month before last', 'this quarter', 'last quarter', 'this year', 'last year'];
 
@@ -72,17 +76,17 @@ $conn->close();
 <?php
 // Link to Style Sheets
 include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/css-files.php');
-
 ?>
+		<link rel="stylesheet" type="text/css" href="/homebase/resources/css/notes.css">
 		<title>Note Form</title>
 	</head>
 	<body>
-		<main style='width: 95%; max-width: none;'>
+		<main>
 
 			<h1>Notes</h1>
 			<h2 class='msg'><?php echo $entry_msg ?></h2>
 
-			<form method='post'>
+			<form method='post' id='main-form'>
 				<label for='id'>ID</label>
 				<input type='number' id='id' name='id' value='<?= $id; ?>' disabled />
 				<label for='datetime'>Datetime (Optional)</label>
@@ -96,19 +100,20 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 					<option value='negative experience' <?php if ($old_info['negative experience'] == 'reminder') echo "selected"; ?> >Negative Experience</option>
 					<option value='quote' <?php if ($old_info['type'] == 'quote') echo "selected"; ?> >Quote</option>
 					<option value='lesson' <?php if ($old_info['type'] == 'lesson') echo "selected"; ?> >Lesson</option>
-					<option value='book to read' <?php if ($old_info['book to read'] == 'reminder') echo "selected"; ?> >Book To Read</option>
-					<option value='learning resource' <?php if ($old_info['learning resource'] == 'reminder') echo "selected"; ?> >Learning Resource</option>
-					<option value='homebase enhancement' <?php if ($old_info['homebase enhancement'] == 'reminder') echo "selected"; ?> >HomeBase Enhancement</option>
+					<option value='book to read' <?php if ($old_info['type'] == 'book to read') echo "selected"; ?> >Book To Read</option>
+					<option value='learning resource' <?php if ($old_info['type'] == 'learning resource') echo "selected"; ?> >Learning Resource</option>
+					<option value='homebase enhancement' <?php if ($old_info['type'] == 'homebase enhancement') echo "selected"; ?> >HomeBase Enhancement</option>
+					<option value='habit' <?php if ($old_info['type'] == 'habit') echo "selected"; ?> >Habit</option>
 				</select>
 				<label for='summary-input'>Summary</label>
-				<span style='position: relative;'>
-					<input class='summary' name='summary' id='summary-input' type='text' placeholder='Heart to heart with Molly Bolzano' maxlength='50' style='width: 100%;' value='<?php echo $old_info['summary'] ?>'/>
-					<h3 class='summary-char-used' style='position: absolute; bottom: 0.5rem; right: 0.5rem; color: hsla(0, 0%, 0%, 0.5);'>0/50</h3>
+				<span class='char-count'>
+					<input class='summary' name='summary' id='summary-input' type='text' placeholder='Heart to heart with Molly' maxlength='50' value='<?php echo $old_info['summary'] ?>'/>
+					<h3 class='char-count'>0/50</h3>
 				</span>
 				<label for='description-input'>Description</label>
-				<span style='position: relative;'>
-					<textarea name='description' class='description' id='description-input' maxlength='255' placeholder='Had a heart to heart with Molly during shift today.' style='width: 100%;'><?php echo htmlspecialchars_decode($old_info['description']); ?></textarea>
-					<h3 class='desc-char-used' style='position: absolute; bottom: 0.5rem; right: 0.5rem; color: hsla(0, 0%, 0%, 0.5);'>0/255</h3>
+				<span class='char-count'>
+					<textarea name='description' class='description' id='description-input' maxlength='255' placeholder='Had a heart to heart with Molly Bolzano during shift today.'><?php echo htmlspecialchars_decode($old_info['description']); ?></textarea>
+					<h3 class='char-count'>0/255</h3>
 				</span>
 				<label for='caution-datetime-input'>Caution Datetime (Optional)</label>
 				<input type='datetime-local' name='caution-datetime' id='caution-datetime-input' <?php echo is_null($old_info['caution_datetime']) ? "" : " value='" . date('Y-m-d\TH:i', strtotime($old_info['caution_datetime'])) . "'" ?> />
@@ -121,13 +126,12 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 				<button type="submit"><?php echo $page_type == 'update' ? 'Update' : 'Submit' ?></button>
 			</form>
 
-			<section class='card-deck-parameters' style='flex-flow: column nowrap; width: 60%; justify-content: center; border: none; background: hsl(190, 100%, 50%);'>
-				<h3 style='font-size: 1.5rem; margin: 0.5rem 0;'>Card Search</h3>
-				<div class='card-deck-parameter-row' style='display: flex; width: 100%;'>
-					<?= generate_named_date_range('', $date_start, $date_end, $predefined_dates); ?>
-					
+			<section id='card-deck-parameters'>
+				<h3>Note Search</h3>
+				<div class='card-deck-parameter-row'>
+					<?= generate_named_date_range($date_start, $date_end, $predefined_dates); ?>					
 				</div>
-				<div class='card-deck-parameter-row' style='display: flex; width: 100%;'>
+				<div class='card-deck-parameter-row'>
 					<span class='flex-input'>
 						<label for='card-deck-type-input'>Type:</label>
 						<select id='card-deck-type-input'>
@@ -142,6 +146,7 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 							<option value='book to read'>Book To Read</option>
 							<option value='learning resource'>Learning Resource</option>
 							<option value='homebase enhancement'>HomeBase Enhancement</option>
+							<option value='habit'>Habit</option>
 						</select>
 					</span>
 					<span class='flex-input'>
@@ -158,7 +163,7 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 					<?= return_label_and_input('card-deck-search-input', 'card-deck-search', 'text', 'Substring:'); ?>
 				</div>
 			</section>
-			<section class='card-deck' style='width: 100%; padding: 1rem; flex-flow: row wrap; justify-content: space-evenly;'></section>
+			<section id='card-deck'></section>
 
 		</main>
 <?php
@@ -181,23 +186,18 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/js
 							}
 						})
 						.done(function(response) {
-							$('section.card-deck').empty().html(response);
+							$('section#card-deck').empty().html(response);
 							// DEPRECATED allowCompleteDatetimeToBeUpdated();
 						});
 					}
-					// Retrieve all notes
-					/*
-					$.ajax({
-						type: "POST",
-						url: '/homebase/resources/ajax/note_cards.php',
-						data: {
-							
-						}
-					})
-					.done(function(response) {
-						$('section.card-deck').empty().html(response);
-					});
-					*/
+					// Initial note retrieval
+					let dateStart = $('input#date-start').val();
+					let dateEnd = $('input#date-end').val();
+					let searchStr = $('input#card-deck-search-input').val();
+					let cardType = $('select#card-deck-type-input').val();
+					let cardStatus = $('select#card-deck-status-input').val();
+					updateNoteCardHTML(dateStart, dateEnd, searchStr, cardType, cardStatus);
+					
 					// Show char limit for summary
 					$('input.summary').on('keyup', function() {
 						let charCount = $(this).val();
@@ -228,7 +228,7 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/js
 						updateNoteCardHTML(dateStart, dateEnd, searchStr, cardType, cardStatus);
 					});
 					// Retrieve notes if inputs change
-					$('section.card-deck-parameters input, select#card-deck-type-input, select#card-deck-status-input').bind('keyup change', function() {
+					$('section#card-deck-parameters input, select#card-deck-type-input, select#card-deck-status-input').bind('keyup change', function() {
 						let dateStart = $('input#date-start').val();
 						let dateEnd = $('input#date-end').val();
 						let searchStr = $('input#card-deck-search-input').val();

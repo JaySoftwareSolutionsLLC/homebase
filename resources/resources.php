@@ -232,9 +232,8 @@
 		}
 		return $notification;
 	}
-	function generate_named_date_range($name, $date_start, $date_end, $predefined_dates, $first_range_label = 'Start', $second_range_label = 'End', $first_range_id = 'date-start', $second_range_id = 'date-end', $predefined_range_id = 'predefined-dates') {
+	function generate_named_date_range($date_start, $date_end, $predefined_dates, $first_range_label = 'Start', $second_range_label = 'End', $first_range_id = 'date-start', $second_range_id = 'date-end', $predefined_range_id = 'predefined-dates') {
 		$str = "<tr>
-			<td class='M nrb'><legend>$name</legend></td>
 			<td class='M nlb' colspan='4'><span class='flex-input'><label for='$first_range_id'>$first_range_label:</label><input type='date' class='datepicker' name='$first_range_id' autocomplete='off' id='$first_range_id' value='";
 		$str .= $date_start;
 		$str .= "' /></span>

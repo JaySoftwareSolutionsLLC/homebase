@@ -27,13 +27,14 @@ $note_type_icons['lesson'] = "<i title='lesson' class='fas fa-graduation-cap'></
 $note_type_icons['book to read'] = "<i title='book to read' class='fas fa-book'></i>";
 $note_type_icons['learning resource'] = "<i title='learning resource' class='fas fa-flask'></i>";
 $note_type_icons['homebase enhancement'] = "<i title='homebase enhancement' class='fas fa-tools'></i>";
+$note_type_icons['habit'] = "<i title='habit' class='fas fa-retweet' style='color: hsla(190, 100%, 50%, 1);'></i>";
 
 //echo "$date_start - $date_end";
 
 // Connect to DB
 $conn = connect_to_db();
 
-// Query DB
+// Query DB to retrieve relevant notes
 $qry = "SELECT 	*
 				FROM personal_notes 
         WHERE   datetime >= '$date_start'

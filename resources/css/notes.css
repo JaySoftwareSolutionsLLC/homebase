@@ -1,0 +1,62 @@
+html body main {
+  width: 95%;
+  max-width: none;
+}
+
+html body main form input, html body main form textarea {
+  width: 100%;
+}
+
+html body main form span.char-count {
+  position: relative;
+}
+
+html body main form span.char-count h3.char-count {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+html body main section#card-deck-parameters {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: column nowrap;
+          flex-flow: column nowrap;
+  width: 60%;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  border: none;
+  background: #00d5ff;
+  border-radius: 4rem 1rem;
+  color: white;
+}
+
+html body main section#card-deck-parameters h3 {
+  font-size: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+html body main section#card-deck-parameters div.card-deck-parameter-row {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  width: 100%;
+  margin: 0.5rem 0;
+}
+
+html body main section#card-deck {
+  width: 100%;
+  padding: 1rem;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: row wrap;
+          flex-flow: row wrap;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+}
+/*# sourceMappingURL=notes.css.map */
