@@ -108,12 +108,12 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 				<label for='summary-input'>Summary</label>
 				<span class='char-count'>
 					<input class='summary' name='summary' id='summary-input' type='text' placeholder='Heart to heart with Molly' maxlength='50' value='<?php echo $old_info['summary'] ?>'/>
-					<h3 class='char-count'>0/50</h3>
+					<h3 id='summary-char-count' class='char-count'>0/50</h3>
 				</span>
 				<label for='description-input'>Description</label>
 				<span class='char-count'>
 					<textarea name='description' class='description' id='description-input' maxlength='255' placeholder='Had a heart to heart with Molly Bolzano during shift today.'><?php echo htmlspecialchars_decode($old_info['description']); ?></textarea>
-					<h3 class='char-count'>0/255</h3>
+					<h3 id='desc-char-count' class='char-count'>0/255</h3>
 				</span>
 				<label for='caution-datetime-input'>Caution Datetime (Optional)</label>
 				<input type='datetime-local' name='caution-datetime' id='caution-datetime-input' <?php echo is_null($old_info['caution_datetime']) ? "" : " value='" . date('Y-m-d\TH:i', strtotime($old_info['caution_datetime'])) . "'" ?> />
@@ -200,20 +200,26 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/js
 					
 					// Show char limit for summary
 					$('input.summary').on('keyup', function() {
+						console.log('trigger');
 						let charCount = $(this).val();
 						charCount = charCount.length;
-						$('h3.summary-char-used').html(`${charCount}/50`);
+						console.log(`${charCount}`);
+						$('h3#summary-char-count').html(`${charCount}/50`);
 					});
 					// Show char limit for description
 					$('textarea.description').on('keyup', function() {
+						console.log('trigger');
 						let enteredText = $(this).val();
 						charCount = enteredText.length;
 						lineBreakCount = (enteredText.match(/\n/g)||[]).length; // Because we're converting newlines to <br /> we need to account for that in the character count
 						lineBreakSizeDifferential = 5;
 						charCount += lineBreakCount * lineBreakSizeDifferential;
-						$('h3.desc-char-used').html(`${charCount}/255`);
+						$('h3#desc-char-count').html(`${charCount}/255`);
 						if (charCount > 255) {
-							$('h3.desc-char-used').css('color: red');
+							$('h3#desc-char-count').addClass('too-long');
+						}
+						else {
+							$('h3#desc-char-count').removeClass('too-long');
 						}
 					});
 					// Update dates and retrieve notes if predefined dates get changed

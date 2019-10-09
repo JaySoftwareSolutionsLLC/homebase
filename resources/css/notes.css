@@ -18,6 +18,10 @@ html body main form span.char-count h3.char-count {
   color: rgba(0, 0, 0, 0.5);
 }
 
+html body main form span.char-count h3.char-count.too-long {
+  color: red;
+}
+
 html body main section#card-deck-parameters {
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
