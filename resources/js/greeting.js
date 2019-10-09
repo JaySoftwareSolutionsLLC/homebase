@@ -19,5 +19,5 @@ $(document).ready(function() {
             return veryLateGreeting;
         }
     }
-    speak(generateGreeting());
+    // DEPRECATED speak(generateGreeting());
 });

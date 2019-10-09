@@ -540,11 +540,21 @@
 	}
 
 	// Expenditure
-	function return_expenditure($conn, $date_start, $date_end) {
+	function return_expenditure($conn, $date_start, $date_end, $category = 'all') {
 		$query = "	SELECT SUM(amount) AS 'Net Expenditure'
 					FROM finance_expenses 
 					WHERE 	date >= '$date_start' 
 						AND date <= '$date_end'";
+		if ($category == 'lux') {
+			$query .= "	AND type IN ('";
+			$query .= implode("', '", LUXURY_EXPENDITURES);
+			$query .= "')";
+		}
+		else if ($category == 'non') {
+			$query .= "	AND type NOT IN ('";
+			$query .= implode("', '", LUXURY_EXPENDITURES);
+			$query .= "')";
+		}
 		$res = $conn->query($query);
 		$row = mysqli_fetch_array($res);
 		return round($row['Net Expenditure'], 2);
