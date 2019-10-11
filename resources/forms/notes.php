@@ -92,7 +92,7 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 				<label for='datetime'>Datetime (Optional)</label>
 				<input type='datetime-local' name='datetime' <?php echo is_null($old_info['datetime']) ? "" : " value='" . date('Y-m-d\TH:i', strtotime($old_info['datetime'])) . "'" ?> />
 				<label for='type'>Type</label>
-				<select name='type'>
+				<select name='type' class='type'>
 					<option value='thought' <?php if ($old_info['type'] == 'thought') echo "selected"; ?> >Thought</option>
 					<option value='idea' <?php if ($old_info['type'] == 'idea') echo "selected"; ?> >Idea</option>
 					<option value='reminder' <?php if ($old_info['type'] == 'reminder') echo "selected"; ?> >Reminder</option>
@@ -198,6 +198,21 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/js
 					let cardStatus = $('select#card-deck-status-input').val();
 					updateNoteCardHTML(dateStart, dateEnd, searchStr, cardType, cardStatus);
 					
+					// Change description textarea to template when type changes if textarea is currently empty
+					$('select.type').on('change', function() {
+						let newVal = $(this).val();
+						let textAreaEl = $('textarea.description');
+						if (textAreaEl.val().length === 0) {
+							switch (newVal) {
+								case 'habit':
+									textAreaEl.html(`Purpose: \nTrigger:\nTime Cost:\nDescription: `);
+									break;
+								default:
+									break;
+							}
+						}
+					});
+
 					// Show char limit for summary
 					$('input.summary').on('keyup', function() {
 						console.log('trigger');

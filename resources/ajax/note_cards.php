@@ -25,7 +25,7 @@ $note_type_icons['thought'] = "<i title='thought' class='fas fa-brain' style='co
 $note_type_icons['quote'] = "<i title='quote' class='fas fa-quote-right'></i>";
 $note_type_icons['lesson'] = "<i title='lesson' class='fas fa-graduation-cap'></i>";
 $note_type_icons['book to read'] = "<i title='book to read' class='fas fa-book'></i>";
-$note_type_icons['learning resource'] = "<i title='learning resource' class='fas fa-flask'></i>";
+$note_type_icons['learning resource'] = "<i title='learning resource' class='fas fa-glasses'></i>";
 $note_type_icons['homebase enhancement'] = "<i title='homebase enhancement' class='fas fa-tools'></i>";
 $note_type_icons['habit'] = "<i title='habit' class='fas fa-retweet' style='color: hsla(190, 100%, 50%, 1);'></i>";
 
