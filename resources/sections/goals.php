@@ -79,6 +79,7 @@
 
 		echo return_timed_goal_progress_bar_html('Opt. Health', 'goal-optimal-health', 0, 100, (100 * $optimal_health_percentage), null, null); // Defined in homebase/resources/resources.php
 		
+		echo return_timed_goal_progress_bar_html('Cert Hrs', 'goal-full-stack-certification', 0, SOFTWARE_DEV_TARGET_CERT_GOAL, $software_dev_hours_cert, START_DATE_STRING_CERT_GOAL, END_DATE_STRING_CERT_GOAL, 'now', 'linear', null); // Defined in homebase/resources/resources.php
 	}
 ?>
 

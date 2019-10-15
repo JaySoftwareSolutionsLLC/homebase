@@ -46,6 +46,11 @@ const END_OF_YEAR_NET_WORTH_TARGET =	81000; // Based off 39.9k NW @ end of 2018 
 // DEPRECATED 03.09.2019 due to market influence const ANNUAL_NET_WORTH_CONTRIBUTION_TARGET =   END_OF_YEAR_NET_WORTH_TARGET - START_OF_YEAR_NET_WORTH;
 // DEPRECATED FOR 2019...will (likely) break index.php const JUNE_1ST_DEBT =					17000;
 
+//--- Other Constants ---
+const START_DATE_STRING_CERT_GOAL =     '2019-10-14';
+const END_DATE_STRING_CERT_GOAL =       '2020-01-31';
+const SOFTWARE_DEV_TARGET_CERT_GOAL =   150;
+
 //--- Fitness Constants ---
 const START_DATE_STRING_RUNNING = 		'January 8th 2019';
 const STARTING_MILE_TIME =				475; // In seconds

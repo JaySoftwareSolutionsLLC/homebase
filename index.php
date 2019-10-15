@@ -537,7 +537,11 @@
 		$interval_since_most_recent_expense_review = date_diff($today_datetime, $most_recent_expense_review_dt, true);
 		$days_since_most_recent_expense_review = $interval_since_most_recent_expense_review->days;
 
-		// Optimal Health
+		// Certification Hours
+		$q = "SELECT SUM(software_dev_hours) FROM personal_day_info WHERE date >= '" . START_DATE_STRING_CERT_GOAL . "' AND date <= '" . END_DATE_STRING_CERT_GOAL . "'";
+		$res = $conn->query($q);
+		$row = mysqli_fetch_row($res);
+		$software_dev_hours_cert = $row[0];
 	
 	}
 //---CLOSE DATABASE CONNECTION------------------------------------------------------
