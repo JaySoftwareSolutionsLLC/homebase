@@ -72,16 +72,20 @@
 <?php
 	}
 	else {
-		$current_net_worth_info = return_finance_stat_info_html('Current Net Worth', 'Determine value today of all accounts and assets minus liabilities', '', array('Accounts havent changed since last update', 'Non-liquid assets are able to be sold for theoretical value'), 'Includes Unreceived After Tax Income');
+		$current_net_worth_info = return_finance_stat_info_html('Current Net Worth'
+																, 'Determine value today of all accounts and assets minus liabilities'
+																, ''
+																, array('Accounts havent changed since last update', 'Non-liquid assets are able to be sold for theoretical value')
+																, 'Includes Unreceived After Tax Income');
 		echo return_finance_stat_html( 'Current Net Worth', "$" . number_format($current_net_worth), '', '', $current_net_worth_info );
 	
 		echo "<div class='row'>"; // Create a row div for 2 small stats
 		
 		$adi_info = return_finance_stat_info_html('Average Daily Income', 'Determine Average Daily Income (YTD)', 'Net Income / Day of year', array(), 'Pre-tax amount');
-		echo return_finance_stat_html( 'ADI', "$" . number_format( $adi, 2 ) . "/day", AVG_DAILY_INCOME_TARGET, 'small', $adi_info, '#0F0' );
+		echo return_finance_stat_html( 'ADI', "$" . number_format( $adi, 2 ) . "/day", AVG_DAILY_INCOME_TARGET, 'small', $adi_info, '#0F0', 'stat-adi', array('all' => 'all', 'S&D' => 'S&D', 'Ricks' => 'Ricks') );
 
 		$ade_info = return_finance_stat_info_html('Average Daily Expenditure', 'Determine Average Daily Expenses (YTD)', 'Net Expenditure / Day of year', array(), '');
-		echo return_finance_stat_html( 'ADE', "$" . number_format( $ade, 2 ) . "/day", AVG_DAILY_EXPENDITURE_TARGET, 'small', $ade_info, '#F00' );
+		echo return_finance_stat_html( 'ADE', "$" . number_format( $ade, 2 ) . "/day", AVG_DAILY_EXPENDITURE_TARGET, 'small', $ade_info, '#F00', 'stat-ade', array('all' => 'all', 'lux' => 'lux', 'non' => 'non')  );
 
 		echo "</div>"; // End row div
 

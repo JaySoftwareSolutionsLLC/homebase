@@ -322,7 +322,9 @@
 		$fuse = 0;
 		while ($day_to_check <= $date_end) {
 			$this_dow = date('D', strtotime($day_to_check));
-			if ($this_dow != 'Sat' && $this_dow != 'Sun' && ($day_to_check < date('Y-m-d', strtotime('July 14th 2018')) || $day_to_check > date('Y-m-d', strtotime('July 21st 2018')))) { // Ideally unpaid PTO should be stored in an array in constants or in a table inside of MySQL DB
+			if ($this_dow == 'Sat' || $this_dow == 'Sun' || ($day_to_check > date('Y-m-d', strtotime('July 14th 2018')) && $day_to_check < date('Y-m-d', strtotime('July 21st 2018')))) { // Ideally unpaid PTO should be stored in an array in constants or in a table inside of MySQL DB
+			; 
+			} else {
 				$pre_tax_salary += ( return_seal_hourly_wage($conn, $day_to_check) * 8 );
 			}
 			$day_to_check = date('Y-m-d', strtotime($day_to_check.'+1day'));
@@ -473,11 +475,21 @@
 	}
 
 	// Expenditure
-	function return_expenditure($conn, $date_start, $date_end) {
+	function return_expenditure($conn, $date_start, $date_end, $category = 'all') {
 		$query = "	SELECT SUM(amount) AS 'Net Expenditure'
 					FROM finance_expenses 
 					WHERE 	date >= '$date_start' 
 						AND date <= '$date_end'";
+		if ($category == 'lux') {
+			$query .= "	AND type IN ('";
+			$query .= implode("', '", LUXURY_EXPENDITURES);
+			$query .= "')";
+		}
+		else if ($category == 'non') {
+			$query .= "	AND type NOT IN ('";
+			$query .= implode("', '", LUXURY_EXPENDITURES);
+			$query .= "')";
+		}
 		$res = $conn->query($query);
 		$row = mysqli_fetch_array($res);
 		return round($row['Net Expenditure'], 2);

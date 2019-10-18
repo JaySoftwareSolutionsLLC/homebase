@@ -36,6 +36,8 @@
     echo $past_365_day_hours_worked . " Net Hours Worked.<br/>";
     $past_365_day_hours_commuted = return_estimated_commute_time($conn, $sd, $ed);
     echo $past_365_day_hours_commuted . " Net Hours Commuted (Estimate).<br/>";
+    
+    echo $test = return_seal_pre_tax_salary($conn, '2019-01-01', '2019-09-27', 367);
     /*
     echo "<pre>";
     var_dump(return_accounts_array($conn, 2019));

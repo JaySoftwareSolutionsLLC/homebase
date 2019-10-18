@@ -28,18 +28,18 @@
 //---INITIALIZE GLOBAL VARIABLES ---------------------------------------------------
 	if ($year == '2018') {
 		$today_time = strtotime('December 31st 2018');
-		$today_date = date('Y/m/d', mktime(0, 0, 0, 12, 31, 2018));
+		$today_date = date('Y-m-d', mktime(0, 0, 0, 12, 31, 2018));
 		$today_datetime = new DateTime('December 31st 2018');
 	}
 	else {
 		$today_time = time();
 		$today_datetime = new DateTime();
-		$today_date = date_format($today_datetime, 'Y/m/d');
+		$today_date = date_format($today_datetime, 'Y-m-d');
 	}
 	//echo $today_time;
 	//var_dump( $today_datetime );
 	//var_dump( $today_date );
-	$last_sunday = "'" . date('Y/m/d', strtotime('last Sunday')) . "'";
+	$last_sunday = "'" . date('Y-m-d', strtotime('last Sunday')) . "'";
 	$days_left_in_year = floor((strtotime("January 1st, " . ($year + 1)) - $today_time) / SEC_IN_DAY); // Needs to stay this way for 2018 and 2019 to both work
 
 	// DEPRECATED 2018.10.28 $current_bench_press = 185;
@@ -49,7 +49,7 @@
 	// FINANCIAL--------------------------------------------------------------------
 
 	// Time Related Variables
-	$start_date_financial = date('Y/m/d', strtotime(START_DATE_STRING_FINANCIAL));
+	$start_date_financial = date('Y-m-d', strtotime(START_DATE_STRING_FINANCIAL));
 	$end_date_financial = $today_date;
 	$start_time_financial = strtotime($start_date_financial);
 	$days_active_financial = ceil(($today_time - $start_time_financial) / (SEC_IN_DAY));
@@ -282,7 +282,7 @@
 
 	// Running
 
-	$start_date_running = date('Y/m/d 00:00:00', strtotime(START_DATE_STRING_RUNNING));
+	$start_date_running = date('Y-m-d 00:00:00', strtotime(START_DATE_STRING_RUNNING));
 	$end_date_running = $today_date;
 	$start_time_running = strtotime($start_date_running);
 
@@ -297,7 +297,7 @@
 
 	// Body Weight
 	
-	$start_date_body_weight = 	date('Y/m/d', strtotime(START_DATE_STRING_BODY_WEIGHT));
+	$start_date_body_weight = 	date('Y-m-d', strtotime(START_DATE_STRING_BODY_WEIGHT));
 	$end_date_body_weight = $today_date;
 	
 	$start_time_body_weight = 	strtotime($start_date_body_weight);
@@ -387,7 +387,7 @@
 			$muscle_ideal_rest = 		$row_mrf[1];
 			//echo $muscle_ideal_rest;
 			$muscle_mrf_hours =			ceil(($today_time - $muscle_mrf_time) / (60 * 60)); // Most Recent Failure as timestamp
-			//echo "$muscle_id | $muscle_mrf_time | $muscle_mrf_hours" . date('Y/m/d H:i:s', $muscle_mrf_time) . " <br/>";
+			//echo "$muscle_id | $muscle_mrf_time | $muscle_mrf_hours" . date('Y-m-d H:i:s', $muscle_mrf_time) . " <br/>";
 			if ($muscle_mrf_hours > 999) { $muscle_mrf_hours = 999; }
 			
 			$hur =						$muscle_ideal_rest - $muscle_mrf_hours;
@@ -505,7 +505,7 @@
 		}
 		$percent_time_frame_body_weight_2019 = number_format((100 * $days_active_body_weight / (((strtotime('January 1st, 2020')) - strtotime(START_DATE_STRING_BODY_WEIGHT)) / SEC_IN_DAY)), 2);
 		// GOAL: Arm Size
-		$start_date_upper_arm_size = date('Y/m/d 00:00:00', strtotime(START_DATE_STRING_UPPER_ARM_CIRC));
+		$start_date_upper_arm_size = date('Y-m-d 00:00:00', strtotime(START_DATE_STRING_UPPER_ARM_CIRC));
 		$end_date_upper_arm_size = $today_date;
 		$start_time_upper_arm_size = strtotime($start_date_upper_arm_size);
 		$days_active_upper_arm_size = ceil(($today_time - $start_time_upper_arm_size) / (SEC_IN_DAY));
@@ -563,8 +563,8 @@
 	$notifications = array(); // Array to house notification objects
 	$qry_caution_notes = "SELECT caution_datetime, summary, est_min_to_comp
 							FROM `personal_notes`
-							WHERE 	caution_datetime <= '" . date_format( $today_datetime, 'Y/m/d H:i:s' ) . "'
-								AND (warning_datetime IS NULL OR warning_datetime > '" . date_format( $today_datetime, 'Y/m/d H:i:s' ) . "')
+							WHERE 	caution_datetime <= '" . date_format( $today_datetime, 'Y-m-d H:i:s' ) . "'
+								AND (warning_datetime IS NULL OR warning_datetime > '" . date_format( $today_datetime, 'Y-m-d H:i:s' ) . "')
 								AND complete_datetime IS NULL
 							ORDER BY caution_datetime ASC; ";
 	$res_caution_notes = $conn->query($qry_caution_notes);
@@ -579,7 +579,7 @@
 	}
 	$qry_warning_notes = "	SELECT warning_datetime, summary, est_min_to_comp
 							FROM `personal_notes`
-							WHERE 	warning_datetime <= '" . date_format( $today_datetime, 'Y/m/d H:i:s' ) . "'
+							WHERE 	warning_datetime <= '" . date_format( $today_datetime, 'Y-m-d H:i:s' ) . "'
 								AND complete_datetime IS NULL
 								ORDER BY warning_datetime ASC; ; ";
 	$res_warning_notes = $conn->query($qry_warning_notes);
@@ -642,6 +642,8 @@
 	</main>
 	<script>
 		var year = <?php echo $year; ?>;
+		var sd = '<?= $start_date_financial; ?>';
+		var ed = '<?= $today_date; ?>';
 	</script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
     <script type="text/javascript" src="resources/resources.js"></script>
