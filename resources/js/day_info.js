@@ -52,6 +52,7 @@ function generateTimerModal(triggerElement, inputElement, title) {
 }
 generateTimerModal( $('span#mindfulness-min-timer'), $('input#mindfulness-minutes-input'), 'Mindfulness Minutes' );
 generateTimerModal( $('span#dev-min-timer'), $('input#software-dev-minutes-input'), 'Software Dev Minutes' );
+generateTimerModal( $('span#cert-min-timer'), $('input#software-cert-minutes-input'), 'Software Cert Minutes' );
 generateTimerModal( $('span#tanning-min-timer'), $('input#tanning-minutes-input'), 'Tanning Minutes' );
 
 $('#modal').on('click', function(event) {

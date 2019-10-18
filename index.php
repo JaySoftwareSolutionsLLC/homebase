@@ -537,7 +537,11 @@
 		$interval_since_most_recent_expense_review = date_diff($today_datetime, $most_recent_expense_review_dt, true);
 		$days_since_most_recent_expense_review = $interval_since_most_recent_expense_review->days;
 
-		// Optimal Health
+		// Certification Hours
+		$q = "SELECT SUM(software_cert_hours) FROM personal_day_info WHERE date >= '" . START_DATE_STRING_CERT_GOAL . "' AND date <= '" . END_DATE_STRING_CERT_GOAL . "'";
+		$res = $conn->query($q);
+		$row = mysqli_fetch_row($res);
+		$software_cert_hours = $row[0];
 	
 	}
 //---CLOSE DATABASE CONNECTION------------------------------------------------------
@@ -561,7 +565,10 @@
 
 	// Note related cautions/warnings
 	$notifications = array(); // Array to house notification objects
-	$qry_caution_notes = "SELECT caution_datetime, summary, est_min_to_comp
+	$qry_caution_notes = "SELECT 	id
+									,caution_datetime
+									,summary
+									,est_min_to_comp
 							FROM `personal_notes`
 							WHERE 	caution_datetime <= '" . date_format( $today_datetime, 'Y-m-d H:i:s' ) . "'
 								AND (warning_datetime IS NULL OR warning_datetime > '" . date_format( $today_datetime, 'Y-m-d H:i:s' ) . "')
@@ -572,12 +579,16 @@
 		while($row = $res_caution_notes->fetch_assoc()) {
 			$notification = new stdClass();
 			$notification->type = 'caution';
+			$notification->link = 'https://www.brettjaybrewster.com/homebase/resources/forms/notes.php?id=' . $row['id'];
 			$notification->message = /* "(" . str_replace(' ', ' @ ', $row['caution_datetime']) . ") " . */ $row['summary'];
 			$notification->est_min_to_comp = $row['est_min_to_comp'];
 			$notifications[] = $notification;
 		}
 	}
-	$qry_warning_notes = "	SELECT warning_datetime, summary, est_min_to_comp
+	$qry_warning_notes = "	SELECT 	id
+									,warning_datetime
+									,summary
+									,est_min_to_comp
 							FROM `personal_notes`
 							WHERE 	warning_datetime <= '" . date_format( $today_datetime, 'Y-m-d H:i:s' ) . "'
 								AND complete_datetime IS NULL
@@ -587,6 +598,7 @@
 		while($row = $res_warning_notes->fetch_assoc()) {
 			$notification = new stdClass();
 			$notification->type = 'warning';
+			$notification->link = 'https://www.brettjaybrewster.com/homebase/resources/forms/notes.php?id=' . $row['id'];
 			$notification->message = /* "(" . str_replace(' ', ' @ ', $row['warning_datetime']) . ") " . */ $row['summary'];
 			$notification->est_min_to_comp = $row['est_min_to_comp'];
 			$notifications[] = $notification;

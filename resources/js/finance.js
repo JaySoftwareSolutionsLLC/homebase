@@ -1,4 +1,4 @@
-$('div.stat i.fa-info').on('click', function( event ) {
+$('div.stat i.fa-info').on('click', function (event) {
     let info = $(this).attr('data-stat-description');
     showModal(event, info);
 });
@@ -9,7 +9,7 @@ $('div#stat-age-60-adw div.variant-row button').each(function (index, element) {
     }    
 });
 */
-$('div#stat-age-60-adw div.variant-row button').on('click', function() {
+$('div#stat-age-60-adw div.variant-row button').on('click', function () {
     let buttonEl = $(this);
     let contentEl = buttonEl.parents('div.variant-row').siblings('h4.main-metric-val');
     let exproi = buttonEl.attr('data-val');
@@ -19,7 +19,7 @@ $('div#stat-age-60-adw div.variant-row button').on('click', function() {
         type: "POST",
         url: "/homebase/resources/ajax/variant_age_60_adw.php",
         data: {
-            exproi : exproi
+            exproi: exproi
         },
         success: function (response) {
             $('div#stat-age-60-adw div.variant-row button').each(function () {
@@ -41,9 +41,9 @@ $('div#stat-ade div.variant-row button').on('click', function() {
         type: "POST",
         url: "/homebase/resources/ajax/variant_ade.php",
         data: {
-            category : category,
-            sd : sd,
-            ed : ed
+            category: category,
+            sd: sd,
+            ed: ed
         },
         success: function (response) {
             $('div#stat-ade div.variant-row button').each(function () {

@@ -4,13 +4,17 @@
 // Include resources
 include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/resources.php');
 // Initialize variables
+$today = return_date_from_str('now');
 $date_start = $_POST['date-start'] ?? return_date_from_str('2018-06-01');
 $date_end = return_end_of_day($_POST['date-end']) ?? date('Y-m-d H:i:s');
 $date_end = empty( $date_end ) ? date('Y-m-d H:i:s') : $date_end;
 $date_start = empty( $date_start ) ? return_date_from_str('2018-06-01') : $date_start;
 $search_str = $_POST['search-str'] ?? '';
+$card_type = $_POST['card-type'] ?? 'all';
+$card_status = $_POST['card-status'] ?? 'all';
 $return_count = $_POST['count'] ?? 0; // Related to page count WIP
 $offset = $_POST['offset'] ?? 0; // Related to current page WIP
+// TEST
 
 $note_type_icons = array();
 $note_type_icons['positive experience'] = "<i title='positive experience' class='fas fa-plus-circle' style='color: hsla(120, 100%, 50%, 1);'></i>";
@@ -21,22 +25,51 @@ $note_type_icons['thought'] = "<i title='thought' class='fas fa-brain' style='co
 $note_type_icons['quote'] = "<i title='quote' class='fas fa-quote-right'></i>";
 $note_type_icons['lesson'] = "<i title='lesson' class='fas fa-graduation-cap'></i>";
 $note_type_icons['book to read'] = "<i title='book to read' class='fas fa-book'></i>";
-$note_type_icons['learning resource'] = "<i title='learning resource' class='fas fa-flask'></i>";
+$note_type_icons['learning resource'] = "<i title='learning resource' class='fas fa-glasses'></i>";
 $note_type_icons['homebase enhancement'] = "<i title='homebase enhancement' class='fas fa-tools'></i>";
+$note_type_icons['habit'] = "<i title='habit' class='fas fa-retweet' style='color: hsla(190, 100%, 50%, 1);'></i>";
 
 //echo "$date_start - $date_end";
 
 // Connect to DB
 $conn = connect_to_db();
 
-// Query DB
+// Query DB to retrieve relevant notes
 $qry = "SELECT 	*
 				FROM personal_notes 
         WHERE   datetime >= '$date_start'
-        	  AND datetime <= '$date_end'
-			  AND (summary LIKE '%$search_str%'
-			  	OR description LIKE '%$search_str%')
-				ORDER BY datetime DESC;";
+        	AND datetime <= '$date_end'
+			AND (summary LIKE '%$search_str%'
+				  OR description LIKE '%$search_str%')";
+if ($card_type != 'all') {
+	$qry .= " AND type = '$card_type' ";
+}
+switch ($card_status) {
+	case 'all':
+		break;
+	case 'actionable':
+		$qry .= " AND (caution_datetime IS NOT NULL OR warning_datetime IS NOT NULL) ";
+		break;
+	case 'warning':
+		$qry .= " AND warning_datetime <= '$today' AND complete_datetime IS NULL ";
+		break;
+	case 'caution':
+		$qry .= " AND caution_datetime <= '$today' AND (warning_datetime >= '$today' OR warning_datetime IS NULL) AND complete_datetime IS NULL ";
+		break;
+	case 'not-due':
+		$qry .= " AND (caution_datetime IS NOT NULL OR warning_datetime IS NOT NULL) AND (caution_datetime >= '$today' OR caution_datetime IS NULL) AND (warning_datetime >= '$today' OR warning_datetime IS NULL) AND complete_datetime IS NULL ";
+		break;
+	case 'complete':
+		$qry .= " AND complete_datetime IS NOT NULL ";
+		break;
+	case 'incomplete':
+		$qry .= " AND complete_datetime IS NULL ";
+		break;
+	default:
+		# code...
+		break;
+}
+$qry .= "ORDER BY datetime DESC;";
 $res = $conn->query($qry);
 if ($res->num_rows > 0) {
 	$data_log = '';
@@ -63,7 +96,7 @@ if ($res->num_rows > 0) {
 
 		$tiles .= "	<div class='card $status' style='border: 1px solid black; padding: 1rem; margin: 1rem; width: 15%; min-width: 20rem; border-radius: 0.5rem;'>
 						<h3 style='font-weight: 900; font-size: 0.875rem; z-index: 10;'>" . $row['summary'] . "</h3>
-						<p style='font-size: 0.625rem; height: 9rem;'>" . nl2br($row['description']) . "</p> ";
+						<p style='font-size: 0.625rem; height: 9rem; overflow: hidden;'>" . nl2br($row['description']) . "</p> ";
 						/*
 						"<h4 style='font-family: monospace; width: 100%; display: inline-flex; flex-flow: row nowrap; justify-content: space-between;'><span>Created:</span><span>" . $row['datetime'] . "</span></h4>
 						<h4 style='font-family: monospace; width: 100%; display: inline-flex; flex-flow: row nowrap; justify-content: space-between;'><span>Caution:</span><span>" . $row['caution_datetime'] . "</span></h4>

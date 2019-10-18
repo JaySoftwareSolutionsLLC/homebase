@@ -411,13 +411,12 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/weekly-report/r
 		</section>
 <?php } ?>
 	<script>
-		/*
 		function generate_arc() { 
 			var arc = d3.svg.arc().innerRadius(100).outerRadius(140).startAngle(0).endAngle(190 * (Math.PI)/180); 
 			svg.append("path").attr('d', arc); 
 		};
 		generate_arc();
-		*/
+
 
 		$('button.previous-week').on('click', function() {
 			let dateStart = $('input#start-date').val();
