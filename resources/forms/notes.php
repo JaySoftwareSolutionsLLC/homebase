@@ -158,6 +158,7 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 							<option value='caution'>Caution</option>
 							<option value='not-due'>Not Due</option>
 							<option value='complete'>Completed</option>
+							<option value='incomplete'>Incomplete</option>
 						</select>
 					</span>
 					<?= return_label_and_input('card-deck-search-input', 'card-deck-search', 'text', 'Substring:'); ?>
@@ -206,6 +207,9 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/js
 							switch (newVal) {
 								case 'habit':
 									textAreaEl.html(`Purpose: \nTrigger:\nTime Cost:\nDescription: `);
+									break;
+								case 'learning resource':
+									textAreaEl.html(`Summary: \nStrain: \nUsefulness: \nNeed to Review: \nUnderstanding: `);
 									break;
 								default:
 									break;

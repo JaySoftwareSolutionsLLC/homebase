@@ -47,7 +47,7 @@ const END_OF_YEAR_NET_WORTH_TARGET =	81000; // Based off 39.9k NW @ end of 2018 
 // DEPRECATED FOR 2019...will (likely) break index.php const JUNE_1ST_DEBT =					17000;
 
 //--- Other Constants ---
-const START_DATE_STRING_CERT_GOAL =     '2019-10-14';
+const START_DATE_STRING_CERT_GOAL =     '2019-10-15';
 const END_DATE_STRING_CERT_GOAL =       '2020-01-31';
 const SOFTWARE_DEV_TARGET_CERT_GOAL =   150;
 

@@ -62,6 +62,9 @@ switch ($card_status) {
 	case 'complete':
 		$qry .= " AND complete_datetime IS NOT NULL ";
 		break;
+	case 'incomplete':
+		$qry .= " AND complete_datetime IS NULL ";
+		break;
 	default:
 		# code...
 		break;
