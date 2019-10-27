@@ -1,4 +1,20 @@
-<?php 
+<?php
+	function bounce_to($target_page = "/") {
+		// Redirects current page to the URL passed
+		header("HTTP/1.0 200 OK");
+		header("Location: " . $target_page);
+		exit();
+	} //end function bounce_to
+
+	//START SESSION
+	session_start();
+	if (!$_SESSION['logged_in']) {
+		//echo "F2";
+		//var_dump($_SESSION);
+		//exit();
+		bounce_to('/homebase/login.php');
+	}
+
 	// Database Functions
 	function connect_to_local_db() {
 		date_default_timezone_set('America/New_York');
