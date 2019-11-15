@@ -5,11 +5,13 @@ ul.habits-list {
         justify-content: space-between;
         align-items: center;
         margin: 0.125rem 0;
+        user-select: none;
+        cursor: pointer;
         &.many-remaining {
             color: hsl(0, 100%, 50%);
         }
         &.one-remaining {
-            color: hsl(50, 100%, 50%);
+            // color: hsl(50, 100%, 50%);
         }
         &.none-remaining {
             color: hsl(120, 100%, 50%);

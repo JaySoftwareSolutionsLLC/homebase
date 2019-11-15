@@ -10,14 +10,15 @@ ul.habits-list li {
       -ms-flex-align: center;
           align-items: center;
   margin: 0.125rem 0;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  cursor: pointer;
 }
 
 ul.habits-list li.many-remaining {
   color: red;
-}
-
-ul.habits-list li.one-remaining {
-  color: #ffd500;
 }
 
 ul.habits-list li.none-remaining {

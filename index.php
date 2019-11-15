@@ -568,7 +568,7 @@
 		else {
 			$row_class_completions_remaining = 'negative-remaining';
 		}
-		$habits_list_html .= "<li class='$row_class_completions_remaining'><span class='unwrapable'>" . $row['name'] . "</span>";
+		$habits_list_html .= "<li data-id='" . $row['id'] . "' class='$row_class_completions_remaining'><span class='unwrapable'>" . $row['name'] . "</span>";
 		$habits_list_html .= "<span class='unwrapable' style='font-size: 0.5rem;'>" . $row['completed'];
 		$habits_list_html .= $row['started'] > 0 ? '(+' . $row['started'] . ")" : "";
 		$habits_list_html .= '/' . $row['frequency_int'] . ' This ' . $row['frequency_window'];
