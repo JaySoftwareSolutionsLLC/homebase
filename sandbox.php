@@ -37,7 +37,7 @@
     $past_365_day_hours_commuted = return_estimated_commute_time($conn, $sd, $ed);
     echo $past_365_day_hours_commuted . " Net Hours Commuted (Estimate).<br/>";
     
-    echo $test = return_seal_pre_tax_salary($conn, '2019-01-01', '2019-09-27', 367);
+    echo $test = return_seal_pre_tax_salary($conn, '2019-01-01', '2019-09-27', 367) . "<br/>";
     /*
     echo "<pre>";
     var_dump(return_accounts_array($conn, 2019));
@@ -51,4 +51,9 @@
     }
     echo "<pre>" . var_dump($updated_accounts). "</pre>";
     echo return_theoretical_age_60_withdrawal_rate($updated_accounts, 34.75, null);
+    */
+    echo "RICKS Q1 INCOME: " . return_ricks_pre_tax_income($conn, '2019-01-01', '2019-03-31', 7.5) . "<br/>";
+    echo "RICKS Q2 INCOME: " . return_ricks_pre_tax_income($conn, '2019-04-01', '2019-06-30', 7.5) . "<br/>";
+    echo "RICKS Q3 INCOME: " . return_ricks_pre_tax_income($conn, '2019-07-01', '2019-09-30', 7.5) . "<br/>";
+    echo "RICKS Q4 INCOME (2018): " . return_ricks_pre_tax_income($conn, '2018-10-01', '2018-12-31', 7.5) . "<br/>";
 ?>

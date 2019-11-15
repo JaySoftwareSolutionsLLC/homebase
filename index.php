@@ -544,6 +544,36 @@
 		$software_cert_hours = $row[0];
 	
 	}
+	//---HABITS---------------------------------------------------------------------
+	$habits_table_html = "<table class='habits-table' style='font-size: 0.75rem;'>";
+	$q = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/homebase/resources/queries/retrieve_active_habit_performance.sql');
+	$res = $conn->query($q);
+	while($row = $res->fetch_assoc()) {
+		$row_class_completions_remaining = '';
+		$completions_remaining_in_window = $row['frequency_int'] - $row['completed'];
+		//echo $row['name'] . ": $completions_remaining_in_window | " . $row['frequency_int'] . "|" . $row['completed'] . "<br/>";
+		if ($completions_remaining_in_window > 1) {
+			$row_class_completions_remaining = 'many-remaining';
+		}
+		else if ($completions_remaining_in_window == 1) {
+			$row_class_completions_remaining = 'one-remaining';
+		} 
+		else if ($completions_remaining_in_window == 0) {
+			$row_class_completions_remaining = 'none-remaining';
+		}
+		else {
+			$row_class_completions_remaining = 'negative-remaining';
+		}
+		$habits_table_html .= "	<tr class='$row_class_completions_remaining'>
+									<td>" . $row['name'] . "</td>
+									<td>" . $row['minutes_to_complete'] . "</td>
+									<td>" . $row['frequency_int'] . '/' . $row['frequency_window']  . "</td>
+									<td>" . $row['completed'] . "</td>" .
+									//<td>" . $row['started'] . "</td>
+								"</tr>";		
+	}
+	$habits_table_html .= "</table>";
+
 //---CLOSE DATABASE CONNECTION------------------------------------------------------
 
 //--- NOTIFICATIONS ----------------------------------------------------------------
@@ -632,6 +662,7 @@
     <link rel="stylesheet" type="text/css" href="resources/css/main-new.css">
     <link rel="stylesheet" type="text/css" href="resources/css/modal.css">
     <link rel="stylesheet" type="text/css" href="resources/css/notifications.css">
+    <link rel="stylesheet" type="text/css" href="resources/css/habits.css">
     <link rel="stylesheet" type="text/css" href="resources/css/goals.css">
     <link rel="stylesheet" type="text/css" href="resources/css/fitness-new.css">
     <link rel="stylesheet" type="text/css" href="resources/css/weather.css">
@@ -645,7 +676,7 @@
 		include('resources/sections/modal.php');
 		include('resources/sections/header.php');
 		include('resources/sections/notifications.php');
-		//include('resources/sections/habits.php');
+		include('resources/sections/habits.php');
 		include('resources/sections/goals.php');
 		include('resources/sections/fitness.php');
 		include('resources/sections/finance.php');

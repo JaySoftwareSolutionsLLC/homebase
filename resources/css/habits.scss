@@ -1,0 +1,13 @@
+table.habits-table {
+    tr {
+        &.many-remaining {
+            color: hsl(0, 100%, 50%);
+        }
+        &.one-remaining {
+            color: hsl(50, 100%, 50%);
+        }
+        &.none-remaining {
+            color: hsl(120, 100%, 50%);
+        }
+    }
+}

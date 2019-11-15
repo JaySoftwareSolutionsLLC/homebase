@@ -1,0 +1,2 @@
+SELECT *
+FROM view_personal_wellness_active_habit_performance

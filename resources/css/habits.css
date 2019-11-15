@@ -1,1 +1,12 @@
-// JavaScript Document
+table.habits-table tr.many-remaining {
+  color: red;
+}
+
+table.habits-table tr.one-remaining {
+  color: #ffd500;
+}
+
+table.habits-table tr.none-remaining {
+  color: lime;
+}
+/*# sourceMappingURL=habits.css.map */
