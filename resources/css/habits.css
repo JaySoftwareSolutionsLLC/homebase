@@ -1,12 +1,34 @@
-table.habits-table tr.many-remaining {
+ul.habits-list li {
+  width: 100%;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: 0.125rem 0;
+}
+
+ul.habits-list li.many-remaining {
   color: red;
 }
 
-table.habits-table tr.one-remaining {
+ul.habits-list li.one-remaining {
   color: #ffd500;
 }
 
-table.habits-table tr.none-remaining {
+ul.habits-list li.none-remaining {
   color: lime;
+  -webkit-text-decoration-line: line-through;
+          text-decoration-line: line-through;
+}
+
+ul.habits-list li.negative-remaining {
+  color: #00d5ff;
+  -webkit-text-decoration-line: line-through;
+          text-decoration-line: line-through;
 }
 /*# sourceMappingURL=habits.css.map */

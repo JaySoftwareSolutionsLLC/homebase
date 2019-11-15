@@ -1,5 +1,10 @@
-table.habits-table {
-    tr {
+ul.habits-list {
+    li {
+        width: 100%;
+        display: inline-flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 0.125rem 0;
         &.many-remaining {
             color: hsl(0, 100%, 50%);
         }
@@ -8,6 +13,11 @@ table.habits-table {
         }
         &.none-remaining {
             color: hsl(120, 100%, 50%);
+            text-decoration-line: line-through;
+        }
+        &.negative-remaining {
+            color: hsl(190, 100%, 50%);
+            text-decoration-line: line-through;
         }
     }
 }

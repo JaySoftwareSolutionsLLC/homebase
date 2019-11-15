@@ -545,14 +545,18 @@
 	
 	}
 	//---HABITS---------------------------------------------------------------------
-	$habits_table_html = "<table class='habits-table' style='font-size: 0.75rem;'>";
+	$habits_list_html = "<ul class='habits-list'>";
 	$q = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/homebase/resources/queries/retrieve_active_habit_performance.sql');
 	$res = $conn->query($q);
 	while($row = $res->fetch_assoc()) {
 		$row_class_completions_remaining = '';
 		$completions_remaining_in_window = $row['frequency_int'] - $row['completed'];
+		//$unstarted_completions_remaining_in_window = $row['frequency_int'] - ($row['completed'] - $row['started']);
 		//echo $row['name'] . ": $completions_remaining_in_window | " . $row['frequency_int'] . "|" . $row['completed'] . "<br/>";
-		if ($completions_remaining_in_window > 1) {
+		if ($row['started'] > 0) {
+			$row_class_completions_remaining = 'in-progress';
+		}
+		else if ($completions_remaining_in_window > 1) {
 			$row_class_completions_remaining = 'many-remaining';
 		}
 		else if ($completions_remaining_in_window == 1) {
@@ -564,15 +568,12 @@
 		else {
 			$row_class_completions_remaining = 'negative-remaining';
 		}
-		$habits_table_html .= "	<tr class='$row_class_completions_remaining'>
-									<td>" . $row['name'] . "</td>
-									<td>" . $row['minutes_to_complete'] . "</td>
-									<td>" . $row['frequency_int'] . '/' . $row['frequency_window']  . "</td>
-									<td>" . $row['completed'] . "</td>" .
-									//<td>" . $row['started'] . "</td>
-								"</tr>";		
+		$habits_list_html .= "<li class='$row_class_completions_remaining'><span class='unwrapable'>" . $row['name'] . "</span>";
+		$habits_list_html .= "<span class='unwrapable' style='font-size: 0.5rem;'>" . $row['completed'];
+		$habits_list_html .= $row['started'] > 0 ? '(+' . $row['started'] . ")" : "";
+		$habits_list_html .= '/' . $row['frequency_int'] . ' This ' . $row['frequency_window'];
 	}
-	$habits_table_html .= "</table>";
+	$habits_list_html .= "</ul>";
 
 //---CLOSE DATABASE CONNECTION------------------------------------------------------
 
@@ -694,6 +695,7 @@
     <script type="text/javascript" src="resources/js/speech.js"></script>
     <script type="text/javascript" src="resources/js/greeting.js"></script>
     <script type="text/javascript" src="resources/js/goals.js"></script>
+    <script type="text/javascript" src="resources/js/habits.js"></script>
 	<script type="text/javascript" src="resources/js/fitness.js"></script>
     <script type="text/javascript" src="resources/js/finance.js"></script>
     <script type="text/javascript" src="resources/js/weather.js"></script>
