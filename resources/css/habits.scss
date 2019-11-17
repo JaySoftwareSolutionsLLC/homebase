@@ -1,25 +1,29 @@
-ul.habits-list {
-    li {
+main {
+    width: 100%;
+    ul.habits-list {
         width: 100%;
-        display: inline-flex;
-        justify-content: space-between;
-        align-items: center;
-        margin: 0.125rem 0;
-        user-select: none;
-        cursor: pointer;
-        &.many-remaining {
-            color: hsl(0, 100%, 50%);
-        }
-        &.one-remaining {
-            // color: hsl(50, 100%, 50%);
-        }
-        &.none-remaining {
-            color: hsl(120, 100%, 50%);
-            text-decoration-line: line-through;
-        }
-        &.negative-remaining {
-            color: hsl(190, 100%, 50%);
-            text-decoration-line: line-through;
+        li {
+            width: 100%;
+            display: inline-flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0.125rem 0;
+            user-select: none;
+            cursor: pointer;
+            &.many-remaining {
+                color: hsl(0, 100%, 50%);
+            }
+            &.one-remaining {
+                // color: hsl(50, 100%, 50%);
+            }
+            &.none-remaining {
+                color: hsl(120, 100%, 50%);
+                text-decoration-line: line-through;
+            }
+            &.negative-remaining {
+                color: hsl(190, 100%, 50%);
+                text-decoration-line: line-through;
+            }
         }
     }
 }

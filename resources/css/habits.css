@@ -1,4 +1,12 @@
-ul.habits-list li {
+main {
+  width: 100%;
+}
+
+main ul.habits-list {
+  width: 100%;
+}
+
+main ul.habits-list li {
   width: 100%;
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
@@ -17,17 +25,17 @@ ul.habits-list li {
   cursor: pointer;
 }
 
-ul.habits-list li.many-remaining {
+main ul.habits-list li.many-remaining {
   color: red;
 }
 
-ul.habits-list li.none-remaining {
+main ul.habits-list li.none-remaining {
   color: lime;
   -webkit-text-decoration-line: line-through;
           text-decoration-line: line-through;
 }
 
-ul.habits-list li.negative-remaining {
+main ul.habits-list li.negative-remaining {
   color: #00d5ff;
   -webkit-text-decoration-line: line-through;
           text-decoration-line: line-through;
