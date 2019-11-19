@@ -24,6 +24,14 @@ main {
                 color: hsl(190, 100%, 50%);
                 text-decoration-line: line-through;
             }
+            &.no-further-action-this-window {
+                color: hsl(190, 100%, 50%);
+                text-decoration-line: line-through;
+            }
+            &.no-further-action-today {
+                color: hsl(120, 100%, 50%);
+                text-decoration-line: line-through;
+            } 
         }
     }
-}
+} 
