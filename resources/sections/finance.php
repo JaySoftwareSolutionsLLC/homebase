@@ -169,6 +169,9 @@ var chart = new CanvasJS.Chart("account-allocation-graph", {
 			case 'ROTH' :
 				$str .= " , color: 'hsl(190, 100%, 50%)', exploded: true, ";
 				break;
+			case 'FSA' :
+				$str .= " , color: 'hsl(285, 100%, 50%)', exploded: true, ";
+				break;
 			case 'taxable account' :
 				$str .= " , color: 'hsl(160, 100%, 50%)', exploded: true, ";
 				break;
@@ -176,7 +179,7 @@ var chart = new CanvasJS.Chart("account-allocation-graph", {
 				$str .= " , color: 'hsl(90, 100%, 100%)', exploded: true, ";
 				break;
 			case 'depreciating asset' :
-				$str .= " , color: 'hsl(40, 100%, 50%)', exploded: true, ";
+				$str .= " , color: 'hsl(30, 100%, 50%)', exploded: true, ";
 				break;
 		}
 		$str .= " }, ";
