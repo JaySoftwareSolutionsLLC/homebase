@@ -12,7 +12,7 @@
     // Connect to DB
     $conn = connect_to_db();
 
-    $qry = "SELECT COUNT(*) FROM personal_wellness_habit_logs WHERE habit_id = $habit_id";
+    $qry = "SELECT COUNT(*) FROM personal_wellness_habit_logs WHERE habit_id = $habit_id AND status = 'Started'";
     $res = $conn->query($qry);
     $row = mysqli_fetch_row($res);
     // If there is a started habit log for this habit and the status requested is Completed then run an update instead of an insert
