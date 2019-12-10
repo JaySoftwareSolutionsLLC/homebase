@@ -56,6 +56,7 @@ function refreshHabitList() {
             });
             listenForHabitDblClickEvents();
             listenForHabitAltClickEvents();
+            hideHiddenHabits();
             updateHabitTime();
         }
     })
@@ -107,7 +108,19 @@ function updateHabitTime() {
     $('table#habits-summary tbody').html(`<tr><td>${readable_time}</td></tr>`)
 }
 
-listenForHabitSelectionClickEvents();
+// listenForHabitSelectionClickEvents();
+//             hideHiddenHabits(hiddenHabits);
+//         }
+//     })
+// }
+function hideHiddenHabits(hiddenHabits = hiddenHabits) {
+    $('section.habits ul li').each(function (index, element) {
+        if (hiddenHabits.includes($(this).attr('data-id'))) {
+            $(this).css('display', 'none');
+        }
+    });
+}
 listenForHabitDblClickEvents();
 listenForHabitAltClickEvents();
+listenForHabitSelectionClickEvents();
 updateHabitTime()
