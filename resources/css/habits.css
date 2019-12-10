@@ -45,11 +45,13 @@ main ul.habits-list li.no-further-action-this-window {
   color: #00d5ff;
   -webkit-text-decoration-line: line-through;
           text-decoration-line: line-through;
+  opacity: 0.5;
 }
 
 main ul.habits-list li.no-further-action-today {
   color: lime;
   -webkit-text-decoration-line: line-through;
           text-decoration-line: line-through;
+  opacity: 0.5;
 }
 /*# sourceMappingURL=habits.css.map */
