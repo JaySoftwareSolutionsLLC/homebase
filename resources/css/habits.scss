@@ -15,16 +15,6 @@ section.habits {
                     background: hsla(190, 100%, 50%, 1);
                 }
             }
-            &.no-further-action-this-window {
-                color: hsl(190, 100%, 50%);
-                text-decoration-line: line-through;
-                opacity: 0.5; 
-            }
-            &.no-further-action-today {
-                color: hsl(120, 100%, 50%);
-                text-decoration-line: line-through;
-                opacity: 0.5; 
-            } 
         }
         width: 100%;
         ul#habits-list {
@@ -54,11 +44,14 @@ section.habits {
                 &.no-further-action-this-window {
                     color: hsl(190, 100%, 50%);
                     text-decoration-line: line-through;
+                    opacity: 0.5;
                 }
                 &.no-further-action-today {
                     color: hsl(120, 100%, 50%);
                     text-decoration-line: line-through;
+                    opacity: 0.5;
                 } 
+                
             }
         }
         table#habits-summary {
