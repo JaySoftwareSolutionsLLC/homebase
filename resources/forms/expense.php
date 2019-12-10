@@ -32,7 +32,7 @@ if ($res->num_rows > 0) {
 						<td>" . $row['date'] . "</td>
 						<td>" . $row['type'] . "</td>
 						<td>" . $row['subtype'] . "</td>
-						<td>$" . $row['amount'] . "</td>
+						<td style='text-align: right;'>$" . nf_omit_zeros($row['amount'], 2) . "</td>
 						</tr>";
     }
 }

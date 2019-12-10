@@ -501,7 +501,7 @@
 		
 	</main>
 
-	<script>
+	<script defer>
 		/*
 		$("svg path.muscle").each(function() {
 			let muscleID = $(this).attr("data-muscle-id");
@@ -699,9 +699,38 @@
 						});
 					}
 				});
-			}
-		});
+			} // End if not new
+		}); // End if exercise select was changed
 		
+		function SVGMuscleClickUpdate() {
+			$('svg path.muscle').each(function() {
+				let muscleID = $(this).attr("data-muscle-id");
+				$(this).on('click', function() {
+					if ( $(this).hasClass('primary') ) {
+						$("svg path.muscle").each(function() {
+							if ( $(this).attr('data-muscle-id') == muscleID ) {
+								$(this).removeClass('primary');
+							}
+						});
+					}
+					else if ( $(this).hasClass('secondary') ) {
+						$("svg path.muscle").each(function() {
+							if ( $(this).attr('data-muscle-id') == muscleID ) {
+								$(this).addClass('primary').removeClass('secondary');
+							}
+						});
+					}
+					else {
+						$("svg path.muscle").each(function() {
+							if ( $(this).attr('data-muscle-id') == muscleID ) {
+								$(this).addClass('secondary');
+							}
+						});
+					}
+				});
+			});
+		}
+		SVGMuscleClickUpdate();
 		
 		
 		

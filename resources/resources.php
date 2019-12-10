@@ -1,4 +1,5 @@
 <?php
+
 	function bounce_to($target_page = "/") {
 		// Redirects current page to the URL passed
 		header("HTTP/1.0 200 OK");
@@ -14,6 +15,17 @@
 		//exit();
 		bounce_to('/homebase/login.php');
 	}
+
+	// Utility Functions
+		//omit the zeros on a value that has .0000 the fractional portion
+	function nf_omit_zeros($n, $precision = 2) {
+		if ( (int)$n == $n ) {
+			return number_format($n, 0);
+		} else {
+			return number_format($n, $precision);
+		}
+	} //end function nf_omit_zeros
+
 
 	// Database Functions
 	function connect_to_local_db() {
@@ -51,20 +63,6 @@
 			return "Error with query: $qry <br> $conn->error";
 		}
 	}
-
-	// Not sure this can be done with MySQL connection
-	/*
-	function sql_srv_connect_to_db() {
-		date_default_timezone_set('America/New_York');
-		$serv = 'localhost';
-		$user = 'jaysoftw_brett';
-		$pass = 'Su944jAk127456';
-		$db = 'jaysoftw_homebase';
-		$connection_info = array("Database"=>$db, "UID"=>$user, "PWD"=>$pass, "CharacterSet"=>"UTF-8");
-		return sqlsrv_connect($serv, $connection_info);
-	}
-	*/
-
 	function set_post_value($string) {
 		return (isset($_POST[$string]) && ($_POST[$string]) != '') ? $_POST[$string] : null;
 	}
@@ -690,6 +688,72 @@
 		$row = mysqli_fetch_array($res);
 		return round($row['Net Dev Hours'], $precision);
 	}
+	function return_cert_hours($conn, $date_start, $date_end, $precision = 2) {
+		$query = "	SELECT SUM(software_cert_hours) AS 'Net Cert Hours'
+					FROM personal_day_info
+					WHERE 	date >= '$date_start'
+						AND date <= '$date_end' ";
+		$res = $conn->query($query);
+		$row = mysqli_fetch_array($res);
+		return round($row['Net Cert Hours'], $precision);
+	}
+	function return_habit_list_html($conn) {
+		$habits_list_html = "";
+		$q = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/homebase/resources/queries/retrieve_active_habit_performance.sql');
+		$res = $conn->query($q);
+		$habits = array(); // array to house habit names. Used to verify that no duplicates display.
+		while ($row = $res->fetch_assoc()) {
+			if (in_array($row['name'], $habits)) {
+				continue;
+			}
+			else {
+				$habits[] = $row['name'];
+			}
+			$row_class_completions_remaining = '';
+			$row_class_progess = '';
+			$completions_remaining_in_window = $row['frequency_int'] - $row['completed'];
+			// Classes for progress: - No-further-action-required-window | No-further-action-required-today | Excess-in-window | Excess-in-day | Deficit > opportunities remaining in window
+			if (!empty($row['max_logs_per_day']) && ($row['logged_today'] - $row['max_logs_per_day']) == 0) {
+				$row_class_progess = 'no-further-action-today';
+			}
+			if (($completions_remaining_in_window <= 0 && $row['frequency_type'] == 'at_least') ||
+				($completions_remaining_in_window == 0 && $row['frequency_type'] == 'exactly') ||
+				($completions_remaining_in_window >= 0 && $row['frequency_type'] == 'at_most')) {
+				$row_class_progess = 'no-further-action-this-window';
+			}
+			if ($row['started'] > 0) {
+				$row_class_progess = 'started';
+			}
+			$habits_list_html .= "<li data-id='" . $row['id'] . "' data-minutes-to-complete='" . ($row['minutes_to_complete'] ?? 0) . "' class='$row_class_progess'><span class='unwrapable'>";
+			// Show a checkmark for each completed log
+			for ($i = 0; $i < $row['logged_today']; $i++) {
+				$habits_list_html .= "<i class='fas fa-check-square'></i>";
+			}
+			// Show a WIP symbol (hourglass) for each started log
+			for ($i = 0; $i < $row['started']; $i++) {
+				$habits_list_html .= "<i class='fas fa-hourglass-half'></i>";
+			}
+			$habits_list_html .= $row['name'] . "</span>";
+			$habits_list_html .= "<span class='unwrapable' style='font-size: 0.5rem;'>" . $row['completed'];
+			// $habits_list_html .= $row['started'] > 0 ? '(+' . $row['started'] . ")" : "";
+			switch ($row['frequency_type']) {
+				case 'at_least':
+					$habits_list_html .= "&ge;";
+					break;
+				case 'exactly':
+					$habits_list_html .= "=";
+					break;
+				case 'at_most':
+					$habits_list_html .= "&le;";
+					break;
+				default:
+					break;
+			}
+			$habits_list_html .= $row['frequency_int'] . ' This ' . $row['frequency_window'];
+		}
+		// $habits_list_html .= "</ul>";
+		return $habits_list_html;
+	}
 
 	// Calculations
 	function return_theoretical_age_60_withdrawal_rate($accounts = array(), $years_until_60 = 34.75, $exp_roi = null ) {
@@ -763,18 +827,35 @@
 		$res = $conn->query($q);
 		if ($res->num_rows > 0) {
 			while($row = $res->fetch_assoc()) {
-				switch ($row['Shifts Type']) {
-					case 'BOTH':
-						$commute_min += 65;
-						break;
-					case 'S&D Only':
-						$commute_min += 55;
-						break;
-					case 'Ricks Only':
-						$commute_min += 25;
-						break;
-					default:
-						break;
+				if ($row['date'] <= '2019-12-01') { // Commute times from 1988 Transit Road
+					switch ($row['Shifts Type']) {
+						case 'BOTH':
+							$commute_min += 65;
+							break;
+						case 'S&D Only':
+							$commute_min += 55;
+							break;
+						case 'Ricks Only':
+							$commute_min += 25;
+							break;
+						default:
+							break;
+					}
+				}
+				else {
+					switch ($row['Shifts Type']) { // Commute times from 138 Princeton
+						case 'BOTH':
+							$commute_min += 65; // Home > S&D > Ricks > Home
+							break;
+						case 'S&D Only':
+							$commute_min += 30; // Home > S&D > Home
+							break;
+						case 'Ricks Only':
+							$commute_min += 50; // Home > Ricks > Home
+							break;
+						default:
+							break;
+					}
 				}
 			}
 		}

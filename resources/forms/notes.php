@@ -196,6 +196,7 @@ $conn->close();
 			// Initial note retrieval
 			let dateStart = $('input#date-start').val();
 			let dateEnd = $('input#date-end').val();
+			// populatePredefinedDates('this quarter', "date-start", "date-end");
 			let searchStr = $('input#card-deck-search-input').val();
 			let cardType = $('select#card-deck-type-input').val();
 			let cardStatus = $('select#card-deck-status-input').val();

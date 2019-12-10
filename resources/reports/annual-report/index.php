@@ -268,6 +268,15 @@ if ($generated) {
 		}
 		// NET INCOME DIFFERENTIAL
 		$w->income_diff = round(($w->income_net - $w->expenditure_net), 2) ?? 0;
+
+		// CERT HOURS
+		$w->cert_hrs = return_cert_hours($conn, $w->start_day, $w->end_day, 2) ?? 0;
+
+		// DEV HOURS
+		$w->dev_hrs = return_dev_hours($conn, $w->start_day, $w->end_day, 2) ?? 0;
+
+		// COMMUTE HOURS (estimate)
+		$w->commute_hrs = return_estimated_commute_time($conn, $w->start_day, $w->end_day, 2) ?? 0;
 	}
 	
 	// Retrieve daily info
@@ -478,7 +487,7 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/annual-report/r
 	if ($generated) {
 ?>
 		<section class='generated-report'>
-			<h1>Annual Report</h1>
+			<h1><?= $year; ?> Annual Report</h1>
 			<div id='income-flow-chart-container' style='height: 300px; width: 100%;'></div>
 			<script>			
 //				window.onload = function () {
@@ -488,7 +497,7 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/annual-report/r
 				var incomeFlowChart = new CanvasJS.Chart("income-flow-chart-container", {
 					animationEnabled: true,
 					title: {
-						text: <?php echo $year; ?> + " Income Flow"
+						text: "Income Flow"
 					},
 					axisX: {
 						valueFormatString: "DDD DD MMM YYYY",
@@ -598,7 +607,21 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/annual-report/r
 	}
 ?>
 						]
-					}
+					},
+					{
+						type: "line",
+						name: "Hourly Wage",
+						showInLegend: true,
+						yValueFormatString: "",
+						color: 'green',
+						dataPoints: [
+<?php
+	foreach ($weeks as $w) {
+		echo "{ x: new Date( " . php_dt_to_js_datestr($w->start_dt, 'Y') . "), y: $w->hourly_net },";
+	}
+?>
+						]
+					}	
 					
 					]
 				});
@@ -623,7 +646,7 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/annual-report/r
 				var hoursChart = new CanvasJS.Chart("hour-chart-container", {
 					animationEnabled: true,
 					title: {
-						text: <?php echo $year; ?> + " Hours"
+						text: "Hours"
 					},
 					axisX: {
 						valueFormatString: "DDD DD MMM YYYY",
@@ -646,7 +669,7 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/annual-report/r
 					data: [
 						{
 						type: "line",
-						name: "Hours",
+						name: "Working Hours",
 						showInLegend: true,
 						yValueFormatString: "",
 						color: 'black',
@@ -660,14 +683,42 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/annual-report/r
 						},	
 						{
 						type: "line",
-						name: "Hourly Wage",
+						name: "Cert Hrs",
 						showInLegend: true,
 						yValueFormatString: "",
-						color: 'green',
+						color: 'hsl(120, 100%, 50%)',
 						dataPoints: [
 <?php
 	foreach ($weeks as $w) {
-		echo "{ x: new Date( " . php_dt_to_js_datestr($w->start_dt, 'Y') . "), y: $w->hourly_net },";
+		echo "{ x: new Date( " . php_dt_to_js_datestr($w->start_dt, 'Y') . "), y: $w->cert_hrs },";
+	}
+?>
+							]
+						},	
+						{
+						type: "line",
+						name: "Dev Hrs",
+						showInLegend: true,
+						yValueFormatString: "",
+						color: 'hsl(190, 100%, 50%)',
+						dataPoints: [
+<?php
+	foreach ($weeks as $w) {
+		echo "{ x: new Date( " . php_dt_to_js_datestr($w->start_dt, 'Y') . "), y: $w->dev_hrs },";
+	}
+?>
+							]
+						},	
+						{
+						type: "line",
+						name: "Commute Hrs",
+						showInLegend: true,
+						yValueFormatString: "",
+						color: 'hsl(0, 100%, 50%)',
+						dataPoints: [
+<?php
+	foreach ($weeks as $w) {
+		echo "{ x: new Date( " . php_dt_to_js_datestr($w->start_dt, 'Y') . "), y: $w->commute_hrs },";
 	}
 ?>
 							]
@@ -688,7 +739,7 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/annual-report/r
 				var monthlyExpenditureChart = new CanvasJS.Chart("monthly-expenditure-chart-container", {
 					animationEnabled: true,
 					title: {
-						text: <?php echo $year; ?> + " Monthly Expenditure"
+						text: "Expenditure"
 					},
 					axisX: {
 						valueFormatString: "MMM YYYY",

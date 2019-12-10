@@ -401,6 +401,13 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/weekly-report/r
 						<h5>Target: <?php echo '10 hours'; ?></h5>
 					</div>
 				</div>
+				<div class='stat cert-hours'>
+					<div class='stat-text'>
+						<h3>Cert Hours</h3>
+						<h4><?= return_cert_hours($conn, $date_start, $date_end, 2) ?></h4>
+						<h5>Target: <?php echo '10 hours'; ?></h5>
+					</div>
+				</div>
 				<div class='stat commute-hours'>
 					<div class='stat-text'>
 						<h3>Commute Hours (Est.)</h3>
@@ -411,11 +418,11 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/weekly-report/r
 		</section>
 <?php } ?>
 	<script>
-		function generate_arc() { 
-			var arc = d3.svg.arc().innerRadius(100).outerRadius(140).startAngle(0).endAngle(190 * (Math.PI)/180); 
-			svg.append("path").attr('d', arc); 
-		};
-		generate_arc();
+		// function generate_arc() { 
+		// 	var arc = d3.svg.arc().innerRadius(100).outerRadius(140).startAngle(0).endAngle(190 * (Math.PI)/180); 
+		// 	svg.append("path").attr('d', arc); 
+		// };
+		// generate_arc();
 
 
 		$('button.previous-week').on('click', function() {
