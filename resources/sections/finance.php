@@ -166,6 +166,9 @@ var chart = new CanvasJS.Chart("account-allocation-graph", {
 			case 'liquid cash' :
 				$str .= " , color: 'hsl(120, 100%, 50%)', exploded: true, ";
 				break;
+			case 'Loaned' :
+				$str .= " , color: 'hsl(80, 100%, 50%)', exploded: true, ";
+				break;
 			case 'ROTH' :
 				$str .= " , color: 'hsl(190, 100%, 50%)', exploded: true, ";
 				break;
@@ -176,7 +179,7 @@ var chart = new CanvasJS.Chart("account-allocation-graph", {
 				$str .= " , color: 'hsl(160, 100%, 50%)', exploded: true, ";
 				break;
 			case 'unreceived ATI' :
-				$str .= " , color: 'hsl(90, 100%, 100%)', exploded: true, ";
+				$str .= " , color: 'hsl(0, 100%, 100%)', exploded: true, ";
 				break;
 			case 'depreciating asset' :
 				$str .= " , color: 'hsl(30, 100%, 50%)', exploded: true, ";

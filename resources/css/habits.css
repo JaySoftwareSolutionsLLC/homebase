@@ -1,12 +1,37 @@
-main {
+section.habits main {
   width: 100%;
 }
 
-main ul.habits-list {
+section.habits main ul#habit-selection {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 1rem 0;
+}
+
+section.habits main ul#habit-selection li {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 0.25rem;
+  border: 1px solid white;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+section.habits main ul#habit-selection li:hover {
+  background: #00d5ff;
+}
+
+section.habits main ul#habits-list {
   width: 100%;
 }
 
-main ul.habits-list li {
+section.habits main ul#habits-list li {
   width: 100%;
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
@@ -25,33 +50,40 @@ main ul.habits-list li {
   cursor: pointer;
 }
 
-main ul.habits-list li.many-remaining {
+section.habits main ul#habits-list li.many-remaining {
   color: red;
 }
 
-main ul.habits-list li.none-remaining {
+section.habits main ul#habits-list li.none-remaining {
   color: lime;
   -webkit-text-decoration-line: line-through;
           text-decoration-line: line-through;
 }
 
-main ul.habits-list li.negative-remaining {
+section.habits main ul#habits-list li.negative-remaining {
   color: #00d5ff;
   -webkit-text-decoration-line: line-through;
           text-decoration-line: line-through;
 }
 
-main ul.habits-list li.no-further-action-this-window {
+section.habits main ul#habits-list li.no-further-action-this-window {
   color: #00d5ff;
   -webkit-text-decoration-line: line-through;
           text-decoration-line: line-through;
   opacity: 0.5;
 }
 
-main ul.habits-list li.no-further-action-today {
+section.habits main ul#habits-list li.no-further-action-today {
   color: lime;
   -webkit-text-decoration-line: line-through;
           text-decoration-line: line-through;
   opacity: 0.5;
+}
+
+section.habits main table#habits-summary {
+  width: 100%;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  border: 1px solid white;
 }
 /*# sourceMappingURL=habits.css.map */

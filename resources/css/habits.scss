@@ -1,28 +1,19 @@
-main {
-    width: 100%;
-    ul.habits-list {
-        width: 100%;
-        li {
-            width: 100%;
-            display: inline-flex;
-            justify-content: space-between;
+section.habits {
+    main {
+        ul#habit-selection {
+            display: flex;
+            justify-content: space-around;
             align-items: center;
-            margin: 0.125rem 0;
-            user-select: none;
-            cursor: pointer;
-            &.many-remaining {
-                color: hsl(0, 100%, 50%);
-            }
-            &.one-remaining {
-                // color: hsl(50, 100%, 50%);
-            }
-            &.none-remaining {
-                color: hsl(120, 100%, 50%);
-                text-decoration-line: line-through;
-            }
-            &.negative-remaining {
-                color: hsl(190, 100%, 50%);
-                text-decoration-line: line-through;
+            padding: 1rem 0;
+            li {
+                box-sizing: border-box;
+                padding: 0.25rem;
+                border: 1px solid white;
+                border-radius: 0.25rem;
+                cursor: pointer;
+                &:hover {
+                    background: hsla(190, 100%, 50%, 1);
+                }
             }
             &.no-further-action-this-window {
                 color: hsl(190, 100%, 50%);
@@ -35,5 +26,45 @@ main {
                 opacity: 0.5; 
             } 
         }
-    }
-} 
+        width: 100%;
+        ul#habits-list {
+            width: 100%;
+            li {
+                width: 100%; 
+                display: inline-flex;
+                justify-content: space-between;
+                align-items: center;
+                margin: 0.125rem 0;
+                user-select: none;
+                cursor: pointer;
+                &.many-remaining {
+                    color: hsl(0, 100%, 50%);
+                }
+                &.one-remaining {
+                    // color: hsl(50, 100%, 50%);
+                }
+                &.none-remaining {
+                    color: hsl(120, 100%, 50%);
+                    text-decoration-line: line-through;
+                }
+                &.negative-remaining {
+                    color: hsl(190, 100%, 50%);
+                    text-decoration-line: line-through;
+                }
+                &.no-further-action-this-window {
+                    color: hsl(190, 100%, 50%);
+                    text-decoration-line: line-through;
+                }
+                &.no-further-action-today {
+                    color: hsl(120, 100%, 50%);
+                    text-decoration-line: line-through;
+                } 
+            }
+        }
+        table#habits-summary {
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid white;
+        }
+    } 
+}

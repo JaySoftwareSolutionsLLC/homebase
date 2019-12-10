@@ -11,14 +11,13 @@ $entry_msg = "Welcome to the Seal & Design shift submission page.";
 
 // If variables have been posted insert into db
 if ( isset( $_POST['date'] ) && isset( $_POST['arrival_time'] ) && isset( $_POST['departure_time'] ) && isset( $_POST['break_min'] ) ) {
-	if ( empty( $_POST['description'] ) ) {
-		$desc = "NULL";
-	}
-	else {
-		$desc = "'" . htmlspecialchars( $_POST['description'], ENT_QUOTES ) . "'";
-	}
+	$desc = ( empty( $_POST['description'] ) ) ? "NULL" : "'" . htmlspecialchars( $_POST['description'], ENT_QUOTES ) . "'";
+	$strain = ( empty( $_POST['strain'] ) ) ? "NULL" : $_POST['strain'];
+	$feedback = ( empty( $_POST['feedback'] ) ) ? "NULL" : $_POST['feedback'];
+	$stress = ( empty( $_POST['stress'] ) ) ? "NULL" : $_POST['stress'];
+
 	$qry = "INSERT INTO `finance_seal_shifts` (`date`, `arrival_time`, `departure_time`, `strain`, `feedback`, `stress`, `description`, `break_min`)
-	VALUES ('" . $_POST['date'] . "', '" . $_POST['arrival_time'] . "', '" . $_POST['departure_time'] . "', " . $_POST['strain'] . ", " . $_POST['feedback'] . ", " . $_POST['stress']  . ", " . $desc . ", " . $_POST['break_min'] . ");";
+	VALUES ('" . $_POST['date'] . "', '" . $_POST['arrival_time'] . "', '" . $_POST['departure_time'] . "', $strain, $feedback, $stress, $desc, " . $_POST['break_min'] . ");";
 
 	if ($conn->query($qry) === TRUE) {
     	$entry_msg = "New record created successfully";
