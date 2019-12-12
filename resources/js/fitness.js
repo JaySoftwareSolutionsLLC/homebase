@@ -1,23 +1,8 @@
 $( document ).ready(function() {
-	
-	//console.log("BIGG");
 
-let grn = 'hsl(100, 100%, 50%)';
-let ylw = 'hsl(45, 100%, 50%)';
-let red = 'hsl(0, 100%, 50%)';
-
-//$(".trapezius").css('fill', red);
-//$(".deltoid").css('fill', red);
-//$(".pec").css('fill', red);
-//$(".tricep").css('fill', red);
-//$(".bicep").css('fill', red);
-//$(".forearm").css('fill', red)
-//$(".abdominal").css('fill', red);
-//$(".oblique").css('fill', red);
-//$(".calf").css('fill', red);
-	
 let bodyStatsString = $(".fitness .stats").html();
 
+// On single click, pull up all of the info pertaining to muscle
 $("svg path.muscle").click(function() {
 	$("svg path.muscle").removeClass('selected');
 	let muscleID = $(this).attr("data-muscle-id");
@@ -46,6 +31,31 @@ $("svg path.muscle").click(function() {
 	addStat("Ready", `${muscleHUR} hrs`);
 	addStat("% Ideal", `${percIdeal} %`);
 });
+// On double click, log a freestyle lift for given exercise for now
+$("svg path.muscle").dblclick(function() {
+	let muscleID = $(this).attr("data-muscle-id");
+	let confirmed = confirm(`Are you sure you want to log a lift for muscle ${muscleID}`)
+	if (confirmed) {
+		let exerciseID = parseInt(muscleID) + 94; // All generic lifts have been created with an exercise id 94 greater than their muscle id
+		$.ajax({
+			type: "POST", // POST, GET, etc.
+			url: "/homebase/resources/ajax/insert_fitness_lift.php",
+			data: {
+				exercise_id : exerciseID,
+				workout_structure_id : 4
+			},
+			// contentType: "application/json",
+			dataType: "JSON",
+			success: function (response) {
+				console.log(JSON.stringify(response));
+				if (response.success) {
+					window.location.reload(true); 
+				}
+			}
+		});
+	}
+});
+
 	
 $("svg .outline").click(function() {
 	$("svg path.muscle").removeClass('selected');
@@ -81,37 +91,6 @@ $("svg path.muscle").each(function() {
 	}
 	
 });
-/*$("svg path.muscle").(function() {
-	let muscleID = $(this).attr("data-muscle-id");
-	$(`svg path.muscle[data-muscle-id="${muscleID}"]`).each(function() {
-		$(this).removeClass('selected');
-	});
-	console.log(muscleID);
-});
-*/
-/*
-$("svg path.muscle").mouseover(function() {
-	$(".fitness .stats").html("");
-	let name = $(this).attr("class");
-	name = name.match(/\w+/g).pop();
-	name = name.substr(0,1).toUpperCase()+name.substr(1);
-	addStatTitle(name);
-	addStat("Size", "12.25\"");
-	addStat("Ideal", "14.75\"");
-	addStat("Worked", "33 hrs");
-	addStat("Ready", "7 hrs");
-	addStat("Priority", "A+");
-});
-$("svg .muscle").mouseout(function() {
-	$(".fitness .stats").html("");
-	addStatTitle("Body");
-	addStat("Weight", "155 lbs");
-	addStat("Ready Muscles", "11");
-	addStat("Percent Ideal", "83%");
-	addStat("Strength Index", "204");
-	addStat("Ideal Muscles", "6 / 13");
-});
-*/
 function addStat(name,value) {
 	$(".fitness .stats").append("<div class='stat'><h4 class='name'>" + name + "</h4><h4 class='value'>" + value + "</h4></div>");
 }
