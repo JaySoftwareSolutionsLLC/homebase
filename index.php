@@ -17,8 +17,11 @@
 	if ( $year == '2018' ) {
 		include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/constants-2018.php');
 	}
-	else {
+	else if ( $year == '2019' ) {
 		include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/constants-2019.php');
+	}
+	else {
+		include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/constants-2020.php');
 	}
 
 //---CONNECT TO DATABASE------------------------------------------------------------
@@ -31,18 +34,18 @@
 		$today_date = date('Y-m-d', mktime(0, 0, 0, 12, 31, 2018));
 		$today_datetime = new DateTime('December 31st 2018');
 	}
+	else if ($year == '2019') {
+		$today_time = strtotime('December 31st 2019');
+		$today_date = date('Y-m-d', mktime(0, 0, 0, 12, 31, 2019));
+		$today_datetime = new DateTime('December 31st 2019');
+	}
 	else {
 		$today_time = time();
 		$today_datetime = new DateTime();
 		$today_date = date_format($today_datetime, 'Y-m-d');
 	}
-	//echo $today_time;
-	//var_dump( $today_datetime );
-	//var_dump( $today_date );
 	$last_sunday = "'" . date('Y-m-d', strtotime('last Sunday')) . "'";
 	$days_left_in_year = floor((strtotime("January 1st, " . ($year + 1)) - $today_time) / SEC_IN_DAY); // Needs to stay this way for 2018 and 2019 to both work
-
-	// DEPRECATED 2018.10.28 $current_bench_press = 185;
 
 //---SELECT FROM DATABASE-----------------------------------------------------------
 
@@ -53,7 +56,7 @@
 	$end_date_financial = $today_date;
 	$start_time_financial = strtotime($start_date_financial);
 	$days_active_financial = ceil(($today_time - $start_time_financial) / (SEC_IN_DAY));
-	if ($year == '2018') {
+	if ($year == '2018' || $year == '2019') {
 		$days_left_in_year_financial = 0;
 	}
 	else {
@@ -119,18 +122,27 @@
 	if ($year == '2018') {
 		$annual_check_adjustment = -3 * 8 * 21.63; // 3 days in my first check were from May work days. This program only checks June 1st on so those days should not count towards total
 	}
-	else {
+	else if ($year == '2019') {
 		$annual_check_adjustment = (-1 * 11 * 8 * 25) + (-62.5); // 11 days in 2019 checks were from hours worked in 2018 plus a $62.50 healthcare waive bonus 
+	}
+	else {
+		// TEMPORARY. Need to remove this until I add back in first check. $annual_check_adjustment = (-1 * 2 * 8 * 27.88) + (-62.5); // 2 days in 2020 checks were from hours worked in 2019 plus a $62.50 healthcare waive bonus 
 	}
 	$q = "SELECT MAX(end_payperiod) FROM finance_seal_income WHERE date >= '$start_date_financial' AND date <= '$end_date_financial' AND type = 'check'";
 	$res = $conn->query($q);
 	$row = mysqli_fetch_row($res);
 	$last_seal_check_date = $row[0]; // The most recent check date
+	if (empty($last_seal_check_date)) {
+		$last_seal_check_date = return_date_from_str("December 31 " . ($year - 1));
+	}
 	$last_seal_check_time = strtotime($last_seal_check_date);
 	$four_pm_seconds = (60 * 60 * 16);
 	$unreceived_seal_income = 0;
 	if ($year == '2018') {
 		$unreceived_seal_income = 200;
+	}
+	else if ($year == '2019') {
+		$unreceived_seal_income = 325;
 	}
 	else {
 		$fuse = 0;
@@ -138,7 +150,7 @@
 		while ($this_time_to_check < $today_time) {
 			$this_dow = date('D',$this_time_to_check);
 			$this_time_to_check += SEC_IN_DAY;
-			if ($this_dow != 'Sat' && $this_dow != 'Sun' && ($this_time_to_check < strtotime('July 14th 2018') || $this_time_to_check > strtotime('July 21st 2018'))) {
+			if ($this_dow != 'Sat' && $this_dow != 'Sun') {
 				$num_hourly_wages = count(HOURLY_WAGES_DATESTRINGS_SEAL);
 				$i = 0;
 				for ($i; $i < $num_hourly_wages; $i++) {
@@ -171,7 +183,11 @@
 	$account_types['unreceived ATI'] = $unreceived_after_tax_seal_income;
 
 	// NET INCOME : Hourlywage at ricks multiplied by ricks hours + net tips from ricks + net recorded income from seal and design + unreceived (but earned) income from seal and design
-	$net_income = (HOURLY_WAGE_RICKS * ( $net_ricks_hours - $net_ricks_otb_hours ) ) + $net_ricks_tips + $net_seal_income + $unreceived_seal_income + $annual_check_adjustment;
+	$net_income = return_ricks_pre_tax_income($conn, $start_date_financial, $end_date_financial, HOURLY_WAGE_RICKS)
+				+ return_seal_received_income($conn, $start_date_financial, $end_date_financial)
+				+ return_jss_income($conn, $start_date_financial, $end_date_financial)
+				+ $unreceived_seal_income
+				+ $annual_check_adjustment;
 	// (46.2) + 106 + 2062.5 + 1000 - 2200
 
 	// echo "$net_income | $net_ricks_hours | $net_ricks_otb_hours | $net_ricks_tips | $net_seal_income | $unreceived_seal_income | $annual_check_adjustment ";
@@ -260,19 +276,10 @@
 	$appreciated_EOY_accounts_total += $account_types['unreceived ATI']; // Add unreceived ATI because this is not housed in accounts array
 
 	$theoretical_future_pretax_income = ( CASHABLE_PTO_HOURS * $correct_hourly) + (($avg_full_week_ricks_income + $avg_full_week_seal_income) * $weeks_left_in_year);
-	//echo "$theoretical_future_pretax_income<br/><br/>";
 	$theoretical_EOY_net_worth = $appreciated_EOY_accounts_total + round((($theoretical_future_pretax_income) * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) - (AVG_DAILY_EXPENDITURE_TARGET * $days_left_in_year) , 0 ); // In addition to projected account values
 	$theoretical_income_this_year = $net_income + $theoretical_future_pretax_income;
-	//echo "$theoretical_income_this_year<br/><br/>";
-	/*
-	echo "$appreciated_EOY_accounts_total<br/><br/>";
-	echo "$theoretical_EOY_net_worth <br/><br/>";
-	echo "$appreciated_EOY_accounts_total + round(((( CASHABLE_PTO_HOURS * $correct_hourly) + (($avg_full_week_ricks_income + $avg_full_week_seal_income) * $weeks_left_in_year)) * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) - (AVG_DAILY_EXPENDITURE_TARGET * $days_left_in_year) , 0 );";
-	*/
-	// DEPRECATED: Doesn't account for seasonality well enough $estimated_EOY_net_worth += ( ( ( $adi * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100) ) - $ade ) * $days_left_in_year_financial );
 
 	$theoretical_net_worth_contribution = round((($net_income + ( CASHABLE_PTO_HOURS * $correct_hourly) + (($avg_full_week_ricks_income + $avg_full_week_seal_income) * $weeks_left_in_year)) * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) - ($net_expenditure + (AVG_DAILY_EXPENDITURE_TARGET * $days_left_in_year)) , 0 ); // Theoretical NW Cont. if I grind out 3 days/week @ Ricks and don't take any PTO @ S&D
-	//echo $theoretical_net_worth_contribution;
 	$opportunity_surplus = round($theoretical_net_worth_contribution - ANNUAL_NET_WORTH_CONTRIBUTION_TARGET , 0 );	
 
 	$current_est_nw_contribution = ( $net_income * ( ESTIMATED_AFTER_TAX_PERCENTAGE / 100 ) ) - ( $net_expenditure );
@@ -288,7 +295,6 @@
 
 	$days_active_running = ceil(($today_time - $start_time_running) / (SEC_IN_DAY));
 
-	//DEPRECATED 2018.10.28 $q = "SELECT TOP(1) MIN(seconds) FROM `fitness_runs` WHERE miles >= 1 ORDER BY datetime DESC;";
 	$q = "SELECT seconds FROM `fitness_runs` WHERE miles = 1 AND datetime <= '$end_date_running 23:59:59' AND datetime >= '$start_date_running' ORDER BY datetime DESC LIMIT 1";
 	$res = $conn->query($q);
 	$row = mysqli_fetch_row($res);
@@ -338,7 +344,6 @@
 	$res = $conn->query($q);
 	$row = mysqli_fetch_row($res);
 	$workout_structure = $row[0];
-	// TEST PASSED 2018.10.14 echo "WORKOUT STRUCTURE: $workout_structure <br/>";
 
 	$number_ready_muscles = 0;
 	$number_total_muscles = 0;
@@ -489,41 +494,7 @@
 		}
 		$percent_time_frame_bench_press_2018 = $percent_time_frame_body_weight_2018; // Rather than redoing the calculation, just using the same time-frame as tracking body weight
 	}
-	else if ($year == '2019') {
-
-		/*
-		// GOAL: Net Worth
-		$percent_goal_net_worth_2019 = 	number_format((((ESTIMATED_AFTER_TAX_PERCENTAGE * $unreceived_seal_income / 100) + $current_cash + $current_assets - $current_liabilities - START_OF_YEAR_NET_WORTH) / (END_OF_YEAR_NET_WORTH_TARGET - START_OF_YEAR_NET_WORTH)) * 100, 2);
-		if ($percent_goal_net_worth_2019 >= 100) {
-			$percent_goal_net_worth_2019 = 100;
-		}
-		$percent_time_frame_net_worth_2019 = number_format((100 * $days_active_financial / 365), 2);
-		// GOAL: Body Weight
-		$percent_goal_body_weight_2019 = number_format(($most_recent_body_weight - STARTING_BODY_WEIGHT) * (100 / (BODY_WEIGHT_TARGET -STARTING_BODY_WEIGHT)), 2);
-		if ($percent_goal_body_weight_2019 > 100) {
-			$percent_goal_body_weight_2019 = 100;
-		}
-		$percent_time_frame_body_weight_2019 = number_format((100 * $days_active_body_weight / (((strtotime('January 1st, 2020')) - strtotime(START_DATE_STRING_BODY_WEIGHT)) / SEC_IN_DAY)), 2);
-		// GOAL: Arm Size
-		$start_date_upper_arm_size = date('Y-m-d 00:00:00', strtotime(START_DATE_STRING_UPPER_ARM_CIRC));
-		$end_date_upper_arm_size = $today_date;
-		$start_time_upper_arm_size = strtotime($start_date_upper_arm_size);
-		$days_active_upper_arm_size = ceil(($today_time - $start_time_upper_arm_size) / (SEC_IN_DAY));
-		
-		$percent_goal_upper_arm_size_2019 = number_format(($most_recent_upper_arm_size - STARTING_UPPER_ARM_CIRC) * (100 / (UPPER_ARM_CIRC_TARGET - STARTING_UPPER_ARM_CIRC)), 2);
-		if ($percent_goal_upper_arm_size_2019 > 100) {
-			$percent_goal_upper_arm_size_2019 = 100;
-		}
-		$percent_time_frame_upper_arm_size_2019 = number_format((100 * $days_active_upper_arm_size / (((strtotime('January 1st, 2020')) - strtotime(START_DATE_STRING_UPPER_ARM_CIRC)) / SEC_IN_DAY)), 2);
-		//echo " $percent_goal_upper_arm_size_2019 | $most_recent_upper_arm_size | " . STARTING_UPPER_ARM_CIRC . " | " . UPPER_ARM_CIRC_TARGET . " | " . STARTING_UPPER_ARM_CIRC . " | $days_active_upper_arm_size";
-		// GOAL: Mile Time
-		$percent_goal_mile_time_2019 = number_format(100 - (($best_mile_time - MILE_TIME_TARGET) * (100 / (STARTING_MILE_TIME - MILE_TIME_TARGET))), 2);
-		if ($percent_goal_mile_time_2019 >= 100) {
-			$percent_goal_mile_time_2019 = 100;
-		}
-		$percent_time_frame_running_2019 = number_format((100 * $days_active_running / (((strtotime('January 1st, 2020')) - strtotime(START_DATE_STRING_RUNNING)) / SEC_IN_DAY)), 2);
-		*/
-		// Most Recent Expense Review
+	else {
 		$qry_most_recent_expense_review = " SELECT date
 											FROM `personal_day_info`
 											WHERE expense_review

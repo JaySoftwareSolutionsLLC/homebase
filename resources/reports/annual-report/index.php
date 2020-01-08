@@ -280,7 +280,7 @@ if ($generated) {
 	}
 	
 	// Retrieve daily info
-	$fuse_length = 367;
+	$fuse_length = 370;
 	$fuse = 0;
 	$day_to_check = clone $date_start_dt;
 	while ($day_to_check <= $date_end_dt) {

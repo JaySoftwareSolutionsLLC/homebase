@@ -15,9 +15,10 @@ if ( isset( $_POST['date'] ) && isset( $_POST['arrival_time'] ) && isset( $_POST
 	$strain = ( empty( $_POST['strain'] ) ) ? "NULL" : $_POST['strain'];
 	$feedback = ( empty( $_POST['feedback'] ) ) ? "NULL" : $_POST['feedback'];
 	$stress = ( empty( $_POST['stress'] ) ) ? "NULL" : $_POST['stress'];
+	$telecommute = ( empty( $_POST['telecommute'] ) ) ? "0" : $_POST['telecommute'];
 
-	$qry = "INSERT INTO `finance_seal_shifts` (`date`, `arrival_time`, `departure_time`, `strain`, `feedback`, `stress`, `description`, `break_min`)
-	VALUES ('" . $_POST['date'] . "', '" . $_POST['arrival_time'] . "', '" . $_POST['departure_time'] . "', $strain, $feedback, $stress, $desc, " . $_POST['break_min'] . ");";
+	$qry = "INSERT INTO `finance_seal_shifts` (`date`, `arrival_time`, `departure_time`, `strain`, `feedback`, `stress`, `description`, `break_min`, `telecommute`)
+	VALUES ('" . $_POST['date'] . "', '" . $_POST['arrival_time'] . "', '" . $_POST['departure_time'] . "', $strain, $feedback, $stress, $desc, " . $_POST['break_min'] . ", " . $telecommute . ");";
 
 	if ($conn->query($qry) === TRUE) {
     	$entry_msg = "New record created successfully";
@@ -36,6 +37,7 @@ $qry = "SELECT 	date,
 				,feedback
 				,stress
 				,description
+				,telecommute
 		FROM finance_seal_shifts ORDER BY date DESC;";
 $res = $conn->query($qry);
 if ($res->num_rows > 0) {
@@ -51,8 +53,9 @@ if ($res->num_rows > 0) {
 						<td>" . $row['strain'] . "</td>
 						<td>" . $row['feedback'] . "</td>
 						<td>" . $row['stress'] . "</td>
-						<td>" . $row['description'] . "</td>
-					</tr>";
+						<td>" . $row['description'] . "</td>";
+		$data_log .= $row['telecommute'] ? '<td>Y</td>' : '<td>N</td>';
+		$data_log .= "</tr>";
     }
 }
 
@@ -76,14 +79,30 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 				<input id='arrival_time' type='time' name='arrival_time'/>
 				<label for='departure_time'>Departure Time</label>
 				<input id='departure_time' type='time' name='departure_time'/>
-				<label for='strain'>Strain</label>
-				<input id='strain' type='number' name='strain' min='1' max='10' step='1'/>
-				<label for='feedback'>Feedback</label>
-				<input id='feedback' type='number' name='feedback' min='1' max='10' step='1'/>
-				<label for='stress'>Stress</label>
-				<input id='stress' type='number' name='stress' min='1' max='10' step='1'/>
-				<label for='break_min'>Break Minutes</label>
-				<input id='break_min' type='number' name='break_min' min='0' max='255' step='1' value='30'/>
+				<span style='display: flex; flex-flow: row nowrap; justify-content: space-between;'>
+					<span class='flex-input' style=''>
+						<label for='strain'>Strain</label>
+						<input id='strain' type='number' name='strain' min='1' max='10' step='1'/>
+					</span>
+					<span class='flex-input' style=''>
+						<label for='feedback'>Feedback</label>
+						<input id='feedback' type='number' name='feedback' min='1' max='10' step='1'/>
+					</span>
+					<span class='flex-input' style=''>
+						<label for='stress'>Stress</label>
+						<input id='stress' type='number' name='stress' min='1' max='10' step='1'/>
+					</span>
+				</span>
+				<span style='display: flex; flex-flow: row nowrap; justify-content: space-between;'>
+					<span class='flex-input' style=''>
+						<label for='break_min'>Break Minutes</label>
+						<input id='break_min' type='number' name='break_min' min='0' max='255' step='1' value='30'/>
+					</span>
+					<span class='flex-input' style=''>
+						<label for='telecommute'>Telecommute</label>
+						<input id='telecommute' type='checkbox' name='telecommute' value='1'/>
+					</span>
+				</span>
 				<label for='description'>Description (Optional)</label>
 				<span style='position: relative;'>
 					<textarea name='description' class='description' maxlength='255' placeholder='Epicor Upgrade Meeting with Jim. Spent most of day writing SQL queries...' style='width: 100%;'></textarea>
@@ -105,6 +124,7 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 						<th>Feedback</th>
 						<th>Stress</th>
 						<th>Description</th>
+						<th><i class="fas fa-home"></i></th>
 					</tr>				
 				</thead>
 				<?php echo $data_log; ?>

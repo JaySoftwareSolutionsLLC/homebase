@@ -3,6 +3,10 @@
 		<a href='/homebase/index.php'><h1>Home Base 3.0</h1></a>
 		<div class='year-select'>
 			<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method='post'>
+				<input type="hidden" name='year' value='2020'>
+				<input type='submit' value='2020' class='<?php if ($year == '2020') {echo 'selected';} ?>'>
+			</form>
+			<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method='post'>
 				<input type="hidden" name='year' value='2019'>
 				<input type='submit' value='2019' class='<?php if ($year == '2019') {echo 'selected';} ?>'>
 			</form>
@@ -10,6 +14,7 @@
 				<input type="hidden" name='year' value='2018'>
 				<input type='submit' value='2018' class='<?php if ($year == '2018') {echo 'selected';} ?>'>
 			</form>
+
 			
 		</div>
 	</div>
