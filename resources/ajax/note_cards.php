@@ -19,7 +19,7 @@ $offset = $_POST['offset'] ?? 0; // Related to current page WIP
 $note_type_icons = array();
 $note_type_icons['positive experience'] = "<i title='positive experience' class='fas fa-plus-circle' style='color: hsla(120, 100%, 50%, 1);'></i>";
 $note_type_icons['negative experience'] = "<i title='negative experience' class='fas fa-minus-circle' style='color: hsla(0, 100%, 50%, 1);'></i>";
-$note_type_icons['reminder'] = "<i title='reminder' class='fas fa-bell' style='color: hsla(300, 100%, 50%, 1);'></i>";
+$note_type_icons['reminder'] = "<i title='reminder' class='fas fa-bell'></i>";
 $note_type_icons['idea'] = "<i title='idea' class='fas fa-lightbulb' style='color: hsla(50, 100%, 50%, 1);'></i>";
 $note_type_icons['thought'] = "<i title='thought' class='fas fa-brain' style='color: hsla(0, 100%, 80%, 1);'></i>";
 $note_type_icons['quote'] = "<i title='quote' class='fas fa-quote-right'></i>";
@@ -27,7 +27,10 @@ $note_type_icons['lesson'] = "<i title='lesson' class='fas fa-graduation-cap'></
 $note_type_icons['book to read'] = "<i title='book to read' class='fas fa-book'></i>";
 $note_type_icons['learning resource'] = "<i title='learning resource' class='fas fa-glasses'></i>";
 $note_type_icons['homebase enhancement'] = "<i title='homebase enhancement' class='fas fa-tools'></i>";
-$note_type_icons['habit'] = "<i title='habit' class='fas fa-retweet' style='color: hsla(190, 100%, 50%, 1);'></i>";
+$note_type_icons['habit'] = "<i title='habit' class='fas fa-atom' style='color: hsla(190, 100%, 50%, 1);'></i>";
+$note_type_icons['metric'] = "<i title='metric' class='fas fa-chart-line'></i>";
+$note_type_icons['concept'] = "<i title='concept' class='fas fa-map-marked' style='color: hsla(320, 100%, 50%, 1);'></i>";
+$note_type_icons['decision'] = "<i title='decision' class='fas fa-map-signs' style='color: hsla(280, 100%, 50%, 1);'></i>";
 
 //echo "$date_start - $date_end";
 

@@ -78,3 +78,32 @@ $('div#stat-adi div.variant-row button').on('click', function() {
         }
     });
 });
+$('div#stat-ff div.variant-row button').on('click', function() {
+    let buttonEl = $(this);
+    let mainContentEl = buttonEl.parents('div.variant-row').siblings('h4.main-metric-val');
+    let subContentEl = buttonEl.parents('div.variant-row').siblings('h5');
+    let withdrawalRate = buttonEl.attr('data-val');
+    console.log(`${withdrawalRate} | ${unreceivedATI} | ${ed}`);
+    mainContentEl.html('...');
+    subContentEl.html('...');
+    // Redo calculation for adi and replace html with new value
+    $.ajax({
+        type: "POST",
+        url: "/homebase/resources/ajax/variant_days_ff.php",
+        dataType: "JSON",
+        data: {
+            withdrawalRate : withdrawalRate,
+            unreceivedATI: unreceivedATI,
+            date : ed
+        },
+        success: function (responseJSON) {
+            $('div#stat-ff div.variant-row button').each(function () {
+                $(this).removeClass('active');
+            });
+            buttonEl.addClass('active');
+            // console.log(responseJSON);
+            mainContentEl.html(responseJSON['date']);
+            subContentEl.html(`(${responseJSON['days']})`);
+        }
+    });
+});

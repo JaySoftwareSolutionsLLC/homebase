@@ -310,6 +310,7 @@
 		$str .= in_array('1yr ago to 18mo ago', $predefined_dates) ? "<option value='1yr ago to 18mo ago'>1 Yr - 18 Mo</option>" : "";
 		$str .= in_array('18mo ago to 2yr ago', $predefined_dates) ? "<option value='18mo ago to 2yr ago'>18 Mo - 2 Yr</option>" : "";
 		$str .= in_array('more than 2yr ago', $predefined_dates) ? "<option value='more than 2yr ago'>More than 2 Yr</option>" : "";
+		$str .= in_array('all time', $predefined_dates) ? "<option value='all time'>All Time</option>" : "";
 		
 		return $str;
 	}
@@ -385,6 +386,15 @@
 		$res = $conn->query($query);
 		$row = mysqli_fetch_array($res);
 		return round( $row['Seal Hours'], 2 );
+	}
+	function return_seal_cert_min($conn, $date_start, $date_end) {
+		$query = "	SELECT SUM(cert_min) AS 'Seal Cert Min'
+					FROM finance_seal_shifts
+					WHERE 	date >= '$date_start'
+						AND date <= '$date_end' ";
+		$res = $conn->query($query);
+		$row = mysqli_fetch_array($res);
+		return round( $row['Seal Cert Min'], 2 );
 	}
 	function return_seal_hourly_wage($conn, $day_to_check) { // Perhaps PTO should be tracked in a similar fashion to income / expenditure but all in one table
 															// ie. 05/29/2019 (approval date) | 32 (hrs)
@@ -610,7 +620,7 @@
 		return $account_ids;
 	}
 
-	function return_accounts_array($conn, $year = '2019', $date = null) { // $year is deprecated but needs to be left here until cleanup can be performed on all reports/forms
+	function return_accounts_array($conn, $date = null) { // $year is deprecated but needs to be left here until cleanup can be performed on all reports/forms
 		$accounts = array(); // Array to house account objects
 		$qry = " SELECT f_a.*, ( 	SELECT value
 									FROM finance_account_log AS f_a_l
@@ -678,6 +688,17 @@
 		return $array;
 	}
 
+	// Financial Freedom
+	function return_financial_freedom($accounts, $unreceived_ati, $daily_withdrawal = 55) {
+		$liquid_cash = $unreceived_ati;
+		foreach ($accounts as $a) {
+			if ($a->type == 'liquid cash' || $a->type == 'loaned') {
+				$liquid_cash += $a->mrv;
+			}
+		}
+		return floor($liquid_cash / $daily_withdrawal);
+	}
+
 	// Goals & Metric tracking
 	function return_dev_hours($conn, $date_start, $date_end, $precision = 2) {
 		$query = "	SELECT SUM(software_dev_hours) AS 'Net Dev Hours'
@@ -699,7 +720,7 @@
 	}
 	function return_habit_list_html($conn) {
 		$habits_list_html = "";
-		$q = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/homebase/resources/queries/retrieve_active_habit_performance.sql');
+		$q = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/homebase/resources/queries/Habit-Display-Query.sql');
 		$res = $conn->query($q);
 		$habits = array(); // array to house habit names. Used to verify that no duplicates display.
 		while ($row = $res->fetch_assoc()) {
@@ -753,6 +774,36 @@
 		}
 		// $habits_list_html .= "</ul>";
 		return $habits_list_html;
+	}
+	function return_habitobj_array($conn, $date) {
+		$habits = array(); // WIP
+		$q = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/homebase/resources/queries/Habit-Display-Query.sql');
+		$q = str_replace('NOW()', "'$date'", $q);
+		$res = $conn->query($q);
+		if (!empty($res)) {
+			while ($row = $res->fetch_assoc()) {
+				if (in_array($row['name'], $habits)) {
+					continue;
+				}
+				else {
+					$habit = new stdClass();
+					$habit->id = $row['id'];
+					$habit->name = $row['name'];
+					$habit->min_to_comp = $row['minutes_to_complete'];
+					$habit->impact_str = $row['impact_str'];
+					$habit->frequency_int = $row['frequency_int'];
+					$habit->frequency_window = $row['frequency_window'];
+					$habit->freq_trgt_str = $row['freq_trgt_str'];
+					$habit->completed = $row['completed'];
+					$habit->logged_today = $row['logged_today'];
+					$habit->frequency_type = $row['frequency_type'];
+					$habit->max_logs_per_day = $row['max_logs_per_day'];
+
+					$habits[] = $habit;
+				}
+			}
+		}
+		return $habits;
 	}
 
 	// Calculations

@@ -17,8 +17,8 @@ if ( isset( $_POST['date'] ) && isset( $_POST['arrival_time'] ) && isset( $_POST
 	$stress = ( empty( $_POST['stress'] ) ) ? "NULL" : $_POST['stress'];
 	$telecommute = ( empty( $_POST['telecommute'] ) ) ? "0" : $_POST['telecommute'];
 
-	$qry = "INSERT INTO `finance_seal_shifts` (`date`, `arrival_time`, `departure_time`, `strain`, `feedback`, `stress`, `description`, `break_min`, `telecommute`)
-	VALUES ('" . $_POST['date'] . "', '" . $_POST['arrival_time'] . "', '" . $_POST['departure_time'] . "', $strain, $feedback, $stress, $desc, " . $_POST['break_min'] . ", " . $telecommute . ");";
+	$qry = "INSERT INTO `finance_seal_shifts` (`date`, `arrival_time`, `departure_time`, `strain`, `feedback`, `stress`, `description`, `break_min`, `cert_min`, `telecommute`)
+	VALUES ('" . $_POST['date'] . "', '" . $_POST['arrival_time'] . "', '" . $_POST['departure_time'] . "', $strain, $feedback, $stress, $desc, " . $_POST['break_min'] . ", " . $_POST['cert_min'] . ", " . $telecommute . ");";
 
 	if ($conn->query($qry) === TRUE) {
     	$entry_msg = "New record created successfully";
@@ -33,6 +33,7 @@ $qry = "SELECT 	date,
 				,departure_time
 				,( ( time_to_sec( TIMEDIFF( departure_time, arrival_time ) ) / ( 60 * 60 ) ) - ( break_min / 60 ) ) AS 'hours'
 				,break_min
+				,cert_min
 				,strain
 				,feedback
 				,stress
@@ -49,6 +50,7 @@ if ($res->num_rows > 0) {
 						<td>" . substr($row['arrival_time'], 0, 5) . "</td>
 						<td>" . substr($row['departure_time'], 0, 5) . "</td>
 						<td>" . $row['break_min'] . "</td>
+						<td>" . $row['cert_min'] . "</td>
 						<td>" . round($row['hours'], 2) . "</td>
 						<td>" . $row['strain'] . "</td>
 						<td>" . $row['feedback'] . "</td>
@@ -99,6 +101,10 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 						<input id='break_min' type='number' name='break_min' min='0' max='255' step='1' value='30'/>
 					</span>
 					<span class='flex-input' style=''>
+						<label for='cert_min'>Cert Minutes</label>
+						<input id='cert_min' type='number' name='cert_min' min='0' max='1440' step='1' value='0'/>
+					</span>
+					<span class='flex-input' style=''>
 						<label for='telecommute'>Telecommute</label>
 						<input id='telecommute' type='checkbox' name='telecommute' value='1'/>
 					</span>
@@ -119,6 +125,7 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 						<th>Arr.</th>
 						<th>Dep.</th>
 						<th>Brk. Min</th>
+						<th>cert. Min</th>
 						<th>Hrs</th>
 						<th>Strain</th>
 						<th>Feedback</th>

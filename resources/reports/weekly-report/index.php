@@ -398,14 +398,14 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/weekly-report/r
 					<div class='stat-text'>
 						<h3>Dev Hours</h3>
 						<h4><?= return_dev_hours($conn, $date_start, $date_end, 2) ?></h4>
-						<h5>Target: <?php echo '10 hours'; ?></h5>
+						<h5>Target: <?= '3 hours'; ?></h5>
 					</div>
 				</div>
 				<div class='stat cert-hours'>
 					<div class='stat-text'>
 						<h3>Cert Hours</h3>
 						<h4><?= return_cert_hours($conn, $date_start, $date_end, 2) ?></h4>
-						<h5>Target: <?php echo '10 hours'; ?></h5>
+						<h5>Target: <?php echo '12 hours'; ?></h5>
 					</div>
 				</div>
 				<div class='stat commute-hours'>

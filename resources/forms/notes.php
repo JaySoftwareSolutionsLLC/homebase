@@ -15,7 +15,7 @@ $five_days_ago = return_date_relative_to_today('-5 days', 'string', 'Y-m-d');
 $date_start = $date_start ?? $_POST['date-start'] ?? $five_days_ago;
 $date_end = $date_end ?? $_POST['date-end'] ?? $today;
 
-$predefined_dates = ['this week', 'last week', 'week before last', 'this month', 'last month', 'month before last', 'this quarter', 'last quarter', 'this year', 'last year'];
+$predefined_dates = ['this week', 'last week', 'week before last', 'this month', 'last month', 'month before last', 'this quarter', 'last quarter', 'this year', 'last year', 'all time'];
 
 // If variables have been posted insert into db
 if (isset($_POST['summary']) && isset($_POST['description']) && isset($_POST['type'])) {
@@ -96,16 +96,19 @@ $conn->close();
 			<label for='type'>Type</label>
 			<select name='type' class='type'>
 				<option value='thought' <?php if ($old_info['type'] == 'thought') echo "selected"; ?>>Thought</option>
+				<option value='learning resource' <?php if ($old_info['type'] == 'learning resource') echo "selected"; ?>>Learning Resource</option>
 				<option value='idea' <?php if ($old_info['type'] == 'idea') echo "selected"; ?>>Idea</option>
-				<option value='reminder' <?php if ($old_info['type'] == 'reminder') echo "selected"; ?>>Reminder</option>
 				<option value='positive experience' <?php if ($old_info['positive experience'] == 'reminder') echo "selected"; ?>>Positive Experience</option>
+				<option value='homebase enhancement' <?php if ($old_info['type'] == 'homebase enhancement') echo "selected"; ?>>HomeBase Enhancement</option>
 				<option value='negative experience' <?php if ($old_info['negative experience'] == 'reminder') echo "selected"; ?>>Negative Experience</option>
-				<option value='quote' <?php if ($old_info['type'] == 'quote') echo "selected"; ?>>Quote</option>
+				<option value='reminder' <?php if ($old_info['type'] == 'reminder') echo "selected"; ?>>Reminder</option>
 				<option value='lesson' <?php if ($old_info['type'] == 'lesson') echo "selected"; ?>>Lesson</option>
 				<option value='book to read' <?php if ($old_info['type'] == 'book to read') echo "selected"; ?>>Book To Read</option>
-				<option value='learning resource' <?php if ($old_info['type'] == 'learning resource') echo "selected"; ?>>Learning Resource</option>
-				<option value='homebase enhancement' <?php if ($old_info['type'] == 'homebase enhancement') echo "selected"; ?>>HomeBase Enhancement</option>
 				<option value='habit' <?php if ($old_info['type'] == 'habit') echo "selected"; ?>>Habit</option>
+				<option value='quote' <?php if ($old_info['type'] == 'quote') echo "selected"; ?>>Quote</option>
+				<option value='metric' <?php if ($old_info['type'] == 'metric') echo "selected"; ?>>Metric</option>
+				<option value='concept' <?php if ($old_info['type'] == 'concept') echo "selected"; ?>>Concept</option>
+				<option value='decision' <?php if ($old_info['type'] == 'decision') echo "selected"; ?>>Decision</option>
 			</select>
 			<label for='summary-input'>Summary</label>
 			<span class='char-count'>
@@ -139,16 +142,19 @@ $conn->close();
 					<select id='card-deck-type-input'>
 						<option value='all'>All</option>
 						<option value='thought'>Thought</option>
+						<option value='learning resource'>Learning Resource</option>
 						<option value='idea'>Idea</option>
-						<option value='reminder'>Reminder</option>
 						<option value='positive experience'>Positive Experience</option>
+						<option value='homebase enhancement'>HomeBase Enhancement</option>
 						<option value='negative experience'>Negative Experience</option>
-						<option value='quote'>Quote</option>
+						<option value='reminder'>Reminder</option>
 						<option value='lesson'>Lesson</option>
 						<option value='book to read'>Book To Read</option>
-						<option value='learning resource'>Learning Resource</option>
-						<option value='homebase enhancement'>HomeBase Enhancement</option>
 						<option value='habit'>Habit</option>
+						<option value='quote'>Quote</option>
+						<option value='metric'>Metric</option>
+						<option value='concept'>Concept</option>
+						<option value='decision'>Decision</option>
 					</select>
 				</span>
 				<span class='flex-input'>

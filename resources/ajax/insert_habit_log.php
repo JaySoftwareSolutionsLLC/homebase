@@ -1,6 +1,6 @@
 <?php
 
-    // File to be called via ajax to load a subset of notes in the form of cards
+    // File to be called via ajax to insert new habit log
 
     // Include resources
     include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/resources.php');
@@ -8,6 +8,11 @@
     // Set variables
     $habit_id = $_POST['habit_id'] ?? $_GET['habit_id'] ?? null;
     $status = $_POST['status'] ?? $_GET['status'] ?? 'Completed';
+    $datetime = $_POST['datetime'] ?? $_GET['datetime'] ?? null;
+    if (is_null($datetime)) {
+        $datetime = new DateTime('now');
+        $datetime = $datetime->format('Y-m-d H:i:s');
+    }
 
     // Connect to DB
     $conn = connect_to_db();
@@ -28,7 +33,7 @@
     }
     // Otherwise, run an insert
     else {
-        $qry = "INSERT INTO personal_wellness_habit_logs (habit_id, status) VALUES ($habit_id, '$status');";
+        $qry = "INSERT INTO personal_wellness_habit_logs (habit_id, status, datetime) VALUES ($habit_id, '$status', '$datetime');";
         $response_object = new stdClass;
         // echo $qry;
         $response_object->qry = $qry;

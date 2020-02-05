@@ -1,6 +1,7 @@
 let hiddenHabits = [];
 // On dbl-click create prompt asking if user wants to log this habit. If yes, hit endpoint with proper habit_id and status values
 function listenForHabitDblClickEvents() {
+    console.log('Start: listenForHabitDblClickEvents');
     $('section.habits ul#habits-list li').on('dblclick', function (e) {
         // Shift + Dbl click creates a 'Started' event
         let status = e.shiftKey ? 'Started' : 'Completed';
@@ -25,8 +26,10 @@ function listenForHabitDblClickEvents() {
             })
         }
     })
+    console.log('Finish: listenForHabitDblClickEvents');
 }
 function listenForHabitAltClickEvents() {
+    console.log('Start: listenForHabitAltClickEvents');
     $('section.habits ul#habits-list li').on('click', function (e) {
         if (e.altKey) {
             let habitId = $(this).attr('data-id');
@@ -38,14 +41,15 @@ function listenForHabitAltClickEvents() {
             });
         }
     });
+    console.log('Finish: listenForHabitAltClickEvents');
 }
 function refreshHabitList() {
+    console.log('Start: refreshHabitList');
     let newHabitList = '';
     $.ajax({
-        type: "GET", // POST, GET, etc.
+        type: "GET",
         url: "/homebase/resources/ajax/retrieve_habit_list.php",
-        data: "", // Can also be an array { val1 : val1, val2: val2 }
-        // dataType: "",
+        data: "",
         success: function (response) {
             $('section.habits main ul#habits-list').html(response);
             $('section.habits ul li').each(function (index, element) {
@@ -56,12 +60,14 @@ function refreshHabitList() {
             });
             listenForHabitDblClickEvents();
             listenForHabitAltClickEvents();
-            hideHiddenHabits();
+            hideHiddenHabits(hiddenHabits);
             updateHabitTime();
         }
     })
+    console.log('Finish: refreshHabitList');
 }
 function listenForHabitSelectionClickEvents() {
+    console.log('Start: listenForHabitSelectionClickEvents');
     $('ul#habit-selection li').on('click', function() {
         let sel = $(this).attr('data-selection');
         switch (sel) {
@@ -70,13 +76,24 @@ function listenForHabitSelectionClickEvents() {
                     $(this).css('display', 'flex')
                 });
                 break;
-            case 'started':
-                $('section.habits ul#habits-list li').each(function (index, element) {
-                    if ($(this).hasClass('started')) {
-                        $(this).css('display', 'flex');
+                case 'started':
+                    $('section.habits ul#habits-list li').each(function (index, element) {
+                        if ($(this).hasClass('started')) {
+                            $(this).css('display', 'flex');
                     }
                     else {
                         $(this).css('display', 'none');
+                    }
+                });
+                break;
+            case 'clear-started':
+                $.ajax({
+                    type: "GET", // POST, GET, etc.
+                    url: "/homebase/resources/ajax/clear-started-habits.php",
+                    success: function (responseJSON) {
+                        if (responseJSON.success) {
+                            refreshHabitList();
+                        }
                     }
                 });
                 break;
@@ -96,9 +113,11 @@ function listenForHabitSelectionClickEvents() {
         }
         updateHabitTime();
     })
+    console.log('Finish: listenForHabitSelectionClickEvents');
 }
 function updateHabitTime() {
-    let minutes = 0;
+            console.log('Start: updateHabitTime');
+            let minutes = 0;
     $('section.habits ul#habits-list li:visible').each(function (index, element) {
         console.log($(this));
         // alert($(this));
@@ -106,19 +125,16 @@ function updateHabitTime() {
     })
     readable_time = convertTimeToReadable(unit = 'minutes', minutes);
     $('table#habits-summary tbody').html(`<tr><td>${readable_time}</td></tr>`)
+    console.log('Finish: updateHabitTime');
 }
-
-// listenForHabitSelectionClickEvents();
-//             hideHiddenHabits(hiddenHabits);
-//         }
-//     })
-// }
-function hideHiddenHabits(hiddenHabits = hiddenHabits) {
+function hideHiddenHabits(hiddenHabits) {
+    console.log('Start: hideHiddenHabits');
     $('section.habits ul li').each(function (index, element) {
         if (hiddenHabits.includes($(this).attr('data-id'))) {
             $(this).css('display', 'none');
         }
     });
+    console.log('Finish: hideHiddenHabits');
 }
 listenForHabitDblClickEvents();
 listenForHabitAltClickEvents();

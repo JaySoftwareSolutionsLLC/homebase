@@ -249,6 +249,10 @@ function populatePredefinedDates(selVal, dateElementStart, dateElementEnd, dateF
                 ed.add(5, 'days');
                 break;
 
+            case "all time":
+                sd = moment('2018-06-01', 'YYYY-MM-DD');
+                break;
+
         } //end switch
 
     }

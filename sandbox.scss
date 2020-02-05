@@ -1,0 +1,38 @@
+html {
+    .numeric {
+        text-align: right;
+    }
+    body {
+        table#dataTable {
+            tbody {
+                tr {
+                    &:hover {
+                        background: hsl(0, 0%, 80%);
+                    }
+                    &.group, &.group:hover {
+                        background-color: hsl(0, 0%, 0%);
+                        color: white;
+                    }
+                    td {
+                        text-align: center;
+                        &.weekly-requirement-met { /* Might end up changing this to interval-requirement-met (i.e. quarter/monthly/weekly) */
+                            background: hsla(190, 100%, 50%, 0.5);
+                        }
+                        &.daily-requirement-met {
+                            background: hsla(120, 100%, 50%, 0.5);
+                        }
+                        i.fa-check {
+                            /* color: hsl(120, 100%, 50%); */
+                        }
+                        i.fa-times {
+                            /* color: hsl(0, 100%, 50%); */
+                        }
+                        i.fa-fire {
+                            color: hsl(40, 100%, 50%);
+                        }
+                    }
+                }
+            }
+        } 
+    }
+}

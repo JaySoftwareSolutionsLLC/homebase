@@ -10,7 +10,7 @@
     $conn = connect_to_db();
     
     // Determine current account values
-    $accounts = return_accounts_array($conn, $year);
+    $accounts = return_accounts_array($conn);
 
     // Determine years until 60
     $birthdate = return_date_from_str('April 28th 1994', 'datetime');

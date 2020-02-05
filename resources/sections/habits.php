@@ -8,6 +8,7 @@
 			<li data-selection='all'>All</li>
 			<li data-selection='started'>Started</li>
 			<li data-selection='incomplete'>Incomplete</li>
+			<li data-selection='clear-started'>Clear Started</li>
 		</ul>
 		<ul id='habits-list'>
 			<?= $habits_list_html; ?>

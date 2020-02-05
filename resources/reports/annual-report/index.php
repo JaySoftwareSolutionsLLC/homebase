@@ -271,6 +271,7 @@ if ($generated) {
 
 		// CERT HOURS
 		$w->cert_hrs = return_cert_hours($conn, $w->start_day, $w->end_day, 2) ?? 0;
+		$w->seal_cert_hrs = round((return_seal_cert_min($conn, $w->start_day, $w->end_day) / 60), 2) ?? 0;
 
 		// DEV HOURS
 		$w->dev_hrs = return_dev_hours($conn, $w->start_day, $w->end_day, 2) ?? 0;
@@ -691,6 +692,20 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/annual-report/r
 <?php
 	foreach ($weeks as $w) {
 		echo "{ x: new Date( " . php_dt_to_js_datestr($w->start_dt, 'Y') . "), y: $w->cert_hrs },";
+	}
+?>
+							]
+						},	
+						{
+						type: "line",
+						name: "Seal Cert Hrs",
+						showInLegend: true,
+						yValueFormatString: "",
+						color: 'hsl(100, 100%, 50%)',
+						dataPoints: [
+<?php
+	foreach ($weeks as $w) {
+		echo "{ x: new Date( " . php_dt_to_js_datestr($w->start_dt, 'Y') . "), y: $w->seal_cert_hrs },";
 	}
 ?>
 							]

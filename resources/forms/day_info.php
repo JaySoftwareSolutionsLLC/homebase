@@ -85,6 +85,7 @@ $day->ricks_income = return_ricks_pre_tax_income($conn, $day->date, $day->date, 
 
 $day->seal_hours = return_seal_hours($conn, $day->date, $day->date);
 $day->seal_income = return_seal_pre_tax_salary($conn, $day->date, $day->date, 3);
+$day->seal_cert_min = return_seal_cert_min($conn, $day->date, $day->date);
 
 $day->income = $day->seal_income + $day->ricks_income;
 $day->net_working_hours = $day->seal_hours + $day->ricks_hours;
@@ -94,6 +95,8 @@ $day->net_hourly = ($day->net_working_hours > 0) ? round($day->income / $day->ne
 $day->expenditure = return_expenditure($conn, $day->date, $day->date);
 // Estimated Net Cont.
 $day->est_net_cont = round(($day->income * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) - $day->expenditure, 2);
+
+$day->habits = return_habitobj_array($conn, $day->date);
 
 ?>
 
@@ -129,20 +132,20 @@ $day->est_net_cont = round(($day->income * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100
                     <i class='fas fa-chevron-right'></i>
                 </span>
             </span>
-            <p class='notifications' <?php if ($notifications == '') {
+            <!-- <p class='notifications' <?php if ($notifications == '') {
                                             echo "style='display: none;'";
                                         } ?>>
                 <ul>
                     <?php echo $notifications; ?>
                 </ul>
-            </p>
-            <section style=''>
+            </p> -->
+            <!-- <section style=''>
                 <h3 style=''>Notifications</h3>
             </section>
             <section style=''>
                 <h3 style=''>Fitness</h3>
-            </section>
-            <section style=''>
+            </section> -->
+            <!-- <section style=''>
                 <h3 style=''>Nutrition</h3>
                 <div class='row'>
                     <span class='flex-input' style=''>
@@ -166,7 +169,7 @@ $day->est_net_cont = round(($day->income * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100
                         <input disabled='true' type='number' name='consumption-carb-percentage' id='consumption-carb-percentage' value='' placeholder='' />
                     </span>
                 </div>
-            </section>
+            </section> -->
             <section style=''>
                 <h3 style=''>Finance</h3>
                 <div class='row'>
@@ -203,6 +206,10 @@ $day->est_net_cont = round(($day->income * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100
                     <span class='input' style=''>
                         <label for='seal-hours-input'>Seal Hours</label>
                         <input disabled='true' type='number' name='seal-hours-input' id='seal-hours-input' class='numeric' value='<?php echo $day->seal_hours; ?>' />
+                    </span>
+                    <span class='input' style=''>
+                        <label for='seal-cert-min-input'>Seal Cert. Min</label>
+                        <input disabled='true' type='number' name='seal-cert-min-input' id='seal-cert-min-input' class='numeric' value='<?php echo $day->seal_cert_min; ?>' />
                     </span>
                     <span class='input' style=''>
                         <label for='ricks-hours-input'>Ricks Hours</label>
@@ -266,6 +273,22 @@ $day->est_net_cont = round(($day->income * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100
                         </select>
                     </span>
                 </div>
+            </section>
+            <section>
+                <h3>Habits</h3>
+                <ul>
+                <?php foreach ($day->habits as $h) {
+                    echo "<li>";
+                    if (is_null($h->max_logs_per_day) || $h->logged_today < $h->max_logs_per_day) {
+                        echo "<i class='fas fa-feather-alt'></i>";
+                    }
+                    if ($h->logged_today > 0) { 
+                        echo "<i class='fas fa-trash' style='color: red'></i>";
+                    }
+                    echo "$h->name" . "(" . $h->id . ")";
+                    echo "</li>";
+                } ?>
+                </ul>
             </section>
         </form>
 

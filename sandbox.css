@@ -1,0 +1,38 @@
+html .numeric {
+  text-align: right;
+}
+
+html body table#dataTable tbody tr:hover {
+  background: #cccccc;
+}
+
+html body table#dataTable tbody tr.group, html body table#dataTable tbody tr.group:hover {
+  background-color: black;
+  color: white;
+}
+
+html body table#dataTable tbody tr td {
+  text-align: center;
+}
+
+html body table#dataTable tbody tr td.weekly-requirement-met {
+  /* Might end up changing this to interval-requirement-met (i.e. quarter/monthly/weekly) */
+  background: rgba(0, 213, 255, 0.5);
+}
+
+html body table#dataTable tbody tr td.daily-requirement-met {
+  background: rgba(0, 255, 0, 0.5);
+}
+
+html body table#dataTable tbody tr td i.fa-check {
+  /* color: hsl(120, 100%, 50%); */
+}
+
+html body table#dataTable tbody tr td i.fa-times {
+  /* color: hsl(0, 100%, 50%); */
+}
+
+html body table#dataTable tbody tr td i.fa-fire {
+  color: #ffaa00;
+}
+/*# sourceMappingURL=sandbox.css.map */
