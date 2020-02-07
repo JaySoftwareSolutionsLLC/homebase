@@ -7,9 +7,14 @@
 
     // Connect to DB
     $conn = connect_to_db();
+    $date = $_POST['date'] ?? null;
 
     $qry = " DELETE FROM personal_wellness_habit_logs WHERE status = 'Started' ";
+    if (!is_null($date)) {
+        $qry .= " AND DATE(datetime) = DATE('$date') ";
+    }
     $response_object = new stdClass;
+    $response_object->post = $_POST;
     $response_object->qry = $qry;
     if ($conn->query($qry)) {
         $response_object->type = 'DELETE';

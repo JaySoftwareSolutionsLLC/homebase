@@ -15,6 +15,9 @@ html {
                     }
                     td {
                         text-align: center;
+                        &:not(:last-child) {
+                            border-right: 1px dashed black;
+                        }
                         &.weekly-requirement-met { /* Might end up changing this to interval-requirement-met (i.e. quarter/monthly/weekly) */
                             background: hsla(190, 100%, 50%, 0.5);
                         }
@@ -29,6 +32,9 @@ html {
                         }
                         i.fa-fire {
                             color: hsl(40, 100%, 50%);
+                        }
+                        i.fa-snowflake {
+                            color: hsl(190, 100%, 50%);
                         }
                     }
                 }

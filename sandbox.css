@@ -15,6 +15,10 @@ html body table#dataTable tbody tr td {
   text-align: center;
 }
 
+html body table#dataTable tbody tr td:not(:last-child) {
+  border-right: 1px dashed black;
+}
+
 html body table#dataTable tbody tr td.weekly-requirement-met {
   /* Might end up changing this to interval-requirement-met (i.e. quarter/monthly/weekly) */
   background: rgba(0, 213, 255, 0.5);
@@ -34,5 +38,9 @@ html body table#dataTable tbody tr td i.fa-times {
 
 html body table#dataTable tbody tr td i.fa-fire {
   color: #ffaa00;
+}
+
+html body table#dataTable tbody tr td i.fa-snowflake {
+  color: #00d5ff;
 }
 /*# sourceMappingURL=sandbox.css.map */

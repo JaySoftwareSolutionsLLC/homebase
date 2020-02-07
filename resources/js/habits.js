@@ -88,9 +88,14 @@ function listenForHabitSelectionClickEvents() {
                 break;
             case 'clear-started':
                 $.ajax({
-                    type: "GET", // POST, GET, etc.
+                    type: "POST", // POST, GET, etc.
+                    dataType: "JSON",
+                    data: {
+                        date : ed
+                    },
                     url: "/homebase/resources/ajax/clear-started-habits.php",
                     success: function (responseJSON) {
+                        console.log(responseJSON);
                         if (responseJSON.success) {
                             refreshHabitList();
                         }

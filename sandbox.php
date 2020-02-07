@@ -7,18 +7,31 @@
     $conn = connect_to_db();
 
     //---Initialize variables-----------------------------------------------------------
-    $dt_start = new DateTime('first day of january this year');
+    // $dt_start = new DateTime('first day of january this year');
     // $dt_start = new DateTime('-1 week');
-    // $dt_start = new DateTime('monday this week');
+    $dt_start = new DateTime('monday this week');
+    // $dt_start = new DateTime('January 27 2020');
     $dt_end = new DateTime('sunday this week');
+    $today_dt = new DateTime('now');
     class HabitMetric {
-        public function __construct($metric_name, $habit_name, $habit_id, $influence, $freq_str, $habit_min_to_comp) {
+        public function __construct($habit_metric_id, $metric_name, $habit_name, $habit_id, $influence, $freq_str, $habit_min_to_comp, $effective_datetime, $expire_datetime) {
+            $this->habit_metric_id = $habit_metric_id; // Should this be broken out into its own Metric class?
             $this->metric_name = $metric_name; // Should this be broken out into its own Metric class?
             $this->habit_name = $habit_name; // Should this be broken out into its own Habit class?
             $this->habit_id = $habit_id;
             $this->habit_min_to_comp = $habit_min_to_comp;
             $this->influence = $influence;
             $this->freq_str = $freq_str;
+            if (!empty($effective_datetime)) {
+                $this->effective_datetime = new DateTime($effective_datetime);
+            } else {
+                $this->effective_datetime = null;
+            }
+            if (!empty($expire_datetime)) {
+                $this->expire_datetime = new DateTime($expire_datetime);
+            } else {
+                $this->expire_datetime = null;
+            }
         }
     }
     class HabitLog {
@@ -83,13 +96,16 @@
 
     // Retrieve all habit metrics
     $habit_metrics = array();
-    $sql_habit_metrics = "  SELECT 	m.name
+    $sql_habit_metrics = "  SELECT 	hm.id
+                                    ,m.name
                                     ,m.id
                                     ,h.name
                                     ,h.id
                                     ,hm.influence
                                     ,h.minutes_to_complete
                                     ,CONCAT(hm.frequency_type, ' ', hm.frequency_int, '/', hm.frequency_window) AS 'freqstr'
+                                    ,hm.effective_datetime
+                                    ,hm.expire_datetime
                                     
                                 FROM `personal_wellness_habit_metric` AS hm
                                 INNER JOIN personal_wellness_habits AS h
@@ -105,9 +121,9 @@
     $stmt = $conn->prepare($sql_habit_metrics);
     $stmt->bind_param("ss", $dt_end->format('Y-m-d'), $dt_start->format('Y-m-d'));
     $stmt->execute();
-    $stmt->bind_result($metric_name, $metric_id, $habit_name, $habit_id, $influence, $minutes_to_complete, $freq_str);
+    $stmt->bind_result($habit_metric_id, $metric_name, $metric_id, $habit_name, $habit_id, $influence, $minutes_to_complete, $freq_str, $effective_datetime, $expire_datetime);
     while ($stmt->fetch()) {
-        $habit_metrics[] = new HabitMetric($metric_name, $habit_name, $habit_id, $influence, $freq_str, $minutes_to_complete);
+        $habit_metrics[] = new HabitMetric($habit_metric_id, $metric_name, $habit_name, $habit_id, $influence, $freq_str, $minutes_to_complete, $effective_datetime, $expire_datetime);
     }
     $stmt->close();
     // var_dump($habit_metrics);
@@ -152,13 +168,28 @@
     </thead>
     <tbody>
         <?php foreach($habit_metrics as $hm) {
+            
+            $hm->streak = return_habit_metric_streak($conn, $hm->habit_metric_id, $today_dt);
             $habit_metric_row = "
             <tr>
                 <td>" . $hm->metric_name . "</td>
-                <td>$hm->habit_name($hm->habit_id)</td>
+                <td>";
+            if ($hm->streak == 'hot-streak') {
+                $habit_metric_row .= "<i class='fas fa-fire'></i>&nbsp;";
+            } elseif ($hm->streak == 'cold-streak') {
+                $habit_metric_row .= "<i class='fas fa-snowflake'></i>&nbsp;";
+            }
+            $habit_metric_row .= "[$hm->habit_metric_id]" . $hm->habit_name . "($hm->habit_id)";
+            
+            $habit_metric_row .= "</td>
                 <td>" . $hm->influence . "</td>
                 <td>" . $hm->freq_str . "</td>";
             foreach($dates as $d) {
+                if ($d < $hm->effective_datetime->format('Y-m-d') 
+                || (!is_null($hm->expire_datetime) && $hm->expire_datetime->format('Y-m-d') < $d)) {
+                    $habit_metric_row .= "<td style='background: hsl(0, 0%, 44%);'></td>";
+                    continue;
+                }
                 $habit_metric_row .= "<td data-date='$d' data-habit-id='$hm->habit_id' data-habit-name='$hm->habit_name' class='habit-date'>"; // May need to move this down to conditionally check if requirements were met after looping through logs
                 foreach($habit_logs as $hl) {
                     if ($hl->habit_id == $hm->habit_id && $hl->date == $d) {
@@ -304,6 +335,7 @@
         </tr>
     </tfoot>
 </table>
+<?= return_habit_metric_streak($conn, 9, $today_dt) ?>
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js""></script>
 <script>

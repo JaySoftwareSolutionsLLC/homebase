@@ -805,6 +805,124 @@
 		}
 		return $habits;
 	}
+	function return_habit_metric_streak($conn, $habit_metric_id, $end_dt) {
+		// return $end_dt->format('Y-m-d');
+		// Determine habit metric window
+		$end_dt_clone = clone $end_dt;
+		$sql = "SELECT 	frequency_window
+						, frequency_int
+						, frequency_type
+						, effective_datetime
+						, expire_datetime
+				FROM personal_wellness_habit_metric 
+				WHERE id = ?";
+		$stmt = $conn->prepare($sql);
+		$stmt->bind_param("i", $habit_metric_id);
+		$stmt->execute();
+		$stmt->bind_result($freq_window, $freq_int, $freq_type, $effective_datetime, $expire_datetime);
+		$stmt->fetch();
+		$stmt->close();
+		if (!empty($expire_datetime) && $expire_datetime < $end_dt_clone) { // We only apply streaks to currently active habits
+			return '';
+		}
+		// return "$freq_type $freq_int x / $freq_window";
+		// return $end_dt->format('Y-m-d');
+		// Determine how far back we need to look to gather 3 windows
+			// If habit_metric was made effective < 3 windows ago return ''
+			// End of query period should be most recent window (not including this window)
+
+		switch ($variable) {
+			case 'Day':
+				$end_dt_clone->modify("-1 day");
+				break;
+		
+			case 'Week':
+				$end_dt_clone->modify("Sunday last week"); // Last Sunday		
+				break;
+		
+			case 'Month':
+				$end_dt_clone->modify("first day of this month"); // Last Sunday		
+				$end_dt_clone->modify("-1 day"); // Last Sunday		
+				break;
+
+			case 'Quarter':
+				if ($end_dt_clone->format('n') <= 3) {
+					$end_dt_clone->modify("first day of january this year"); // Last Sunday		
+				} elseif ($end_dt_clone->format('n') <= 6) {
+					$end_dt_clone->modify("first day of april this year"); // Last Sunday		
+				} elseif ($end_dt_clone->format('n') <= 9) {
+					$end_dt_clone->modify("first day of july this year"); // Last Sunday		
+				} else {
+					$end_dt_clone->modify("first day of october this year"); // Last Sunday		
+				} 
+				$end_dt_clone->modify("-1 day"); // Last Sunday		
+				break;
+
+			case 'Year':
+				$end_dt_clone->modify("first day of january this year"); // Last Sunday		
+				$end_dt_clone->modify("-1 day");
+				break;
+
+			default:
+				# code...
+				break;
+		}
+
+		// return $freq_window;
+		$start_dt = clone $end_dt_clone;
+		if ($freq_window === 'Quarter') { // php doesnt support modifications with quarters
+			$start_dt->modify("-9 month");
+		} else {
+			$start_dt->modify("-3 $freq_window");
+		}
+		$start_dt->modify("+1 day");
+		$effective_dt = new DateTime($effective_datetime);
+		if ($effective_dt > $start_dt) {
+			return '';
+		}
+
+		// Group by window and count # of logs in that window (ordered by MIN(datetime) DESC)
+			$freq_window_str = $freq_window . "(hl.datetime)";
+			if ($freq_window == 'Week') {
+				$freq_window_str = "Week(hl.datetime, 3)";
+			}
+			
+			$sql = "SELECT $freq_window_str, COUNT(*)
+					FROM personal_wellness_habit_metric AS hm
+					INNER JOIN personal_wellness_habit_logs AS hl
+						ON (hm.habit_id = hl.habit_id)
+					WHERE 	hm.id = ?
+						AND DATE(hl.datetime) >= ?
+						AND DATE(hl.datetime) <= ?
+					GROUP BY $freq_window_str ";
+			$stmt = $conn->prepare($sql);
+			$stmt->bind_param("iss", $habit_metric_id, $start_dt->format('Y-m-d'), $end_dt_clone->format('Y-m-d'));
+			$stmt->execute();
+			$stmt->bind_result($window, $count);
+			$points = 0;
+			while($stmt->fetch()) {
+				if ($freq_type == 'exactly' && $count == $freq_int) {
+					$points++;
+				} elseif ($freq_type == 'at_least' && $count >= $freq_int) {
+					$points++;
+				} elseif ($freq_type == 'at_most' && $count <= $freq_int) {
+					$points++;
+				}
+			}
+			$stmt->close();
+			// IF All 3 windows had count >= target THEN return "HOT"
+			if ($points == 3) {
+				return 'hot-streak';
+			}
+			// IF All 3 windows had count < target THEN return "COLD"
+			elseif ($points == 0) {
+				return 'cold-streak';
+			}
+			// OTHERWISE return "N/A"
+			else {
+				return '';
+			}
+	}
 
 	// Calculations
 	function return_theoretical_age_60_withdrawal_rate($accounts = array(), $years_until_60 = 34.75, $exp_roi = null ) {
