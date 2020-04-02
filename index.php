@@ -64,7 +64,10 @@
 	}
 
 	// Retrieve Account Information
-	$accounts = return_accounts_array($conn, $year, $today_date);
+	$accounts = return_accounts_array($conn, $today_date);
+	// echo "<pre>";
+	// var_dump($accounts);
+	// echo "</pre>";
 
 	$account_types = array();
 	foreach ($accounts as $a) {
