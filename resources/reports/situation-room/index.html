@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+	<!--Basic Meta Setup-->
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!--Description which is sometimes used by search engines-->
+ 	<!-- <meta name="description" content=""> -->
+ 	<!-- Verify ownership for Google Search Console -->
+	<!-- <meta name="google-site-verification" content="" /> -->
+	<!-- Control the behavior of search engine crawling and indexing -->
+	<!-- <meta name="robots" content="index,follow"> ALL SEARCH ENGINES -->
+	<!-- <meta name="googlebot" content="index,follow"> GOOGLE SPECIFIC -->
+	<!-- Tells Google not to show the sitelinks search box -->
+	<!-- <meta name="google" content="nositelinkssearchbox"> -->
+	<!--Favicon-->
+	<!-- <link rel="shortcut icon" href="resources/assets/images/favicon.ico" type="image/x-icon"/> -->
+<!--	<link href="resources/assets/images/favicon.ico" rel="icon" type="image/x-icon"/>-->
+	<!--Title-->
+  	<title>Investment Calculator</title>
+	<!--CSS-->
+  	<link rel="stylesheet" href="resources/css/reset.css">
+	<link rel='stylesheet' href='resources/css/main.css'>
+  	<link rel="stylesheet" href="resources/css/situation_room.css">
+	<!--Google Fonts-->
+<link href="https://fonts.googleapis.com/css?family=Eczar:800|Montserrat+Alternates" rel="stylesheet">
+</head>
+	<body>
+
+		<header>
+			<div class='left-side'>The Rich Road</div>
+			<nav class='right-side'>
+				<a href='how_much_to_save.html'>How Much To Save</a>
+				|
+				<a href='situation_room.html'>Situation Room</a>
+			</nav>
+		</header>
+
+		<h1>Plan Assessment</h1>
+		<section class='inputs'>
+			<div class='current'>
+				<h2>Current Situation</h2>
+				<div class='input'>
+					<label for='dob'>Date of Birth</label>
+					<input type='date' id='dob' max='2018-01-01'>
+				</div>
+				<div class='debts'>
+					<div class='input'>
+						<label for='debts'>Debts</label>
+						<input type='number' id='debts' step="100" min="0">
+					</div>
+					<div class='input'>
+						<label for='aggInt'>Aggregate Interest Rate %</label>
+						<input type='number' id='aggInt' step="0.05" min="0">
+					</div>
+				</div>
+				<button class='add-account'>Add Account</button>
+			</div>
+			<div class='future'>
+				<h2>Future Plans</h2>
+				<button class='add-step'>Add Plan</button>
+			</div>
+		</section>
+		<button class='assess'>Analyze Plan</button>
+		<div id="chartContainer" style="height: 300px; width: 100%; display: none;"></div>
+
+		<!--JavaScript-->
+		<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.js"></script>
+		<script src="resources/javascript/jquery.canvasjs.min.js"></script>
+		<script src="resources/javascript/financial.js"></script>
+		<script src="resources/javascript/situation_room.js"></script>
+		<script>
+			
+		</script>
+	</body>
+</html>

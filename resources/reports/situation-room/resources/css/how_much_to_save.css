@@ -1,0 +1,108 @@
+* {
+
+}
+html {
+	font-size: 12px;
+	display: inline-flex;
+	flex-flow: column;
+	align-items: center;
+	background: hsla(0, 0%, 50%, 1);
+}
+body {
+	width: 100%;
+	max-width: 1080px;
+	display: flex;
+	flex-flow: column;
+	align-items: center;
+	align-content: flex-start;
+	justify-content: flex-start;
+	background: white;
+	/*background: url("../assets/images/money_background_half_opacity.png");*/
+}
+
+section.intro {
+	width: 50rem;
+	padding: 3rem 2rem 1rem 2rem;
+	background: #FFF;
+	/*display: inline-flex;
+	flex-flow: column;
+	align-content: flex-start;
+	justify-content: center;*/
+}
+section.intro h2 {
+	font-size: 3rem;
+	font-family: 'Eczar', serif;
+	text-align: center;
+}
+section.intro div.line-break {
+	height: 1rem;
+}
+section.intro p {
+	font-size: 1.25rem;
+	font-family: 'Montserrat Alternatives', sans-serif;
+	text-align: justify;
+}
+
+section.user-info {
+	width: 50rem;
+	margin: 0.5rem 2rem 1rem 2rem;
+	font-family: 'Montserrat Alternatives', sans-serif;
+	display: inline-flex;
+	justify-content: space-between;
+	background: #FFF;
+}
+section.user-info p {
+	font-size: 1.25rem;
+	text-align: center;
+}
+section.user-info div.line-break {
+	height: 0.5rem;
+}
+section.user-info input {
+	text-align: center;
+	font-size: 1.5rem;
+	border-radius: 1rem 0;
+	outline: none;
+	border: 0.125rem solid black;
+	width: 8rem;
+}
+section.user-info select {
+	text-align: center;
+	font-size: 1.5rem;
+	border-radius: 0 1rem;
+	outline: none;
+	border: 0.125rem solid black;
+}
+
+section.historical-confidence-table {
+	/*opacity: 0;*/
+	border: 0.25rem solid black;
+	width: 70rem;
+	max-width: 70rem;
+	background-color: hsla(0, 0%, 80%, 1);
+	/*height: 40rem;*/
+	font-family:
+}
+section.historical-confidence-table.display {
+	opacity: 1;
+	transition: opacity 500ms ease-in-out;
+	/* Once transition is finalized, adjust for all browsers */
+}
+table.historical-confidence-table {
+	width: 100%;
+	height: 100%;
+}
+table.historical-confidence-table th, table.historical-confidence-table td {
+	text-align: center;
+	vertical-align: middle;
+	border: 1px solid black;
+}
+table.historical-confidence-table th {
+	font-size: 1.25rem;
+	font-family: 'Eczar', serif;
+	padding: 0.75rem;
+
+}
+@media only screen and (min-width: 0px) {
+
+}

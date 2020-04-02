@@ -1,0 +1,55 @@
+* {}
+html {}
+body {}
+h1 {
+    font-size: 4rem;
+    margin: 2rem 0;
+}
+section.inputs {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+div.current, div.future {
+    box-sizing: border-box;
+    border: 0.25rem solid black;
+    width: 50%;
+    display: inline-flex;
+    flex-flow: column;
+    align-items: center;
+    padding: 2rem;
+}
+section.inputs div h2 {
+    font-size: 2rem;
+    margin: 0 2rem 2rem 2rem;
+}
+div.account, div.debts, div.time-frame, div.values {
+    width: 100%;
+    display: inline-flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+div.input {
+    width: 100%;
+    display: inline-flex;
+    flex-flow: column;
+    text-align: center;
+}
+div.current div.account div.input, div.current div.debts div.input, div.time-frame div.input {
+    width: 48%;
+}
+div.input input {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+div.future div.step {
+    width: 100%;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 0.5rem;
+    margin: 1rem 0;
+    /*box-sizing: border-box;*/
+    /*border: 0.25rem solid black;*/
+    background-color: hsla(0, 0%, 75%, 1);
+}
