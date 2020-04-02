@@ -107,3 +107,18 @@ $('div#stat-ff div.variant-row button').on('click', function() {
         }
     });
 });
+$('div#stat-theoretical-income div.variant-row button').each(function() {
+    let thisEl = $(this);
+    let defaultVals = ['SD', 'MPM', 'RPM', 'SPM'];
+    let dataAttr = thisEl.attr('data-val');
+    // console.log(dataAttr);
+    if (defaultVals.indexOf(dataAttr) != -1) {
+        thisEl.addClass('active');
+    }
+});
+function returnTheoreticalIncome() {
+    // Gather specifics of request
+    // Working at Seal & Design?
+    // Shifts at Ricks
+    // Make request to endpoint
+}
