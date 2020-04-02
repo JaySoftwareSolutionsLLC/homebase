@@ -7,11 +7,17 @@
 
     // Connect to DB
     $conn = connect_to_db();
-    $date = $_POST['date'] ?? null;
+    $date = $_POST['date'] ?? $_GET['date'] ?? null;
+    $habit_id = $_POST['habit_id'] ?? $_GET['habit_id'] ?? null;
+    // Hesitant to implement the below line. Could lead to clearing ALL habits_logs ever if $date and habit_id were null
+    // $status = $_POST['status'] ?? $GET['status'] ?? 'started'; // Clearing started is default behavior
 
     $qry = " DELETE FROM personal_wellness_habit_logs WHERE status = 'Started' ";
     if (!is_null($date)) {
         $qry .= " AND DATE(datetime) = DATE('$date') ";
+    }
+    if (!is_null($habit_id)) {
+        $qry .= " AND habit_id = $habit_id ";
     }
     $response_object = new stdClass;
     $response_object->post = $_POST;
