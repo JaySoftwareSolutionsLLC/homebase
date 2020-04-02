@@ -1,5 +1,7 @@
 <?php
 
+	$login_exemption = $login_exemption ?? false;
+
 	function bounce_to($target_page = "/") {
 		// Redirects current page to the URL passed
 		header("HTTP/1.0 200 OK");
@@ -9,7 +11,7 @@
 
 	//START SESSION
 	session_start();
-	if (!$_SESSION['logged_in']) {
+	if (!$_SESSION['logged_in'] && !$login_exemption) {
 		//echo "F2";
 		//var_dump($_SESSION);
 		//exit();
