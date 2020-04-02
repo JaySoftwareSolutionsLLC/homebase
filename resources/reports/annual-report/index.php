@@ -3,12 +3,7 @@
 include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/resources.php');
 // Set year to posted value. If no posted value then set to today's year.
 $year = set_post_value('year') ?? date('Y');
-if ( $year == '2018' ) { // Include appropriate constants
-	include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/constants-2018.php');
-}
-else {
-	include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/constants-2019.php');
-}
+include($_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/constants-$year.php");
 
 // Connect to Database
 $conn = connect_to_db();
@@ -278,6 +273,8 @@ if ($generated) {
 
 		// COMMUTE HOURS (estimate)
 		$w->commute_hrs = return_estimated_commute_time($conn, $w->start_day, $w->end_day, 2) ?? 0;
+
+		$w->career_capital_hrs = $w->dev_hrs + $w->hours_net + $w->cert_hrs;
 	}
 	
 	// Retrieve daily info
@@ -668,6 +665,24 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/annual-report/r
 					},
 					dataPointWidth: 10,
 					data: [
+						<?php if ($year >= '2020') {
+		// Prior to 2020 there was no distinction between dev/cert hrs done at work, so there would be overlap with this calculation  ?>
+						{
+						type: "line",
+						name: "Career Capital Hrs",
+						lineDashType: "shortDash",   
+						showInLegend: true,
+						yValueFormatString: "",
+						color: 'hsl(190, 100%, 50%)',
+						dataPoints: [
+<?php
+		foreach ($weeks as $w) {
+			echo "{ x: new Date( " . php_dt_to_js_datestr($w->start_dt, 'Y') . "), y: $w->career_capital_hrs },";
+		}
+?>
+							]
+						},	
+<?php } ?>
 						{
 						type: "line",
 						name: "Working Hours",
@@ -687,7 +702,7 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/annual-report/r
 						name: "Cert Hrs",
 						showInLegend: true,
 						yValueFormatString: "",
-						color: 'hsl(120, 100%, 50%)',
+						color: 'hsl(130, 100%, 50%)',
 						dataPoints: [
 <?php
 	foreach ($weeks as $w) {
@@ -701,7 +716,7 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/annual-report/r
 						name: "Seal Cert Hrs",
 						showInLegend: true,
 						yValueFormatString: "",
-						color: 'hsl(100, 100%, 50%)',
+						color: 'hsl(150, 100%, 50%)',
 						dataPoints: [
 <?php
 	foreach ($weeks as $w) {
@@ -715,7 +730,7 @@ include $_SERVER["DOCUMENT_ROOT"] . "/homebase/resources/reports/annual-report/r
 						name: "Dev Hrs",
 						showInLegend: true,
 						yValueFormatString: "",
-						color: 'hsl(190, 100%, 50%)',
+						color: 'hsl(100, 100%, 50%)',
 						dataPoints: [
 <?php
 	foreach ($weeks as $w) {
