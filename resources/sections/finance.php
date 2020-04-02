@@ -109,7 +109,7 @@
 		echo return_finance_stat_html('Theoretical EOY Net Worth',"$" . number_format($theoretical_EOY_net_worth), '', '', $theoretical_eoy_nw_info);
 	
 		$theoretical_income_info = return_finance_stat_info_html('Theoretical Income', 'Determine 2019 pre-tax income', 'Current Income + (Cashable PTO Hours * Current Hourly Wage) + ((Avg Weekly Ricks Income + Avg Weekly Seal Income) * Weeks left in year )', array('Work all regular shifts', 'Cashout all PTO', 'No raises', 'No bonuses'), 'Accounts for seasonality');
-		echo return_finance_stat_html('Theoretical Income', "$" . number_format($theoretical_income_this_year), '', '', $theoretical_income_info);
+		echo return_finance_stat_html('Theoretical Income', "$" . number_format($theoretical_income_this_year), '', '', $theoretical_income_info, '', 'stat-theoretical-income', array('SD' => 'S&D', 'MPM' => 'Mon', 'RPM' => 'Thur', 'SPM' => 'Sat', 'SAM' => 'AM'));
 
 		$days_financially_free_info = return_finance_stat_info_html('Days Financially Free', 'Determine the number of days that I could not work consecutively before having to dip into retirement accounts', 'Liquid Cash / ADE', array('My average expenditure during hiatus equals ADE'), '');
 		echo return_finance_stat_html('FF Timeline', $financial_freedom_datetime->format('M jS, Y'), "($days_financially_free days)", '', $days_financially_free_info, '#FFF', 'stat-ff', array('45' => '$45', '60' => '$60', '75' => '$75', '100' => '$100'));
@@ -179,7 +179,7 @@ var chart = new CanvasJS.Chart("account-allocation-graph", {
 				$str .= " , color: 'hsl(285, 100%, 50%)', exploded: true, ";
 				break;
 			case 'taxable account' :
-				$str .= " , color: 'hsl(160, 100%, 50%)', exploded: true, ";
+				$str .= " , color: 'hsl(170, 100%, 50%)', exploded: true, ";
 				break;
 			case 'unreceived ATI' :
 				$str .= " , color: 'hsl(0, 100%, 100%)', exploded: true, ";
