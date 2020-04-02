@@ -831,13 +831,13 @@
 			// If habit_metric was made effective < 3 windows ago return ''
 			// End of query period should be most recent window (not including this window)
 
-		switch ($variable) {
+		switch ($freq_window) {
 			case 'Day':
 				$end_dt_clone->modify("-1 day");
 				break;
 		
 			case 'Week':
-				$end_dt_clone->modify("Sunday last week"); // Last Sunday		
+				$end_dt_clone->modify("Sunday last week"); // Last Sunday
 				break;
 		
 			case 'Month':
@@ -882,46 +882,48 @@
 		}
 
 		// Group by window and count # of logs in that window (ordered by MIN(datetime) DESC)
-			$freq_window_str = $freq_window . "(hl.datetime)";
-			if ($freq_window == 'Week') {
-				$freq_window_str = "Week(hl.datetime, 3)";
+		$freq_window_str = $freq_window . "(hl.datetime)";
+		if ($freq_window == 'Week') {
+			$freq_window_str = "Week(hl.datetime, 3)"; // Use mode 3 for week calculations (rolling year-to-year. New weeks start Mondays.) 
+		}
+		// return $start_dt->format('Y-m-d') . " - " . $end_dt_clone->format('Y-m-d');
+		
+		$sql = "SELECT $freq_window_str, COUNT(*)
+				FROM personal_wellness_habit_metric AS hm
+				INNER JOIN personal_wellness_habit_logs AS hl
+					ON (hm.habit_id = hl.habit_id)
+				WHERE 	hm.id = ?
+					AND DATE(hl.datetime) >= ?
+					AND DATE(hl.datetime) <= ?
+					AND status = 'Completed'
+				GROUP BY $freq_window_str ";
+		$stmt = $conn->prepare($sql);
+		$stmt->bind_param("iss", $habit_metric_id, $start_dt->format('Y-m-d'), $end_dt_clone->format('Y-m-d'));
+		$stmt->execute();
+		$stmt->bind_result($window, $count);
+		$points = 0;
+		while($stmt->fetch()) {
+			if ($freq_type == 'exactly' && $count == $freq_int) {
+				$points++;
+			} elseif ($freq_type == 'at_least' && $count >= $freq_int) {
+				$points++;
+			} elseif ($freq_type == 'at_most' && $count <= $freq_int) {
+				$points++;
 			}
-			
-			$sql = "SELECT $freq_window_str, COUNT(*)
-					FROM personal_wellness_habit_metric AS hm
-					INNER JOIN personal_wellness_habit_logs AS hl
-						ON (hm.habit_id = hl.habit_id)
-					WHERE 	hm.id = ?
-						AND DATE(hl.datetime) >= ?
-						AND DATE(hl.datetime) <= ?
-					GROUP BY $freq_window_str ";
-			$stmt = $conn->prepare($sql);
-			$stmt->bind_param("iss", $habit_metric_id, $start_dt->format('Y-m-d'), $end_dt_clone->format('Y-m-d'));
-			$stmt->execute();
-			$stmt->bind_result($window, $count);
-			$points = 0;
-			while($stmt->fetch()) {
-				if ($freq_type == 'exactly' && $count == $freq_int) {
-					$points++;
-				} elseif ($freq_type == 'at_least' && $count >= $freq_int) {
-					$points++;
-				} elseif ($freq_type == 'at_most' && $count <= $freq_int) {
-					$points++;
-				}
-			}
-			$stmt->close();
-			// IF All 3 windows had count >= target THEN return "HOT"
-			if ($points == 3) {
-				return 'hot-streak';
-			}
-			// IF All 3 windows had count < target THEN return "COLD"
-			elseif ($points == 0) {
-				return 'cold-streak';
-			}
-			// OTHERWISE return "N/A"
-			else {
-				return '';
-			}
+		}
+		$stmt->close();
+		// IF All 3 windows had count >= target THEN return "HOT"
+		if ($points == 3) {
+			return 'hot-streak';
+		}
+		// IF All 3 windows had count < target THEN return "COLD"
+		elseif ($points == 0) {
+			return 'cold-streak';
+		}
+		// OTHERWISE return "N/A"
+		else {
+			return '';
+		}
 	}
 
 	// Calculations

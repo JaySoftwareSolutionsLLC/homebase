@@ -150,6 +150,7 @@
 <link rel="stylesheet" href="/homebase/sandbox.css">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+<title>Habit Calendar</title>
 
 <table id="datatable" class='stripe compact row-border hover results' style="width:100%">
     <thead>
@@ -172,44 +173,60 @@
             $hm->streak = return_habit_metric_streak($conn, $hm->habit_metric_id, $today_dt);
             $habit_metric_row = "
             <tr>
-                <td>" . $hm->metric_name . "</td>
-                <td>";
+                <td>" . $hm->metric_name . "&nbsp;<i class='fas fa-edit'></i></td>
+                <td style='text-align: left;'>";
             if ($hm->streak == 'hot-streak') {
                 $habit_metric_row .= "<i class='fas fa-fire'></i>&nbsp;";
             } elseif ($hm->streak == 'cold-streak') {
                 $habit_metric_row .= "<i class='fas fa-snowflake'></i>&nbsp;";
             }
-            $habit_metric_row .= "[$hm->habit_metric_id]" . $hm->habit_name . "($hm->habit_id)";
+            $habit_metric_row .= $hm->habit_name . "&nbsp;<i class='fas fa-edit'></i>" ;
             
             $habit_metric_row .= "</td>
-                <td>" . $hm->influence . "</td>
-                <td>" . $hm->freq_str . "</td>";
+                <td style='text-align: right;'>" . $hm->influence . "</td>
+                <td style='text-align: right;'>" . $hm->freq_str . "</td>";
             foreach($dates as $d) {
                 if ($d < $hm->effective_datetime->format('Y-m-d') 
                 || (!is_null($hm->expire_datetime) && $hm->expire_datetime->format('Y-m-d') < $d)) {
                     $habit_metric_row .= "<td style='background: hsl(0, 0%, 44%);'></td>";
                     continue;
-                }
-                $habit_metric_row .= "<td data-date='$d' data-habit-id='$hm->habit_id' data-habit-name='$hm->habit_name' class='habit-date'>"; // May need to move this down to conditionally check if requirements were met after looping through logs
-                foreach($habit_logs as $hl) {
-                    if ($hl->habit_id == $hm->habit_id && $hl->date == $d) {
-                        switch ($hl->status) {
-                            case 'Completed':
-                                $habit_metric_row .= '<i class="fas fa-check"></i>';
-                                break;
-
-                            case 'Started':
-                                $habit_metric_row .= '<i class="fas fa-hourglass-half"></i>';
-                                break;
-                            
-                            default:
-                                break;
+                } else {
+                    $habit_metric_row .= "<td data-date='$d' data-habit-id='$hm->habit_id' data-habit-name='$hm->habit_name' class='habit-date'><div>"; // May need to move this down to conditionally check if requirements were met after looping through logs
+                    $habit_metric_row .= "<i class='fas fa-plus-circle log-habit'></i>";
+                    $daily_habit_completion_count = 0;
+                    $daily_habit_start_count = 0;
+                    foreach($habit_logs as $hl) {
+                        if ($hl->habit_id == $hm->habit_id && $hl->date == $d) {
+                            switch ($hl->status) {
+                                case 'Completed':
+                                    $daily_habit_completion_count += 1;
+                                    break;
+                                    
+                                    case 'Started':
+                                    $daily_habit_start_count += 1;
+                                    break;
+                                    
+                                    default:
+                                    break;
+                                }
+                            }
                         }
-                    }
+                        if ($daily_habit_completion_count > 0) {
+                            $habit_metric_row .= "<span class='daily-completions'><i class='fas fa-check'></i>x$daily_habit_completion_count</span>"; // Display qty of completed logs
+                        } else {
+                            $habit_metric_row .= "<span class='daily-completions'>&nbsp;</span>";
+                        }
+                        if ($daily_habit_start_count > 0) {
+                            $habit_metric_row .= "<span class='daily-starts'><i class='fas fa-hourglass-half'></i>x$daily_habit_start_count</span>"; // Display qty of started logs 
+                        } else {
+                            $habit_metric_row .= "<span class='daily-starts'>&nbsp;</span>";
+                        }
+                        if ($daily_habit_start_count) {
+                            $habit_metric_row .= "<i class='fas fa-broom clear-habits'></i>";
+                        }
                 }
-                $habit_metric_row .= "</td>";
+                $habit_metric_row .= "</div></td>";
             }
-            
             $habit_metric_row .= "</tr> ";
             echo $habit_metric_row;
         } ?>
@@ -335,7 +352,6 @@
         </tr>
     </tfoot>
 </table>
-<?= return_habit_metric_streak($conn, 9, $today_dt) ?>
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js""></script>
 <script>
@@ -347,7 +363,7 @@ $(document).ready(function() {
             { "visible": false, "targets": groupColumn }
         ],
         "order": [[ groupColumn, 'asc' ], [2, 'desc']],
-        "displayLength": 25,
+        "displayLength": 100,
         "drawCallback": function ( settings ) {
             var api = this.api();
             var rows = api.rows( {page:'current'} ).nodes();
@@ -376,16 +392,16 @@ $(document).ready(function() {
         }
     } );
 
-    function listenForHabitDblClickEvents() {
-        console.log('Start: listenForHabitDblClickEvents');
-        $('td.habit-date').on('dblclick', function (e) {
-            // Shift + Dbl click creates a 'Started' event
-            let tdEl = $(this);
+    function listenForHabitLog() {
+        console.log('Start: listenForHabitLog');
+        $('td.habit-date i.log-habit').on('click', function (e) {
+            // Shift + click creates a 'Started' event
+            let tdEl = $(this).parents('td');
             let status = e.shiftKey ? 'Started' : 'Completed';
             // confirm with user
-            let habitId = $(this).attr('data-habit-id');
-            let habitName = $(this).attr('data-habit-name');
-            let date = $(this).attr('data-date');
+            let habitId = tdEl.attr('data-habit-id');
+            let habitName = tdEl.attr('data-habit-name');
+            let date = tdEl.attr('data-date');
             let verified = confirm(`Are you sure you would like to make a ${status} ${habitName} event for ${date}?`);
             if (verified) {
                 // update db
@@ -415,9 +431,39 @@ $(document).ready(function() {
                 })
             }
         })
-        console.log('Finish: listenForHabitDblClickEvents');
+        console.log('Finish: listenForHabitLog');
     }
-    listenForHabitDblClickEvents();
+    listenForHabitLog();
+
+    function listenForHabitClear() {
+        console.log('Start: listenForHabitClear');
+        $('td.habit-date i.clear-habits').on('click', function (e) {
+            let tdEl = $(this).parents('td');
+            let habitId = tdEl.attr('data-habit-id');
+            let habitName = tdEl.attr('data-habit-name');
+            let date = tdEl.attr('data-date');
+            let verified = confirm(`Are you sure you would like to clear all started habits for ${habitName} on ${date}?`);
+            if (verified) {
+                // update db
+                $.ajax({
+                    type: "POST",
+                    url: '/homebase/resources/ajax/clear-started-habits.php',
+                    dataType: 'JSON',
+                    data: {
+                        'habit_id' : habitId,
+                        'date': date,
+
+                    }
+                }).done(function (responseJSON) {
+                    if (responseJSON.success) {
+                        tdEl.empty().html('<div><i class="fas fa-plus-circle log-habit"></i><span class="daily-completions">&nbsp;</span><span class="daily-starts">&nbsp;</span></div>');
+                    }
+                })
+            }
+        })
+        console.log('Finish: listenForHabitClear');
+    }
+    listenForHabitClear();
 
 
 } );

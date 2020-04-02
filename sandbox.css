@@ -19,6 +19,42 @@ html body table#dataTable tbody tr td:not(:last-child) {
   border-right: 1px dashed black;
 }
 
+html body table#dataTable tbody tr td.habit-date div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+html body table#dataTable tbody tr td.habit-date div i.fa-check {
+  /* color: hsl(120, 100%, 50%); */
+}
+
+html body table#dataTable tbody tr td.habit-date div i.fa-times {
+  /* color: hsl(0, 100%, 50%); */
+}
+
+html body table#dataTable tbody tr td.habit-date div i.fa-plus-circle {
+  font-size: 0.625rem;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+}
+
+html body table#dataTable tbody tr td.habit-date div i.fa-broom {
+  font-size: 0.625rem;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+html body table#dataTable tbody tr td.habit-date div span {
+  width: 2rem;
+}
+
 html body table#dataTable tbody tr td.weekly-requirement-met {
   /* Might end up changing this to interval-requirement-met (i.e. quarter/monthly/weekly) */
   background: rgba(0, 213, 255, 0.5);
@@ -28,19 +64,15 @@ html body table#dataTable tbody tr td.daily-requirement-met {
   background: rgba(0, 255, 0, 0.5);
 }
 
-html body table#dataTable tbody tr td i.fa-check {
-  /* color: hsl(120, 100%, 50%); */
-}
-
-html body table#dataTable tbody tr td i.fa-times {
-  /* color: hsl(0, 100%, 50%); */
-}
-
 html body table#dataTable tbody tr td i.fa-fire {
   color: #ffaa00;
 }
 
 html body table#dataTable tbody tr td i.fa-snowflake {
   color: #00d5ff;
+}
+
+html body table#dataTable tbody tr td i.fa-edit {
+  color: rgba(128, 128, 128, 0.3);
 }
 /*# sourceMappingURL=sandbox.css.map */
