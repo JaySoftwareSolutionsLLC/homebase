@@ -14,7 +14,8 @@
     //---Initialize variables-----------------------------------------------------------
     // $dt_start = new DateTime('monday this week');
     $dt_start = new DateTime('2020-05-13');
-    $dt_end = new DateTime('sunday this week');
+    // $dt_end = new DateTime('sunday this week');
+    $dt_end = new DateTime('sunday next week');
     $today_dt = new DateTime('now');
     
     // All dates between start and end date (inclusive)
