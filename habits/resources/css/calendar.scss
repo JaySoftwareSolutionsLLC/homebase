@@ -3,6 +3,22 @@ html {
         text-align: right;
     }
     body {
+        user-select: none;
+        div#wellness-metrics {
+            button {
+                background: none;
+                border: 1px solid hsl(190, 100%, 50%);
+                border-radius: 0.5rem;
+                padding: 0.5rem;
+                font-size: 1.5rem;
+                margin: 0 1rem;
+                &:hover {
+                    background: hsl(190, 100%, 50%);
+                    color: white;
+                    cursor: pointer;
+                }
+            }
+        }
         table#dataTable {
             tbody {
                 tr {

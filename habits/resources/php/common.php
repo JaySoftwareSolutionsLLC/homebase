@@ -36,6 +36,7 @@ function return_scheduled_time_estimate($date, $habit_metrics, $habit_logs) {
     }
     return $minutes;
 }
+
 function return_influence_points($date, $habit_metrics, $habit_logs, $status = 'Completed') {
     $inf_pts = 0;
     foreach($habit_logs as $hl) {
