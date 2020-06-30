@@ -12,18 +12,19 @@ const START_DATE_STRING_FINANCIAL = 	'January 1st 2020';
 
 // As of January 6th, current target is to earn 86k, invest 10k in ROTH account(s), and save a further 32k cash. This will require only spending $20,770 during the year.
 const ANNUAL_NET_WORTH_CONTRIBUTION_TARGET = 42000;
-const ANNUAL_INCOME_TARGET = 			86000;	// If hit, annual After Tax Income ~$62,770
+const ANNUAL_INCOME_TARGET = 			//82882; // If hit, annual After Tax Income ~$60,770 
+                                        86000;	// If hit, annual After Tax Income ~$62,770
 const ANNUAL_EXPENDITURE_TARGET =		20770;	// If hit and Income Target hit...net worth contribution ~$42,000
 
 define("AVG_DAILY_INCOME_TARGET", number_format((ANNUAL_INCOME_TARGET / 365), 2));
 define("AVG_DAILY_EXPENDITURE_TARGET", number_format((ANNUAL_EXPENDITURE_TARGET / 365), 2));
 
 // DEPRECATED...should not break anything const HOURLY_WAGE_SEAL = 				21.63;
-const HOURLY_WAGES_SEAL = 				array(27.88); // Array value must correspond with HOURLY_WAGES_DATESTRINGS_SEAL date. Referenced in reports/weekly-report/index.php
-const HOURLY_WAGES_DATESTRINGS_SEAL =	array('2019-07-01'); // Array date must correspond with HOURLY_WAGES_SEAL value. Referenced in reports/weekly-report/index.php
-const CASHABLE_PTO_HOURS =              20; // Dont like this setup currently, because as PTO is used and as extra PTO is received I will have to derive and update this. Note: This will drop to zero in June 2019 because all cashable hours will have been cashed out
+const HOURLY_WAGES_SEAL = 				array(27.88, 29.80); // Array value must correspond with HOURLY_WAGES_DATESTRINGS_SEAL date. Referenced in reports/weekly-report/index.php
+const HOURLY_WAGES_DATESTRINGS_SEAL =	array('2019-07-01', '2020-06-29'); // Array date must correspond with HOURLY_WAGES_SEAL value. Referenced in reports/weekly-report/index.php
+const CASHABLE_PTO_HOURS =              0; // Dont like this setup currently, because as PTO is used and as extra PTO is received I will have to derive and update this. Note: This will drop to zero in June because all cashable hours will have been cashed out
 
-const HOURLY_WAGE_RICKS = 				7.80; // Looks like this doesnt change until 2020 when it will jump to 7.80
+const HOURLY_WAGE_RICKS = 				7.80;
 const HOURLY_WAGE_TARGET =				34.82; // Based off 2470 hours in 2020 and net income 86k;
 
 const WEEKLY_INCOME_TARGET = 			AVG_DAILY_INCOME_TARGET * 7;

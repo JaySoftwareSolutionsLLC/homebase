@@ -258,7 +258,7 @@
 			}
 		}
 	}
-	$avg_full_week_ricks_income = $avg_monday_pm_net_income + $avg_thursday_pm_net_income + $avg_saturday_pm_net_income;
+	$avg_full_week_ricks_income = $avg_thursday_pm_net_income + $avg_saturday_pm_net_income;
 
 	$avg_full_week_seal_income = 40 * $correct_hourly;
 	$weeks_left_in_year = $days_left_in_year / 7;
