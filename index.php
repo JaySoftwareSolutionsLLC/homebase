@@ -219,12 +219,13 @@
 	$avg_monday_pm_net_income = 0;
 	$avg_thursday_pm_net_income = 0;
 	$avg_saturday_pm_net_income = 0;
+	$hourly_wage_ricks = HOURLY_WAGE_RICKS;
 	$qry = "	SELECT 	
 					DAYNAME(date) AS 'dow',
 					ROUND( 
 						AVG(
 							CASE
-								WHEN type IN ('AM', 'PM') THEN (tips + (hours * 7.5))
+								WHEN type IN ('AM', 'PM') THEN (tips + (hours * $hourly_wage_ricks))
 								WHEN type IN ('OTB') THEN (tips)
 								ELSE 0
 							END
