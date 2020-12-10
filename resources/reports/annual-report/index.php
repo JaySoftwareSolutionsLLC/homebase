@@ -262,7 +262,7 @@ if ($generated) {
 			$w->hourly_net = 0;
 		}
 		// NET INCOME DIFFERENTIAL
-		$w->income_diff = round(($w->income_net - $w->expenditure_net), 2) ?? 0;
+		$w->income_diff = round((($w->income_net * ESTIMATED_AFTER_TAX_PERCENTAGE / 100) - $w->expenditure_net), 2) ?? 0;
 
 		// CERT HOURS
 		$w->cert_hrs = return_cert_hours($conn, $w->start_day, $w->end_day, 2) ?? 0;
@@ -432,7 +432,7 @@ if ($generated) {
 		// NET HOURLY
 		$d->hourly_net = round(($d->income_net / $d->hours_net), 2) ?? 0;
 		// NET INCOME DIFFERENTIAL
-		$d->income_diff = round(($d->income_net - $d->expenditure_net), 2) ?? 0;
+		$d->income_diff = round((($d->income_net  * ESTIMATED_AFTER_TAX_PERCENTAGE / 100) - $d->expenditure_net), 2) ?? 0;
 		
 		$d->non_bonus_income = $d->income_net - $d->bonuses_seal;
 		// DAILY RECORDS EVALUATION
