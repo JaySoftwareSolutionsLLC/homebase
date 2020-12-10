@@ -3,3 +3,127 @@ Stack trace:
 #0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/ajax/note_cards.php(29): return_days_between_dates(NULL, '2019/06/05')
 #1 {main}
   thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 226
+[27-Sep-2019 20:05:00 America/New_York] PHP Fatal error:  Uncaught Exception: DateTime::__construct(): Failed to parse time string (8.308641975308642) at position 15 (4): Unexpected character in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php:271
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php(271): DateTime->__construct('8.3086419753086...')
+#1 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php(281): return_date_from_str('8.3086419753086...', 'datetime')
+#2 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/ajax/variant_ade.php(16): return_days_between_dates('2019', '8.3086419753086...')
+#3 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 271
+[27-Sep-2019 20:05:58 America/New_York] PHP Fatal error:  Uncaught Exception: DateTime::__construct(): Failed to parse time string (8.308641975308642) at position 15 (4): Unexpected character in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php:271
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php(271): DateTime->__construct('8.3086419753086...')
+#1 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php(281): return_date_from_str('8.3086419753086...', 'datetime')
+#2 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/ajax/variant_ade.php(16): return_days_between_dates('2019', '8.3086419753086...')
+#3 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 271
+[27-Sep-2019 20:06:00 America/New_York] PHP Fatal error:  Uncaught Exception: DateTime::__construct(): Failed to parse time string (8.308641975308642) at position 15 (4): Unexpected character in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php:271
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php(271): DateTime->__construct('8.3086419753086...')
+#1 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php(281): return_date_from_str('8.3086419753086...', 'datetime')
+#2 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/ajax/variant_ade.php(16): return_days_between_dates('2019', '8.3086419753086...')
+#3 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 271
+[27-Sep-2019 20:06:34 America/New_York] PHP Fatal error:  Uncaught Exception: DateTime::__construct(): Failed to parse time string (8.308641975308642) at position 15 (4): Unexpected character in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php:271
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php(271): DateTime->__construct('8.3086419753086...')
+#1 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php(281): return_date_from_str('8.3086419753086...', 'datetime')
+#2 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/ajax/variant_ade.php(16): return_days_between_dates('2019', '8.3086419753086...')
+#3 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 271
+[27-Sep-2019 20:07:01 America/New_York] PHP Fatal error:  Uncaught Exception: DateTime::__construct(): Failed to parse time string (8.308641975308642) at position 15 (4): Unexpected character in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php:271
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php(271): DateTime->__construct('8.3086419753086...')
+#1 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php(281): return_date_from_str('8.3086419753086...', 'datetime')
+#2 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/ajax/variant_ade.php(16): return_days_between_dates('2019', '8.3086419753086...')
+#3 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 271
+[27-Sep-2019 20:07:48 America/New_York] PHP Fatal error:  Uncaught Exception: DateTime::__construct(): Failed to parse time string (8.308641975308642) at position 15 (4): Unexpected character in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php:271
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php(271): DateTime->__construct('8.3086419753086...')
+#1 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php(281): return_date_from_str('8.3086419753086...', 'datetime')
+#2 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/ajax/variant_ade.php(16): return_days_between_dates('2019', '8.3086419753086...')
+#3 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 271
+[27-Sep-2019 20:07:50 America/New_York] PHP Fatal error:  Uncaught Exception: DateTime::__construct(): Failed to parse time string (8.308641975308642) at position 15 (4): Unexpected character in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php:271
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php(271): DateTime->__construct('8.3086419753086...')
+#1 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php(281): return_date_from_str('8.3086419753086...', 'datetime')
+#2 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/ajax/variant_ade.php(16): return_days_between_dates('2019', '8.3086419753086...')
+#3 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 271
+[27-Sep-2019 20:09:04 America/New_York] PHP Fatal error:  Uncaught Exception: DateTime::__construct(): Failed to parse time string (8.308641975308642) at position 15 (4): Unexpected character in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php:271
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php(271): DateTime->__construct('8.3086419753086...')
+#1 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php(281): return_date_from_str('8.3086419753086...', 'datetime')
+#2 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/ajax/variant_ade.php(16): return_days_between_dates('2019', '8.3086419753086...')
+#3 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 271
+[27-Sep-2019 19:41:59 CST6CDT] PHP Parse error:  syntax error, unexpected ';', expecting ',' or ')' in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/ajax/variant_adi.php on line 20
+[02-Oct-2019 14:03:55 CST6CDT] PHP Fatal error:  Uncaught Exception: DateTime::__construct(): Failed to parse time string (1) at position 0 (1): Unexpected character in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php:356
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php(356): DateTime->__construct('1')
+#1 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/ajax/note_cards.php(8): return_end_of_day('1')
+#2 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 356
+[02-Oct-2019 14:03:55 CST6CDT] PHP Fatal error:  Uncaught Exception: DateTime::__construct(): Failed to parse time string (10) at position 0 (1): Unexpected character in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php:356
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php(356): DateTime->__construct('10')
+#1 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/ajax/note_cards.php(8): return_end_of_day('10')
+#2 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 356
+[02-Oct-2019 14:03:55 CST6CDT] PHP Fatal error:  Uncaught Exception: DateTime::__construct(): Failed to parse time string (10/) at position 0 (1): Unexpected character in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php:356
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php(356): DateTime->__construct('10/')
+#1 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/ajax/note_cards.php(8): return_end_of_day('10/')
+#2 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 356
+[02-Oct-2019 14:03:56 CST6CDT] PHP Fatal error:  Uncaught Exception: DateTime::__construct(): Failed to parse time string (10/02/) at position 5 (/): Unexpected character in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php:356
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php(356): DateTime->__construct('10/02/')
+#1 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/ajax/note_cards.php(8): return_end_of_day('10/02/')
+#2 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 356
+[02-Oct-2019 14:03:58 CST6CDT] PHP Fatal error:  Uncaught Exception: DateTime::__construct(): Failed to parse time string (10/02/) at position 5 (/): Unexpected character in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php:356
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php(356): DateTime->__construct('10/02/')
+#1 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/ajax/note_cards.php(8): return_end_of_day('10/02/')
+#2 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 356
+[02-Oct-2019 14:09:23 CST6CDT] PHP Fatal error:  Uncaught Exception: DateTime::__construct(): Failed to parse time string (20) at position 0 (2): Unexpected character in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php:356
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php(356): DateTime->__construct('20')
+#1 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/ajax/note_cards.php(8): return_end_of_day('20')
+#2 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 356
+[02-Oct-2019 14:09:23 CST6CDT] PHP Fatal error:  Uncaught Exception: DateTime::__construct(): Failed to parse time string (201) at position 0 (2): Unexpected character in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php:356
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php(356): DateTime->__construct('201')
+#1 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/ajax/note_cards.php(8): return_end_of_day('201')
+#2 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 356
+[02-Oct-2019 14:09:24 CST6CDT] PHP Fatal error:  Uncaught Exception: DateTime::__construct(): Failed to parse time string (201) at position 0 (2): Unexpected character in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php:356
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php(356): DateTime->__construct('201')
+#1 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/ajax/note_cards.php(8): return_end_of_day('201')
+#2 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 356
+[02-Oct-2019 14:09:25 CST6CDT] PHP Fatal error:  Uncaught Exception: DateTime::__construct(): Failed to parse time string (2019-) at position 4 (-): Unexpected character in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php:356
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php(356): DateTime->__construct('2019-')
+#1 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/ajax/note_cards.php(8): return_end_of_day('2019-')
+#2 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 356
+[02-Oct-2019 14:09:25 CST6CDT] PHP Fatal error:  Uncaught Exception: DateTime::__construct(): Failed to parse time string (2019-) at position 4 (-): Unexpected character in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php:356
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php(356): DateTime->__construct('2019-')
+#1 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/ajax/note_cards.php(8): return_end_of_day('2019-')
+#2 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 356
+[02-Oct-2019 14:09:26 CST6CDT] PHP Fatal error:  Uncaught Exception: DateTime::__construct(): Failed to parse time string (2019-10-) at position 7 (-): Unexpected character in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php:356
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php(356): DateTime->__construct('2019-10-')
+#1 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/ajax/note_cards.php(8): return_end_of_day('2019-10-')
+#2 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 356
+[11-Dec-2019 20:50:57 America/New_York] PHP Recoverable fatal error:  Object of class DateTime could not be converted to string in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/ajax/insert_fitness_lift.php on line 25

@@ -67,3 +67,118 @@ Stack trace:
   thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 374
 [16-Aug-2019 14:42:22 CST6CDT] PHP Parse error:  syntax error, unexpected '}' in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 516
 [16-Aug-2019 14:42:41 CST6CDT] PHP Parse error:  syntax error, unexpected 'function' (T_FUNCTION), expecting '(' in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 543
+[27-Sep-2019 20:01:50 America/New_York] PHP Recoverable fatal error:  Object of class DateTime could not be converted to string in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/index.php on line 646
+[27-Sep-2019 20:02:11 America/New_York] PHP Recoverable fatal error:  Object of class DateTime could not be converted to string in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/index.php on line 646
+[27-Sep-2019 20:02:48 America/New_York] PHP Recoverable fatal error:  Object of class DateTime could not be converted to string in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/index.php on line 646
+[27-Sep-2019 20:03:46 America/New_York] PHP Recoverable fatal error:  Object of class DateTime could not be converted to string in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/index.php on line 646
+[27-Sep-2019 20:04:15 America/New_York] PHP Recoverable fatal error:  Object of class DateTime could not be converted to string in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/index.php on line 646
+[24-Oct-2019 08:03:13 CST6CDT] PHP Fatal error:  require_once(): Failed opening required '/home/jaysoftw/public_html/brettjaybrewster.com/common/resources.php' (include_path='.:/usr/local/php71/pear') in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/login.php on line 11
+[24-Oct-2019 08:03:42 CST6CDT] PHP Fatal error:  require_once(): Failed opening required '/common/resources.php' (include_path='.:/usr/local/php71/pear') in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/login.php on line 11
+[24-Oct-2019 08:04:26 CST6CDT] PHP Fatal error:  require_once(): Failed opening required '/home/jaysoftw/public_html/brettjaybrewster.com/common/resources.php' (include_path='.:/usr/local/php71/pear') in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/login.php on line 12
+[24-Oct-2019 08:04:50 CST6CDT] PHP Fatal error:  require_once(): Failed opening required '/home/jaysoftw/public_html/brettjaybrewster.com/homebase/common/resources.php' (include_path='.:/usr/local/php71/pear') in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/login.php on line 12
+[14-Nov-2019 12:59:09 America/New_York] PHP Fatal error:  Uncaught Error: Call to undefined function int() in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/index.php:553
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/index.php on line 553
+[19-Dec-2019 10:18:17 America/New_York] PHP Fatal error:  Uncaught Error: Call to undefined function int() in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php:15
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php on line 15
+[05-Jan-2020 20:48:03 America/New_York] PHP Fatal error:  Uncaught Exception: DateTime::__construct(): Failed to parse time string (Jan 1 this year) at position 8 (i): The timezone could not be found in the database in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php:352
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php(352): DateTime->__construct('Jan 1 this year')
+#1 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/index.php(136): return_date_from_str('Jan 1 this year')
+#2 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 352
+[05-Jan-2020 20:50:18 America/New_York] PHP Fatal error:  Uncaught Error: Call to undefined function int() in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/index.php:136
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/index.php on line 136
+[12-Jan-2020 22:53:51 America/New_York] PHP Fatal error:  Uncaught Error: Call to a member function fetch_assoc() on boolean in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php:714
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/index.php(519): return_habit_list_html(Object(mysqli))
+#1 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 714
+[31-Jan-2020 15:52:22 CST6CDT] PHP Parse error:  syntax error, unexpected 'createfromdatestring' (T_STRING), expecting variable (T_VARIABLE) or '$' in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/index.php on line 282
+[31-Jan-2020 16:55:39 America/New_York] PHP Fatal error:  Uncaught Error: Non-static method DateTime::format() cannot be called statically in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/sections/finance.php:115
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/index.php(630): include()
+#1 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/sections/finance.php on line 115
+[04-Feb-2020 19:41:02 America/New_York] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php:42
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php on line 42
+[04-Feb-2020 20:27:43 America/New_York] PHP Fatal error:  Uncaught Error: Call to a member function format() on string in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php:129
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php on line 129
+[04-Feb-2020 20:28:38 America/New_York] PHP Fatal error:  Uncaught Error: Call to a member function format() on string in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php:24
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php(96): HabitLog->__construct(4, '2020-01-28 07:4...', 'Completed')
+#1 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php on line 24
+[04-Feb-2020 20:30:04 America/New_York] PHP Fatal error:  Uncaught Error: Call to a member function format() on string in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php:24
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php(96): HabitLog->__construct(4, '2020-01-28 07:4...', 'Completed')
+#1 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php on line 24
+[04-Feb-2020 20:49:12 America/New_York] PHP Fatal error:  Uncaught Exception: DateTime::__construct(): Failed to parse time string (start of year) at position 0 (s): The timezone could not be found in the database in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php:10
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php(10): DateTime->__construct('start of year')
+#1 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php on line 10
+[04-Feb-2020 21:24:25 America/New_York] PHP Fatal error:  Uncaught Exception: DateTime::__construct(): Failed to parse time string (Monday of this week) at position 7 (o): The timezone could not be found in the database in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php:12
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php(12): DateTime->__construct('Monday of this ...')
+#1 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php on line 12
+[04-Feb-2020 21:41:48 America/New_York] PHP Fatal error:  Uncaught Error: Call to undefined function echoreturn_scheduled_time_estimate() in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php:120
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php on line 120
+[06-Feb-2020 18:55:18 America/New_York] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php:813
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php(24): return_habit_metric_streak(NULL, 16, NULL)
+#1 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php(114): HabitMetric->__construct(16, 'Daily Sugar Con...', 'Log consumption', 4, '10.00', 'exactly 1/Day', '10.00')
+#2 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 813
+[06-Feb-2020 18:56:09 America/New_York] PHP Fatal error:  Uncaught Error: Call to a member function bind_param() on boolean in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php:814
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php(25): return_habit_metric_streak(Object(mysqli), 16, Object(DateTime))
+#1 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php(115): HabitMetric->__construct(16, 'Daily Sugar Con...', 'Log consumption', 4, '10.00', 'exactly 1/Day', '10.00')
+#2 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 814
+[06-Feb-2020 18:56:54 America/New_York] PHP Fatal error:  Uncaught Error: Call to a member function bind_param() on boolean in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php:814
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php(25): return_habit_metric_streak(Object(mysqli), 16, Object(DateTime))
+#1 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php(115): HabitMetric->__construct(16, 'Daily Sugar Con...', 'Log consumption', 4, '10.00', 'exactly 1/Day', '10.00')
+#2 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 814
+[06-Feb-2020 18:58:09 America/New_York] PHP Fatal error:  Uncaught Error: Using $this when not in object context in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php:158
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php on line 158
+[06-Feb-2020 19:00:22 America/New_York] PHP Fatal error:  Uncaught Error: Call to undefined method HabitMetric::habit_name() in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php:166
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php on line 166
+[06-Feb-2020 18:19:13 CST6CDT] PHP Parse error:  syntax error, unexpected '}', expecting end of file in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 893
+[06-Feb-2020 18:21:30 CST6CDT] PHP Parse error:  syntax error, unexpected '.', expecting identifier (T_STRING) or variable (T_VARIABLE) or '{' or '$' in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 827
+[06-Feb-2020 19:40:54 America/New_York] PHP Fatal error:  Uncaught Error: Call to a member function format() on string in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php:179
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php on line 179
+[06-Feb-2020 22:21:06 CST6CDT] PHP Parse error:  syntax error, unexpected '$dt_end' (T_VARIABLE) in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php on line 14
+[22-May-2020 12:33:31 CST6CDT] PHP Fatal error:  Uncaught Error: Call to undefined function connect_to_db() in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php on line 6
+[22-May-2020 12:34:21 CST6CDT] PHP Fatal error:  Uncaught Error: Call to undefined function connect_to_db() in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php on line 6
+[22-May-2020 12:34:40 CST6CDT] PHP Fatal error:  Uncaught Error: Call to undefined function connect_to_db() in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php on line 6

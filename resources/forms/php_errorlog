@@ -87,3 +87,46 @@ Stack trace:
 Stack trace:
 #0 {main}
   thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/accounts.php on line 72
+[13-Nov-2019 17:36:17 America/New_York] PHP Fatal error:  Uncaught Error: Call to undefined function Wellness_Dimension() in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/wellness_dimensions.php:23
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/wellness_dimensions.php on line 23
+[13-Nov-2019 17:36:30 America/New_York] PHP Fatal error:  Uncaught Error: Class 'Wellness_Dimension' not found in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/wellness_dimensions.php:23
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/wellness_dimensions.php on line 23
+[13-Nov-2019 17:42:31 America/New_York] PHP Fatal error:  Uncaught ArgumentCountError: Too few arguments to function Wellness_Dimension::__construct(), 3 passed in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/wellness_dimensions.php on line 23 and exactly 4 expected in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/classes/wellness_dimension.php:11
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/wellness_dimensions.php(23): Wellness_Dimension->__construct('1', 'Emotional', 0)
+#1 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/classes/wellness_dimension.php on line 11
+[13-Nov-2019 16:43:20 CST6CDT] PHP Parse error:  syntax error, unexpected 'global' (T_GLOBAL) in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/classes/wellness_dimension.php on line 16
+[13-Nov-2019 16:55:50 CST6CDT] PHP Fatal error:  Constant expression contains invalid operations in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/classes/wellness_dimension.php on line 18
+[13-Nov-2019 16:56:15 CST6CDT] PHP Fatal error:  Constant expression contains invalid operations in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/classes/wellness_dimension.php on line 18
+[13-Nov-2019 18:21:21 America/New_York] PHP Fatal error:  Uncaught Error: Cannot use object of type Wellness_Dimension as array in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/wellness_dimensions.php:24
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/wellness_dimensions.php on line 24
+[13-Nov-2019 18:21:54 America/New_York] PHP Fatal error:  Uncaught Error: Cannot use object of type Wellness_Dimension as array in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/wellness_dimensions.php:24
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/wellness_dimensions.php on line 24
+[13-Nov-2019 18:22:14 America/New_York] PHP Fatal error:  Uncaught Error: Cannot use object of type Wellness_Dimension as array in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/wellness_dimensions.php:24
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/wellness_dimensions.php on line 24
+[13-Nov-2019 18:43:41 America/New_York] PHP Fatal error:  Uncaught Error: Class 'Wellness_Metric' not found in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/classes/wellness_dimension.php:40
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/wellness_dimensions.php(24): Wellness_Dimension->populate_metrics()
+#1 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/classes/wellness_dimension.php on line 40
+[13-Nov-2019 19:10:18 America/New_York] PHP Fatal error:  Uncaught Error: Class 'Wellness_Habit' not found in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/classes/wellness_metric.php:57
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/wellness_dimensions.php(27): Wellness_Metric->populate_habits()
+#1 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/classes/wellness_metric.php on line 57
+[12-Jan-2020 23:12:41 America/New_York] PHP Fatal error:  Uncaught Error: Call to a member function fetch_assoc() on boolean in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php:771
+Stack trace:
+#0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/day_info.php(99): return_habitobj_array(Object(mysqli), '2020-01-12')
+#1 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 771
