@@ -50,7 +50,6 @@ let user = {
 let accounts = {
     'debts' : 0,
     'sAndP' : 0,
-    'tenYearBond' : 0,
 	'seventeenPercent' : 0,
 }
 // Create an array to house start and end values of a given account
@@ -126,7 +125,6 @@ function simulateStarting(year) {
         let thisYearChanges = {
             'debts' : 0,
             'sAndP' : 0,
-            'tenYearBond' : 0,
 			'seventeenPercent' : 0
         };
         // For each step, determine if age for this simulate is within time window
@@ -181,8 +179,8 @@ function simulateStarting(year) {
         // console.log(`simulating ${y} at age ${a}`)
         historicalCase.push(simulateYear(y, a));
         y++;
-        if (y >= '2018') {
-            y = '1950';
+        if (y >= '2019') {
+            y = '1926';
         }
         if (Math.round(a) !== a) {
             a = Math.ceil(a);
@@ -196,11 +194,11 @@ function simulateStarting(year) {
     // console.log(historicalCase);
 }
 
-// call simulateStarting() from 1950 through 2017. This will simulate based on user input the net worth of an individual with the same game-plan starting in each of those years.
+// call simulateStarting() from 1926 through 2019. This will simulate based on user input the net worth of an individual with the same game-plan starting in each of those years.
 function runSimulation() {
     let allSims = [];
-    let year = 1950;
-    for (year; year <= 2017; year++) {
+    let year = 1926;
+    for (year; year <= 2019; year++) {
         allSims.push(simulateStarting(year));
     }
     allSimulations = allSims;
@@ -304,7 +302,7 @@ function arrayToObjectWithAge(array) {
     }
     return object;
 }
-// Assess the users plan. Take their inputs and run a simulation using historical data from 1950-2017 to determine best, worst, median, and average historical cases
+// Assess the users plan. Take their inputs and run a simulation using historical data from 1926-2019 to determine best, worst, median, and average historical cases
 function assessPlan() {
     // Populate user object with relevant info
     fillInUser();
@@ -312,7 +310,7 @@ function assessPlan() {
     fillInAccounts();
     // For each future plan div from UI create a Step object and push it into the steps array
     fillInSteps();
-    // run simulateStarting() from 1950 through 2017. This will simulate based on user input the net worth of an individual with the same game-plan starting in each of those years.
+    // run simulateStarting() from 1926 through 2019. This will simulate based on user input the net worth of an individual with the same game-plan starting in each of those years.
     runSimulation();
     // Determine the worst, best, average, and median simulation
     let wrst = arrayToObjectWithAge(returnWrstHistoricalCase(allSimulations));
@@ -457,7 +455,6 @@ $('button.add-account').on('click', function() {
                     						<label for='acnt-mrkt-${initialAccounts}'>Market</label>
                     						<select id='acnt-mrkt-${initialAccounts}'>
                                                 <option value='sAndP'>S and P 500</option>
-                                                <option value='tenYearBond'>10 Year Bond</option>
 												<option value='seventeenPercent'>Housing Market (17%)</option>
                                             </select>
                     					</div>
@@ -485,7 +482,6 @@ $('button.add-step').on('click', function() {
                         						<select id='step-mrkt-${initialPlans}'>
                                                     <option value='debts'>Debts</option>
                                                     <option value='sAndP'>S and P 500</option>
-                                                    <option value='tenYearBond'>10 Year Bond</option>
 													<option value='seventeenPercent'>Housing Market (17%)</option>
                                                 </select>
                         					</div>
