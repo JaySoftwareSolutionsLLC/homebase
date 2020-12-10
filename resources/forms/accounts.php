@@ -106,7 +106,7 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 			<label for='date'>Date</label>
 			<input id='date' type='date' name='date' value="<?php echo $today;?>"/>
 			<label for='value'>Value</label>
-			<input id='value' type='number' name='value' min='0' step='1'/>
+			<input id='value' type='number' name='value' step='1'/>
 			<button type="submit">Submit</button>
 		</form>
 
@@ -143,12 +143,19 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 					"order": [[ 1, "desc" ]]
 				} );
 
-				function toggleDataSeries(e) {
-					if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
-						e.dataSeries.visible = false;
-					} else {
-						e.dataSeries.visible = true;
-					}
+				function singleClick(e){
+				if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible)
+					e.dataSeries.visible = false;
+				else
+					e.dataSeries.visible = true;
+				e.chart.render();
+				}
+
+				function doubleClick(e){
+					var data = e.chart.options.data;
+					for(var i = 0; i < data.length; i++)
+						data[i].visible = false;
+					e.dataSeries.visible = true;
 					e.chart.render();
 				}
 
@@ -162,10 +169,8 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 						cornerRadius: 5,
 						borderThickness: 3,
 						borderColor: 'hsl(190, 100%, 50%)',
-						//backgroundColor: '#960B39',
-						//fontColor: 'white',
 						contentFormatter: function ( e ) {
-							let str = "<div style='font-size: 1.25rem; font-weight: 900;'>" + e.entries[0].dataPoint.x.toLocaleDateString('en-US'/*, { year: 'numeric', month: 'long',  }*/) + "</div><br/>";
+							let str = "<div style='font-size: 1.25rem; font-weight: 900;'>" + e.entries[0].dataPoint.x.toLocaleDateString('en-US') + "</div><br/>";
 							var arr = [];
 							for(var i = 0; i < e.entries.length; i++) {
 								if(e.entries[i].dataSeries.visible) {
@@ -179,11 +184,31 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 					},
 					legend: {
 						cursor: "pointer",
-						itemclick: toggleDataSeries
+						itemclick: function (e) {
+							
+							// If already clicked once
+							if(e.chart.options.clicked){
+								doubleClick(e);
+								e.chart.options.clicked = false;
+								clearTimeout(this.executeDoubleClick);
+								return;
+							}
+
+							this.executeDoubleClick = setTimeout(function(){
+							e.chart.options.clicked = false;
+							singleClick(e);
+							}, 500);
+
+							e.chart.options.clicked = true;
+						},
 					},
 					axisX: {
 						intervalType: 'month',
 						interval: 1
+					},
+					axisY: {
+						interval: 5000,
+						gridDashType: "dot"
 					},
 					data: [
 <?php
@@ -195,7 +220,7 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 			showInLegend: true,
 			yValueFormatString: '$#,##0',
 			dataPoints: [";
-		$values = return_account_value_over_time($conn, '2019-01-01', $today, $a_id);
+		$values = return_account_value_over_time($conn, '2020-01-01', $today, $a_id);
 		//hidden_var_dump($values);
 		foreach ($values as $date => $val) {
 			$dt = new Datetime($date);
