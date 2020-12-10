@@ -26,7 +26,7 @@ INNER JOIN personal_wellness_habit_metric AS hm
 	ON (h.id = hm.habit_id)
 INNER JOIN personal_wellness_metrics AS m
     ON (hm.metric_id = m.id)
-INNER JOIN personal_wellness_metric_logs AS ml
+LEFT JOIN personal_wellness_metric_logs AS ml
 	ON((`ml`.`id` = (	SELECT `mls`.`id` 
                      	FROM personal_wellness_metric_logs `mls` 
                      	WHERE (`m`.`id` = `mls`.`metric_id`) 
