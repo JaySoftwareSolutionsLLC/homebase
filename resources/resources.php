@@ -139,13 +139,13 @@
 		$default_goal_description = "<h2>$goal_str</h2>
 		<h3><span>Starting Value:</span><span>" . number_format($starting_value, 2) . "</span></h3>
 		<h3><span>Current Value:</span><span>" . number_format($current_value, 2) . "</span></h3>";
-		if ( $projection == 'linear' ) {
-			$default_goal_description .= "<h3><span>Linear Target:</span><span>" . number_format($linear_target, 2) . "</span></h3>";
-		}
-		else if ( $projection == 'polynomial' ) {
-			$default_goal_description .= "<h3><span>Polynomial Target:</span><span>" . number_format($polynomial_target, 2) . "</span></h3>";
+		// if ( $projection == 'linear' ) {
+		// 	$default_goal_description .= "<h3><span>Linear Target:</span><span>" . number_format($linear_target, 2) . "</span></h3>";
+		// }
+		// else if ( $projection == 'polynomial' ) {
+		// 	$default_goal_description .= "<h3><span>Polynomial Target:</span><span>" . number_format($polynomial_target, 2) . "</span></h3>";
 		
-		}
+		// }
 		$default_goal_description .= "<h3><span>Target Value:</span><span>" . number_format($target_value, 2) . "</span></h3>
 		<h3><span>Starting Date:</span><span>$starting_date_str</span></h3>
 		<h3><span>Target Date:</span><span>$target_date_str</span></h3>";
@@ -981,7 +981,8 @@
 							THEN 'S&D Only'
 							WHEN NOT EXISTS(	SELECT *
 											FROM finance_seal_shifts AS fss1
-											WHERE fss1.date = rs.date	)
+											WHERE 	fss1.date = rs.date
+												AND fss1.telecommute = 0	)
 							AND EXISTS(	SELECT *
 											FROM finance_ricks_shifts AS frs1
 											WHERE frs1.date = rs.date	)
