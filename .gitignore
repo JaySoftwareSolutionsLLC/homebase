@@ -1,3 +1,4 @@
 *.css.map
 resources/fontawesome-free-5.8.1-web/
 homebase/
+resources/reports/situation-room/resources/examples/*
