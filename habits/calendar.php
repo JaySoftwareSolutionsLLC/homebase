@@ -14,6 +14,7 @@
 
     //---Initialize variables-----------------------------------------------------------
     $dt_start = new DateTime('monday this week');
+    // $dt_start = new DateTime('saturday last week');
     $dt_end = new DateTime('sunday this week');
     $today_dt = new DateTime('now');
     

@@ -1,0 +1,36 @@
+[18-May-2020 17:09:27 America/New_York] PHP Fatal error:  Uncaught Error: Call to a member function bind_param() on bool in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/habits/calendar.php:57
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/habits/calendar.php on line 57
+[18-May-2020 17:11:40 America/New_York] PHP Fatal error:  Uncaught Error: Call to a member function execute() on bool in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/habits/calendar.php:27
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/habits/calendar.php on line 27
+[18-May-2020 17:12:18 America/New_York] PHP Fatal error:  Uncaught Error: Call to a member function execute() on bool in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/habits/calendar.php:28
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/habits/calendar.php on line 28
+[18-May-2020 17:12:56 America/New_York] PHP Fatal error:  Uncaught Error: Call to a member function execute() on bool in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/habits/calendar.php:28
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/habits/calendar.php on line 28
+[18-May-2020 17:13:48 America/New_York] PHP Fatal error:  Uncaught Error: Call to a member function bind_param() on bool in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/habits/calendar.php:73
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/habits/calendar.php on line 73
+[18-May-2020 17:14:19 America/New_York] PHP Fatal error:  Uncaught Error: Call to a member function bind_param() on bool in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/habits/calendar.php:73
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/habits/calendar.php on line 73
+[18-May-2020 17:14:21 America/New_York] PHP Fatal error:  Uncaught Error: Call to a member function bind_param() on bool in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/habits/calendar.php:73
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/habits/calendar.php on line 73
+[18-May-2020 17:15:16 America/New_York] PHP Fatal error:  Uncaught Error: Call to a member function execute() on bool in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/habits/calendar.php:28
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/habits/calendar.php on line 28
+[18-May-2020 17:15:33 America/New_York] PHP Fatal error:  Uncaught Error: Call to a member function execute() on bool in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/habits/calendar.php:28
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/habits/calendar.php on line 28
