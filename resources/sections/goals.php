@@ -82,6 +82,16 @@
 		
 		echo return_timed_goal_progress_bar_html('Opt. Health', 'goal-optimal-health', 0, 100, (100 * $optimal_health_percentage), null, null); // Defined in homebase/resources/resources.php
 	}
+	else if ($year == '2020') {
+		# Fourth Quarter
+		echo return_timed_goal_progress_bar_html('Family Habit App', 'family-app', 0, 9, 7, '2020-10-01', '2020-12-31', 'now');
+		
+		echo return_timed_goal_progress_bar_html('Become Kratos', 'become-kratos', 0, 11, 5, '2020-10-01', '2020-12-31', 'now');
+		
+		echo return_timed_goal_progress_bar_html('Yale SOWB', 'yale-sowb', 0, 8, 7, '2020-10-01', '2020-12-31', 'now');
+		
+		echo return_timed_goal_progress_bar_html('MBA Apps', 'mba-apps', 0, 10, 9, '2020-10-01', '2020-12-31', 'now');
+	}
 ?>
 
 		</div>
