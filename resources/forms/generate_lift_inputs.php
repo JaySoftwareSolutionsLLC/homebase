@@ -47,7 +47,27 @@
 			<div class='equipment-inputs'>
 <?php
 			foreach ($equipments as $e) {
-				$str = "<span class='equipment-input checked'><label for='equipment-$e->id'>$e->name</label><input type='checkbox' name='equipments[]' id='equipment-$e->id' value='$e->id' class='equipment' checked></span>";
+				switch ($e->id) {
+					case 5:
+					case 6:
+					case 7:
+					case 10:
+					case 11:
+					case 12:
+						$checked = false;
+						break;
+					
+					default:
+						$checked = true;
+						break;
+				}
+				$str = "<span class='equipment-input ";
+				$str .= $checked ? "checked" : "";
+				$str .= "'>
+							<label for='equipment-$e->id'>$e->name</label>
+							<input type='checkbox' name='equipments[]' id='equipment-$e->id' value='$e->id' class='equipment' ";
+				$str .= $checked ? "checked" : "";
+				$str .= "></span>";
 				echo $str;
 			}
 ?>
