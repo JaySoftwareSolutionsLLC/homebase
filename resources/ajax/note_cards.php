@@ -23,6 +23,7 @@ $note_type_icons['reminder'] = "<i title='reminder' class='fas fa-bell'></i>";
 $note_type_icons['idea'] = "<i title='idea' class='fas fa-lightbulb' style='color: hsla(50, 100%, 50%, 1);'></i>";
 $note_type_icons['thought'] = "<i title='thought' class='fas fa-brain' style='color: hsla(0, 100%, 80%, 1);'></i>";
 $note_type_icons['quote'] = "<i title='quote' class='fas fa-quote-right'></i>";
+$note_type_icons['study'] = "<i title='study' class='fas fa-university' style='color: hsla(60, 100%, 80%, 1);'></i>";
 $note_type_icons['lesson'] = "<i title='lesson' class='fas fa-graduation-cap'></i>";
 $note_type_icons['book to read'] = "<i title='book to read' class='fas fa-book'></i>";
 $note_type_icons['learning resource'] = "<i title='learning resource' class='fas fa-glasses'></i>";
@@ -31,6 +32,7 @@ $note_type_icons['habit'] = "<i title='habit' class='fas fa-atom' style='color: 
 $note_type_icons['metric'] = "<i title='metric' class='fas fa-chart-line'></i>";
 $note_type_icons['concept'] = "<i title='concept' class='fas fa-map-marked' style='color: hsla(320, 100%, 50%, 1);'></i>";
 $note_type_icons['decision'] = "<i title='decision' class='fas fa-map-signs' style='color: hsla(280, 100%, 50%, 1);'></i>";
+$note_type_icons['milestone'] = "<i title='milestone' class='fas fa-bookmark' style='color: hsla(0, 100%, 50%, 1);'></i>";
 
 //echo "$date_start - $date_end";
 

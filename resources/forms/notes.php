@@ -106,9 +106,11 @@ $conn->close();
 				<option value='book to read' <?php if ($old_info['type'] == 'book to read') echo "selected"; ?>>Book To Read</option>
 				<option value='habit' <?php if ($old_info['type'] == 'habit') echo "selected"; ?>>Habit</option>
 				<option value='quote' <?php if ($old_info['type'] == 'quote') echo "selected"; ?>>Quote</option>
+				<option value='study' <?php if ($old_info['type'] == 'study') echo "selected"; ?>>Study</option>
 				<option value='metric' <?php if ($old_info['type'] == 'metric') echo "selected"; ?>>Metric</option>
 				<option value='concept' <?php if ($old_info['type'] == 'concept') echo "selected"; ?>>Concept</option>
 				<option value='decision' <?php if ($old_info['type'] == 'decision') echo "selected"; ?>>Decision</option>
+				<option value='milestone' <?php if ($old_info['type'] == 'milestone') echo "selected"; ?>>Milestone</option>
 			</select>
 			<label for='summary-input'>Summary</label>
 			<span class='char-count'>
@@ -152,9 +154,11 @@ $conn->close();
 						<option value='book to read'>Book To Read</option>
 						<option value='habit'>Habit</option>
 						<option value='quote'>Quote</option>
+						<option value='study'>Study</option>
 						<option value='metric'>Metric</option>
 						<option value='concept'>Concept</option>
 						<option value='decision'>Decision</option>
+						<option value='milestone'>Milestone</option>
 					</select>
 				</span>
 				<span class='flex-input'>
