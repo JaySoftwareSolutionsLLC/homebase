@@ -100,7 +100,7 @@ function dateToAge(dob, date) {
 // ...I think it takes a current Net inflation and then adds to it the inflation from the previous year...if that's the case then it's erroneous b/c not weighted?
 // Example: netInf = 7%, annInf = 10% --> ((1.07*1.1)-1)*10000 / 100
 function returnNetInf(netInf, annInf) {
-    return Math.round(((((netInf + 100) / 100) * ((annInf + 100) / 100)) - 1) * 10000) / 100;
+    return Math.round(((((netInf + 100) / 100) * ((annInf + 100) / 100)) - 1) * 1000000) / 10000;
 }
 // Determine net worth from acnts array
 function netWorth(acnts) {
@@ -120,6 +120,8 @@ function inflationAdjust(amnt, netInflation) {
 // 
 function simulateStarting(year) {
     function simulateYear(yr, age) {
+        console.log(`Simulation: age ${age} > ${yr}`);
+
         let currentSteps = [];
         // Define an array to house changes user is expecting for relevant steps this year. All initially begin at 0
         let thisYearChanges = {
@@ -141,12 +143,16 @@ function simulateStarting(year) {
                 thisYearChanges[account];
             }
         }
+        console.log('Changes:');
+        console.log(thisYearChanges);
+
         let percentOfYear = 1;
         if (Math.round(age) !== age) { // If age is not an integer then we want to only calculate a percent of that year...I think there is a bug here somewhere
             percentOfYear = Math.round((Math.ceil(age) - age) * 100) / 100;
         }
         let debt = thisSimAccounts['debts'];
-        if (debt !== 0) {
+        if (debt !== 0 || thisYearChanges['debts'] != 0) {
+            console.log(user['aggInt']);
             debt *= (100 + (user['aggInt'] * percentOfYear)) / 100; // Account for interest
             debt -= (thisYearChanges['debts'] * percentOfYear); // Subtract out debt repayments
             if (debt <= 0) {
@@ -160,11 +166,15 @@ function simulateStarting(year) {
                 thisSimAccounts[property] *= (100 + (percentOfYear * markets[property][yr])) / 100;
                 thisSimAccounts[property] += (percentOfYear * thisYearChanges[property]);
                 thisSimAccounts[property] = Math.round(thisSimAccounts[property]);
-                // console.log(markets[property][yr]);
             }
         }
         let annInf = inflation[yr] * percentOfYear;
+        console.log(`Account Values:`);
+        console.log(thisSimAccounts);
+        console.log(`${netInf} | ${annInf}`)
         netInf = returnNetInf(netInf, annInf);
+        console.log(`${netInf}`);
+        console.log(inflationAdjust(netWorth(thisSimAccounts), netInf));
         // return netWorth(thisSimAccounts); // Used for net worths that are NOT inflation adjusted
         return inflationAdjust(netWorth(thisSimAccounts), netInf); // Return an inflation adjusted net worth
     }
