@@ -16,7 +16,7 @@
 	$today_time = time();
 	$today_date = date('Y-m-d');
 	$today_datetime = new DateTime();
-	$weight_redistribution_time = 120; // in seconds
+	$weight_redistribution_time = 240; // in seconds
 	$workout_str = '';
 
 // Retrieve all of the muscle info
