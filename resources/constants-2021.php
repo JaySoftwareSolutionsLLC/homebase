@@ -21,6 +21,8 @@ define("AVG_DAILY_EXPENDITURE_TARGET", number_format((ANNUAL_EXPENDITURE_TARGET 
 const HOURLY_WAGES_SEAL = 				array(29.80); // Array value must correspond with HOURLY_WAGES_DATESTRINGS_SEAL date. Referenced in reports/weekly-report/index.php
 const HOURLY_WAGES_DATESTRINGS_SEAL =	array('2020-06-29'); // Array date must correspond with HOURLY_WAGES_SEAL value. Referenced in reports/weekly-report/index.php
 const CASHABLE_PTO_HOURS =              0; // Dont like this setup currently, because as PTO is used and as extra PTO is received I will have to derive and update this. Note: This will drop to zero in June because all cashable hours will have been cashed out
+const REMAINING_BONUSES =               1000 + 1250;
+const REMAINING_EMP_401K_DELTA =        500 + 1800 + 2200; // Vestment increase + Safe Harbor + Profit Sharing
 
 const HOURLY_WAGE_RICKS = 				7.80;
 const HOURLY_WAGE_TARGET =				38.71; // (238 working days * 8 hrs / day) + 11 hrs @ Ricks / week * 40 = 2454 (Hoping Ricks opens back up by April)

@@ -294,7 +294,7 @@
 	}
 	$appreciated_EOY_accounts_total += $account_types['unreceived ATI']; // Add unreceived ATI because this is not housed in accounts array
 
-	$theoretical_future_pretax_income = ( CASHABLE_PTO_HOURS * $correct_hourly) + (($avg_full_week_ricks_income + $avg_full_week_seal_income) * $weeks_left_in_year);
+	$theoretical_future_pretax_income = ( CASHABLE_PTO_HOURS * $correct_hourly) + (($avg_full_week_ricks_income + $avg_full_week_seal_income) * $weeks_left_in_year) + REMAINING_BONUSES + REMAINING_EMP_401K_DELTA;
 	$theoretical_EOY_net_worth = $appreciated_EOY_accounts_total + round((($theoretical_future_pretax_income) * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) - (AVG_DAILY_EXPENDITURE_TARGET * $days_left_in_year) , 0 ); // In addition to projected account values
 	$theoretical_income_this_year = $net_income + $theoretical_future_pretax_income;
 	$days_financially_free = return_financial_freedom($accounts, AVG_DAILY_EXPENDITURE_TARGET); //floor(($account_types['liquid cash'] + $account_types['unreceived ATI'] + $account_types['loaned']) / AVG_DAILY_EXPENDITURE_TARGET);
@@ -302,7 +302,7 @@
 	$financial_freedom_datetime->modify("+$days_financially_free day");
 	// var_dump($financial_freedom_datetime);
 
-	$theoretical_net_worth_contribution = round((($net_income + ( CASHABLE_PTO_HOURS * $correct_hourly) + (($avg_full_week_ricks_income + $avg_full_week_seal_income) * $weeks_left_in_year)) * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) - ($net_expenditure + (AVG_DAILY_EXPENDITURE_TARGET * $days_left_in_year)) , 0 ); // Theoretical NW Cont. if I grind out 3 days/week @ Ricks and don't take any PTO @ S&D
+	$theoretical_net_worth_contribution = round((($net_income + $theoretical_future_pretax_income) * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) - ($net_expenditure + (AVG_DAILY_EXPENDITURE_TARGET * $days_left_in_year)) , 0 ); // Theoretical NW Cont. if I grind out 3 days/week @ Ricks and don't take any PTO @ S&D
 	$opportunity_surplus = round($theoretical_net_worth_contribution - ANNUAL_NET_WORTH_CONTRIBUTION_TARGET , 0 );	
 
 	$current_est_nw_contribution = ( $net_income * ( ESTIMATED_AFTER_TAX_PERCENTAGE / 100 ) ) - ( $net_expenditure );
