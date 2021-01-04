@@ -140,7 +140,7 @@
 		$annual_check_adjustment = (-1 * 2 * 8 * 27.88) + (-62.5); // 2 days in 2020 checks were from hours worked in 2019 plus a $62.50 healthcare waive bonus 
 	}
 	else {
-		$annual_check_adjustment = (-1 * 2 * 4 * 29.80); // 4 days in 2021 checks were from hours worked in 2020
+		$annual_check_adjustment = (-1 * 2 * 0 * 29.80); // 4 days in 2021 checks were from hours worked in 2020
 	}
 	// Not sure that the above is accurate...we're subtracting from every year but that would be a net loss...
 	$q = "SELECT MAX(end_payperiod) FROM finance_seal_income WHERE date >= '$start_date_financial' AND date <= '$end_date_financial' AND type = 'check'";
