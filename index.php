@@ -20,8 +20,11 @@
 	else if ( $year == '2019' ) {
 		include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/constants-2019.php');
 	}
-	else {
+	else if ( $year == '2020' ) {
 		include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/constants-2020.php');
+	}
+	else {
+		include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/constants-2021.php');
 	}
 
 //---CONNECT TO DATABASE------------------------------------------------------------
@@ -38,6 +41,11 @@
 		$today_time = strtotime('December 31st 2019');
 		$today_date = date('Y-m-d', mktime(0, 0, 0, 12, 31, 2019));
 		$today_datetime = new DateTime('December 31st 2019');
+	}
+	else if ($year == '2020') {
+		$today_time = strtotime('December 31st 2020');
+		$today_date = date('Y-m-d', mktime(0, 0, 0, 12, 31, 2020));
+		$today_datetime = new DateTime('December 31st 2020');
 	}
 	else {
 		$today_time = time();
@@ -56,7 +64,7 @@
 	$end_date_financial = $today_date;
 	$start_time_financial = strtotime($start_date_financial);
 	$days_active_financial = ceil(($today_time - $start_time_financial) / (SEC_IN_DAY));
-	if ($year == '2018' || $year == '2019') {
+	if ($year == '2018' || $year == '2019' || $year == '2020') {
 		$days_left_in_year_financial = 0;
 	}
 	else {
@@ -128,9 +136,13 @@
 	else if ($year == '2019') {
 		$annual_check_adjustment = (-1 * 11 * 8 * 25) + (-62.5); // 11 days in 2019 checks were from hours worked in 2018 plus a $62.50 healthcare waive bonus 
 	}
-	else {
-		// TEMPORARY. Need to remove this until I add back in first check. $annual_check_adjustment = (-1 * 2 * 8 * 27.88) + (-62.5); // 2 days in 2020 checks were from hours worked in 2019 plus a $62.50 healthcare waive bonus 
+	else if ($year == '2020') {
+		$annual_check_adjustment = (-1 * 2 * 8 * 27.88) + (-62.5); // 2 days in 2020 checks were from hours worked in 2019 plus a $62.50 healthcare waive bonus 
 	}
+	else {
+		$annual_check_adjustment = (-1 * 2 * 4 * 29.80); // 4 days in 2021 checks were from hours worked in 2020
+	}
+	// Not sure that the above is accurate...we're subtracting from every year but that would be a net loss...
 	$q = "SELECT MAX(end_payperiod) FROM finance_seal_income WHERE date >= '$start_date_financial' AND date <= '$end_date_financial' AND type = 'check'";
 	$res = $conn->query($q);
 	$row = mysqli_fetch_row($res);
@@ -146,6 +158,9 @@
 	}
 	else if ($year == '2019') {
 		$unreceived_seal_income = 325;
+	}
+	else if ($year == '2020') {
+		$unreceived_seal_income = 870; // Not sure if this is right??? 
 	}
 	else {
 		$fuse = 0;
