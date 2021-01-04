@@ -99,16 +99,27 @@
 
 		echo "</div>"; // End row div
 
-		$opportunity_surplus_info = return_finance_stat_info_html('Opportunity Surplus', 'Determine amount of $ I can spend and still hit annual net worth contribution goal', '(($net_income + ( CASHABLE_PTO_HOURS * $correct_hourly) + (($avg_full_week_ricks_income + $avg_full_week_seal_income) * $weeks_left_in_year)) * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) - ($net_expenditure + (AVG_DAILY_EXPENDITURE_TARGET * $days_left_in_year)) - ANNUAL_NET_WORTH_CONTRIBUTION_TARGET', array('Work Mon/Thu/Sat PMs @ Ricks', 'Cash out all PTO', 'Future ADE = Target ADE'), 'Accounts for seasonality');
+		$opportunity_surplus_info = return_finance_stat_info_html('Opportunity Surplus'
+																, 'Determine amount of $ I can spend and still hit annual net worth contribution goal'
+																, '(($net_income + ( CASHABLE_PTO_HOURS * $correct_hourly) + (($avg_full_week_ricks_income + $avg_full_week_seal_income) * $weeks_left_in_year) + REMAINING_BONUSES + REMAINING_EMP_401K_DELTA) * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) - ($net_expenditure + (AVG_DAILY_EXPENDITURE_TARGET * $days_left_in_year)) - ANNUAL_NET_WORTH_CONTRIBUTION_TARGET'
+																, array('Work Thu/Sat PMs @ Ricks', 'Cash out all PTO', 'Future ADE = Target ADE'), 'Accounts for seasonality');
 		echo return_finance_stat_html( 'Opportunity Surplus', "$" . number_format($opportunity_surplus), '', '', $opportunity_surplus_info, $opportunity_surplus_font_color );
 	
-		$theoretical_age_60_ADW_info = return_finance_stat_info_html('Theoretical Age 60 ADW', 'Determine Average Daily Withdrawal from Investments at age 60', '', array('exp_roi is hit each year for each account (or avg ROI is equal to selected variant)'), 'Only considers ROTH and taxable account types.');
+		$theoretical_age_60_ADW_info = return_finance_stat_info_html('Theoretical Age 60 ADW'
+																   , 'Determine Average Daily Withdrawal from Investments at age 60'
+																   , ''
+																   , array('exp_roi is hit each year for each account (or avg ROI is equal to selected variant)')
+																   , 'Only considers ROTH and taxable account types.');
 		echo return_finance_stat_html( 'Age 60 ADW', "$" . number_format( $theoretical_age_60_annual_withdrawal_rate / 365.25 , 2 ) . "/day", '', '', $theoretical_age_60_ADW_info, '#FFF', 'stat-age-60-adw', array('5' => '5%', '7' => '7%','8' => '8%','10' => '10%','12' => '12%') );
 	
 		$theoretical_eoy_nw_info = return_finance_stat_info_html('Theoretical EOY Net Worth', 'Determine Net Worth on last day of year if I earn expected ROI on investments and earn my theoretical income amount.', 'appreciated account values + (theoretical future income * take home %) - (Target ADE * days left in year)');
 		echo return_finance_stat_html('Theoretical EOY Net Worth',"$" . number_format($theoretical_EOY_net_worth), '', '', $theoretical_eoy_nw_info);
 	
-		$theoretical_income_info = return_finance_stat_info_html('Theoretical Income', 'Determine 2019 pre-tax income', 'Current Income + (Cashable PTO Hours * Current Hourly Wage) + ((Avg Weekly Ricks Income + Avg Weekly Seal Income) * Weeks left in year )', array('Work all regular shifts', 'Cashout all PTO', 'No raises', 'No bonuses'), 'Accounts for seasonality');
+		$theoretical_income_info = return_finance_stat_info_html('Theoretical Income'
+															   , 'Determine 2019 pre-tax income'
+															   , 'Current Income + (Cashable PTO Hours * Current Hourly Wage) + ((Avg Weekly Ricks Income + Avg Weekly Seal Income) * Weeks left in year ) + REMAINING_BONUSES + REMAINING_EMP_401K_DELTA'
+															   , array('Work all regular shifts', 'Cashout all PTO', 'No raises', 'No bonuses')
+															   , 'Accounts for seasonality');
 		echo return_finance_stat_html('Theoretical Income', "$" . number_format($theoretical_income_this_year), '', '', $theoretical_income_info, '', 'stat-theoretical-income', array('SD' => 'S&D', 'MPM' => 'Mon', 'RPM' => 'Thur', 'SPM' => 'Sat', 'SAM' => 'AM'));
 
 		$days_financially_free_info = return_finance_stat_info_html('Days Financially Free', 'Determine the number of days that I could not work consecutively before having to dip into retirement accounts', 'Liquid Cash / ADE', array('My average expenditure during hiatus equals ADE'), '');
