@@ -1,7 +1,7 @@
 <?php 
 // Include resources
 include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/resources.php');
-include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/constants.php');
+include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/constants-2021.php');
 // Connect to DB
 $conn = connect_to_db();
 // Initialize variables
@@ -62,8 +62,15 @@ if ($res->num_rows > 0) {
 						</tr>";
     }
 }
-
-$qry = "SELECT DAYNAME(date) AS 'dow', type, AVG(tips + (hours * " . HOURLY_WAGE_RICKS . ")) AS 'net income', AVG((tips / hours) + 7.5) AS 'hourly wage' FROM `finance_ricks_shifts` WHERE type <> 'otb' GROUP BY DAYNAME(date), type ORDER BY DAYOFWEEK(date)";
+$one_year_ago_dt = new \DateTime();
+$one_year_ago_str = $one_year_ago_dt->modify('-1 year')->format('Y-m-d');
+$qry = "SELECT DAYNAME(date) AS 'dow', type, AVG(tips + (hours * " . HOURLY_WAGE_RICKS . ")) AS 'net income', AVG((tips / hours) + " . HOURLY_WAGE_RICKS . ") AS 'hourly wage' 
+		FROM `finance_ricks_shifts` 
+		WHERE type <> 'otb'
+			AND date >= '$one_year_ago_str'
+		GROUP BY DAYNAME(date), type 
+		HAVING COUNT(*) >= 3
+		ORDER BY DAYOFWEEK(date)";
 $res = $conn->query($qry);
 if ($res->num_rows > 0) {
 	$shifts = array();

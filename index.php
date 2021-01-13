@@ -257,6 +257,7 @@
 					(MONTH(date) = MONTH(CURRENT_DATE)
 					AND DAY(date) >= DAY(CURRENT_DATE) ) 
 					)
+				AND YEAR(date) >= ($year - 2)
 				GROUP BY DAYNAME(date) ";
 	$res = $conn->query($qry);
 	if ($res->num_rows > 0) {
