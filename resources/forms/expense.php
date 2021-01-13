@@ -12,8 +12,8 @@ $entry_msg = "Welcome to the expenses page.";
 
 // If variables have been posted insert into db
 if(isset($_POST['date']) && isset($_POST['name']) && isset($_POST['type']) && isset($_POST['amount'])) {
-	$qry = "INSERT INTO finance_expenses (date, name, type, subtype, amount)
-	VALUES ('" . $_POST['date'] . "', '" . $_POST['name'] . "', '" . $_POST['type'] . "', '" . $_POST['subtype'] . "', " . $_POST['amount'] . ");";
+	$qry = "INSERT INTO finance_expenses (date, name, type, subtype, amount, jss_percentage)
+	VALUES ('" . $_POST['date'] . "', '" . $_POST['name'] . "', '" . $_POST['type'] . "', '" . $_POST['subtype'] . "', " . $_POST['amount'] . ", " . $_POST['jss_percentage'] . ");";
 
 	if ($conn->query($qry) === TRUE) {
     	$entry_msg = "New record created successfully";
@@ -22,7 +22,7 @@ if(isset($_POST['date']) && isset($_POST['name']) && isset($_POST['type']) && is
 	}
 }
 
-$qry = "SELECT name, date, type, subtype, amount FROM finance_expenses WHERE date >= '$start_date' ORDER BY date DESC;";
+$qry = "SELECT name, date, type, subtype, amount, jss_percentage FROM finance_expenses WHERE date >= '$start_date' ORDER BY date DESC;";
 $res = $conn->query($qry);
 if ($res->num_rows > 0) {
 	$data_log = '';
@@ -33,6 +33,7 @@ if ($res->num_rows > 0) {
 						<td>" . $row['type'] . "</td>
 						<td>" . $row['subtype'] . "</td>
 						<td style='text-align: right;'>$" . nf_omit_zeros($row['amount'], 2) . "</td>
+						<td style='text-align: right;'>" . $row['jss_percentage'] . "</td>
 						</tr>";
     }
 }
@@ -77,6 +78,8 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 				<input id='subtype' type='text' name='subtype'/>
 				<label for='amount'>Amount</label>
 				<input id='amount' type='number' name='amount' min='0' step='0.01'/>
+				<label for='jss_percentage'>JSS Percentage</label>
+				<input id='jss_percentage' type='number' name='jss_percentage' min='0' step='0.01' value='0'/>
 				<button type="submit">Submit</button>
 			</form>
 
@@ -88,6 +91,7 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 						<th>Type</th>
 						<th>Subtype</th>
 						<th>Amount</th>
+						<th>JSS %</th>
 					</tr>
 				</thead>
 				<?php echo $data_log; ?>

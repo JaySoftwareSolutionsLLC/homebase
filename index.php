@@ -139,10 +139,12 @@
 	else if ($year == '2020') {
 		$annual_check_adjustment = (-1 * 2 * 8 * 27.88) + (-62.5); // 2 days in 2020 checks were from hours worked in 2019 plus a $62.50 healthcare waive bonus 
 	}
-	else {
-		$annual_check_adjustment = (-1 * 2 * 0 * 29.80); // 4 days in 2021 checks were from hours worked in 2020
+	else if ($year == '2021') {
+		$annual_check_adjustment = (-1 * 4 * 8 * 29.80); // 4 days in 2021 checks were from hours worked in 2020
 	}
-	// Not sure that the above is accurate...we're subtracting from every year but that would be a net loss...
+	else {
+		$annual_check_adjustment = (-1 * 0 * 8 * 29.80); // 
+	}
 	$q = "SELECT MAX(end_payperiod) FROM finance_seal_income WHERE date >= '$start_date_financial' AND date <= '$end_date_financial' AND type = 'check'";
 	$res = $conn->query($q);
 	$row = mysqli_fetch_row($res);
@@ -154,13 +156,13 @@
 	$four_pm_seconds = (60 * 60 * 16);
 	$unreceived_seal_income = 0;
 	if ($year == '2018') {
-		$unreceived_seal_income = 200;
+		$unreceived_seal_income = 2263; // 11 * 8 * 25 + 62.5
 	}
 	else if ($year == '2019') {
-		$unreceived_seal_income = 325;
+		$unreceived_seal_income = 509; // 2 * 8 * 27.88 + 62.5
 	}
 	else if ($year == '2020') {
-		$unreceived_seal_income = 870; // Not sure if this is right??? 
+		$unreceived_seal_income = 954; // 4 * 8 * 29.80
 	}
 	else {
 		$fuse = 0;
