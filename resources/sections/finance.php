@@ -120,7 +120,7 @@
 															   , 'Current Income + (Cashable PTO Hours * Current Hourly Wage) + ((Avg Weekly Ricks Income + Avg Weekly Seal Income) * Weeks left in year ) + REMAINING_BONUSES + REMAINING_EMP_401K_DELTA'
 															   , array('Work all regular shifts', 'Cashout all PTO', 'No raises', 'No bonuses')
 															   , 'Accounts for seasonality');
-		echo return_finance_stat_html('Theoretical Income', "$" . number_format($theoretical_income_this_year), '', '', $theoretical_income_info, '', 'stat-theoretical-income', array('SD' => 'S&D', 'MPM' => 'Mon', 'RPM' => 'Thur', 'SPM' => 'Sat', 'SAM' => 'AM'));
+		echo return_finance_stat_html('Theoretical Income', "$" . number_format($theoretical_income_this_year), '', '', $theoretical_income_info, '', 'stat-theoretical-income', array('SD' => 'S&D', 'MPM' => 'M', 'TPM' => 'T', 'WPM' => 'W', 'RPM' => 'R', 'FPM' => 'F', 'SPM' => 'S'));
 
 		$days_financially_free_info = return_finance_stat_info_html('Days Financially Free', 'Determine the number of days that I could not work consecutively before having to dip into retirement accounts', 'Liquid Cash / ADE', array('My average expenditure during hiatus equals ADE'), '');
 		echo return_finance_stat_html('FF Timeline', $financial_freedom_datetime->format('M jS, Y'), "($days_financially_free days)", '', $days_financially_free_info, '#FFF', 'stat-ff', array('45' => '$45', '60' => '$60', '75' => '$75', '100' => '$100'));
@@ -197,6 +197,9 @@ var chart = new CanvasJS.Chart("account-allocation-graph", {
 				break;
 			case 'depreciating asset' :
 				$str .= " , color: 'hsl(30, 100%, 50%)', exploded: true, ";
+				break;
+			case 'crypto' :
+				$str .= " , color: 'hsl(60, 100%, 50%)', exploded: true, ";
 				break;
 		}
 		$str .= " }, ";

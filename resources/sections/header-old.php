@@ -25,8 +25,9 @@
 	<div class="right">
 		<nav>
 			<a href="/homebase/habits/calendar.php" target="_blank">Habit Calendar</a>
-			<a href="https://tools.siteground.com/filemanager?siteId=TEFyMFlITUpJUT09" target="_blank">SiteGround</a>
-			<a href="https://siteground332.com/phpmyadmin/index.php?lang=en" target="_blank">phpMyAdmin</a>
+			<a href="https://secure332.sgcpanel.com:2083/cpsess9548072040/frontend/Crystal/index.php" target="_blank">cPanel</a>
+			<a href="https://secure332.sgcpanel.com:2083/cpsess6924724625/3rdparty/phpMyAdmin/index.php" target="_blank">phpMyAdmin</a>
+			<a href="https://secure332.sgcpanel.com:2096/cpsess0106124978/webmail/Crystal/index.html?mailclient=horde" target="_blank">webmail</a>
 			<a href="/homebase/resources/forms/day_info.php" target="_blank">Daily</a>
 			<a href="/homebase/resources/reports/weekly-report/index.php" target="_blank">Week</a>
 			<a href="/homebase/resources/reports/monthly-report/index.php" target="_blank">Month</a>
@@ -37,8 +38,9 @@
 		<img src='/homebase/resources/assets/images/icon-hamburger-nav-white.png'/>
 		<nav>
 		<a href="/homebase/habits/calendar.php" target="_blank">Habit Calendar</a>
-			<a href="https://tools.siteground.com/filemanager?siteId=TEFyMFlITUpJUT09" target="_blank">SiteGround</a>
-			<a href="https://siteground332.com/phpmyadmin/index.php?lang=en" target="_blank">phpMyAdmin</a>
+			<a href="https://secure332.sgcpanel.com:2083/cpsess9548072040/frontend/Crystal/index.php" target="_blank">cPanel</a>
+			<a href="https://secure332.sgcpanel.com:2083/cpsess6924724625/3rdparty/phpMyAdmin/index.php" target="_blank">phpMyAdmin</a>
+			<a href="https://secure332.sgcpanel.com:2096/cpsess0106124978/webmail/Crystal/index.html?mailclient=horde" target="_blank">webmail</a>
 			<a href="/homebase/resources/forms/day_info.php" target="_blank">Daily</a>
 			<a href="/homebase/resources/reports/weekly-report/index.php" target="_blank">Week</a>
 			<a href="/homebase/resources/reports/monthly-report/index.php" target="_blank">Month</a>

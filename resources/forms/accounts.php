@@ -57,7 +57,7 @@ if ($res->num_rows > 0) {
 }
 
 $relevant_accounts = return_relevant_accounts_info_array($conn, $today);
-hidden_var_dump( $relevant_accounts );
+// echo "<pre>"; var_dump( $relevant_accounts ); echo "</pre>";
 foreach ($relevant_accounts as $a_id => $a_name) {
 	$str = "{        
 		type: 'line',
@@ -98,8 +98,8 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 			<label for='name'>Account</label>
 			<select name='name' id='name'>
 <?php
-	foreach ($accounts as $a) {
-		echo "<option value='$a->id'>$a->name</option>";
+	foreach ($relevant_accounts as $id => $name) {
+		echo "<option value='$id'>$name</option>";
 	}
 ?>
 			</select>

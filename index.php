@@ -52,6 +52,7 @@
 		$today_datetime = new DateTime();
 		$today_date = date_format($today_datetime, 'Y-m-d');
 	}
+	$final_date_of_year = "$year-12-31";
 	$last_sunday = "'" . date('Y-m-d', strtotime('last Sunday')) . "'";
 	$days_left_in_year = floor((strtotime("January 1st, " . ($year + 1)) - $today_time) / SEC_IN_DAY); // Needs to stay this way for 2018 and 2019 to both work
 
@@ -130,67 +131,9 @@
 	$res = $conn->query($q);
 	$row = mysqli_fetch_row($res);
 	$net_seal_income = $row[0];
-	if ($year == '2018') {
-		$annual_check_adjustment = -3 * 8 * 21.63; // 3 days in my first check were from May work days. This program only checks June 1st on so those days should not count towards total
-	}
-	else if ($year == '2019') {
-		$annual_check_adjustment = (-1 * 11 * 8 * 25) + (-62.5); // 11 days in 2019 checks were from hours worked in 2018 plus a $62.50 healthcare waive bonus 
-	}
-	else if ($year == '2020') {
-		$annual_check_adjustment = (-1 * 2 * 8 * 27.88) + (-62.5); // 2 days in 2020 checks were from hours worked in 2019 plus a $62.50 healthcare waive bonus 
-	}
-	else if ($year == '2021') {
-		$annual_check_adjustment = (-1 * 4 * 8 * 29.80); // 4 days in 2021 checks were from hours worked in 2020
-	}
-	else {
-		$annual_check_adjustment = (-1 * 0 * 8 * 29.80); // 
-	}
-	$q = "SELECT MAX(end_payperiod) FROM finance_seal_income WHERE date >= '$start_date_financial' AND date <= '$end_date_financial' AND type = 'check'";
-	$res = $conn->query($q);
-	$row = mysqli_fetch_row($res);
-	$last_seal_check_date = $row[0]; // The most recent check date
-	if (empty($last_seal_check_date)) {
-		$last_seal_check_date = return_date_from_str("December 31 " . ($year - 1));
-	}
-	$last_seal_check_time = strtotime($last_seal_check_date);
-	$four_pm_seconds = (60 * 60 * 16);
-	$unreceived_seal_income = 0;
-	if ($year == '2018') {
-		$unreceived_seal_income = 2263; // 11 * 8 * 25 + 62.5
-	}
-	else if ($year == '2019') {
-		$unreceived_seal_income = 509; // 2 * 8 * 27.88 + 62.5
-	}
-	else if ($year == '2020') {
-		$unreceived_seal_income = 954; // 4 * 8 * 29.80
-	}
-	else {
-		$fuse = 0;
-		$this_time_to_check = $last_seal_check_time + SEC_IN_DAY + $four_pm_seconds;
-		while ($this_time_to_check < $today_time) {
-			$this_dow = date('D',$this_time_to_check);
-			$this_time_to_check += SEC_IN_DAY;
-			if ($this_dow != 'Sat' && $this_dow != 'Sun') {
-				$num_hourly_wages = count(HOURLY_WAGES_DATESTRINGS_SEAL);
-				$i = 0;
-				for ($i; $i < $num_hourly_wages; $i++) {
-					if (strtotime(HOURLY_WAGES_DATESTRINGS_SEAL[$i]) > $this_time_to_check) {
-						break;
-					}
-					else {
-						$correct_hourly = HOURLY_WAGES_SEAL[$i];
-					}
-				}
-				$unreceived_seal_income += ($correct_hourly * 8);
-				// TEST PASSED 2018.10.18 echo "$ $unreceived_seal_income | $days_active_financial days";
-			}
-			$fuse++;
-			if ($fuse > 30) {
-				echo 'FUSE BLOWN in finance.php';
-				break;
-			}
-		}
-	}
+	$annual_check_adjustment = return_annual_check_adjustments($year);
+	$unreceived_seal_income = return_seal_unreceived_income($conn, $year, $start_date_financial, $end_date_financial);
+	$correct_hourly = HOURLY_WAGES_SEAL[count(HOURLY_WAGE_SEAL) - 1];
 
 	// Software Dev Hours
 	$q = "SELECT SUM(software_dev_hours) FROM personal_day_info WHERE date >= '$start_date_financial' AND date <= '$end_date_financial'";
@@ -208,9 +151,8 @@
 				+ return_jss_income($conn, $start_date_financial, $end_date_financial)
 				+ $unreceived_seal_income
 				+ $annual_check_adjustment;
-	// (46.2) + 106 + 2062.5 + 1000 - 2200
+				;
 
-	// echo "$net_income | $net_ricks_hours | $net_ricks_otb_hours | $net_ricks_tips | $net_seal_income | $unreceived_seal_income | $annual_check_adjustment ";
 
 	if ($year == '2018') {
 		$unpaid_vacation_adjustment = 7; // Factored in for week long trip to South Carolina (unpaid by S&D)
@@ -233,51 +175,7 @@
 
 	$estimated_2019_income = number_format(($adi * 365), 0);
 
-	$avg_monday_pm_net_income = 0;
-	$avg_thursday_pm_net_income = 0;
-	$avg_saturday_pm_net_income = 0;
-	$hourly_wage_ricks = HOURLY_WAGE_RICKS;
-	$qry = "	SELECT 	
-					DAYNAME(date) AS 'dow',
-					ROUND( 
-						AVG(
-							CASE
-								WHEN type IN ('AM', 'PM') THEN (tips + (hours * $hourly_wage_ricks))
-								WHEN type IN ('OTB') THEN (tips)
-								ELSE 0
-							END
-						) , 2
-					) AS 'AVG income',
-					ROUND( AVG(hours) , 2 ) AS 'AVG hours'
-				FROM `finance_ricks_shifts` 
-				WHERE   type = 'PM'
-				AND (
-					MONTH(date) > MONTH(CURRENT_DATE)
-					OR 
-					(MONTH(date) = MONTH(CURRENT_DATE)
-					AND DAY(date) >= DAY(CURRENT_DATE) ) 
-					)
-				AND YEAR(date) >= ($year - 2)
-				GROUP BY DAYNAME(date) ";
-	$res = $conn->query($qry);
-	if ($res->num_rows > 0) {
-		while($row = $res->fetch_assoc()) {
-			switch ($row['dow']) {
-				case 'Monday':
-					$avg_monday_pm_net_income = $row['AVG income'];
-					break;
-				case 'Thursday':
-					$avg_thursday_pm_net_income = $row['AVG income'];
-					break;
-				case 'Saturday':
-					$avg_saturday_pm_net_income = $row['AVG income'];
-					break;
-				default:
-					break;
-			}
-		}
-	}
-	$avg_full_week_ricks_income = $avg_thursday_pm_net_income + $avg_saturday_pm_net_income;
+	$ricks_expected_upcoming_income = return_ricks_expected_upcoming_income($conn, $today_date, $final_date_of_year, HOURLY_WAGE_RICKS, $shifts = ['RPM', 'SPM']);
 
 	$avg_full_week_seal_income = 40 * $correct_hourly;
 	$weeks_left_in_year = $days_left_in_year / 7;
@@ -297,7 +195,7 @@
 	}
 	$appreciated_EOY_accounts_total += $account_types['unreceived ATI']; // Add unreceived ATI because this is not housed in accounts array
 
-	$theoretical_future_pretax_income = ( CASHABLE_PTO_HOURS * $correct_hourly) + (($avg_full_week_ricks_income + $avg_full_week_seal_income) * $weeks_left_in_year) + REMAINING_BONUSES + REMAINING_EMP_401K_DELTA;
+	$theoretical_future_pretax_income = ( CASHABLE_PTO_HOURS * $correct_hourly) + $ricks_expected_upcoming_income + ($avg_full_week_seal_income * $weeks_left_in_year) + REMAINING_BONUSES + REMAINING_EMP_401K_DELTA;
 	$theoretical_EOY_net_worth = $appreciated_EOY_accounts_total + round((($theoretical_future_pretax_income) * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) - (AVG_DAILY_EXPENDITURE_TARGET * $days_left_in_year) , 0 ); // In addition to projected account values
 	$theoretical_income_this_year = $net_income + $theoretical_future_pretax_income;
 	$days_financially_free = return_financial_freedom($accounts, AVG_DAILY_EXPENDITURE_TARGET); //floor(($account_types['liquid cash'] + $account_types['unreceived ATI'] + $account_types['loaned']) / AVG_DAILY_EXPENDITURE_TARGET);
@@ -592,7 +490,7 @@
 							FROM `personal_notes`
 							WHERE 	warning_datetime <= '" . date_format( $today_datetime, 'Y-m-d H:i:s' ) . "'
 								AND complete_datetime IS NULL
-								ORDER BY warning_datetime ASC; ; ";
+								ORDER BY warning_datetime ASC;";
 	$res_warning_notes = $conn->query($qry_warning_notes);
 	if ($res_warning_notes->num_rows > 0) {
 		while($row = $res_warning_notes->fetch_assoc()) {
@@ -637,7 +535,6 @@
     <link rel="stylesheet" type="text/css" href="resources/css/fitness-new.css">
     <link rel="stylesheet" type="text/css" href="resources/css/weather.css">
     <link rel="stylesheet" type="text/css" href="resources/css/finance.css">
-    
 </head>
 
 <body>

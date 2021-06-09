@@ -130,3 +130,6 @@ Stack trace:
 #0 /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/day_info.php(99): return_habitobj_array(Object(mysqli), '2020-01-12')
 #1 {main}
   thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 771
+[13-Jan-2021 18:40:27 America/New_York] PHP Recoverable fatal error:  Object of class DateTime could not be converted to string in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/forms/ricks_shift.php on line 70
+[13-Jan-2021 18:49:27 America/New_York] PHP Recoverable fatal error:  Object of class DateTime could not be converted to string in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 516
+[13-Jan-2021 18:49:40 America/New_York] PHP Recoverable fatal error:  Object of class DateTime could not be converted to string in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/resources/resources.php on line 516

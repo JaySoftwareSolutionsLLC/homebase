@@ -1,6 +1,8 @@
 <?php
 
-	$login_exemption = $login_exemption ?? false;
+use Illuminate\Support\Facades\Date;
+
+$login_exemption = $login_exemption ?? false;
 
 	function bounce_to($target_page = "/") {
 		// Redirects current page to the URL passed
@@ -448,6 +450,74 @@
 		$row = mysqli_fetch_array($res);
 		return $row['value'];
 	}
+	function return_seal_unreceived_income($conn, $year, $start_date_financial, $end_date_financial) {
+		$today_time = time();
+		$q = "SELECT MAX(end_payperiod) FROM finance_seal_income WHERE date >= '$start_date_financial' AND date <= '$end_date_financial' AND type = 'check'";
+		$res = $conn->query($q);
+		$row = mysqli_fetch_row($res);
+		$last_seal_check_date = $row[0]; // The most recent check date
+		if (empty($last_seal_check_date)) {
+			$last_seal_check_date = return_date_from_str("December 31 " . ($year - 1));
+		}
+		$last_seal_check_time = strtotime($last_seal_check_date);
+		$four_pm_seconds = (60 * 60 * 16);
+		$unreceived_seal_income = 0;
+		if ($year == '2018') {
+			$unreceived_seal_income = 2263; // 11 * 8 * 25 + 62.5
+		}
+		else if ($year == '2019') {
+			$unreceived_seal_income = 509; // 2 * 8 * 27.88 + 62.5
+		}
+		else if ($year == '2020') {
+			$unreceived_seal_income = 954; // 4 * 8 * 29.80
+		}
+		else {
+			$fuse = 0;
+			$this_time_to_check = $last_seal_check_time + SEC_IN_DAY + $four_pm_seconds;
+			while ($this_time_to_check < $today_time) {
+				$this_dow = date('D',$this_time_to_check);
+				$this_time_to_check += SEC_IN_DAY;
+				if ($this_dow != 'Sat' && $this_dow != 'Sun') {
+					$num_hourly_wages = count(HOURLY_WAGES_DATESTRINGS_SEAL);
+					$i = 0;
+					for ($i; $i < $num_hourly_wages; $i++) {
+						if (strtotime(HOURLY_WAGES_DATESTRINGS_SEAL[$i]) > $this_time_to_check) {
+							break;
+						}
+						else {
+							$correct_hourly = HOURLY_WAGES_SEAL[$i];
+						}
+					}
+					$unreceived_seal_income += ($correct_hourly * 8);
+					// TEST PASSED 2018.10.18 echo "$ $unreceived_seal_income | $days_active_financial days";
+				}
+				$fuse++;
+				if ($fuse > 30) {
+					echo 'FUSE BLOWN in finance.php';
+					break;
+				}
+			}
+		}
+		return $unreceived_seal_income;
+	}
+	function return_annual_check_adjustments($year) {
+		if ($year == '2018') {
+			$annual_check_adjustment = -3 * 8 * 21.63; // 3 days in my first check were from May work days. This program only checks June 1st on so those days should not count towards total
+		}
+		else if ($year == '2019') {
+			$annual_check_adjustment = (-1 * 11 * 8 * 25) + (-62.5); // 11 days in 2019 checks were from hours worked in 2018 plus a $62.50 healthcare waive bonus 
+		}
+		else if ($year == '2020') {
+			$annual_check_adjustment = (-1 * 2 * 8 * 27.88) + (-62.5); // 2 days in 2020 checks were from hours worked in 2019 plus a $62.50 healthcare waive bonus 
+		}
+		else if ($year == '2021') {
+			$annual_check_adjustment = (-1 * 4 * 8 * 29.80); // 4 days in 2021 checks were from hours worked in 2020
+		}
+		else {
+			$annual_check_adjustment = (-1 * 0 * 8 * 29.80); // 
+		}
+		return $annual_check_adjustment;
+	}
 
 	// Ricks on Main
 	function return_ricks_hours($conn, $date_start, $date_end) {
@@ -553,6 +623,52 @@
 		}
 		return $ricks_monthly_array;
 	}
+	function return_ricks_expected_upcoming_income($conn, $date_start, $date_end, $hourly_wage, $shifts = ['RPM', 'SPM']) {
+		$sd = new DateTime($date_start);
+		$ed = new DateTime($date_end);
+		$year = $sd->format('Y');
+		$qry = "	SELECT 	DAYNAME(date) AS 'dow',
+							type,
+							ROUND( 
+								AVG(
+									CASE
+										WHEN type IN ('AM', 'PM') THEN (tips + (hours * $hourly_wage))
+										WHEN type IN ('OTB') THEN (tips)
+										ELSE 0
+									END
+								) , 2
+							) AS 'AVG income'
+					FROM `finance_ricks_shifts` 
+					WHERE   type = 'PM'
+					AND (
+						MONTH(date) > MONTH(CURRENT_DATE)
+						OR 
+						(MONTH(date) = MONTH(CURRENT_DATE)
+						AND DAY(date) >= DAY(CURRENT_DATE) ) 
+						)
+					AND YEAR(date) >= ($year - 1)
+					GROUP BY DAYNAME(date), type
+					ORDER BY DAYOFWEEK(date) ";
+		$res = $conn->query($qry);
+		if ($res->num_rows > 0) {
+			$avg_full_week_ricks_income = 0;
+			while($row = $res->fetch_assoc()) {
+				if (	(in_array('MPM', $shifts) && $row['dow'] == 'Monday' && $row['type'] == 'pm')
+					||  (in_array('TPM', $shifts) && $row['dow'] == 'Tuesday' && $row['type'] == 'pm')
+					||  (in_array('WPM', $shifts) && $row['dow'] == 'Wednesday' && $row['type'] == 'pm')
+					||  (in_array('RPM', $shifts) && $row['dow'] == 'Thursday' && $row['type'] == 'pm')
+					||  (in_array('FPM', $shifts) && $row['dow'] == 'Friday' && $row['type'] == 'pm')
+					||  (in_array('SPM', $shifts) && $row['dow'] == 'Saturday' && $row['type'] == 'pm')
+					||  (in_array('SAM', $shifts) && $row['dow'] == 'Saturday' && $row['type'] == 'am') )
+				{
+					$avg_full_week_ricks_income += $row['AVG income'];
+				}
+			}
+		}
+		$date_diff = date_diff($sd, $ed);
+		$week_count = $date_diff->days / 7;
+		return round($avg_full_week_ricks_income * $week_count, 2);
+	}
 
 	// JSS
 	function return_jss_income($conn, $date_start, $date_end) { // CAUTION: date end must be 23:59:59 to appropriately capture entire end day
@@ -612,7 +728,8 @@
 					AND EXISTS(	SELECT value
 								FROM finance_account_log AS f_a_l
 								WHERE f_a.id = f_a_l.account_id
-									AND f_a_l.date <= '$date' ) ";
+									AND f_a_l.date <= '$date' )
+				ORDER BY f_a.name ";
 		$res = $conn->query($qry);
 		if ($res->num_rows > 0) {
 			while($row = $res->fetch_assoc()) {

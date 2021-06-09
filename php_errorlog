@@ -182,3 +182,8 @@ Stack trace:
 Stack trace:
 #0 {main}
   thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php on line 6
+[10-Dec-2020 11:22:08 CST6CDT] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO), expecting ',' or ';' in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php on line 10
+[04-Jan-2021 10:05:14 CST6CDT] PHP Fatal error:  Uncaught Error: Call to undefined function return_date_from_str() in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php:4
+Stack trace:
+#0 {main}
+  thrown in /home/jaysoftw/public_html/brettjaybrewster.com/homebase/sandbox.php on line 4
