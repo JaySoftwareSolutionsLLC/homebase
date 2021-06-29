@@ -82,6 +82,8 @@
 				<textarea style='width: 100%;' type='text' name='exercise-desc-input' value='' class='exercise-desc-input' placeholder='Hands on ground. Back as straight as possible. Focus on feeling pecs contract on each rep.'></textarea>
 			</form>
 		</section>
+
+		<div id="chartContainer" style='width: 500px; height: 500px;'></div>
 		
 		<section class='muscle-selection'>
 			<h2>Muscles</h2>
@@ -479,20 +481,9 @@
 		</section>
 		
 		<section class='best-lifts'>
-			<h2>Best Lifts</h2>
-<?php
-			/*
-			foreach ($workout_structures as $wos) {
-				$str = "<div class='workout-structure'>";
-				$str .= "<h3>$wos->name</h3>";
-				$str .= "<h4>$wos->best_total_reps reps @ $wos->best_weight lbs</h4>";
-				$str .= "</div>";
-				echo $str;
-			}
-			*/
-?>			
+			<h2>Best Lifts</h2>	
 		</section>
-		
+
 		<section>
 			<button id='submit'>Update/Create</button>
 		</section>
@@ -501,81 +492,65 @@
 		
 	</main>
 
+	<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script></head>
 	<script defer>
-		/*
-		$("svg path.muscle").each(function() {
-			let muscleID = $(this).attr("data-muscle-id");
-			//let muscleHue = 0;
-			//let muscleLit = 100;
-			if ( primMuscles.includes(muscleID) ) {
-				//muscleHue = 0;
-				//muscleLit = 50;
-				$(this).addClass('primary');
-			}
-			else if ( secMuscles.includes(muscleID) ) {
-				//muscleHue = 50;
-				//muscleLit = 50;
-				$(this).addClass('secondary');
-			}
-			$(this).on('click', function() {
-				if ( $(this).hasClass('primary') ) {
-					$("svg path.muscle").each(function() {
-						if ( $(this).attr('data-muscle-id') == muscleID ) {
-							$(this).removeClass('primary');
-						}
-					});
-				}
-				else if ( $(this).hasClass('secondary') ) {
-					$("svg path.muscle").each(function() {
-						if ( $(this).attr('data-muscle-id') == muscleID ) {
-							$(this).addClass('primary').removeClass('secondary');
-						}
-					});
-				}
-				else {
-					$("svg path.muscle").each(function() {
-						if ( $(this).attr('data-muscle-id') == muscleID ) {
-							$(this).addClass('secondary');
-						}
-					});
-				}
-			});
-			*/
-			/*
-			let relMuscle = muscleObjects.filter(obj => {
-				return obj.id === muscleID;
-			});
-			let muscleObj = relMuscle[0];
-			let muscleHUR = muscleObj['hur'];
-			let muscleHue = muscleHUR * (120 / muscleObj['ideal_rest']);
-			if (muscleHue < 0) {
-				muscleHue = 0;
-			}
-			else if (muscleHue > 120) {
-				muscleHue = 120;
-			}
-			*/
+		let maxMarkerSize = 15;
+		function singleClick(e){
+		if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible)
+			e.dataSeries.visible = false;
+		else
+			e.dataSeries.visible = true;
+		e.chart.render();
+		}
 
-			//$(this).css('fill', `hsl(${muscleHue}, 100%, ${muscleLit}%)`);
-			/*
-			let percIdeal = muscleObj['perc_ideal'];
-			// If the muscle is ready and far from ideal or if the muscle has been ready for more than a week then apply the flashing class
-			if ((percIdeal < 90 && muscleHUR <= 0) || muscleHUR < (-1 * 7 * 24))  {
-				$(this).addClass('flashing');
-			}
-			*/
-		/*
+		function doubleClick(e){
+			var data = e.chart.options.data;
+			for(var i = 0; i < data.length; i++)
+				data[i].visible = false;
+			e.dataSeries.visible = true;
+			e.chart.render();
+		}
+		var chart = new CanvasJS.Chart("chartContainer",
+		{
+			title:{
+				fontColor: "white",
+				text: "Lifts"
+			},
+			backgroundColor: 'hsla(0, 0%, 0%, 0)',
+			data: [
+			{
+				type: "line",
+				name: "Starting Strength (3x5)",
+				showInLegend: true,
+				dataPoints: [
+					
+				]
+			}],
+			legend: {
+				fontColor: "white",
+				cursor: "pointer",
+				itemclick: function (e) {
+					
+					// If already clicked once
+					if(e.chart.options.clicked){
+						doubleClick(e);
+						e.chart.options.clicked = false;
+						clearTimeout(this.executeDoubleClick);
+						return;
+					}
+
+					this.executeDoubleClick = setTimeout(function(){
+					e.chart.options.clicked = false;
+					singleClick(e);
+					}, 500);
+
+					e.chart.options.clicked = true;
+				},
+			},
 		});
-<?php
-		/*foreach ($exercise->p_muscles as $pm) {
-			echo "$('svg path.muscle.$pm').css('fill', `hsl(0, 100%, 50%)`);";
-		}
-		foreach ($exercise->s_muscles as $sm) {
-			echo "$('svg path.muscle.$sm').css('fill', `hsl(50, 100%, 50%)`);";
-		}
-		*/
-?>
-		*/
+
+		chart.render();
+
 		function changeColorOfEquipmentSpans() {
 			$('input.equipment').each(function() {
 				if ($(this).is(':checked')) {
@@ -593,12 +568,18 @@
 		
 		// If the exercise selection was changed then update the page information
 		$('section.exercise-selection select').on('change', function() {
+			// Delete out previous best lifts & chart info
+			$('.workout-structure').remove();
+			chart.options.data.forEach(function(element) {
+				element.dataPoints = [];
+			});
+
 			$('svg path.muscle').removeClass('primary').removeClass('secondary');
 			$('input.equipment').each(function() {
 				$(this).attr('checked', false);
 			});
 			changeColorOfEquipmentSpans();
-			$('section.best-lifts').html('<h2>Best Lifts</h2>');
+			// $('section.best-lifts').html('<h2>Best Lifts</h2>');
 			
 			//console.log('changed');
 			thisExerciseID = $(this).val();
@@ -697,6 +678,35 @@
 							newDiv.append(`<h4>${l['best_total_reps']} @ ${l['best_weight']}</h4>`);
 							$('section.best-lifts').append(newDiv);
 						});
+						console.log(selectedExercise['lifts']);
+						// Replace chart data
+						$.each(selectedExercise['lifts'], function( i, l ) {
+							let workoutStructure = l['structure_name'];
+							let date = new Date(`${l['datetime']}`);
+							let weight = parseFloat(l['weight']);
+							let totalReps = parseFloat(l['total_reps']);
+							let markerSize = (totalReps / 2 < maxMarkerSize) ? (totalReps / 2) : maxMarkerSize;
+							let markerType = 'circle';
+							if (workoutStructure == 'One Rep Max') {
+								markerSize = 10;
+								markerType = 'triangle';
+							}
+							let formattedDate = Intl.DateTimeFormat('en-US').format(date);
+							let dataPoint = {x: date, y: weight, markerSize: markerSize, label: `${formattedDate}: ${totalReps} total reps @ ${weight} lbs`, markerType: markerType};
+							dataSetExists = false;
+							console.log(chart.options.data);
+							chart.options.data.forEach(function(element) {
+								if (element.name == workoutStructure) {
+									element.dataPoints.push(dataPoint);
+									dataSetExists = true;
+								}
+							});
+							// If this dataSet doesn't exists, create it and push this data point into it
+							if (!dataSetExists) {
+								chart.options.data.push({type: "line", name: workoutStructure, showInLegend: true, dataPoints: [dataPoint]});
+							}
+						});
+						chart.render();
 					}
 				});
 			} // End if not new
@@ -731,8 +741,6 @@
 			});
 		}
 		SVGMuscleClickUpdate();
-		
-		
 		
 		$('button#submit').on('click', function() {
 			//console.log('submitted');
@@ -787,4 +795,4 @@
 		
 	</script>
 
-</body>
+</body>  

@@ -141,6 +141,7 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 				
 				$('#accounts-log-table').DataTable( {
 					"order": [[ 1, "desc" ]]
+					, "pageLength": 25
 				} );
 
 				function singleClick(e){
