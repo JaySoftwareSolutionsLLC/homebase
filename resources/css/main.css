@@ -1,4 +1,5 @@
 /*UNIVERSAL*/
+/* DEPRECATED? */
 html {
 	min-height: 100vh;
 	font-size: 16px;
@@ -8,6 +9,9 @@ html {
 }
 * {
   transition: all 400ms linear;
+}
+.blur {
+  filter: blur(1px);
 }
 body {
 	display: inline-flex;

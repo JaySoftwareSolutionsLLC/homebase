@@ -21,4 +21,7 @@ $(document).ready(function() {
     $(this).toggle();
     $(this).siblings('nav').toggle();
   });
+  $(document).on('click', 'button#blur-data', function() {
+    $('section.finance div.content div.stat h4, section.finance div.content div.stat h5, section.fitness div.stat h4.value').toggleClass('blur');
+  });
 });

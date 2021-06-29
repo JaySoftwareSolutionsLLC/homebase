@@ -18,9 +18,8 @@
 				<input type="hidden" name='year' value='2018'>
 				<input type='submit' value='2018' class='<?php if ($year == '2018') {echo 'selected';} ?>'>
 			</form>
-
-			
 		</div>
+		<button id='blur-data' style='background: none; color: #00d5ff; border: 1px solid #00d5ff; border-radius: 0.5rem; padding: 0.25rem; margin: 0 0.25rem; cursor: pointer;'>Blur</button>
 	</div>
 	<div class="right">
 		<nav>

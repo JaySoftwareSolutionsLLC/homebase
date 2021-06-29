@@ -4,6 +4,10 @@
   transition: all 400ms linear;
 }
 
+.blur {
+  filter: blur(4px);
+}
+
 .unwrapable {
   overflow: hidden;
   white-space: nowrap;
