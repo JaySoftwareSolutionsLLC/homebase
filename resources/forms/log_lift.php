@@ -216,9 +216,9 @@ $conn->close();
 
 // Link to Style Sheets
 include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/css-files.php');
-
 ?>
 
+	<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 	<body>
 		<main>
 
@@ -229,7 +229,8 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 				<label for='datetime'>Date</label>
 				<input id='datetime' type='datetime-local' name='datetime'/>
 				<label for='workout-structure-id'>Structure ID</label>
-				<select name='workout-structure-id' class='workout-structure-selection'>
+				<select name='workout-structure-id' class='workout-structure-selection' id='workout-structure-id'>
+					<option type='text' disabled selected>Select Structure</option>
 <?php
 	foreach( $workout_structures as $wos ) {
 		echo "<option type='text' value='$wos->id'>$wos->name</option>";
@@ -240,7 +241,8 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 				<input id='workout-structure-id' type='number' name='workout-structure-id' value='<?php //echo $current_workout_structure_id; ?>' min='1'/>
 				-->
 				<label for='exercise-id'>Exercise</label>
-				<select name='exercise-id' class='exercise-selection'>
+				<select name='exercise-id' class='exercise-selection' id='exercise-id' required>
+					<option type='text' disabled selected>Select Exercise</option>
 <?php
 	foreach( $exercises as $e ) {
 		echo "<option type='text' data-target-reps='$e->best_total_reps' data-current-weight='$e->best_weight' data-description='$e->description' value='$e->id'>$e->name</option>";
@@ -251,6 +253,7 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 				<input id='total-reps' type='number' name='total-reps' value='0' min='1'/>
 				<label for='weight'>Weight</label>
 				<input id='weight' type='number' name='weight' min='0' step='.01'/>
+				<div id="chartContainer" style='width: 100%; height: 300px;'></div>
 				<button type="submit">Submit</button>
 			</form>
 			
@@ -318,6 +321,104 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/js
 					$('#lifts-table').DataTable( {
 						"order": [[ 0, "desc" ]]
 					} );
-				} );
+
+					let maxMarkerSize = 15;
+					function singleClick(e){
+					if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible)
+						e.dataSeries.visible = false;
+					else
+						e.dataSeries.visible = true;
+					e.chart.render();
+					}
+
+					function doubleClick(e){
+						var data = e.chart.options.data;
+						for(var i = 0; i < data.length; i++)
+							data[i].visible = false;
+						e.dataSeries.visible = true;
+						e.chart.render();
+					}
+					var chart = new CanvasJS.Chart("chartContainer",
+					{
+						title:{
+							fontColor: "black",
+							text: "Lifts"
+						},
+						backgroundColor: 'hsla(0, 0%, 0%, 0)',
+						data: [
+						{
+							type: "line",
+							name: "Starting Strength (3x5)",
+							showInLegend: true,
+							dataPoints: [
+								
+							]
+						}],
+						legend: {
+							fontColor: "black",
+							cursor: "pointer",
+							itemclick: function (e) {
+								
+								// If already clicked once
+								if(e.chart.options.clicked){
+									doubleClick(e);
+									e.chart.options.clicked = false;
+									clearTimeout(this.executeDoubleClick);
+									return;
+								}
+
+								this.executeDoubleClick = setTimeout(function(){
+								e.chart.options.clicked = false;
+								singleClick(e);
+								}, 500);
+
+								e.chart.options.clicked = true;
+							},
+						},
+					});
+					chart.render();
+
+					$('.exercise-selection').on('change', function() {
+						let thisExerciseID = $(this).val();
+						$.ajax({
+							url: '/homebase/resources/forms/form-resources/return_exercise_info.php',
+							method: 'POST',
+							data: {
+								'exercise-id' : thisExerciseID,
+							},
+							success: function(data) {
+								selectedExercise = jQuery.parseJSON( data );
+								// Replace chart data
+								$.each(selectedExercise['lifts'], function( i, l ) {
+									let workoutStructure = l['structure_name'];
+									let date = new Date(`${l['datetime']}`);
+									let weight = parseFloat(l['weight']);
+									let totalReps = parseFloat(l['total_reps']);
+									let markerSize = (totalReps / 2 < maxMarkerSize) ? (totalReps / 2) : maxMarkerSize;
+									let markerType = 'circle';
+									if (workoutStructure == 'One Rep Max') {
+										markerSize = 10;
+										markerType = 'triangle';
+									}
+									let formattedDate = Intl.DateTimeFormat('en-US').format(date);
+									let dataPoint = {x: date, y: weight, markerSize: markerSize, label: `${formattedDate}: ${totalReps} total reps @ ${weight} lbs`, markerType: markerType};
+									dataSetExists = false;
+									console.log(chart.options.data);
+									chart.options.data.forEach(function(element) {
+										if (element.name == workoutStructure) {
+											element.dataPoints.push(dataPoint);
+											dataSetExists = true;
+										}
+									});
+									// If this dataSet doesn't exists, create it and push this data point into it
+									if (!dataSetExists) {
+										chart.options.data.push({type: "line", name: workoutStructure, showInLegend: true, dataPoints: [dataPoint]});
+									}
+								});
+								chart.render();
+							} // End successful ajax call
+						}); // End ajax call
+					}); // End on exercise change
+				}); // End doc load
 			</script>
 	</body>
