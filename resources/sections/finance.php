@@ -116,7 +116,7 @@
 		echo return_finance_stat_html('Theoretical EOY Net Worth',"$" . number_format($theoretical_EOY_net_worth), '', '', $theoretical_eoy_nw_info);
 	
 		$theoretical_income_info = return_finance_stat_info_html('Theoretical Income'
-															   , 'Determine 2019 pre-tax income'
+															   , "Determine $year pre-tax income"
 															   , 'Current Income + (Cashable PTO Hours * Current Hourly Wage) + ((Avg Weekly Ricks Income + Avg Weekly Seal Income) * Weeks left in year ) + REMAINING_BONUSES + REMAINING_EMP_401K_DELTA'
 															   , array('Work all regular shifts', 'Cashout all PTO', 'No raises', 'No bonuses')
 															   , 'Accounts for seasonality');
