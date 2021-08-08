@@ -133,7 +133,7 @@
 	$net_seal_income = $row[0];
 	$annual_check_adjustment = return_annual_check_adjustments($year);
 	$unreceived_seal_income = return_seal_unreceived_income($conn, $year, $start_date_financial, $end_date_financial);
-	$correct_hourly = HOURLY_WAGES_SEAL[count(HOURLY_WAGE_SEAL) - 1];
+	$correct_hourly = HOURLY_WAGES_SEAL[count(HOURLY_WAGES_SEAL) - 1];
 
 	// Software Dev Hours
 	$q = "SELECT SUM(software_dev_hours) FROM personal_day_info WHERE date >= '$start_date_financial' AND date <= '$end_date_financial'";

@@ -32,7 +32,7 @@
     // Theoretical Future Income
     $theoretical_future_pretax_income = 0;  
     if (in_array('SD', $params)) {
-        $correct_hourly = HOURLY_WAGES_SEAL[count(HOURLY_WAGE_SEAL) - 1];
+        $correct_hourly = HOURLY_WAGES_SEAL[count(HOURLY_WAGES_SEAL) - 1];
         $theoretical_future_pretax_income += ((($weeks_remaining_in_year * 40) + CASHABLE_PTO_HOURS) * $correct_hourly) + REMAINING_BONUSES + REMAINING_EMP_401K_DELTA;
     }
     $ricks_params = [];
