@@ -379,6 +379,9 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/js
 					chart.render();
 
 					$('.exercise-selection').on('change', function() {
+						chart.options.data.forEach(function(element) {
+							element.dataPoints = [];
+						});
 						let thisExerciseID = $(this).val();
 						$.ajax({
 							url: '/homebase/resources/forms/form-resources/return_exercise_info.php',
