@@ -27,7 +27,7 @@
 		include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/constants-2021.php');
 	}
 	else {
-		include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/constants-2022.php');
+		include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/constants-2022-Jan-Apr.php');
 	}
 
 //---CONNECT TO DATABASE------------------------------------------------------------
@@ -60,9 +60,17 @@
 		$today_datetime = new DateTime();
 		$today_date = date_format($today_datetime, 'Y-m-d');
 	}
-	$final_date_of_year = "$year-12-31";
+	if ($year == '2022') {
+		$final_date_of_year = "$year-04-30";
+	} else {
+		$final_date_of_year = "$year-12-31";
+	}
 	$last_sunday = "'" . date('Y-m-d', strtotime('last Sunday')) . "'";
-	$days_left_in_year = floor((strtotime("January 1st, " . ($year + 1)) - $today_time) / SEC_IN_DAY); // Needs to stay this way for 2018 and 2019 to both work
+	if ($year == '2022') {
+		$days_left_in_year = (120 - (date('z') + 1));
+	} else {
+		$days_left_in_year = floor((strtotime("January 1st, " . ($year + 1)) - $today_time) / SEC_IN_DAY); // Needs to stay this way for 2018 and 2019 to both work
+	}
 
 //---SELECT FROM DATABASE-----------------------------------------------------------
 
@@ -75,6 +83,9 @@
 	$days_active_financial = ceil(($today_time - $start_time_financial) / (SEC_IN_DAY));
 	if ($year == '2018' || $year == '2019' || $year == '2020' || $year == '2021') {
 		$days_left_in_year_financial = 0;
+	}
+	else if ($year == '2022') {
+		$days_left_in_year_financial = (120 - (date('z') + 1));
 	}
 	else {
 		$days_left_in_year_financial = (365 - (date('z') + 1));
@@ -177,13 +188,12 @@
 	foreach ($account_types as $name=>$val) {
 		$current_net_worth += $val;
 	}
-	//$current_net_worth = $current_assets + $current_cash - $current_liabilities;
 
 	$estimated_2018_income = number_format(PRE_JUNE_RICKS_INCOME + ($adi  * ($days_left_in_year_financial + $days_active_financial)), 0);
 
 	$estimated_2019_income = number_format(($adi * 365), 0);
 
-	$ricks_expected_upcoming_income = return_ricks_expected_upcoming_income($conn, $today_date, $final_date_of_year, HOURLY_WAGE_RICKS, $shifts = ['RPM', 'SPM']);
+	$ricks_expected_upcoming_income = return_ricks_expected_upcoming_income($conn, $today_date, $final_date_of_year, HOURLY_WAGE_RICKS, $shifts = ['SPM']);
 
 	$avg_full_week_seal_income = 40 * $correct_hourly;
 	$weeks_left_in_year = $days_left_in_year / 7;
@@ -209,13 +219,12 @@
 	$days_financially_free = return_financial_freedom($accounts, AVG_DAILY_EXPENDITURE_TARGET); //floor(($account_types['liquid cash'] + $account_types['unreceived ATI'] + $account_types['loaned']) / AVG_DAILY_EXPENDITURE_TARGET);
 	$financial_freedom_datetime = clone $today_datetime;
 	$financial_freedom_datetime->modify("+$days_financially_free day");
-	// var_dump($financial_freedom_datetime);
 
+	echo "$net_income | $theoretical_future_pretax_income | $net_expenditure | $days_left_in_year";
 	$theoretical_net_worth_contribution = round((($net_income + $theoretical_future_pretax_income) * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) - ($net_expenditure + (AVG_DAILY_EXPENDITURE_TARGET * $days_left_in_year)) , 0 ); // Theoretical NW Cont. if I grind out 3 days/week @ Ricks and don't take any PTO @ S&D
 	$opportunity_surplus = round($theoretical_net_worth_contribution - ANNUAL_NET_WORTH_CONTRIBUTION_TARGET , 0 );	
 
 	$current_est_nw_contribution = ( $net_income * ( ESTIMATED_AFTER_TAX_PERCENTAGE / 100 ) ) - ( $net_expenditure );
-	// echo ("Opportunity Cost Surplus: $opportunity_surplus | $net_income | $avg_full_week_ricks_income | $avg_full_week_seal_income | $weeks_left_in_year <br/><br/><br/>");
 
 	//---FITNESS--------------------------------------------------------------------
 
@@ -231,7 +240,6 @@
 	$res = $conn->query($q);
 	$row = mysqli_fetch_row($res);
 	$best_mile_time = $row[0];
-	// TEST PASSED 2019/01/06 echo $q;
 
 	// Body Weight
 	

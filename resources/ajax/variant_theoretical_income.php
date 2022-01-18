@@ -9,7 +9,11 @@
     $params = $_POST['params'];
     $start_of_year = "$year-01-01";
     $today = date('Y-m-d');
-    $end_of_year = "$year-12-31";
+    if ($year == '2022') {
+        $end_of_year = "$year-04-30";
+    } else {
+        $end_of_year = "$year-12-31";
+    }
     $today_dt = new DateTime($today);
     $end_of_year_dt = new DateTime($end_of_year);
     $date_diff = date_diff($today_dt, $end_of_year_dt);

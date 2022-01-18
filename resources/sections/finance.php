@@ -21,6 +21,11 @@
 ?>
 <section class="column finance">
 	<h2>Finances</h2>
+<?php 
+	if ($year == '2022') {
+		echo "<h3>(Jan-Apr)</h3>";
+	}
+?>
 	<div class="content">
 <?php 	if ($year == '2018') { ?>
 		<div class="stat net-worth">

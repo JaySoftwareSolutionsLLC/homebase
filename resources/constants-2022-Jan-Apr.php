@@ -10,12 +10,15 @@ const SEC_IN_DAY = 						(60 * 60 * 24);
 //--- Financial Constants ---
 const START_DATE_STRING_FINANCIAL = 	'January 1st 2022';
 
-const ANNUAL_NET_WORTH_CONTRIBUTION_TARGET =    0;
-const ANNUAL_INCOME_TARGET = 			        37000; // Enough to cover my expenses.
-const ANNUAL_EXPENDITURE_TARGET =		        30000;
+const DAYS_IN_THIS_WINDOW =             120;
 
-define("AVG_DAILY_INCOME_TARGET", number_format((ANNUAL_INCOME_TARGET / 365), 2));
-define("AVG_DAILY_EXPENDITURE_TARGET", number_format((ANNUAL_EXPENDITURE_TARGET / 365), 2));
+// It says ANNUAL...but actual just for this time period
+const ANNUAL_NET_WORTH_CONTRIBUTION_TARGET =    18887;
+const ANNUAL_INCOME_TARGET = 			        28750; // Annual goal is 37k pre-tax = 30k after tax
+const ANNUAL_EXPENDITURE_TARGET =		        9863; // Annual goal is 30k or less expenses
+
+define("AVG_DAILY_INCOME_TARGET", number_format((ANNUAL_INCOME_TARGET / DAYS_IN_THIS_WINDOW), 2));
+define("AVG_DAILY_EXPENDITURE_TARGET", number_format((ANNUAL_EXPENDITURE_TARGET / DAYS_IN_THIS_WINDOW), 2));
 
 const HOURLY_WAGES_SEAL = 				array(34.13); // Array value must correspond with HOURLY_WAGES_DATESTRINGS_SEAL date.
 const HOURLY_WAGES_DATESTRINGS_SEAL =	array('2021-07-01'); // Array date must correspond with HOURLY_WAGES_SEAL value of same index.
@@ -39,9 +42,9 @@ const MONTHLY_HOURS_TARGET = 			WEEKLY_HOURS_TARGET * 52 / 12;
 
 const LUXURY_EXPENDITURES =             array('entertainment', 'clothing', 'personal', 'giving', 'travel', /*'fee',*/ 'office'); // List of the finance_expenses.type which correspond with non-necessary expenses. Some are necessary such as clothing and fee, but as a guideline these are avoidable.
 
-const ESTIMATED_AFTER_TAX_PERCENTAGE =	72.33; // Based off of Effective Tax Rate from smartasset.com
+const ESTIMATED_AFTER_TAX_PERCENTAGE =	100; // Based off of Effective Tax Rate from smartasset.com
 
 const START_OF_YEAR_NET_WORTH =			212500;
-const END_OF_YEAR_NET_WORTH_TARGET =	216750; // Current NW + 8,750 (Investment Growth) - 4,500 (Depreciation)
+const END_OF_YEAR_NET_WORTH_TARGET =	214000; // Current NW + 3,000 (Investment Growth) - 1,500 (Depreciation)
 
 ?>

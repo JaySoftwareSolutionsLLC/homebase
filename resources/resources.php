@@ -517,7 +517,7 @@ $login_exemption = $login_exemption ?? false;
 			$annual_check_adjustment = (-1 * 4 * 8 * 29.80); // 4 days in 2021 checks were from hours worked in 2020
 		}
 		else {
-			$annual_check_adjustment = (-1 * 5 * 8 * 34.13); // 
+			$annual_check_adjustment = (-1 * 5 * 8 * 34.13); // 5 days in 2022 checks were from 2021
 		}
 		return $annual_check_adjustment;
 	}
