@@ -21,7 +21,7 @@ define("AVG_DAILY_EXPENDITURE_TARGET", number_format((ANNUAL_EXPENDITURE_TARGET 
 const HOURLY_WAGES_SEAL = 				array(29.80, 34.13); // Array value must correspond with HOURLY_WAGES_DATESTRINGS_SEAL date. Referenced in reports/weekly-report/index.php
 const HOURLY_WAGES_DATESTRINGS_SEAL =	array('2020-06-29', '2021-07-01'); // Array date must correspond with HOURLY_WAGES_SEAL value. Referenced in reports/weekly-report/index.php
 const CASHABLE_PTO_HOURS =              0; // Dont like this setup currently, because as PTO is used and as extra PTO is received I will have to derive and update this. Note: This will drop to zero in June because all cashable hours will have been cashed out
-const REMAINING_BONUSES =               1000;
+const REMAINING_BONUSES =               0;
 // Previous year income can be found on paylocity {REG + PTO + PTOPO + RETRO + BONUS + MED WAIVER}
 const REMAINING_EMP_401K_DELTA =        0 + 0 + 0; // Vestment increase + Safe Harbor (3% of previous year income) + Profit Sharing (~4.36% this year)
 
