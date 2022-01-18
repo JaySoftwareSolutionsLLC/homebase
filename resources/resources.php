@@ -471,6 +471,9 @@ $login_exemption = $login_exemption ?? false;
 		else if ($year == '2020') {
 			$unreceived_seal_income = 954; // 4 * 8 * 29.80
 		}
+		else if ($year == '2021') {
+			$unreceived_seal_income = 1365.2; // 5 * 8 * 34.13
+		}
 		else {
 			$fuse = 0;
 			$this_time_to_check = $last_seal_check_time + SEC_IN_DAY + $four_pm_seconds;
@@ -514,7 +517,7 @@ $login_exemption = $login_exemption ?? false;
 			$annual_check_adjustment = (-1 * 4 * 8 * 29.80); // 4 days in 2021 checks were from hours worked in 2020
 		}
 		else {
-			$annual_check_adjustment = (-1 * 0 * 8 * 29.80); // 
+			$annual_check_adjustment = (-1 * 5 * 8 * 34.13); // 
 		}
 		return $annual_check_adjustment;
 	}

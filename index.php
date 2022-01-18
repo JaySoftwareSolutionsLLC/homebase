@@ -23,8 +23,11 @@
 	else if ( $year == '2020' ) {
 		include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/constants-2020.php');
 	}
-	else {
+	else if ( $year == '2021' ) {
 		include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/constants-2021.php');
+	}
+	else {
+		include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/constants-2022.php');
 	}
 
 //---CONNECT TO DATABASE------------------------------------------------------------
@@ -47,6 +50,11 @@
 		$today_date = date('Y-m-d', mktime(0, 0, 0, 12, 31, 2020));
 		$today_datetime = new DateTime('December 31st 2020');
 	}
+	else if ($year == '2021') {
+		$today_time = strtotime('December 31st 2021');
+		$today_date = date('Y-m-d', mktime(0, 0, 0, 12, 31, 2021));
+		$today_datetime = new DateTime('December 31st 2021');
+	}
 	else {
 		$today_time = time();
 		$today_datetime = new DateTime();
@@ -65,7 +73,7 @@
 	$end_date_financial = $today_date;
 	$start_time_financial = strtotime($start_date_financial);
 	$days_active_financial = ceil(($today_time - $start_time_financial) / (SEC_IN_DAY));
-	if ($year == '2018' || $year == '2019' || $year == '2020') {
+	if ($year == '2018' || $year == '2019' || $year == '2020' || $year == '2021') {
 		$days_left_in_year_financial = 0;
 	}
 	else {
