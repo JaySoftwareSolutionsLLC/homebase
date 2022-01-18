@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	"use strict";
-	const MIN_BEAUTIFUL_TEMP = 60; 	// Sets the minimum temp. which may qualify as a beautiful day
+	const MIN_BEAUTIFUL_TEMP = 65; 	// Sets the minimum temp. which may qualify as a beautiful day
 	const MAX_BEAUTIFUL_TEMP = 85; 	// Sets the maximum temp. which may qualify as a beautiful day
 	const DBL_CLICK_DELAY = 700; 	// Sets the time the click event will wait for a second click, before calling the first.
 	
