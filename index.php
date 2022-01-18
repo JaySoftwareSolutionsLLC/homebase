@@ -93,19 +93,14 @@
 
 	// Retrieve Account Information
 	$accounts = return_accounts_array($conn, $today_date);
-	// echo "<pre>";
-	// var_dump($accounts);
-	// echo "</pre>";
 
 	$account_types = array();
 	foreach ($accounts as $a) {
 		if ( empty( $account_types["$a->type"] ) ) {
 			$account_types["$a->type"] = intval($a->mrv);
-			//echo $a->mrv;
 		}
 		else {
 			$account_types["$a->type"] += intval($a->mrv);
-			//echo $a->mrv;
 		}
 	}
 
@@ -220,7 +215,6 @@
 	$financial_freedom_datetime = clone $today_datetime;
 	$financial_freedom_datetime->modify("+$days_financially_free day");
 
-	echo "$net_income | $theoretical_future_pretax_income | $net_expenditure | $days_left_in_year";
 	$theoretical_net_worth_contribution = round((($net_income + $theoretical_future_pretax_income) * (ESTIMATED_AFTER_TAX_PERCENTAGE / 100)) - ($net_expenditure + (AVG_DAILY_EXPENDITURE_TARGET * $days_left_in_year)) , 0 ); // Theoretical NW Cont. if I grind out 3 days/week @ Ricks and don't take any PTO @ S&D
 	$opportunity_surplus = round($theoretical_net_worth_contribution - ANNUAL_NET_WORTH_CONTRIBUTION_TARGET , 0 );	
 
@@ -249,15 +243,12 @@
 	$start_time_body_weight = 	strtotime($start_date_body_weight);
 
 	$days_active_body_weight =	ceil(($today_time - $start_time_body_weight) / (SEC_IN_DAY));
-	// echo "$days_active_body_weight <br/>";
 
-	//echo "$start_date_body_weight | $end_date_body_weight<br/>";
 	$q = " SELECT pounds FROM `fitness_measurements_body_weight` WHERE datetime >= '$start_date_body_weight 00:00:00' AND datetime <= '$end_date_body_weight 23:59:59' ORDER BY datetime DESC LIMIT 1 ";
 	
 	$res = $conn->query($q);
 	$row = mysqli_fetch_row($res);
 	$most_recent_body_weight = $row[0];
-	//echo "$q | $most_recent_body_weight";
 
 	// Circumference Tracking
 
@@ -330,9 +321,7 @@
 			$row_mrf =					mysqli_fetch_row($res_mrf);
 			$muscle_mrf_time =			strtotime($row_mrf[0]); // Most Recent Failure as timestamp
 			$muscle_ideal_rest = 		$row_mrf[1];
-			//echo $muscle_ideal_rest;
 			$muscle_mrf_hours =			ceil(($today_time - $muscle_mrf_time) / (60 * 60)); // Most Recent Failure as timestamp
-			//echo "$muscle_id | $muscle_mrf_time | $muscle_mrf_hours" . date('Y-m-d H:i:s', $muscle_mrf_time) . " <br/>";
 			if ($muscle_mrf_hours > 999) { $muscle_mrf_hours = 999; }
 			
 			$hur =						$muscle_ideal_rest - $muscle_mrf_hours;
@@ -369,7 +358,6 @@
 			$number_total_muscles++;
 			$ideal_score += 			$idealness_score;			
 			
-			//echo "ID: $muscle_id | COMMON NAME: $muscle_name | CIRC.: $muscle_associated_circ | IDEAL: $muscle_ideal_circ | CURRENT: $muscle_current_circ | MRF: $muscle_mrf_hours | IDEAL REC: $muscle_ideal_rest | HUR: $hur | % IDEAL: $percent_ideal <br/>";
 		}
 	}
 
@@ -394,7 +382,6 @@
 	$res = $conn->query($q);
 	$row = mysqli_fetch_row($res);
 	$optimal_health_percentage = $row[0];
-	//echo $optimal_health_percentage;
 
 	//---GOALS----------------------------------------------------------------------
 	if ($year == '2018') {
@@ -426,7 +413,6 @@
 			$percent_goal_mile_time_2018 = 100;
 		}
 		$percent_time_frame_running_2018 = number_format((100 * $days_active_running / (((strtotime('January 1st, 2019')) - strtotime(START_DATE_STRING_RUNNING)) / SEC_IN_DAY)), 2);
-		//echo "$percent_goal_mile_time_2018 | $best_mile_time";
 		
 		$percent_goal_bench_press_2018 = number_format( ( 100 * ( $current_bench_press - STARTING_BENCH_PRESS ) / ( END_OF_YEAR_BENCH_PRESS_TARGET - STARTING_BENCH_PRESS ) ), 2);
 		if ($percent_goal_bench_press_2018 >= 100) {
