@@ -167,12 +167,13 @@ var chart = new CanvasJS.Chart("account-allocation-graph", {
 		startAngle: 270,
       	innerRadius: 5,
 		radius: 100,
-		toolTipContent: "<b>{name}</b>: ${y}",
+		toolTipContent: "<b>{name}</b>: ${y} ({perc}%)",
 		dataPoints: [
 <?php
 	arsort($account_types); // Associative row sort (desc)
 	foreach ($account_types as $name=>$val) {
-		$str = "{ y: $val, name: '$name' ";
+		$percent_of_portfolio = round(100 * $val / $current_net_worth, 2);
+		$str = "{ y: $val, name: '$name', perc: '$percent_of_portfolio' ";
 		switch ( $name ) {
 			case 'liability' :
 				$str .= " , color: 'hsl(0, 100%, 50%)', exploded: true, ";
