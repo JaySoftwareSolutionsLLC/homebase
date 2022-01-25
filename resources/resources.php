@@ -649,7 +649,7 @@ $login_exemption = $login_exemption ?? false;
 						(MONTH(date) = MONTH(CURRENT_DATE)
 						AND DAY(date) >= DAY(CURRENT_DATE) ) 
 						)
-					AND YEAR(date) >= ($year - 1)
+					AND YEAR(date) >= ($year - 2)
 					GROUP BY DAYNAME(date), type
 					ORDER BY DAYOFWEEK(date) ";
 		$res = $conn->query($qry);

@@ -91,6 +91,14 @@
 		echo return_timed_goal_progress_bar_html('Yale SOWB', 'yale-sowb', 0, 8, 7, '2020-10-01', '2020-12-31', '2020-12-31');
 		
 		echo return_timed_goal_progress_bar_html('MBA Apps', 'mba-apps', 0, 10, 9, '2020-10-01', '2020-12-31', '2020-12-31');
+	} else if ($year == '2022') {
+		$today_dt = new DateTime();
+		$mba_orientation_dt = new DateTime("2022-08-01");
+		$day_diff = $today_dt->diff($mba_orientation_dt)->days;
+		echo "Days until MBA Orientation: $day_diff<br/>";
+
+		// Each point is a quiz / project. There are 25 total. 17 Quizes. 8 Projects.
+		echo return_timed_goal_progress_bar_html('Stanford ML', 'stanford-machine-learning', 0, 25, 14, '2021-12-13', '2022-03-07');
 	}
 ?>
 

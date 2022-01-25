@@ -11,8 +11,7 @@ section.weather div.content {
 section.weather div.city {
 	display: inline-flex;
 	flex-flow: column nowrap;
-	align-items: center;
-	margin: 0rem 0rem 1rem 0;
+	margin: 0.25rem;
 }
 section.weather div.city img {
 	width: 6rem;

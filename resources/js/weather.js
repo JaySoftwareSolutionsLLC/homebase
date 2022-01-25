@@ -39,33 +39,64 @@ $(document).ready(function() {
 					city.warmestDayTemperature = -500;
 					city.warmestDay = "non-existent";
 					for (var i = 0; i < 10; i++) {
-						if (data.data.temperature[i] > city.warmestDayTemperature) {
-							city.warmestDayTemperature = data.data.temperature[i];
-							city.warmestDay = data.time.startPeriodName[i];
+						if (parseInt(data.data.temperature[i]) > parseInt(city.warmestDayTemperature)) {
+							city.warmestDayTemperature = parseInt(data.data.temperature[i]);
+							city.warmestDay = data.time.startPeriodName[i].substring(0,3);
+							if (data.time.startPeriodName[i].includes("Night")) {
+								city.warmestDay += ' (PM)';
+							}
 						}
 					}
-					city.niceDayTemp = [];
-					city.niceDays = [];
-					city.niceDayWeather = [];
+					city.coldestDayTemperature = 500;
+					city.coldestDay = "non-existent";
+					for (var i = 0; i < 10; i++) {
+						if (parseInt(data.data.temperature[i]) < parseInt(city.coldestDayTemperature)) {
+							city.coldestDayTemperature = parseInt(data.data.temperature[i]);
+							city.coldestDay = data.time.startPeriodName[i].substring(0,3);
+							if (data.time.startPeriodName[i].includes("Night")) {
+								city.coldestDay += ' (PM)';
+							}
+						}
+					}
+					city.beautifulDayTemp = [];
+					city.beautifulDays = [];
+					city.beautifulDayWeather = [];
 					for (var i = 0; i < 10; i++) {
 						if (data.data.temperature[i] >= MIN_BEAUTIFUL_TEMP && data.data.temperature[i] <= MAX_BEAUTIFUL_TEMP && (data.data.weather[i] === "Sunny" || data.data.weather[i] === "Mostly Sunny" || data.data.weather[i] === "Mostly Clear" || data.data.weather[i] === "Partly Sunny" || data.data.weather[i] === "Partly Cloudy") && data.time.startPeriodName[i].indexOf("Night") < 0 && data.time.startPeriodName[i].indexOf("night") < 0) {
-							city.niceDays.push(data.time.startPeriodName[i]);
-							city.niceDayTemp.push(data.data.temperature[i]);
-							city.niceDayWeather.push(data.data.weather[i]);
+							city.beautifulDays.push(data.time.startPeriodName[i]);
+							city.beautifulDayTemp.push(data.data.temperature[i]);
+							city.beautifulDayWeather.push(data.data.weather[i]);
 						}
 					}
-					city.niceNightTemp = [];
-					city.niceNights = [];
-					city.niceNightWeather = [];
+					city.beautifulNightTemp = [];
+					city.beautifulNights = [];
+					city.beautifulNightWeather = [];
 					for (var i = 0; i < 10; i++) {
 						if (data.data.temperature[i] >= MIN_BEAUTIFUL_TEMP && data.data.temperature[i] <= MAX_BEAUTIFUL_TEMP && (data.data.weather[i] === "Sunny" || data.data.weather[i] === "Mostly Sunny" || data.data.weather[i] === "Mostly Clear" || data.data.weather[i] === "Partly Sunny" || data.data.weather[i] === "Partly Cloudy") && (data.time.startPeriodName[i].indexOf("Night") >= 0 || data.time.startPeriodName[i].indexOf("night") >= 0)) {
-							city.niceNights.push(data.time.startPeriodName[i]);
-							city.niceNightTemp.push(data.data.temperature[i]);
-							city.niceNightWeather.push(data.data.weather[i]);
+							city.beautifulNights.push(data.time.startPeriodName[i]);
+							city.beautifulNightTemp.push(data.data.temperature[i]);
+							city.beautifulNightWeather.push(data.data.weather[i]);
 						}
 					}
-					$("div." + city.name).append("<h4>Days: " + city.niceDays.length + "</h4>");
-					$("div." + city.name).append("<h4>Nights: " + city.niceNights.length + "</h4>");
+
+					let beautifulDaysLightness = 100 - ((city.beautifulDays.length+city.beautifulNights.length)*7.5);
+					if (beautifulDaysLightness < 50) {
+						beautifulDaysLightness = 50;
+					}
+					$("div." + city.name).append(`<h4 style='color: hsl(120, 100%, ${beautifulDaysLightness}%)'>Beautiful: ${city.beautifulDays.length} | ${city.beautifulNights.length}</h4>`);
+					
+					let warmestDayLightness = 100 - (Math.abs(75-city.warmestDayTemperature)*0.5);
+					if (warmestDayLightness < 50) {
+						warmestDayLightness = 50;
+					}
+					$("div." + city.name).append(`<h4 style='color: hsl(0, 100%, ${warmestDayLightness}%)'>${city.warmestDay}: ${city.warmestDayTemperature}</h4>`);
+					
+					let coldestDayLightness = 100 - (Math.abs(50-city.coldestDayTemperature)*0.5);
+					if (coldestDayLightness < 50) {
+						coldestDayLightness = 50;
+					}
+					$("div." + city.name).append(`<h4 style='color: hsl(0, 100%, ${coldestDayLightness}%)'>${city.coldestDay}: ${city.coldestDayTemperature}</h4>`);
+
 //					if (isTouchDevice()) {
 //						$("div." + city.name).append("<button>Full Forecast</button>");
 //						$("div." + city.name + " button").on("click", function(e) {
@@ -86,7 +117,9 @@ $(document).ready(function() {
 	/* Function: loops through the myCities array of objects and calls displayCity passing each array object as an argument. */
 	function displayCities() {
 		for (let city of myCities) {
-			displayCity(city);
+			if (city.active == 1) {
+				displayCity(city);
+			}
 		}
 	}
 	
@@ -143,26 +176,26 @@ $(document).ready(function() {
 			speak("Tomorrow is forecasted to be " + cityObject.tomorrowWeather + ", With a high near " + cityObject.tomorrowDayHigh + ", and a low near " + cityObject.tomorrowDayLow);
 		}
 		speak("The warmest day in the five day forecast is " + cityObject.warmestDay + ", with a projected high of " + cityObject.warmestDayTemperature);
-		if (cityObject.niceDays.length === 0) {
+		if (cityObject.beautifulDays.length === 0) {
 			speak("Unfortunately, there are no beautiful days in the five day forecast.")
-		} else if (cityObject.niceDays.length === 1) {
+		} else if (cityObject.beautifulDays.length === 1) {
 			speak("There is one day in the forecast that looks beautiful.")
-			speak(cityObject.niceDays[0] + " is forecast to be " + cityObject.niceDayTemp[0] + " degrees and " + cityObject.niceDayWeather[0]);
+			speak(cityObject.beautifulDays[0] + " is forecast to be " + cityObject.beautifulDayTemp[0] + " degrees and " + cityObject.beautifulDayWeather[0]);
 		} else {
-			speak("There are " + cityObject.niceDays.length + " days in the forecast that look beautiful.")
-			for (var i = 0; i < cityObject.niceDays.length; i++) {
-				speak(cityObject.niceDays[i] + " is forecast to be " + cityObject.niceDayTemp[i] + " degrees and " + cityObject.niceDayWeather[i]);
+			speak("There are " + cityObject.beautifulDays.length + " days in the forecast that look beautiful.")
+			for (var i = 0; i < cityObject.beautifulDays.length; i++) {
+				speak(cityObject.beautifulDays[i] + " is forecast to be " + cityObject.beautifulDayTemp[i] + " degrees and " + cityObject.beautifulDayWeather[i]);
 			}
 		}
-		if (cityObject.niceNights.length === 0) {
+		if (cityObject.beautifulNights.length === 0) {
 			speak("Unfortunately, there are no beautiful nights in the five day forecast.")
-		} else if (cityObject.niceNights.length === 1) {
+		} else if (cityObject.beautifulNights.length === 1) {
 			speak("There is one night in the forecast that looks beautiful.")
-			speak(cityObject.niceNights[0] + " is forecast to be " + cityObject.niceNightTemp[0] + " degrees and " + cityObject.niceNightWeather[0]);
+			speak(cityObject.beautifulNights[0] + " is forecast to be " + cityObject.beautifulNightTemp[0] + " degrees and " + cityObject.beautifulNightWeather[0]);
 		} else {
-			speak("There are " + cityObject.niceNights.length + " nights in the forecast that look beautiful.")
-			for (var i = 0; i < cityObject.niceNights.length; i++) {
-				speak(cityObject.niceNights[i] + " is forecast to be " + cityObject.niceNightTemp[i] + " degrees and " + cityObject.niceNightWeather[i]);
+			speak("There are " + cityObject.beautifulNights.length + " nights in the forecast that look beautiful.")
+			for (var i = 0; i < cityObject.beautifulNights.length; i++) {
+				speak(cityObject.beautifulNights[i] + " is forecast to be " + cityObject.beautifulNightTemp[i] + " degrees and " + cityObject.beautifulNightWeather[i]);
 			}
 		}
 	}

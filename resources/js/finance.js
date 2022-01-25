@@ -109,7 +109,7 @@ $('div#stat-ff div.variant-row button').on('click', function() {
 });
 $('div#stat-theoretical-income div.variant-row button').each(function() {
     let buttonEl = $(this);
-    let defaultVals = ['SD', 'RPM', 'SPM'];
+    let defaultVals = ['SD', 'SPM'];
     let dataAttr = buttonEl.attr('data-val');
     // console.log(dataAttr);
     if (defaultVals.indexOf(dataAttr) != -1) {

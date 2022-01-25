@@ -85,6 +85,7 @@ section.fitness .form:hover {
 section.fitness .form img {
 	height: 3rem;
 	width: 3rem;
+	filter: invert(1);
 }
 section.fitness .form figcaption {
 	font-size: 0.75rem;

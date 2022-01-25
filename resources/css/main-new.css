@@ -19,8 +19,8 @@ html {
   font-size: 16px;
   font-family: "Orbitron", sans-serif;
   color: white;
-  background: -webkit-gradient(linear, left top, right bottom, from(black), to(white));
-  background: linear-gradient(to bottom right, black, white);
+  background: -webkit-gradient(linear, left top, right bottom, from(hsl(190,100%,5%)), to(hsl(190,100%,10%)));
+  background: linear-gradient(to bottom right, hsl(190,100%,5%), hsl(190,100%,10%));
   /*HEADER*/
 }
 
@@ -145,7 +145,7 @@ section {
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  padding: 2rem;
+  padding: 0.5rem;
   border: 0.25rem solid white;
   margin: 1rem auto;
 }
@@ -175,6 +175,10 @@ span.flex-input select {
   font-size: 1rem;
   height: 1.25rem;
   width: 10rem;
+}
+
+a {
+  text-decoration: none;
 }
 
 @media only screen and (max-width: 1280px) {

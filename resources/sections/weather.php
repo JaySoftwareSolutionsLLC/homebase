@@ -10,10 +10,11 @@
 			?>
 				<script>
 					var myCities = [];
-					function City(name, lat, lon) {
+					function City(name, lat, lon, active) {
 						this.name = name;
 						this.lat = lat;
 						this.lon = lon;
+						this.active = active;
 					}
 				</script>
 			<?php
@@ -21,11 +22,20 @@
 						// TEST PASSED 2018.10.18 echo "THIS CITY: " . var_dump($row);
 			?>
 				<script>
-					myCities.push(new City("<?php echo $row["name"]?>", "<?php echo $row["lat"]?>", "<?php echo $row["lon"]?>"));
+					myCities.push(new City("<?php echo $row["name"]?>", "<?php echo $row["lat"]?>", "<?php echo $row["lon"]?>", "<?php echo $row["active"]?>"));
 				</script>
 			<?php
 					}
 				}
 			?>
+			<script>
+				myCities.sort(function(a,b) {
+					if (a.name < b.name) {
+						return 1;
+					} else {
+						return -1;
+					}
+				});
+			</script>
 			</div>
 		</section>
