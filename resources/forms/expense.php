@@ -21,6 +21,23 @@ if(isset($_POST['date']) && isset($_POST['name']) && isset($_POST['type']) && is
     	$entry_msg = "Error with query: $qry <br> $conn->error";
 	}
 }
+$qry_common_expenses = "SELECT 	fe.name
+								, fe.type
+								, fe.jss_percentage
+								, COUNT(*) AS 'Occurances'
+						FROM `finance_expenses` fe
+						WHERE fe.date >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)
+						GROUP BY fe.name, fe.type, fe.jss_percentage
+						HAVING COUNT(*) >= 3
+						ORDER BY Occurances DESC;";
+$res_common_expenses = $conn->query($qry_common_expenses);
+if ($res_common_expenses->num_rows > 0) {
+	$common_expenses_data_list = '<datalist id="common-expenses">';
+	while($row_common_expenses = $res_common_expenses->fetch_assoc()) {
+        $common_expenses_data_list .= "<option value='" . $row_common_expenses['name'] . "' data-type='" . $row_common_expenses['type'] . "' data-jss-percentage='" . $row_common_expenses['jss_percentage'] . "'>" . $row_common_expenses['name'] . "(" . $row_common_expenses['type'] . "~" . $row_common_expenses['jss_percentage'] . ")</option>";
+    }
+	$common_expenses_data_list .= "</datalist>";
+}
 
 $qry = "SELECT name, date, type, subtype, amount, jss_percentage FROM finance_expenses WHERE date >= '$start_date' ORDER BY date DESC;";
 $res = $conn->query($qry);
@@ -55,7 +72,8 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/cs
 				<label for='date'>Date</label>
 				<input id='date' type='date' name='date' value="<?php echo $today;?>"/>
 				<label for='name'>Name</label>
-				<input id='name' type='text' name='name' placeholder='Wegmans groceries' autocomplete/>
+				<?= $common_expenses_data_list; ?>
+				<input id='name' type='text' name='name' placeholder='Wegmans groceries' list='common-expenses' autocomplete/>
 				<label for='type'>Type</label>
 				<select id='type' name='type'>
 					<option value='food'>Food</option>
@@ -106,6 +124,15 @@ include($_SERVER["DOCUMENT_ROOT"] . '/homebase/resources/forms/form-resources/js
 				$('#expenses-table').DataTable( {
 					"order": [[ 1, "desc" ]]
 				} );
+				$("input#name").on('input', function () {
+					var val = this.value;
+					$('#common-expenses option').each(function(index) {
+						if ($(this).val() == val) {
+							$('select#type').val($(this).data('type'));
+							$('input#jss_percentage').val($(this).data('jss-percentage'));
+						}
+					});
+				});
 			} );
 		</script>
 	</body>
