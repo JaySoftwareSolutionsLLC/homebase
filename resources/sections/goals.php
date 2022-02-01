@@ -98,7 +98,7 @@
 		echo "Days until MBA Orientation: $day_diff<br/>";
 
 		// Each point is a quiz / project. There are 25 total. 17 Quizes. 8 Projects.
-		echo return_timed_goal_progress_bar_html('Stanford ML', 'stanford-machine-learning', 0, 25, 14, '2021-12-13', '2022-03-07');
+		echo return_timed_goal_progress_bar_html('Stanford ML', 'stanford-machine-learning', 0, 25, 16, '2021-12-13', '2022-03-07');
 	}
 ?>
 
