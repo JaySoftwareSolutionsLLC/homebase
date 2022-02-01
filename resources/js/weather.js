@@ -41,7 +41,12 @@ $(document).ready(function() {
 					for (var i = 0; i < 10; i++) {
 						if (parseInt(data.data.temperature[i]) > parseInt(city.warmestDayTemperature)) {
 							city.warmestDayTemperature = parseInt(data.data.temperature[i]);
-							city.warmestDay = data.time.startPeriodName[i].substring(0,3);
+							if (data.time.startPeriodName[i] == 'This Afternoon'
+								|| data.time.startPeriodName[i] == 'Today') {
+								city.warmestDay = 'Today'
+							} else {
+								city.warmestDay = data.time.startPeriodName[i].substring(0,3);
+							}
 							if (data.time.startPeriodName[i].includes("Night")) {
 								city.warmestDay += ' (PM)';
 							}
@@ -52,7 +57,12 @@ $(document).ready(function() {
 					for (var i = 0; i < 10; i++) {
 						if (parseInt(data.data.temperature[i]) < parseInt(city.coldestDayTemperature)) {
 							city.coldestDayTemperature = parseInt(data.data.temperature[i]);
-							city.coldestDay = data.time.startPeriodName[i].substring(0,3);
+							if (data.time.startPeriodName[i] == 'This Afternoon'
+								|| data.time.startPeriodName[i] == 'Today') {
+								city.coldestDay = 'Today'
+							} else {
+								city.coldestDay = data.time.startPeriodName[i].substring(0,3);
+							}
 							if (data.time.startPeriodName[i].includes("Night")) {
 								city.coldestDay += ' (PM)';
 							}
